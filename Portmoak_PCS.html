@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Portmoak (PCS) RASP Forecast</title>
+<style>
+  :root {
+    --bg: #0f1720;
+    --panel: #1b2534;
+    --border: #2c3a4f;
+    --text: #e6edf3;
+    --muted: #94a3b8;
+    --accent: #4fa3e0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    padding: 16px 20px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  header h1 {
+    font-size: 18px;
+    margin: 0;
+    font-weight: 600;
+  }
+  header .sub {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .controls {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  select {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  a.src-link {
+    color: var(--accent);
+    font-size: 13px;
+    text-decoration: none;
+  }
+  a.src-link:hover { text-decoration: underline; }
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .card h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--muted);
+    margin: 0;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  iframe {
+    display: block;
+    width: 100%;
+    border: none;
+    background: #fff;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Portmoak (PCS) &mdash; RASP Forecast</h1>
+    <div class="sub">Scottish Gliding Centre &middot; Turn point PCS &middot; via app.stratus.org.uk</div>
+  </div>
+  <div class="controls">
+    <label for="day" class="sub">Day:</label>
+    <select id="day"></select>
+  </div>
+</header>
+
+<main id="graphs"></main>
+
+<footer>
+  Forecast imagery &copy; RASP UK (Stratus) / BLIPMAP&trade; &mdash; Dr. John W. (Jack) Glendening.
+  This page just links to their live images; no data is stored here.
+</footer>
+
+<script>
+  const TP = "PCS";
+  const BASE = "https://app.stratus.org.uk/blip/graph/";
+
+  const graphs = [
+    { id: "blip_main",     file: "blip_main.php",     label: "Overview" },
+    { id: "blip_cu",       file: "blip_cu.php",       label: "Cumulus Cloud" },
+    { id: "blip_temp",     file: "blip_temp.php",     label: "Temperature" },
+    { id: "blip_wind",     file: "blip_wind_dir.php", label: "Wind Direction" },
+    { id: "blip_wind_dir", file: "blip_wind.php",     label: "Wind Speed" },
+    { id: "blip_sun",      file: "blip_sun.php",      label: "Sunshine" },
+    { id: "blip_press",    file: "blip_press.php",    label: "Pressure" },
+    { id: "blip_rain",     file: "blip_rain.php",     label: "Rain" },
+    { id: "blip_stars",    file: "blip_stars.php",    label: "Soaring Stars" },
+    { id: "blip_cover",    file: "blip_cover.php",    label: "Cloud Cover" }
+  ];
+
+  // Build day list starting today, matching the RASP site's own weekday-name scheme
+  const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const today = new Date();
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    const label = d.toLocaleDateString("en-GB", { weekday: "long", day: "2-digit", month: "short" });
+    days.push({ value: dayNames[d.getDay()], label });
+  }
+
+  const daySelect = document.getElementById("day");
+  days.forEach(d => {
+    const opt = document.createElement("option");
+    opt.value = d.value;
+    opt.textContent = d.label;
+    daySelect.appendChild(opt);
+  });
+
+  const graphsEl = document.getElementById("graphs");
+
+  function urlFor(file, day) {
+    return `${BASE}${file}?day=${encodeURIComponent(day)}&tp=${TP}`;
+  }
+
+  function render(day) {
+    graphsEl.innerHTML = "";
+    graphs.forEach(g => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const h2 = document.createElement("h2");
+      h2.textContent = g.label;
+      card.appendChild(h2);
+
+      const iframe = document.createElement("iframe");
+      iframe.id = g.id;
+      iframe.height = g.id === "blip_main" ? "540" : "330";
+      iframe.src = urlFor(g.file, day);
+      card.appendChild(iframe);
+
+      graphsEl.appendChild(card);
+    });
+  }
+
+  daySelect.addEventListener("change", () => render(daySelect.value));
+
+  // Default to today
+  daySelect.value = days[0].value;
+  render(days[0].value);
+</script>
+
+</body>
+</html>
