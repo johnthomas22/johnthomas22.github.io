@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radiative Transfer & Greenhouse Effect Simulator</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --accent: #38bdf8;
+      --border: #334155;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      margin-bottom: 5px;
+      font-size: 1.5rem;
+    }
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: 320px 600px;
+      gap: 20px;
+      max-width: 960px;
+      width: 100%;
+    }
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .control-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+    .value-display {
+      color: var(--accent);
+    }
+    canvas {
+      background: #020617;
+      border-radius: 6px;
+      width: 100%;
+      height: 450px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .stat-box {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .stat-box .title {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+    .stat-box .val {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #f1f5f9;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>1D Atmospheric Radiative Transfer Simulator</h1>
+  <div class="subtitle">Logarithmic CO₂ forcing, water vapor feedback, and atmospheric altitude escape layer model</div>
+
+  <div class="container">
+    <div class="panel">
+      <div class="control-group">
+        <label>CO₂ Concentration <span class="value-display" id="co2Val">420 ppm</span></label>
+        <input type="range" id="co2" min="100" max="1600" step="10" value="420">
+      </div>
+
+      <div class="control-group">
+        <label>Water Vapor Relative Multiplier <span class="value-display" id="h2oVal">1.0x</span></label>
+        <input type="range" id="h2o" min="0.5" max="2.0" step="0.05" value="1.0">
+      </div>
+
+      <div class="control-group">
+        <label>Troposphere Height Scale <span class="value-display" id="heightVal">12.0 km</span></label>
+        <input type="range" id="height" min="8" max="16" step="0.2" value="12">
+      </div>
+
+      <div class="control-group">
+        <label>
+          <span>Auto Water-Vapor Feedback</span>
+          <input type="checkbox" id="feedbackToggle" checked>
+        </label>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">
+          Automatically adjusts H₂O relative to surface temperature changes (~7%/°C).
+        </div>
+      </div>
+
+      <hr style="border-color: var(--border); margin: 20px 0;">
+
+      <div class="stats">
+        <div class="stat-box">
+          <div class="title">Surface Temp</div>
+          <div class="val" id="tempVal">15.0 °C</div>
+        </div>
+        <div class="stat-box">
+          <div class="title">Effective Altitude</div>
+          <div class="val" id="altVal">5.2 km</div>
+        </div>
+        <div class="stat-box">
+          <div class="title">Outward OLR</div>
+          <div class="val" id="olrVal">239 W/m²</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="display: flex; flex-direction: column; justify-content: center;">
+      <canvas id="simCanvas" width="600" height="450"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Inputs
+    const co2Input = document.getElementById('co2');
+    const h2oInput = document.getElementById('h2o');
+    const heightInput = document.getElementById('height');
+    const feedbackToggle = document.getElementById('feedbackToggle');
+
+    // Display elements
+    const co2Val = document.getElementById('co2Val');
+    const h2oVal = document.getElementById('h2oVal');
+    const heightVal = document.getElementById('heightVal');
+    const tempVal = document.getElementById('tempVal');
+    const altVal = document.getElementById('altVal');
+    const olrVal = document.getElementById('olrVal');
+
+    // Physical constants / Baseline settings
+    const S0 = 239; // Incoming net solar radiation baseline (W/m^2)
+    const baselineCO2 = 280; // Pre-industrial baseline (ppm)
+    const sigma = 5.670374e-8; // Stefan-Boltzmann constant
+
+    function calculatePhysics() {
+      let co2 = parseFloat(co2Input.value);
+      let h2oMult = parseFloat(h2oInput.value);
+      let tropoHeight = parseFloat(heightInput.value);
+
+      // 1. Logarithmic Radiative Forcing delta (RF = 5.35 * ln(C / C0))
+      let rfCO2 = 5.35 * Math.log(co2 / baselineCO2);
+      
+      // 2. Optical depth & Radiating altitude adjustment
+      let opticalDepth = (Math.log(co2 / 100) * 0.4) + (h2oMult * 0.6);
+      let effectiveHeight = Math.min(tropoHeight * 0.9, 3.0 + opticalDepth * 2.2);
+
+      // 3. Environmental lapse rate (~6.5 °C / km)
+      let lapseRate = 6.5; 
+
+      // Temperature needed at effective radiating altitude to balance incoming solar radiation (239 W/m^2)
+      let Teffective = Math.pow(S0 / sigma, 0.25); // ~255 K (-18 °C)
+
+      // Calculate Surface Temperature based on effective altitude and lapse rate
+      let TsurfaceK = Teffective + (lapseRate * effectiveHeight);
+      let TsurfaceC = TsurfaceK - 273.15;
+
+      // Handle water-vapor feedback automatically if checked
+      if (feedbackToggle.checked) {
+        let deltaT = TsurfaceC - 14.0; // Baseline temperature ~14 C
+        let newH2o = Math.max(0.5, Math.min(2.0, 1.0 + (deltaT * 0.05)));
+        h2oInput.value = newH2o.toFixed(2);
+        h2oMult = newH2o;
+      }
+
+      // Outgoing Longwave Radiation at Earth surface vs atmosphere top
+      let OLR = sigma * Math.pow(Teffective, 4);
+
+      return { co2, h2oMult, tropoHeight, effectiveHeight, TsurfaceC, OLR };
+    }
+
+    function draw() {
+      const p = calculatePhysics();
+
+      // UI Text updates
+      co2Val.textContent = `${p.co2} ppm`;
+      h2oVal.textContent = `${parseFloat(p.h2oMult).toFixed(2)}x`;
+      heightVal.textContent = `${parseFloat(p.tropoHeight).toFixed(1)} km`;
+      tempVal.textContent = `${p.TsurfaceC.toFixed(1)} °C`;
+      altVal.textContent = `${p.effectiveHeight.toFixed(1)} km`;
+      olrVal.textContent = `${Math.round(p.OLR)} W/m²`;
+
+      // Canvas Rendering
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const width = canvas.width;
+      const height = canvas.height;
+      const groundY = height - 50;
+      const spaceY = 40;
+      const atmosHeightPx = groundY - spaceY;
+
+      // Draw Space
+      ctx.fillStyle = "#020617";
+      ctx.fillRect(0, 0, width, spaceY);
+
+      // Draw Atmosphere Gradient (Opacity scales with greenhouse density)
+      let atmosGradient = ctx.createLinearGradient(0, groundY, 0, spaceY);
+      let opacity = Math.min(0.85, 0.2 + (p.co2 / 2000) * 0.4 + (p.h2oMult * 0.2));
+      atmosGradient.addColorStop(0, `rgba(56, 189, 248, ${opacity})`);
+      atmosGradient.addColorStop(1, 'rgba(15, 23, 42, 0.1)');
+      ctx.fillStyle = atmosGradient;
+      ctx.fillRect(0, spaceY, width, atmosHeightPx);
+
+      // Draw Ground
+      let groundColor = p.TsurfaceC > 20 ? '#b45309' : (p.TsurfaceC < 10 ? '#334155' : '#15803d');
+      ctx.fillStyle = groundColor;
+      ctx.fillRect(0, groundY, width, 50);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '12px sans-serif';
+      ctx.fillText(`Earth Surface (${p.TsurfaceC.toFixed(1)}°C)`, 15, groundY + 30);
+
+      // Draw Effective Emission Height Line
+      let escapeY = groundY - (p.effectiveHeight / p.tropoHeight) * atmosHeightPx;
+      ctx.strokeStyle = '#ef4444';
+      ctx.setLineDash([6, 6]);
+      ctx.beginPath();
+      ctx.moveTo(0, escapeY);
+      ctx.lineTo(width, escapeY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#ef4444';
+      ctx.fillText(`Effective Radiating Altitude (~${p.effectiveHeight.toFixed(1)} km)`, width - 260, escapeY - 8);
+
+      // Draw Radiation Vectors
+      // 1. Upward Surface IR (Red arrows)
+      let numPhotons = 7;
+      for (let i = 0; i < numPhotons; i++) {
+        let x = 60 + i * 75;
+        let startY = groundY;
+        let endY = escapeY;
+
+        ctx.strokeStyle = '#f97316';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x, startY);
+        ctx.lineTo(x, endY);
+        ctx.stroke();
+
+        // Arrow head
+        ctx.fillStyle = '#f97316';
+        ctx.beginPath();
+        ctx.arc(x, endY, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 2. Escape Radiation to space (Thin blue/orange outgoing line above escape level)
+      for (let i = 0; i < numPhotons; i++) {
+        let x = 60 + i * 75;
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(x, escapeY);
+        ctx.lineTo(x, spaceY - 10);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText(`Radiation Escaping to Space (${Math.round(p.OLR)} W/m²)`, 15, spaceY - 15);
+    }
+
+    // Event Listeners
+    [co2Input, h2oInput, heightInput, feedbackToggle].forEach(input => {
+      input.addEventListener('input', draw);
+    });
+
+    // Initial render
+    draw();
+  </script>
+</body>
+</html>
