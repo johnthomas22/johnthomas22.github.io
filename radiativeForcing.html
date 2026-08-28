@@ -90,6 +90,98 @@
       color: #f1f5f9;
       margin-top: 4px;
     }
+
+    /* Explanation Button & Modal Styles */
+    .btn-explain {
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    .btn-explain:hover {
+      background: #0284c7;
+      color: #ffffff;
+    }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(2, 6, 23, 0.85);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      max-width: 800px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 30px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: var(--accent);
+    }
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .close-btn:hover {
+      color: var(--text);
+    }
+    .modal-body {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    .modal-body h3 {
+      color: #f8fafc;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 4px;
+    }
+    .modal-body ul {
+      padding-left: 20px;
+    }
+    .modal-body li {
+      margin-bottom: 8px;
+    }
+    .modal-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    .modal-body th, .modal-body td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .modal-body th {
+      background: #0f172a;
+    }
   </style>
 </head>
 <body>
@@ -124,7 +216,9 @@
         </div>
       </div>
 
-      <hr style="border-color: var(--border); margin: 20px 0;">
+      <hr style="border-color: var(--border); margin: 15px 0;">
+
+      <button class="btn-explain" id="openModalBtn">Explanation & Physics Guide</button>
 
       <div class="stats">
         <div class="stat-box">
@@ -147,6 +241,62 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Atmospheric Physics & "Saturation Myth" Analysis</h2>
+        <button class="close-btn" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>This simulator models <strong>Radiative Transfer</strong> and <strong>Outgoing Longwave Radiation (OLR)</strong>—the thermal infrared energy emitted by Earth's surface and atmosphere back into space.</p>
+        
+        <h3>Flaws in the "CO₂ Saturation" Claim</h3>
+        <p>Arguments claiming CO₂ is "99% saturated" relies on simplified assumptions that ignore 3D atmospheric dynamics:</p>
+        
+        <ul>
+          <li><strong>The Altitude Effect:</strong> Earth's atmosphere is not a single thin sheet of glass. Thermal radiation is absorbed and re-emitted thousands of times on its way upward. Radiation only escapes to space from the <em>Effective Radiating Altitude</em>, where air is thin enough for infrared rays to escape without hitting another CO₂ molecule. Adding CO₂ pushes this escape layer to higher, colder altitudes. Because colder air radiates less energy, Earth retains extra heat until the surface warms up.</li>
+          <li><strong>Spectral Wings:</strong> While the center of CO₂'s absorption band (~15 µm) is nearly saturated near the surface, the "wings" (edges) of the absorption spectrum are not. Increasing CO₂ widens the range of wavelengths that get trapped.</li>
+          <li><strong>Logarithmic Forcing:</strong> Radiative forcing scales logarithmically: $\Delta F = 5.35 \cdot \ln(C / C_0)$. Every doubling of CO₂ adds ~3.7 W/m² of trapped energy, producing continuous surface warming rather than zero impact.</li>
+          <li><strong>Water Vapor Feedback:</strong> Water vapor is the dominant greenhouse gas, but it acts as a feedback mechanism. Warmer air holds more moisture (~7% per 1°C), doubling the warming initiated by CO₂.</li>
+        </ul>
+
+        <h3>Core Physics Summary</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Concept</th>
+              <th>Common Misconception</th>
+              <th>Scientific Reality</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>CO₂ Saturation</strong></td>
+              <td>"CO₂ is saturated, so more emissions do nothing."</td>
+              <td>Saturation only applies to ground-level absorption centers. Radiation escapes higher up in colder, unsaturated layers.</td>
+            </tr>
+            <tr>
+              <td><strong>Diminishing Returns</strong></td>
+              <td>"Logarithmic growth makes added CO₂ negligible."</td>
+              <td>Logarithmic growth means every doubling yields a steady ~2.5°C–4°C of surface warming.</td>
+            </tr>
+            <tr>
+              <td><strong>Water Vapor</strong></td>
+              <td>"Water vapor renders CO₂ irrelevant."</td>
+              <td>Water vapor amplifies CO₂ forcing by roughly 2x via atmospheric moisture feedback loops.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Definitions</h3>
+        <ul>
+          <li><strong>OLR (Outgoing Longwave Radiation):</strong> Thermal infrared energy escaping Earth into space. At equilibrium, OLR equals net incoming solar energy (~239 W/m²).</li>
+          <li><strong>Lapse Rate:</strong> The rate at which atmospheric temperature drops with altitude (~6.5°C per kilometer in the troposphere).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
   <script>
     const canvas = document.getElementById('simCanvas');
     const ctx = canvas.getContext('2d');
@@ -165,42 +315,46 @@
     const altVal = document.getElementById('altVal');
     const olrVal = document.getElementById('olrVal');
 
+    // Modal elements
+    const modalOverlay = document.getElementById('modalOverlay');
+    const openModalBtn = document.getElementById('openModalBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    // Modal Events
+    openModalBtn.addEventListener('click', () => modalOverlay.style.display = 'flex');
+    closeModalBtn.addEventListener('click', () => modalOverlay.style.display = 'none');
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) modalOverlay.style.display = 'none';
+    });
+
     // Physical constants / Baseline settings
-    const S0 = 239; // Incoming net solar radiation baseline (W/m^2)
-    const baselineCO2 = 280; // Pre-industrial baseline (ppm)
-    const sigma = 5.670374e-8; // Stefan-Boltzmann constant
+    const S0 = 239; 
+    const baselineCO2 = 280; 
+    const sigma = 5.670374e-8; 
 
     function calculatePhysics() {
       let co2 = parseFloat(co2Input.value);
       let h2oMult = parseFloat(h2oInput.value);
       let tropoHeight = parseFloat(heightInput.value);
 
-      // 1. Logarithmic Radiative Forcing delta (RF = 5.35 * ln(C / C0))
       let rfCO2 = 5.35 * Math.log(co2 / baselineCO2);
       
-      // 2. Optical depth & Radiating altitude adjustment
       let opticalDepth = (Math.log(co2 / 100) * 0.4) + (h2oMult * 0.6);
       let effectiveHeight = Math.min(tropoHeight * 0.9, 3.0 + opticalDepth * 2.2);
 
-      // 3. Environmental lapse rate (~6.5 °C / km)
       let lapseRate = 6.5; 
+      let Teffective = Math.pow(S0 / sigma, 0.25); 
 
-      // Temperature needed at effective radiating altitude to balance incoming solar radiation (239 W/m^2)
-      let Teffective = Math.pow(S0 / sigma, 0.25); // ~255 K (-18 °C)
-
-      // Calculate Surface Temperature based on effective altitude and lapse rate
       let TsurfaceK = Teffective + (lapseRate * effectiveHeight);
       let TsurfaceC = TsurfaceK - 273.15;
 
-      // Handle water-vapor feedback automatically if checked
       if (feedbackToggle.checked) {
-        let deltaT = TsurfaceC - 14.0; // Baseline temperature ~14 C
+        let deltaT = TsurfaceC - 14.0; 
         let newH2o = Math.max(0.5, Math.min(2.0, 1.0 + (deltaT * 0.05)));
         h2oInput.value = newH2o.toFixed(2);
         h2oMult = newH2o;
       }
 
-      // Outgoing Longwave Radiation at Earth surface vs atmosphere top
       let OLR = sigma * Math.pow(Teffective, 4);
 
       return { co2, h2oMult, tropoHeight, effectiveHeight, TsurfaceC, OLR };
@@ -209,7 +363,6 @@
     function draw() {
       const p = calculatePhysics();
 
-      // UI Text updates
       co2Val.textContent = `${p.co2} ppm`;
       h2oVal.textContent = `${parseFloat(p.h2oMult).toFixed(2)}x`;
       heightVal.textContent = `${parseFloat(p.tropoHeight).toFixed(1)} km`;
@@ -217,7 +370,6 @@
       altVal.textContent = `${p.effectiveHeight.toFixed(1)} km`;
       olrVal.textContent = `${Math.round(p.OLR)} W/m²`;
 
-      // Canvas Rendering
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const width = canvas.width;
@@ -226,11 +378,9 @@
       const spaceY = 40;
       const atmosHeightPx = groundY - spaceY;
 
-      // Draw Space
       ctx.fillStyle = "#020617";
       ctx.fillRect(0, 0, width, spaceY);
 
-      // Draw Atmosphere Gradient (Opacity scales with greenhouse density)
       let atmosGradient = ctx.createLinearGradient(0, groundY, 0, spaceY);
       let opacity = Math.min(0.85, 0.2 + (p.co2 / 2000) * 0.4 + (p.h2oMult * 0.2));
       atmosGradient.addColorStop(0, `rgba(56, 189, 248, ${opacity})`);
@@ -238,7 +388,6 @@
       ctx.fillStyle = atmosGradient;
       ctx.fillRect(0, spaceY, width, atmosHeightPx);
 
-      // Draw Ground
       let groundColor = p.TsurfaceC > 20 ? '#b45309' : (p.TsurfaceC < 10 ? '#334155' : '#15803d');
       ctx.fillStyle = groundColor;
       ctx.fillRect(0, groundY, width, 50);
@@ -246,7 +395,6 @@
       ctx.font = '12px sans-serif';
       ctx.fillText(`Earth Surface (${p.TsurfaceC.toFixed(1)}°C)`, 15, groundY + 30);
 
-      // Draw Effective Emission Height Line
       let escapeY = groundY - (p.effectiveHeight / p.tropoHeight) * atmosHeightPx;
       ctx.strokeStyle = '#ef4444';
       ctx.setLineDash([6, 6]);
@@ -259,8 +407,6 @@
       ctx.fillStyle = '#ef4444';
       ctx.fillText(`Effective Radiating Altitude (~${p.effectiveHeight.toFixed(1)} km)`, width - 260, escapeY - 8);
 
-      // Draw Radiation Vectors
-      // 1. Upward Surface IR (Red arrows)
       let numPhotons = 7;
       for (let i = 0; i < numPhotons; i++) {
         let x = 60 + i * 75;
@@ -274,14 +420,12 @@
         ctx.lineTo(x, endY);
         ctx.stroke();
 
-        // Arrow head
         ctx.fillStyle = '#f97316';
         ctx.beginPath();
         ctx.arc(x, endY, 4, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // 2. Escape Radiation to space (Thin blue/orange outgoing line above escape level)
       for (let i = 0; i < numPhotons; i++) {
         let x = 60 + i * 75;
         ctx.strokeStyle = '#38bdf8';
@@ -296,12 +440,10 @@
       ctx.fillText(`Radiation Escaping to Space (${Math.round(p.OLR)} W/m²)`, 15, spaceY - 15);
     }
 
-    // Event Listeners
     [co2Input, h2oInput, heightInput, feedbackToggle].forEach(input => {
       input.addEventListener('input', draw);
     });
 
-    // Initial render
     draw();
   </script>
 </body>
