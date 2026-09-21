@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RASP Meteogram - Portmoak (POR)</title>
+  <title>RASP Forecast - Portmoak (POR)</title>
   <style>
     :root {
       --bg: #121212;
@@ -11,6 +11,7 @@
       --text: #e0e0e0;
       --accent: #4da3ff;
       --border: #333;
+      --warning: #ffb86c;
     }
     * {
       box-sizing: border-box;
@@ -41,10 +42,11 @@
     }
     .controls {
       display: flex;
+      flex-wrap: wrap;
       gap: 0.5rem;
       align-items: center;
     }
-    button, a.btn {
+    select, button, a.btn {
       background: #2a2a2a;
       color: var(--text);
       border: 1px solid var(--border);
@@ -55,11 +57,19 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      transition: background 0.15s ease;
+      transition: background 0.15s ease, border-color 0.15s ease;
     }
-    button:hover, a.btn:hover {
+    button:hover, a.btn:hover, select:hover {
       background: #383838;
       border-color: var(--accent);
+    }
+    select:focus, button:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .status {
+      font-size: 0.85rem;
+      color: #aaa;
     }
     .main-container {
       flex: 1;
@@ -67,102 +77,115 @@
       flex-direction: column;
       padding: 1rem;
       align-items: center;
-      justify-content: flex-start;
       gap: 1.5rem;
     }
-    .image-wrapper {
+    .card {
       max-width: 1200px;
       width: 100%;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 0.5rem;
+      padding: 0.75rem;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       text-align: center;
     }
-    .image-wrapper img {
+    .card h2 {
+      font-size: 0.95rem;
+      color: #aaa;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+    .card img {
       width: 100%;
       height: auto;
       display: block;
       border-radius: 4px;
-      background: #fff; /* meteogram images are transparent or white bg */
+      background: #fff;
+    }
+    .callout {
+      font-size: 0.8rem;
+      color: var(--warning);
+      margin-top: 0.5rem;
     }
     .notice {
       font-size: 0.8rem;
-      color: #888;
-      text-align: center;
-      margin-top: 0.5rem;
-    }
-    .status {
-      font-size: 0.85rem;
-      color: #aaa;
+      color: #777;
+      margin-top: 0.4rem;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Portmoak (POR) Meteogram</h1>
+    <h1>Portmoak (POR) RASP</h1>
     <div class="controls">
+      <label for="day-select" class="status">Day for BLIP:</label>
+      <select id="day-select" onchange="updateBlipGraph()">
+        <option value="today">Today</option>
+        <option value="tomorrow" selected>Tomorrow</option>
+      </select>
+
       <span id="timestamp" class="status"></span>
-      <button onclick="reloadImages()">Refresh</button>
-      <a class="btn" href="https://rasp.stratus.org.uk/index.php/meteograms" target="_blank" rel="noopener noreferrer">Open Stratus Direct ↗</a>
+      <button onclick="reloadAll()">Refresh</button>
+      <a class="btn" href="https://rasp.stratus.org.uk/index.php/meteograms" target="_blank" rel="noopener noreferrer">Stratus Meteograms ↗</a>
     </div>
   </header>
 
   <main class="main-container">
-    <!-- Primary Meteogram Graphic -->
-    <div class="image-wrapper">
+    <!-- Spot Meteogram (Latest generated run) -->
+    <div class="card">
+      <h2>Spot Meteogram (POR)</h2>
       <img id="meteogram-img" alt="POR Meteogram loading..." src="" />
-      <p class="notice">High-resolution spot meteogram for Portmoak (POR)</p>
+      <p class="callout">⚠ Always verify the model date/run time stamped directly on the chart image header.</p>
     </div>
 
-    <!-- Secondary BLIP Summary Graph (Today) -->
-    <div class="image-wrapper">
+    <!-- BLIP Profile Graph (Day queryable) -->
+    <div class="card">
+      <h2 id="blip-heading">Thermal & BL Profile</h2>
       <img id="blip-img" alt="POR BLIP Graph loading..." src="" />
-      <p class="notice">Thermal Updraft & Boundary Layer Profile</p>
+      <p class="notice">Thermal Updraft, Cu Potential, and Boundary Layer Depth for Portmoak.</p>
     </div>
   </main>
 
   <script>
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    
-    function getUrls() {
-      const cacheBust = new Date().getTime();
-      const currentDay = days[new Date().getDay()];
 
-      return {
-        // Direct Meteogram CDN path (POR)
-        meteogram: `https://cdn19.mrsap.org/UK4%2b1/FCST/meteogram_POR.png?t=${cacheBust}`,
-        // Alternate fallback in case of regional prefix variations
-        meteogramAlt: `https://cdn19.mrsap.org/UK4%2b1/FCST/meteogram_PO2.png?t=${cacheBust}`,
-        // BLIP graph feed for POR turnpoint
-        blip: `https://app.stratus.org.uk/blip/graph/blip_main.php?day=${currentDay}&tp=POR&t=${cacheBust}`
-      };
+    function getTargetDayName() {
+      const dayChoice = document.getElementById('day-select').value;
+      const target = new Date();
+      if (dayChoice === 'tomorrow') {
+        target.setDate(target.getDate() + 1);
+      }
+      return days[target.getDay()];
     }
 
-    function reloadImages() {
-      const urls = getUrls();
+    function updateMeteogram() {
+      const cacheBust = new Date().getTime();
       const mImg = document.getElementById('meteogram-img');
+      mImg.src = `https://cdn19.mrsap.org/UK4%2b1/FCST/meteogram_POR.png?t=${cacheBust}`;
+    }
+
+    function updateBlipGraph() {
+      const cacheBust = new Date().getTime();
+      const dayName = getTargetDayName();
       const bImg = document.getElementById('blip-img');
-      const ts = document.getElementById('timestamp');
+      const heading = document.getElementById('blip-heading');
+      
+      heading.textContent = `Thermal & BL Profile (${dayName})`;
+      bImg.src = `https://app.stratus.org.uk/blip/graph/blip_main.php?day=${dayName}&tp=POR&t=${cacheBust}`;
+    }
 
-      // Error handler to try alternate code if POR isn't found
-      mImg.onerror = function() {
-        if (mImg.src !== urls.meteogramAlt) {
-          mImg.src = urls.meteogramAlt;
-        }
-      };
-
-      mImg.src = urls.meteogram;
-      bImg.src = urls.blip;
+    function reloadAll() {
+      updateMeteogram();
+      updateBlipGraph();
 
       const now = new Date();
-      ts.textContent = `Updated: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+      const ts = document.getElementById('timestamp');
+      ts.textContent = `Refreshed: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
     }
 
-    // Initial load
-    reloadImages();
+    // Load both charts on initial visit
+    reloadAll();
   </script>
 </body>
 </html>
