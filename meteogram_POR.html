@@ -119,10 +119,10 @@
   <header>
     <h1>Portmoak (POR) RASP</h1>
     <div class="controls">
-      <label for="day-select" class="status">Day for BLIP:</label>
-      <select id="day-select" onchange="updateBlipGraph()">
-        <option value="today">Today</option>
-        <option value="tomorrow" selected>Tomorrow</option>
+      <label for="day-select" class="status">Forecast Target:</label>
+      <select id="day-select" onchange="reloadAll()">
+        <option value="today" selected>Today</option>
+        <option value="tomorrow">Tomorrow</option>
       </select>
 
       <span id="timestamp" class="status"></span>
@@ -132,14 +132,14 @@
   </header>
 
   <main class="main-container">
-    <!-- Spot Meteogram (Latest generated run) -->
+    <!-- Spot Meteogram -->
     <div class="card">
-      <h2>Spot Meteogram (POR)</h2>
+      <h2 id="meteogram-heading">Spot Meteogram (POR)</h2>
       <img id="meteogram-img" alt="POR Meteogram loading..." src="" />
-      <p class="callout">⚠ Always verify the model date/run time stamped directly on the chart image header.</p>
+      <p class="callout">⚠ Verify the timestamp and valid date stamped directly in the chart image header.</p>
     </div>
 
-    <!-- BLIP Profile Graph (Day queryable) -->
+    <!-- BLIP Profile Graph -->
     <div class="card">
       <h2 id="blip-heading">Thermal & BL Profile</h2>
       <img id="blip-img" alt="POR BLIP Graph loading..." src="" />
@@ -150,41 +150,62 @@
   <script>
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    function getTargetDayName() {
-      const dayChoice = document.getElementById('day-select').value;
-      const target = new Date();
-      if (dayChoice === 'tomorrow') {
-        target.setDate(target.getDate() + 1);
+    function getTargetInfo() {
+      const mode = document.getElementById('day-select').value;
+      const targetDate = new Date();
+      let dayOffset = 0;
+
+      if (mode === 'tomorrow') {
+        targetDate.setDate(targetDate.getDate() + 1);
+        dayOffset = 1;
       }
-      return days[target.getDay()];
-    }
 
-    function updateMeteogram() {
-      const cacheBust = new Date().getTime();
-      const mImg = document.getElementById('meteogram-img');
-      mImg.src = `https://cdn19.mrsap.org/UK4%2b1/FCST/meteogram_POR.png?t=${cacheBust}`;
-    }
-
-    function updateBlipGraph() {
-      const cacheBust = new Date().getTime();
-      const dayName = getTargetDayName();
-      const bImg = document.getElementById('blip-img');
-      const heading = document.getElementById('blip-heading');
-      
-      heading.textContent = `Thermal & BL Profile (${dayName})`;
-      bImg.src = `https://app.stratus.org.uk/blip/graph/blip_main.php?day=${dayName}&tp=POR&t=${cacheBust}`;
+      return {
+        mode: mode,
+        offset: dayOffset,
+        dayName: days[targetDate.getDay()],
+        dateStr: targetDate.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })
+      };
     }
 
     function reloadAll() {
-      updateMeteogram();
-      updateBlipGraph();
+      const target = getTargetInfo();
+      const cacheBust = new Date().getTime();
+
+      const mImg = document.getElementById('meteogram-img');
+      const bImg = document.getElementById('blip-img');
+      const mHeading = document.getElementById('meteogram-heading');
+      const bHeading = document.getElementById('blip-heading');
+      const ts = document.getElementById('timestamp');
+
+      mHeading.textContent = `Spot Meteogram (POR) - ${target.mode.toUpperCase()} (${target.dateStr})`;
+      bHeading.textContent = `Thermal & BL Profile - ${target.mode.toUpperCase()} (${target.dayName})`;
+
+      // BLIP graph accepts day names or day relative index
+      // Using explicit day name + day index prevents the script from sticking to tomorrow
+      bImg.src = `https://app.stratus.org.uk/blip/graph/blip_main.php?day=${target.dayName}&dayidx=${target.offset}&tp=POR&t=${cacheBust}`;
+
+      // Meteogram CDN:
+      // FCST holds the active/tomorrow run after evening update; day0/ holds today's active operational model
+      if (target.mode === 'today') {
+        const todayUrl = `https://cdn19.mrsap.org/UK4%2b1/day0/FCST/meteogram_POR.png?t=${cacheBust}`;
+        const fallbackUrl = `https://cdn19.mrsap.org/UK4%2b1/FCST/meteogram_POR.png?t=${cacheBust}`;
+        
+        mImg.onerror = function() {
+          mImg.onerror = null;
+          mImg.src = fallbackUrl;
+        };
+        mImg.src = todayUrl;
+      } else {
+        mImg.onerror = null;
+        mImg.src = `https://cdn19.mrsap.org/UK4%2b1/FCST/meteogram_POR.png?t=${cacheBust}`;
+      }
 
       const now = new Date();
-      const ts = document.getElementById('timestamp');
       ts.textContent = `Refreshed: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
     }
 
-    // Load both charts on initial visit
+    // Initialize on page load
     reloadAll();
   </script>
 </body>
