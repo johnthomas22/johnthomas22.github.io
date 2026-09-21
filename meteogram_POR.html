@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RASP Meteogram - Portmoak (POR)</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --text: #e0e0e0;
+      --accent: #4da3ff;
+      --border: #333;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    button, a.btn {
+      background: #2a2a2a;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      transition: background 0.15s ease;
+    }
+    button:hover, a.btn:hover {
+      background: #383838;
+      border-color: var(--accent);
+    }
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1.5rem;
+    }
+    .image-wrapper {
+      max-width: 1200px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    .image-wrapper img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+      background: #fff; /* meteogram images are transparent or white bg */
+    }
+    .notice {
+      font-size: 0.8rem;
+      color: #888;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .status {
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Portmoak (POR) Meteogram</h1>
+    <div class="controls">
+      <span id="timestamp" class="status"></span>
+      <button onclick="reloadImages()">Refresh</button>
+      <a class="btn" href="https://rasp.stratus.org.uk/index.php/meteograms" target="_blank" rel="noopener noreferrer">Open Stratus Direct ↗</a>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Primary Meteogram Graphic -->
+    <div class="image-wrapper">
+      <img id="meteogram-img" alt="POR Meteogram loading..." src="" />
+      <p class="notice">High-resolution spot meteogram for Portmoak (POR)</p>
+    </div>
+
+    <!-- Secondary BLIP Summary Graph (Today) -->
+    <div class="image-wrapper">
+      <img id="blip-img" alt="POR BLIP Graph loading..." src="" />
+      <p class="notice">Thermal Updraft & Boundary Layer Profile</p>
+    </div>
+  </main>
+
+  <script>
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    
+    function getUrls() {
+      const cacheBust = new Date().getTime();
+      const currentDay = days[new Date().getDay()];
+
+      return {
+        // Direct Meteogram CDN path (POR)
+        meteogram: `https://cdn19.mrsap.org/UK4%2b1/FCST/meteogram_POR.png?t=${cacheBust}`,
+        // Alternate fallback in case of regional prefix variations
+        meteogramAlt: `https://cdn19.mrsap.org/UK4%2b1/FCST/meteogram_PO2.png?t=${cacheBust}`,
+        // BLIP graph feed for POR turnpoint
+        blip: `https://app.stratus.org.uk/blip/graph/blip_main.php?day=${currentDay}&tp=POR&t=${cacheBust}`
+      };
+    }
+
+    function reloadImages() {
+      const urls = getUrls();
+      const mImg = document.getElementById('meteogram-img');
+      const bImg = document.getElementById('blip-img');
+      const ts = document.getElementById('timestamp');
+
+      // Error handler to try alternate code if POR isn't found
+      mImg.onerror = function() {
+        if (mImg.src !== urls.meteogramAlt) {
+          mImg.src = urls.meteogramAlt;
+        }
+      };
+
+      mImg.src = urls.meteogram;
+      bImg.src = urls.blip;
+
+      const now = new Date();
+      ts.textContent = `Updated: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+    }
+
+    // Initial load
+    reloadImages();
+  </script>
+</body>
+</html>
