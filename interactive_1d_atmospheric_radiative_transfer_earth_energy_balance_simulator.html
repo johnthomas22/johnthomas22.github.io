@@ -1390,7 +1390,10 @@
           inertiaSlider.value = "20";
 
           computePhysics();
+          // Full Pre-Industrial reset to true thermal equilibrium
           T_surface_C = T_surface_equilibrium_C;
+          currentOLR = ASR;
+          currentEEI = 0.0;
           setBaseline(T_surface_C);
         });
 
@@ -1410,8 +1413,20 @@
           emissionRatePpmYr = 0.0;
           emissionRateSlider.value = "0.0";
           updateRateButtons();
+
+          h2oMultiplier = 1.0;
+          h2oSlider.value = "1.00";
+          autoH2oFeedback = true;
+          h2oAutoFeedback.checked = true;
+
+          tropoHeightKm = 12.0;
+          tropoSlider.value = "12.0";
+
           computePhysics();
-          T_surface_C = T_surface_equilibrium_C;
+          // Cleanly set Pre-Industrial state to exact radiative equilibrium
+          T_surface_C = T_surface_equilibrium_C; // 13.85 °C
+          currentOLR = ASR;                      // 239.0 W/m²
+          currentEEI = 0.0;                      // 0.00 W/m²
           setBaseline(T_surface_C);
         });
 
@@ -1420,9 +1435,19 @@
           emissionRatePpmYr = 2.5;
           emissionRateSlider.value = "2.5";
           updateRateButtons();
+
+          h2oMultiplier = 1.07;
+          h2oSlider.value = "1.07";
+          autoH2oFeedback = true;
+          h2oAutoFeedback.checked = true;
+
+          tropoHeightKm = 12.0;
+          tropoSlider.value = "12.0";
+
+          // Present day: ~1.15°C warming above pre-industrial, active transient EEI
+          T_surface_C = 15.00;
           computePhysics();
-          T_surface_C = 14.95;
-          setBaseline(14.95);
+          setBaseline(T_surface_C);
         });
 
         document.getElementById('btnDoubled').addEventListener('click', () => {
@@ -1430,6 +1455,9 @@
           emissionRatePpmYr = 0.0;
           emissionRateSlider.value = "0.0";
           updateRateButtons();
+
+          // Instantaneous 2x CO2 forcing shock starting from modern temperature
+          T_surface_C = 15.00;
           computePhysics();
           setBaseline(T_surface_C);
         });
@@ -1439,6 +1467,9 @@
           emissionRatePpmYr = 4.0;
           emissionRateSlider.value = "4.0";
           updateRateButtons();
+
+          // Quadrupled CO2 extreme forcing shock starting from modern temperature
+          T_surface_C = 15.00;
           computePhysics();
           setBaseline(T_surface_C);
         });
@@ -1468,9 +1499,14 @@
           setupEvents();
 
           updateCO2UI(425);
+          emissionRatePpmYr = 2.5;
+          emissionRateSlider.value = "2.5";
+          tropoHeightKm = 12.0;
+          tropoSlider.value = "12.0";
+          T_surface_C = 15.00;
+
           computePhysics();
-          T_surface_C = 14.95;
-          setBaseline(14.95);
+          setBaseline(15.00);
 
           lastTime = performance.now();
           requestAnimationFrame(animate);
