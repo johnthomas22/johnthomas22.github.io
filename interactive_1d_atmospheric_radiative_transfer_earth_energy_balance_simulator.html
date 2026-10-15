@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1D Radiative Transfer & Earth Energy Balance Simulator</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Earth Energy Imbalance & Radiative Transfer Simulator</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -16,12 +17,15 @@
     .mono {
       font-family: 'JetBrains Mono', monospace;
     }
+    input[type=range] {
+      accent-color: #38bdf8;
+    }
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #0f172a;
+      background: #090d16;
     }
     ::-webkit-scrollbar-thumb {
       background: #334155;
@@ -30,22 +34,19 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #475569;
     }
-    input[type=range] {
-      accent-color: #38bdf8;
-    }
-    @keyframes pulse-slow {
-      0%, 100% { opacity: 0.9; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.98); }
+    @keyframes pulse-gentle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(0.98); }
     }
     .heating-pulse {
-      animation: pulse-slow 2s infinite ease-in-out;
+      animation: pulse-gentle 2.2s infinite ease-in-out;
     }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950">
 
-  <!-- Top Navbar -->
-  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40 px-4 py-3">
+  <!-- TOP NAVBAR -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40 px-4 py-2.5">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-cyan-500 to-sky-400 p-[2px] flex items-center justify-center shadow-lg shadow-cyan-500/10">
@@ -58,14 +59,14 @@
         <div>
           <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2">
             Earth Energy Imbalance & Radiative Transfer
-            <span class="text-xs px-2 py-0.5 rounded-full font-semibold bg-cyan-950 text-cyan-400 border border-cyan-800/60 hidden sm:inline-block">Transient OLR Model</span>
+            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold bg-cyan-950 text-cyan-400 border border-cyan-800/60 hidden sm:inline-block">Transient OLR Model</span>
           </h1>
-          <p class="text-xs text-slate-400">Dynamic relaxation from CO₂ radiative forcing to thermal equilibrium</p>
+          <p class="text-[11px] text-slate-400">1D Atmospheric multi-layer emission & non-equilibrium ocean heat uptake</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <button id="openGuideBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition shadow-sm">
+        <button id="openGuideBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition shadow-sm active:scale-95">
           <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
           </svg>
@@ -75,13 +76,13 @@
     </div>
   </header>
 
-  <!-- Main Content Layout -->
-  <main class="max-w-7xl mx-auto w-full p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
+  <!-- MAIN BODY LAYOUT -->
+  <main class="max-w-7xl mx-auto w-full p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
     
-    <!-- Left Column: Controls & Presets (5 cols on lg) -->
+    <!-- LEFT PANEL: CONTROLS & EXPERIMENT PRESETS (5 cols on desktop) -->
     <div class="lg:col-span-5 flex flex-col gap-4">
       
-      <!-- Simulation Time & Mode Controls -->
+      <!-- Simulation Engine & Transport Bar -->
       <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2">
@@ -91,17 +92,17 @@
             </span>
             <span class="text-xs font-semibold uppercase tracking-wider text-slate-300" id="simStatusLabel">Dynamic Simulation: Running</span>
           </div>
-          <span class="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/40" id="elapsedYears">Year: 0.0</span>
+          <span class="text-xs font-mono text-cyan-400 bg-cyan-950/80 px-2.5 py-0.5 rounded border border-cyan-800/60" id="elapsedYears">Year: 0.0</span>
         </div>
 
-        <!-- Transport Bar -->
+        <!-- Buttons -->
         <div class="flex flex-wrap items-center gap-2 mb-3">
-          <button id="togglePlayBtn" class="flex-1 py-2 px-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs flex items-center justify-center gap-1.5 transition active:scale-95">
+          <button id="togglePlayBtn" class="flex-1 py-2 px-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow">
             <svg id="playIcon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
             <svg id="pauseIcon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
             <span id="playBtnText">Pause</span>
           </button>
-          <button id="fastForwardBtn" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs border border-slate-700 transition flex items-center gap-1 active:scale-95" title="Instantly step to steady-state equilibrium">
+          <button id="snapEquilibriumBtn" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs border border-slate-700 transition flex items-center gap-1 active:scale-95" title="Step immediately to steady state (OLR = 239 W/m²)">
             <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
             <span>Snap to Equilibrium</span>
           </button>
@@ -112,7 +113,7 @@
 
         <!-- Simulation Speed -->
         <div class="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800/80">
-          <span>Thermal Relaxation Speed:</span>
+          <span>Time Step Velocity:</span>
           <div class="flex items-center gap-1">
             <button data-speed="0.5" class="speed-btn px-2 py-0.5 rounded text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300">0.5x</button>
             <button data-speed="1.0" class="speed-btn px-2 py-0.5 rounded text-[11px] bg-cyan-700 text-white font-semibold">1x</button>
@@ -122,20 +123,25 @@
         </div>
       </div>
 
-      <!-- Quick Scenario Triggers -->
+      <!-- Presets & Baseline Switch -->
       <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
-        <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2.5 flex items-center justify-between">
-          <span>Experiment Presets</span>
-          <span class="text-[10px] text-cyan-400 font-normal">Test instant forcing & balance</span>
-        </h3>
+        <div class="flex items-center justify-between mb-2.5">
+          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span>Experiment Presets</span>
+          </h3>
+          <button id="rebaselineBtn" class="text-[10px] text-cyan-400 hover:text-cyan-300 font-mono px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-800/60 hover:bg-cyan-900 transition flex items-center gap-1 active:scale-95" title="Set current temperature as the reference baseline (ΔT = 0.00 °C)">
+            <svg class="w-3 h-3 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span>Set New Baseline</span>
+          </button>
+        </div>
         <div class="grid grid-cols-2 gap-2 text-xs">
           <button id="btnPreInd" class="preset-btn text-left p-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 transition group">
             <div class="font-semibold text-slate-200 group-hover:text-cyan-300">1. Pre-Industrial</div>
             <div class="text-[11px] text-slate-400">280 ppm · EEI ≈ 0.0 W/m²</div>
           </button>
           <button id="btnCurrent" class="preset-btn text-left p-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 transition group">
-            <div class="font-semibold text-slate-200 group-hover:text-cyan-300">2. Present Day</div>
-            <div class="text-[11px] text-slate-400">420 ppm · Active Imbalance</div>
+            <div class="font-semibold text-cyan-300 group-hover:text-cyan-200">2. Present Day</div>
+            <div class="text-[11px] text-slate-400">425 ppm · +2.5 ppm/yr ramp</div>
           </button>
           <button id="btnDoubled" class="preset-btn text-left p-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 transition group">
             <div class="font-semibold text-amber-300 group-hover:text-amber-200">3. Sudden 2× CO₂ Spike</div>
@@ -149,25 +155,25 @@
       </div>
 
       <!-- Parameter Sliders -->
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col gap-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col gap-4">
         
-        <!-- CO2 Slider (Logarithmic Scale) -->
+        <!-- Logarithmic CO2 Slider -->
         <div>
           <div class="flex justify-between items-center text-xs mb-1.5">
             <label for="co2Slider" class="font-semibold text-slate-200 flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
               Atmospheric CO₂ Concentration
-              <span class="text-[10px] px-1.5 py-0.2 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/50 font-mono">Log scale</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/60 font-mono">Log scale</span>
             </label>
-            <span class="mono font-bold text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800/60" id="co2Display">420 ppm</span>
+            <span class="mono font-bold text-cyan-400 bg-cyan-950 px-2.5 py-0.5 rounded border border-cyan-800/60" id="co2Display">425 ppm</span>
           </div>
           
-          <div class="relative w-full pt-1 pb-6">
-            <input type="range" id="co2Slider" min="0" max="1" step="0.001" value="0.518" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
+          <div class="relative w-full pt-1 pb-7">
+            <input type="range" id="co2Slider" min="0" max="1" step="0.0005" value="0.521" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
             
-            <!-- Mathematical Log Scale Tick Marks & Labels -->
+            <!-- Exact Log-Scale Tick Marks -->
             <div class="relative w-full h-4 mt-1 pointer-events-none text-[10px] font-mono text-slate-400">
-              <!-- 100 ppm (0.0%) -->
+              <!-- 100 ppm (0.00%) -->
               <div class="absolute left-0 -translate-x-0 flex flex-col items-start">
                 <span class="w-px h-1.5 bg-slate-600 mb-0.5"></span>
                 <span>100</span>
@@ -176,25 +182,25 @@
               <div class="absolute -translate-x-1/2 flex flex-col items-center" style="left: 37.14%;">
                 <span class="w-px h-1.5 bg-slate-500 mb-0.5"></span>
                 <span class="text-slate-300 font-semibold">280</span>
-                <span class="text-[9px] text-slate-400 font-sans -mt-0.5">Pre-Ind</span>
+                <span class="text-[9px] text-slate-500 font-sans -mt-0.5">Pre-Ind</span>
               </div>
-              <!-- 420 ppm (51.76%) -->
-              <div class="absolute -translate-x-1/2 flex flex-col items-center" style="left: 51.76%;">
-                <span class="w-px h-1.5 bg-cyan-500/80 mb-0.5"></span>
-                <span class="text-cyan-400 font-semibold">420</span>
-                <span class="text-[9px] text-cyan-400/80 font-sans -mt-0.5">Now</span>
+              <!-- 420-425 ppm (~52.1%) -->
+              <div class="absolute -translate-x-1/2 flex flex-col items-center" style="left: 52.1%;">
+                <span class="w-px h-1.5 bg-cyan-500 mb-0.5"></span>
+                <span class="text-cyan-400 font-semibold">425</span>
+                <span class="text-[9px] text-cyan-400 font-sans -mt-0.5">Now</span>
               </div>
               <!-- 560 ppm (62.15%) -->
               <div class="absolute -translate-x-1/2 flex flex-col items-center" style="left: 62.15%;">
-                <span class="w-px h-1.5 bg-amber-500/80 mb-0.5"></span>
+                <span class="w-px h-1.5 bg-amber-500 mb-0.5"></span>
                 <span class="text-amber-300 font-semibold">560</span>
-                <span class="text-[9px] text-amber-300/80 font-sans -mt-0.5">2×</span>
+                <span class="text-[9px] text-amber-300 font-sans -mt-0.5">2×</span>
               </div>
               <!-- 1120 ppm (87.15%) -->
               <div class="absolute -translate-x-1/2 flex flex-col items-center hidden sm:flex" style="left: 87.15%;">
-                <span class="w-px h-1.5 bg-rose-500/80 mb-0.5"></span>
+                <span class="w-px h-1.5 bg-rose-500 mb-0.5"></span>
                 <span class="text-rose-300 font-semibold">1120</span>
-                <span class="text-[9px] text-rose-300/80 font-sans -mt-0.5">4×</span>
+                <span class="text-[9px] text-rose-300 font-sans -mt-0.5">4×</span>
               </div>
               <!-- 1600 ppm (100.0%) -->
               <div class="absolute right-0 translate-x-0 flex flex-col items-end">
@@ -202,6 +208,38 @@
                 <span>1600</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Annual CO2 Emission Growth Rate Slider -->
+        <div class="pt-2 border-t border-slate-800">
+          <div class="flex justify-between items-center text-xs mb-1.5">
+            <label for="emissionRateSlider" class="font-semibold text-slate-200 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+              Annual CO₂ Emission Growth Rate
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800/60 font-mono">Continuous</span>
+            </label>
+            <span class="mono font-bold text-rose-400 bg-rose-950 px-2 py-0.5 rounded border border-rose-800/60" id="emissionRateDisplay">+2.50 ppm/yr</span>
+          </div>
+          <input type="range" id="emissionRateSlider" min="0.0" max="8.0" step="0.1" value="2.5" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
+          
+          <div class="grid grid-cols-4 gap-1.5 mt-2">
+            <button data-rate="0.0" class="rate-preset-btn px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 border border-slate-700 transition text-center">
+              0.0 <span class="block text-[8px] text-slate-400">Net Zero</span>
+            </button>
+            <button data-rate="1.5" class="rate-preset-btn px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 border border-slate-700 transition text-center">
+              +1.5 <span class="block text-[8px] text-slate-400">Mid-20th C.</span>
+            </button>
+            <button data-rate="2.5" class="rate-preset-btn px-2 py-1 rounded-lg bg-rose-900/60 text-[10px] text-rose-200 font-semibold border border-rose-700 transition text-center">
+              +2.5 <span class="block text-[8px] text-rose-300">Current Pace</span>
+            </button>
+            <button data-rate="4.0" class="rate-preset-btn px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 border border-slate-700 transition text-center">
+              +4.0 <span class="block text-[8px] text-slate-400">Accelerating</span>
+            </button>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-1.5 flex items-center justify-between">
+            <span>Perpetuates out-of-equilibrium EEI</span>
+            <span class="text-rose-400 font-mono text-[10px]" id="rateStatusText">Active emissions ramp</span>
           </div>
         </div>
 
@@ -214,13 +252,12 @@
             </label>
             <span class="mono font-bold text-blue-400 bg-blue-950 px-2 py-0.5 rounded border border-blue-800/60" id="h2oDisplay">1.00×</span>
           </div>
-          <input type="range" id="h2oSlider" min="0.5" max="2.5" step="0.02" value="1.00" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
+          <input type="range" id="h2oSlider" min="0.5" max="2.0" step="0.02" value="1.00" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
           
-          <!-- Auto Clausius-Clapeyron Feedback -->
-          <div class="mt-2.5 flex items-center justify-between bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
+          <div class="mt-2 flex items-center justify-between bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
             <div class="text-xs">
-              <div class="font-medium text-slate-200">Clausius-Clapeyron Feedback</div>
-              <div class="text-[10px] text-slate-400">Auto-scales water vapor ~7% per +1°C warming</div>
+              <div class="font-medium text-slate-200">Clausius-Clapeyron Auto-Feedback</div>
+              <div class="text-[10px] text-slate-400">Scales moisture ~7% per +1°C surface warming</div>
             </div>
             <label class="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" id="h2oAutoFeedback" class="sr-only peer" checked>
@@ -229,7 +266,7 @@
           </div>
         </div>
 
-        <!-- Troposphere Height / Lapse Rate Slider -->
+        <!-- Troposphere Height Baseline -->
         <div class="pt-2 border-t border-slate-800">
           <div class="flex justify-between items-center text-xs mb-1.5">
             <label for="tropoSlider" class="font-semibold text-slate-200 flex items-center gap-1.5">
@@ -240,24 +277,24 @@
           </div>
           <input type="range" id="tropoSlider" min="8.0" max="16.0" step="0.2" value="12.0" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
           <div class="text-[10px] text-slate-400 mt-1">
-            Governs vertical temperature gradient (lapse rate: <span class="mono text-slate-300">-6.5 °C/km</span>)
+            Governs tropospheric lapse rate (<span class="mono text-slate-300">-6.5 °C/km</span>)
           </div>
         </div>
 
-        <!-- Ocean Thermal Inertia / Heat Capacity Slider -->
+        <!-- Climate Thermal Inertia (Response Time) -->
         <div class="pt-2 border-t border-slate-800">
           <div class="flex justify-between items-center text-xs mb-1.5">
             <label for="inertiaSlider" class="font-semibold text-slate-200 flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
-              Climate System Thermal Inertia
+              Climate System Thermal Inertia (Ocean Lag)
             </label>
-            <span class="mono font-bold text-indigo-300 bg-indigo-950 px-2 py-0.5 rounded border border-indigo-800/60" id="inertiaDisplay">Normal (~50m ocean)</span>
+            <span class="mono font-bold text-indigo-300 bg-indigo-950 px-2 py-0.5 rounded border border-indigo-800/60" id="inertiaDisplay">20 years</span>
           </div>
-          <input type="range" id="inertiaSlider" min="0.2" max="3.0" step="0.1" value="1.0" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
+          <input type="range" id="inertiaSlider" min="5" max="50" step="1" value="20" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
           <div class="flex justify-between text-[10px] text-slate-400 mt-1">
-            <span>Fast (Atmosphere only)</span>
-            <span>Standard mixed ocean</span>
-            <span>Deep ocean lag</span>
+            <span>Fast (5 yrs, shallow)</span>
+            <span>Standard (20 yrs, ~100m)</span>
+            <span>Deep lag (50 yrs)</span>
           </div>
         </div>
 
@@ -265,62 +302,76 @@
 
     </div>
 
-    <!-- Right Column: Visualization Canvas, Live Gauges & Energy Budget Cards (7 cols on lg) -->
+    <!-- RIGHT PANEL: DASHBOARDS, CANVASES, & KPIs (7 cols on desktop) -->
     <div class="lg:col-span-7 flex flex-col gap-4">
       
-      <!-- Live Real-Time Radiation Flux Gauges -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <!-- Inbound Solar (ASR) Card -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 shadow-lg relative overflow-hidden">
-          <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-amber-500/10 rounded-full blur-xl pointer-events-none"></div>
-          <div class="text-[11px] font-semibold uppercase tracking-wider text-amber-400 flex items-center justify-between">
-            <span>Net Inbound Solar</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 border border-amber-800/50 text-amber-300">ASR</span>
+      <!-- Top Gauges Strip: ASR, OLR, EEI, & Delta T -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        
+        <!-- Net Inbound Solar (ASR) -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-lg relative overflow-hidden">
+          <div class="text-[10px] font-semibold uppercase tracking-wider text-amber-400 flex items-center justify-between">
+            <span>Inbound Solar</span>
+            <span class="text-[8px] px-1 py-0.2 rounded bg-amber-950 border border-amber-800/50 text-amber-300 mono">ASR</span>
           </div>
           <div class="mt-1 flex items-baseline gap-1">
-            <span class="text-2xl font-black mono text-amber-300" id="inboundVal">239.0</span>
-            <span class="text-xs text-amber-400/80 font-mono">W/m²</span>
+            <span class="text-xl font-black mono text-amber-300" id="inboundVal">239.0</span>
+            <span class="text-[10px] text-amber-400/80 font-mono">W/m²</span>
           </div>
-          <p class="text-[10px] text-slate-400 mt-1">Sunlight absorbed after albedo (~30%)</p>
+          <p class="text-[9px] text-slate-400 mt-0.5 truncate">Net absorbed after albedo</p>
         </div>
 
-        <!-- Outbound Longwave (OLR) Card -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 shadow-lg relative overflow-hidden">
-          <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-sky-500/10 rounded-full blur-xl pointer-events-none"></div>
-          <div class="text-[11px] font-semibold uppercase tracking-wider text-sky-400 flex items-center justify-between">
+        <!-- Outbound Thermal (OLR) -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-lg relative overflow-hidden">
+          <div class="text-[10px] font-semibold uppercase tracking-wider text-sky-400 flex items-center justify-between">
             <span>Outbound Thermal</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-sky-950 border border-sky-800/50 text-sky-300">OLR</span>
+            <span class="text-[8px] px-1 py-0.2 rounded bg-sky-950 border border-sky-800/50 text-sky-300 mono">OLR</span>
           </div>
           <div class="mt-1 flex items-baseline gap-1">
-            <span class="text-2xl font-black mono text-sky-300 transition-colors" id="outboundVal">239.0</span>
-            <span class="text-xs text-sky-400/80 font-mono">W/m²</span>
+            <span class="text-xl font-black mono text-sky-300" id="outboundVal">238.1</span>
+            <span class="text-[10px] text-sky-400/80 font-mono">W/m²</span>
           </div>
-          <div class="text-[10px] text-slate-400 mt-1 flex items-center justify-between">
-            <span>Escaping at top of atmos</span>
-            <span id="olrDeltaIndicator" class="mono text-[10px] text-slate-300">Δ: 0.0</span>
+          <div class="text-[9px] text-slate-400 mt-0.5 flex items-center justify-between">
+            <span>Top of atmos</span>
+            <span id="olrDeltaIndicator" class="mono text-[9px] text-rose-400">Δ: -0.9</span>
           </div>
         </div>
 
-        <!-- Net Earth Energy Imbalance (EEI) Card -->
-        <div id="eeiCard" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 shadow-lg relative overflow-hidden transition-all duration-300">
-          <div id="eeiGlow" class="absolute -right-4 -bottom-4 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl pointer-events-none"></div>
-          <div class="text-[11px] font-semibold uppercase tracking-wider flex items-center justify-between" id="eeiHeader">
-            <span id="eeiTitle">Net Imbalance (EEI)</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 mono" id="eeiStatusTag">Balanced</span>
+        <!-- Net Earth Energy Imbalance (EEI) -->
+        <div id="eeiCard" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-lg relative overflow-hidden transition-all duration-300">
+          <div class="text-[10px] font-semibold uppercase tracking-wider flex items-center justify-between">
+            <span id="eeiTitle">Net Imbalance</span>
+            <span class="text-[8px] px-1.5 py-0.2 rounded bg-rose-950 border border-rose-800 text-rose-300 mono heating-pulse" id="eeiStatusTag">Trapped Surplus</span>
           </div>
           <div class="mt-1 flex items-baseline gap-1">
-            <span class="text-2xl font-black mono text-emerald-400" id="eeiVal">+0.00</span>
-            <span class="text-xs text-slate-400 font-mono">W/m²</span>
+            <span class="text-xl font-black mono text-rose-400" id="eeiVal">+0.90</span>
+            <span class="text-[10px] text-slate-400 font-mono">W/m²</span>
           </div>
-          <p class="text-[10px] text-slate-400 mt-1" id="eeiDesc">Surplus trapped heat flux heating oceans</p>
+          <p class="text-[9px] text-slate-400 mt-0.5 truncate" id="eeiDesc">Surplus heating oceans</p>
         </div>
+
+        <!-- Warming Since Start (ΔT Baseline Card) -->
+        <div id="warmingDeltaCard" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-lg relative overflow-hidden">
+          <div class="text-[10px] font-semibold uppercase tracking-wider text-rose-300 flex items-center justify-between">
+            <span>Warming Since Start</span>
+            <span class="text-[8px] px-1 py-0.2 rounded bg-rose-950 border border-rose-800/50 text-rose-300 font-mono">ΔT</span>
+          </div>
+          <div class="mt-1 flex items-baseline gap-1">
+            <span class="text-xl font-black mono text-slate-200" id="deltaTempVal">+0.00 °C</span>
+          </div>
+          <div class="text-[9px] text-slate-400 mt-0.5 flex items-center justify-between truncate">
+            <span>Start: <span class="mono text-slate-300" id="startTempDisplay">14.95 °C</span></span>
+            <span class="text-amber-400/90 font-mono" id="currentTempSmallDisplay">Now: 14.95 °C</span>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Dynamic Flux Visualizer Canvas -->
+      <!-- Canvas Visualizer: Left (1D Column) + Right (Vertical Profiles Chart) -->
       <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col flex-1 relative">
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold text-slate-200">Atmospheric Cross-Section & Vertical Profiles</span>
+            <span class="text-xs font-semibold text-slate-200">Atmospheric Column & Vertical Radiative Profiles</span>
             <span class="text-[10px] px-2 py-0.5 bg-slate-800 text-slate-300 rounded font-mono border border-slate-700">1D Column Model</span>
           </div>
           <div class="text-[11px] text-slate-400 flex items-center gap-3">
@@ -330,41 +381,47 @@
           </div>
         </div>
 
-        <!-- Canvas Container -->
-        <div class="relative w-full h-[380px] sm:h-[420px] rounded-xl overflow-hidden border border-slate-800 bg-[#020617]">
+        <!-- Canvas Element -->
+        <div class="relative w-full h-[400px] rounded-xl overflow-hidden border border-slate-800 bg-[#020617]">
           <canvas id="atmosCanvas" class="w-full h-full block"></canvas>
           
-          <!-- On-canvas dynamic indicators (floating tags) -->
-          <div id="escapeAltitudeBadge" class="absolute right-3 px-2 py-1 rounded bg-rose-950/80 border border-rose-500/50 text-rose-300 text-[11px] font-mono shadow-md backdrop-blur pointer-events-none transition-all">
+          <!-- Effective altitude dynamic badge -->
+          <div id="escapeAltitudeBadge" class="absolute right-3 px-2 py-1 rounded bg-rose-950/85 border border-rose-500/60 text-rose-300 text-[10px] font-mono shadow-md backdrop-blur pointer-events-none transition-all">
             Emission Alt: <span id="badgeHeightKm">5.4</span> km (<span id="badgeTempC">-17.8</span>°C)
           </div>
 
-          <div class="absolute left-3 top-3 px-2 py-1 rounded bg-slate-950/80 border border-slate-800 text-[11px] font-mono text-slate-300 shadow pointer-events-none">
+          <div class="absolute left-3 top-3 px-2 py-1 rounded bg-slate-950/80 border border-slate-800 text-[10px] font-mono text-slate-300 shadow pointer-events-none">
             Space (Top of Atmosphere)
           </div>
         </div>
 
-        <!-- Canvas Bottom Status Bar -->
+        <!-- Bottom KPI Bar -->
         <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-800/80 text-xs">
-          <div class="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
-            <div class="text-[10px] text-slate-400">Surface Temperature</div>
-            <div class="mono font-bold text-sm text-amber-400" id="canvasSurfTemp">14.00 °C</div>
-            <div class="text-[9px] text-slate-400" id="canvasTempAnomaly">Anomaly: +0.00 °C</div>
+          <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
+            <div class="flex items-center justify-between text-[10px] text-slate-400">
+              <span>Surface Temperature</span>
+              <span id="canvasDeltaBadge" class="font-mono text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-300">ΔT: +0.00°C</span>
+            </div>
+            <div class="mono font-bold text-sm text-amber-400 mt-0.5" id="canvasSurfTemp">14.95 °C</div>
+            <div class="text-[9px] text-slate-400 flex items-center justify-between mt-0.5">
+              <span id="canvasTempAnomaly">Anomaly: +1.15 °C</span>
+              <span class="text-[8px] text-slate-500 font-mono" id="canvasBaselineLabel">from 14.95°C</span>
+            </div>
           </div>
-          <div class="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
+          <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
             <div class="text-[10px] text-slate-400">Instant Radiative Forcing</div>
-            <div class="mono font-bold text-sm text-cyan-400" id="canvasForcing">0.00 W/m²</div>
-            <div class="text-[9px] text-slate-400">ΔF = 5.35 · ln(C/C₀)</div>
+            <div class="mono font-bold text-sm text-cyan-400 mt-0.5" id="canvasForcing">+2.23 W/m²</div>
+            <div class="text-[9px] text-slate-400 mt-0.5">ΔF = 5.35 · ln(C/C₀)</div>
           </div>
-          <div class="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
+          <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
             <div class="text-[10px] text-slate-400">Equilibrium Temperature</div>
-            <div class="mono font-bold text-sm text-emerald-400" id="canvasEqTemp">14.00 °C</div>
-            <div class="text-[9px] text-slate-400" id="canvasWarmRemaining">Remaining: 0.00 °C</div>
+            <div class="mono font-bold text-sm text-emerald-400 mt-0.5" id="canvasEqTemp">15.82 °C</div>
+            <div class="text-[9px] text-slate-400 mt-0.5" id="canvasWarmRemaining">Committed: +0.87 °C</div>
           </div>
-          <div class="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
+          <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
             <div class="text-[10px] text-slate-400">Cumulative Heat Stored</div>
-            <div class="mono font-bold text-sm text-rose-400" id="canvasHeatStored">0.00 ZJ</div>
-            <div class="text-[9px] text-slate-400">Ocean warming reservoir</div>
+            <div class="mono font-bold text-sm text-rose-400 mt-0.5" id="canvasHeatStored">0.0 ZJ</div>
+            <div class="text-[9px] text-slate-400 mt-0.5">Ocean warming reservoir</div>
           </div>
         </div>
 
@@ -374,8 +431,8 @@
 
   </main>
 
-  <!-- Comprehensive Explanation Modal -->
-  <div id="guideModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+  <!-- PHYSICS GUIDE & SATURATION REFUTATION MODAL -->
+  <div id="guideModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       
       <!-- Modal Header -->
@@ -387,8 +444,8 @@
             </svg>
           </div>
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-white">Atmospheric Radiative Transfer & Saturation Physics Guide</h2>
-            <p class="text-xs text-slate-400">A rigorous scientific evaluation of energy balance, OLR, and why the "CO₂ saturation" claim fails.</p>
+            <h2 class="text-base sm:text-lg font-bold text-white">Atmospheric Radiative Transfer & Saturation Refutation Guide</h2>
+            <p class="text-xs text-slate-400">Rigorous physical breakdown of why the "CO₂ is 99% saturated" argument is scientifically false.</p>
           </div>
         </div>
         <button id="closeGuideBtn" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition">
@@ -396,96 +453,122 @@
         </button>
       </div>
 
-      <!-- Modal Body (Scrollable) -->
+      <!-- Modal Content (Scrollable) -->
       <div class="px-6 py-5 overflow-y-auto space-y-6 text-sm text-slate-300 leading-relaxed">
         
-        <!-- Section 1: The Core Mechanism of Warming -->
+        <!-- Section 1: Radiation Physics & EEI -->
         <section class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
           <h3 class="text-sm font-bold text-cyan-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <span>1. What is Outgoing Longwave Radiation (OLR) & Earth Energy Imbalance (EEI)?</span>
+            <span>1. Earth Energy Imbalance (EEI) & Transient OLR</span>
           </h3>
           <p class="mb-3">
-            Earth's climate is governed by the <strong>First Law of Thermodynamics</strong> (Conservation of Energy). The Sun radiates shortwave energy (mostly visible light). Averaged over the whole spherical surface of the globe:
+            Planetary temperature is governed by the global energy budget. The Sun supplies shortwave solar radiation ($340\text{ W/m}^2$). Earth reflects $\approx 30\%$ back to space ($101\text{ W/m}^2$). The remaining absorbed radiation warms the planet:
           </p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2 text-xs mono">
             <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-              <span class="text-amber-400 font-semibold">Incoming Solar Flux:</span> ~340 W/m²<br>
-              <span class="text-slate-400">Albedo (reflection ~30%):</span> -101 W/m²<br>
-              <span class="text-emerald-400 font-bold">Net Absorbed Solar (ASR): ≈ 239 W/m²</span>
+              <span class="text-amber-400 font-semibold">Net Absorbed Solar (ASR):</span> ≈ 239.0 W/m²<br>
+              <span class="text-slate-400">Fixed planetary input baseline</span>
             </div>
             <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-              <span class="text-sky-400 font-semibold">Outgoing Longwave (OLR):</span> Emitted thermal infrared<br>
-              <span class="text-slate-400">At perfect steady-state equilibrium:</span><br>
-              <span class="text-emerald-400 font-bold">OLR = ASR = 239 W/m² (EEI = 0.0 W/m²)</span>
+              <span class="text-sky-400 font-semibold">Outgoing Longwave Radiation (OLR):</span><br>
+              <span class="text-slate-400">Thermal IR escaping to space</span><br>
+              <span class="text-emerald-400 font-bold">In Equilibrium: OLR = ASR = 239.0 W/m²</span>
             </div>
           </div>
-          <div class="mt-3 space-y-2 text-xs">
-            <div class="p-2.5 rounded-lg bg-slate-900 border-l-4 border-emerald-500">
-              <strong class="text-slate-200">Stage A: Equilibrium.</strong> Earth radiates out exactly what it takes in: <span class="mono">OLR = 239 W/m²</span>.
-            </div>
+          <div class="space-y-2 mt-3 text-xs">
             <div class="p-2.5 rounded-lg bg-slate-900 border-l-4 border-rose-500">
-              <strong class="text-slate-200">Stage B: The Carbon Spike & OLR Drop (Instantaneous Forcing).</strong> Increasing CO₂ blocks infrared from lower layers and pushes the effective escape level to a higher, colder altitude. Because cold air radiates much less thermal power ($P \propto T^4$), outbound radiation drops instantaneously (e.g. from 239 to ~235.3 W/m² for a doubling of CO₂). This creates an <strong>Earth Energy Imbalance:</strong>
-              <div class="mono font-bold text-rose-400 my-1">EEI = Absorbed Solar (239) - OLR (235.3) = +3.7 W/m² Surplus</div>
+              <strong class="text-slate-200">The Transient OLR Drop:</strong> When greenhouse gases increase, the lower atmosphere becomes more opaque to infrared. Thermal emission to space is forced to occur from higher, colder altitudes in the troposphere. Because colder air emits less radiation ($\sigma T^4$), outbound flux drops immediately ($\text{OLR} < 239\text{ W/m}^2$).
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border-l-4 border-amber-500">
+              <strong class="text-slate-200">Earth Energy Imbalance (EEI):</strong> $\text{EEI} = \text{ASR} - \text{OLR} > 0$. Over $90\%$ of this surplus heat is absorbed by Earth's oceans.
             </div>
             <div class="p-2.5 rounded-lg bg-slate-900 border-l-4 border-cyan-500">
-              <strong class="text-slate-200">Stage C: Thermal Relaxation to a Hotter Equilibrium.</strong> That surplus accumulates in the ocean heat reservoir. As oceans and surface air warm, the surface and troposphere radiate more heat. OLR gradually recovers from 235.3 W/m² back toward 239 W/m². Once OLR reaches 239 W/m² again, the planet returns to balance—<strong>but the surface is now permanently hotter!</strong>
+              <strong class="text-slate-200">Equilibrium Restoration:</strong> As the oceans warm the atmosphere, surface and tropospheric temperatures rise. OLR gradually increases back up to $239\text{ W/m}^2$. Once $\text{OLR} = \text{ASR}$, balance is restored, but the surface is permanently warmer.
             </div>
           </div>
         </section>
 
-        <!-- Section 2: Why the "Saturation Argument" is Scientifically False -->
+        <!-- Section 2: Refutation of Saturation Claim -->
         <section class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
-          <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <span>2. Debunking the Heartland / "CO₂ Saturation" Claim</span>
+          <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider mb-2">
+            2. The Four Fatal Flaws in the "CO₂ Saturation" Argument
           </h3>
-          <p class="mb-3">
-            Arguments claiming that because current CO₂ absorbs ~99% of infrared at the center of its 15-micrometer band, adding more CO₂ cannot trap more heat, ignore essential 3D physics:
-          </p>
-
           <div class="space-y-3 text-xs">
             <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
-              <h4 class="font-bold text-slate-200 mb-1 text-cyan-400">
-                A. The Atmosphere is 3-Dimensional & Stratified, Not a Single Sheet of Glass
-              </h4>
+              <h4 class="font-bold text-cyan-400 mb-1">A. The 3D Layered Atmosphere vs. The "Single Glass Sheet" Fallacy</h4>
               <p class="text-slate-300">
-                Infrared photons emitted by Earth's surface are absorbed by CO₂ and water vapor, then re-emitted in random directions, absorbed again, and re-emitted millions of times as heat climbs upward. What governs planetary cooling is the <strong>Effective Emission Layer (Altitude of Escape)</strong>—the cold upper layer where air density drops low enough that photons can escape to space. Adding more CO₂ raises this escape altitude higher into the troposphere where the air is colder ($~-6.5^\circ\text{C/km}$ lapse rate). A colder emitter radiates less energy, trapping heat below.
+                Skeptical claims treat the atmosphere as a single, thin laboratory tube where absorption can saturate. But Earth's atmosphere is stratified. Photons are absorbed and re-emitted millions of times. What determines planetary heat loss is the <strong>effective radiating altitude</strong>—the height where air is thin enough ($e^{-z/H}$) for photons to escape without collision. Adding CO₂ pushes this escape level higher into colder air, reducing heat loss.
               </p>
             </div>
-
             <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
-              <h4 class="font-bold text-slate-200 mb-1 text-cyan-400">
-                B. Spectral Wings (Pressure & Doppler Broadening)
-              </h4>
+              <h4 class="font-bold text-cyan-400 mb-1">B. Spectral Line Wings (Pressure & Doppler Broadening)</h4>
               <p class="text-slate-300">
-                Absorption lines have "wings" shaped by molecular collisions and thermal motion. Even if the center of the 15 µm band is saturated, adding more CO₂ molecules continues to absorb strongly in the non-saturated wings (13–14 µm and 16–18 µm), continuously widening the wavelength window where heat is trapped.
+                Even though the very center of the $15\ \mu\text{m}$ absorption band is opaque at sea level, the wings (flanks) of the absorption lines (around $13\text{--}14\ \mu\text{m}$ and $16\text{--}18\ \mu\text{m}$) are not saturated. Higher concentrations broaden these wings, capturing thermal radiation that previously escaped.
               </p>
             </div>
-
             <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
-              <h4 class="font-bold text-slate-200 mb-1 text-cyan-400">
-                C. Logarithmic Scaling Does NOT Mean "Negligible"
-              </h4>
+              <h4 class="font-bold text-cyan-400 mb-1">C. Logarithmic Scaling Still Produces Steady Warming</h4>
               <p class="text-slate-300">
-                Radiative forcing follows $\Delta F = 5.35 \cdot \ln(C / C_0)$. While this is a logarithmic curve (diminishing marginal returns per individual molecule), <em>every doubling</em> of CO₂ still yields a steady $+3.7 \text{ W/m}^2$ of heating, leading to ~3°C warming per doubling.
+                The forcing formula is logarithmic ($\Delta F = 5.35 \cdot \ln(C/C_0)$). Diminishing marginal returns per molecule does not mean zero warming: <em>every doubling</em> of CO₂ produces $\approx 3.7\text{ W/m}^2$ of forcing, resulting in $\approx 2.5\text{--}4.0^\circ\text{C}$ of equilibrium warming.
               </p>
             </div>
-
             <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
-              <h4 class="font-bold text-slate-200 mb-1 text-cyan-400">
-                D. The Water Vapor Amplifier
-              </h4>
+              <h4 class="font-bold text-cyan-400 mb-1">D. Water Vapor is an Amplifying Feedback, Not an Alternative</h4>
               <p class="text-slate-300">
-                When CO₂ produces an initial warming, warmer air holds ~7% more moisture per 1°C (Clausius-Clapeyron relation). This extra water vapor acts as a powerful feedback, doubling the total equilibrium warming from CO₂ alone.
+                Water vapor condenses and its concentration is governed by temperature (Clausius-Clapeyron equation: $\sim 7\%$ increase per $1^\circ\text{C}$). Adding CO₂ triggers warming that increases water vapor, roughly doubling the initial CO₂ warming effect.
               </p>
             </div>
           </div>
+        </section>
+
+        <!-- Section 3: Perpetual Imbalance from Continuous Emissions -->
+        <section class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+          <h3 class="text-sm font-bold text-rose-400 uppercase tracking-wider mb-2">
+            3. Why Continuous Emissions Cause a Perpetual Energy Imbalance
+          </h3>
+          <p class="text-xs text-slate-300 leading-relaxed mb-2">
+            Because human emissions ramp up continuously ($\approx +2.5\text{ ppm/yr}$), the radiative target continually moves upward faster than ocean thermal inertia can equilibrate. This prevents OLR from catching up to ASR, maintaining a sustained planetary energy imbalance ($+0.8\text{ to }+1.2\text{ W/m}^2$) observed by CERES satellites.
+          </p>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Reaching <strong>Net Zero ($0.0\text{ ppm/yr}$)</strong> freezes the atmospheric concentration, allowing the oceans to catch up over decades as committed warming runs its course and EEI decays to zero.
+          </p>
+        </section>
+
+        <!-- Summary Table -->
+        <section class="overflow-x-auto text-xs">
+          <table class="w-full text-left border-collapse border border-slate-800">
+            <thead>
+              <tr class="bg-slate-950 text-slate-300">
+                <th class="p-2 border border-slate-800">Claim / Metric</th>
+                <th class="p-2 border border-slate-800 text-rose-400">Misconception</th>
+                <th class="p-2 border border-slate-800 text-cyan-400">Scientific Reality</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800 text-slate-400">
+              <tr>
+                <td class="p-2 font-semibold text-slate-200">CO₂ Saturation</td>
+                <td class="p-2">"Atmosphere is 99% saturated, so more CO₂ does nothing."</td>
+                <td class="p-2 text-slate-300">Saturation only applies to line centers near ground. Radiative emission escapes to space in cold, thin upper layers.</td>
+              </tr>
+              <tr>
+                <td class="p-2 font-semibold text-slate-200">Logarithmic Growth</td>
+                <td class="p-2">"Diminishing returns makes future warming negligible."</td>
+                <td class="p-2 text-slate-300">Each doubling adds ~3.7 W/m², producing consistent ~3°C warming per doubling.</td>
+              </tr>
+              <tr>
+                <td class="p-2 font-semibold text-slate-200">Water Vapor</td>
+                <td class="p-2">"Water vapor is stronger, making CO₂ irrelevant."</td>
+                <td class="p-2 text-slate-300">Water vapor acts as an amplifier (+7%/°C) that doubles the warming started by CO₂.</td>
+              </tr>
+            </tbody>
+          </table>
         </section>
 
       </div>
 
       <!-- Modal Footer -->
       <div class="px-6 py-3 border-t border-slate-800 bg-slate-950 flex justify-end">
-        <button id="closeGuideFooterBtn" class="px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs transition">
+        <button id="closeGuideFooterBtn" class="px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs transition active:scale-95">
           Close Guide & Return to Simulator
         </button>
       </div>
@@ -493,759 +576,909 @@
     </div>
   </div>
 
+  <!-- JAVASCRIPT CODE -->
   <script>
-    /**
-     * Atmospheric Radiative Transfer & Energy Balance Model
-     */
+    (function () {
+      'use strict';
 
-    // Physical Constants
-    const ASR = 239.0;               // Net absorbed solar radiation (W/m²)
-    const SIGMA = 5.670374419e-8;    // Stefan-Boltzmann constant (W/m²K⁴)
-    const BASELINE_CO2 = 280;        // Pre-industrial CO2 (ppm)
-    const LAPSE_RATE = 6.5;          // Tropospheric lapse rate (°C/km)
-    const T_EFF_EQ = Math.pow(ASR / SIGMA, 0.25); // ~254.87 K (-18.28 °C)
+      // --- Physical Constants ---
+      const ASR = 239.0;               // Net absorbed solar flux (W/m²)
+      const SIGMA = 5.670374419e-8;    // Stefan-Boltzmann constant (W/m²K⁴)
+      const BASELINE_CO2 = 280.0;      // Pre-industrial CO2 (ppm)
+      const LAPSE_RATE = 6.5;          // Troposphere lapse rate (°C/km)
+      const T_EFF_EQ = Math.pow(ASR / SIGMA, 0.25); // ~254.87 K (-18.28 °C)
 
-    // Simulation State
-    let isRunning = true;
-    let simSpeed = 1.0;
-    let simTimeYears = 0.0;
-    let cumulativeJoulesZJ = 0.0;
+      // --- Simulation State Variables ---
+      let isRunning = true;
+      let simSpeed = 1.0;
+      let simTimeYears = 0.0;
+      let cumulativeHeatZJ = 0.0;
 
-    // Controls Variables
-    let co2 = 420;
-    let h2oMultiplier = 1.0;
-    let tropoHeightKm = 12.0;
-    let thermalInertia = 1.0;
-    let autoH2oFeedback = true;
+      // Parameters
+      let co2 = 425.0;
+      let emissionRatePpmYr = 2.5;
+      let h2oMultiplier = 1.0;
+      let tropoHeightKm = 12.0;
+      let oceanLagYears = 20.0; // Ocean mixed-layer heat capacity response time
+      let autoH2oFeedback = true;
 
-    // Thermodynamic state
-    let T_surface_C = 14.85;
-    let T_surface_equilibrium_C = 14.85;
-    let effectiveAltitudeKm = 5.1;
-    let currentOLR = 239.0;
-    let currentEEI = 0.0;
-    let radiativeForcing = 0.0;
-    let surfaceEmissionFlux = 390.0;
+      // Thermodynamic State
+      let T_surface_C = 14.95;
+      let T_start_C = 14.95;
+      let T_surface_equilibrium_C = 15.82;
+      let effectiveAltitudeKm = 5.4;
+      let currentOLR = 238.1;
+      let currentEEI = 0.90;
+      let radiativeForcing = 2.23;
+      let surfaceEmissionFlux = 390.0;
 
-    // DOM Elements
-    const canvas = document.getElementById('atmosCanvas');
-    const ctx = canvas.getContext('2d');
+      // --- DOM Elements ---
+      const canvas = document.getElementById('atmosCanvas');
+      const ctx = canvas.getContext('2d');
 
-    const co2Slider = document.getElementById('co2Slider');
-    const co2Display = document.getElementById('co2Display');
-    const h2oSlider = document.getElementById('h2oSlider');
-    const h2oDisplay = document.getElementById('h2oDisplay');
-    const h2oAutoFeedback = document.getElementById('h2oAutoFeedback');
-    const tropoSlider = document.getElementById('tropoSlider');
-    const tropoDisplay = document.getElementById('tropoDisplay');
-    const inertiaSlider = document.getElementById('inertiaSlider');
-    const inertiaDisplay = document.getElementById('inertiaDisplay');
+      const co2Slider = document.getElementById('co2Slider');
+      const co2Display = document.getElementById('co2Display');
+      const emissionRateSlider = document.getElementById('emissionRateSlider');
+      const emissionRateDisplay = document.getElementById('emissionRateDisplay');
+      const rateStatusText = document.getElementById('rateStatusText');
 
-    const inboundVal = document.getElementById('inboundVal');
-    const outboundVal = document.getElementById('outboundVal');
-    const olrDeltaIndicator = document.getElementById('olrDeltaIndicator');
-    const eeiVal = document.getElementById('eeiVal');
-    const eeiCard = document.getElementById('eeiCard');
-    const eeiTitle = document.getElementById('eeiTitle');
-    const eeiStatusTag = document.getElementById('eeiStatusTag');
-    const eeiDesc = document.getElementById('eeiDesc');
+      const h2oSlider = document.getElementById('h2oSlider');
+      const h2oDisplay = document.getElementById('h2oDisplay');
+      const h2oAutoFeedback = document.getElementById('h2oAutoFeedback');
+      const tropoSlider = document.getElementById('tropoSlider');
+      const tropoDisplay = document.getElementById('tropoDisplay');
+      const inertiaSlider = document.getElementById('inertiaSlider');
+      const inertiaDisplay = document.getElementById('inertiaDisplay');
 
-    const canvasSurfTemp = document.getElementById('canvasSurfTemp');
-    const canvasTempAnomaly = document.getElementById('canvasTempAnomaly');
-    const canvasForcing = document.getElementById('canvasForcing');
-    const canvasEqTemp = document.getElementById('canvasEqTemp');
-    const canvasWarmRemaining = document.getElementById('canvasWarmRemaining');
-    const canvasHeatStored = document.getElementById('canvasHeatStored');
-    const escapeAltitudeBadge = document.getElementById('escapeAltitudeBadge');
-    const badgeHeightKm = document.getElementById('badgeHeightKm');
-    const badgeTempC = document.getElementById('badgeTempC');
+      const inboundVal = document.getElementById('inboundVal');
+      const outboundVal = document.getElementById('outboundVal');
+      const olrDeltaIndicator = document.getElementById('olrDeltaIndicator');
+      const eeiVal = document.getElementById('eeiVal');
+      const eeiCard = document.getElementById('eeiCard');
+      const eeiStatusTag = document.getElementById('eeiStatusTag');
+      const eeiDesc = document.getElementById('eeiDesc');
 
-    const togglePlayBtn = document.getElementById('togglePlayBtn');
-    const playBtnText = document.getElementById('playBtnText');
-    const playIcon = document.getElementById('playIcon');
-    const pauseIcon = document.getElementById('pauseIcon');
-    const fastForwardBtn = document.getElementById('fastForwardBtn');
-    const resetSimBtn = document.getElementById('resetSimBtn');
-    const simStatusLabel = document.getElementById('simStatusLabel');
-    const elapsedYears = document.getElementById('elapsedYears');
-    const simStatePing = document.getElementById('simStatePing');
-    const simStateDot = document.getElementById('simStateDot');
+      const deltaTempVal = document.getElementById('deltaTempVal');
+      const startTempDisplay = document.getElementById('startTempDisplay');
+      const currentTempSmallDisplay = document.getElementById('currentTempSmallDisplay');
 
-    const guideModal = document.getElementById('guideModal');
-    const openGuideBtn = document.getElementById('openGuideBtn');
-    const closeGuideBtn = document.getElementById('closeGuideBtn');
-    const closeGuideFooterBtn = document.getElementById('closeGuideFooterBtn');
+      const canvasSurfTemp = document.getElementById('canvasSurfTemp');
+      const canvasTempAnomaly = document.getElementById('canvasTempAnomaly');
+      const canvasDeltaBadge = document.getElementById('canvasDeltaBadge');
+      const canvasBaselineLabel = document.getElementById('canvasBaselineLabel');
+      const canvasForcing = document.getElementById('canvasForcing');
+      const canvasEqTemp = document.getElementById('canvasEqTemp');
+      const canvasWarmRemaining = document.getElementById('canvasWarmRemaining');
+      const canvasHeatStored = document.getElementById('canvasHeatStored');
 
-    // Atmospheric dots and photons
-    const atmosphericDots = [];
-    const NUM_DOTS = 280;
-    const photons = [];
-    const MAX_PHOTONS = 50;
+      const escapeAltitudeBadge = document.getElementById('escapeAltitudeBadge');
+      const badgeHeightKm = document.getElementById('badgeHeightKm');
+      const badgeTempC = document.getElementById('badgeTempC');
 
-    // Logarithmic slider helpers
-    const CO2_MIN = 100;
-    const CO2_MAX = 1600;
-    const LN_CO2_MIN = Math.log(CO2_MIN);
-    const LN_CO2_MAX = Math.log(CO2_MAX);
+      const togglePlayBtn = document.getElementById('togglePlayBtn');
+      const playBtnText = document.getElementById('playBtnText');
+      const playIcon = document.getElementById('playIcon');
+      const pauseIcon = document.getElementById('pauseIcon');
+      const snapEquilibriumBtn = document.getElementById('snapEquilibriumBtn');
+      const resetSimBtn = document.getElementById('resetSimBtn');
+      const rebaselineBtn = document.getElementById('rebaselineBtn');
+      const simStatusLabel = document.getElementById('simStatusLabel');
+      const elapsedYears = document.getElementById('elapsedYears');
+      const simStatePing = document.getElementById('simStatePing');
+      const simStateDot = document.getElementById('simStateDot');
 
-    function co2ToSliderPos(c) {
-      return (Math.log(c) - LN_CO2_MIN) / (LN_CO2_MAX - LN_CO2_MIN);
-    }
+      const guideModal = document.getElementById('guideModal');
+      const openGuideBtn = document.getElementById('openGuideBtn');
+      const closeGuideBtn = document.getElementById('closeGuideBtn');
+      const closeGuideFooterBtn = document.getElementById('closeGuideFooterBtn');
 
-    function sliderPosToCO2(pos) {
-      const clamped = Math.max(0, Math.min(1, pos));
-      return Math.exp(LN_CO2_MIN + clamped * (LN_CO2_MAX - LN_CO2_MIN));
-    }
+      // --- Logarithmic CO2 Slider Math ---
+      const CO2_MIN = 100.0;
+      const CO2_MAX = 1600.0;
+      const LN_MIN = Math.log(CO2_MIN);
+      const LN_MAX = Math.log(CO2_MAX);
 
-    function setCO2Value(val) {
-      co2 = Math.round(val);
-      co2Slider.value = co2ToSliderPos(co2).toFixed(4);
-      co2Display.textContent = `${co2} ppm`;
-    }
-
-    class AtmosphericDot {
-      constructor() {
-        this.reset();
+      function co2ToPos(c) {
+        return (Math.log(c) - LN_MIN) / (LN_MAX - LN_MIN);
       }
-      reset() {
-        const scaleHeight = 7.0;
-        const u = Math.random() * 0.88;
-        this.zKm = -scaleHeight * Math.log(1 - u);
-        this.xNorm = Math.random();
-        this.radius = 0.8 + Math.random() * 1.2;
-        const rand = Math.random();
-        if (rand < 0.20) {
-          this.kind = 'co2';
-          this.color = 'rgba(56, 189, 248, 0.7)';
-        } else if (rand < 0.40) {
-          this.kind = 'h2o';
-          this.color = 'rgba(96, 165, 250, 0.65)';
-        } else {
-          this.kind = 'air';
-          this.color = 'rgba(148, 163, 184, 0.35)';
+
+      function posToCO2(pos) {
+        const p = Math.max(0, Math.min(1, pos));
+        return Math.exp(LN_MIN + p * (LN_MAX - LN_MIN));
+      }
+
+      function updateCO2UI(newVal) {
+        co2 = Math.round(newVal);
+        co2Slider.value = co2ToPos(co2).toFixed(4);
+        co2Display.textContent = `${co2} ppm`;
+      }
+
+      // --- Molecule Dots & Photon Particles ---
+      const atmosphericDots = [];
+      const NUM_DOTS = 260;
+      const photons = [];
+      const NUM_PHOTONS = 45;
+
+      class AtmosphericDot {
+        constructor() {
+          this.reset();
         }
-      }
-    }
-
-    class Photon {
-      constructor() {
-        this.reset(true);
-      }
-      reset(initial = false) {
-        this.xNorm = 0.05 + Math.random() * 0.90;
-        this.zKm = initial ? Math.random() * 12.0 : 0.0;
-        this.speed = 2.0 + Math.random() * 2.2;
-        this.state = 'upward';
-        this.scatterTimer = 0;
-      }
-      step(dt, currentEscapeKm) {
-        if (this.state === 'absorbed') {
-          this.scatterTimer -= dt;
-          if (this.scatterTimer <= 0) {
-            this.state = (this.zKm >= currentEscapeKm) ? 'escaping' : 'upward';
-            this.xNorm = Math.max(0.04, Math.min(0.96, this.xNorm + (Math.random() - 0.5) * 0.1));
+        reset() {
+          // Barometric density thinning e^(-z/H) with scale height H ~ 7 km
+          const u = Math.random() * 0.88;
+          this.zKm = -7.0 * Math.log(1.0 - u);
+          this.xNorm = Math.random();
+          this.radius = 0.8 + Math.random() * 1.2;
+          const r = Math.random();
+          if (r < 0.22) {
+            this.kind = 'co2';
+            this.color = 'rgba(56, 189, 248, 0.7)'; // cyan
+          } else if (r < 0.42) {
+            this.kind = 'h2o';
+            this.color = 'rgba(96, 165, 250, 0.65)'; // blue
+          } else {
+            this.kind = 'air';
+            this.color = 'rgba(148, 163, 184, 0.35)'; // slate
           }
-          return;
         }
+      }
 
-        this.zKm += this.speed * dt;
-
-        // Absorption chance below escape altitude
-        if (this.state === 'upward' && this.zKm < currentEscapeKm) {
-          const densityFactor = Math.exp(-this.zKm / 7.0);
-          if (Math.random() < 0.045 * densityFactor) {
-            this.state = 'absorbed';
-            this.scatterTimer = 0.15 + Math.random() * 0.25;
+      class Photon {
+        constructor() {
+          this.reset(true);
+        }
+        reset(randomZ = false) {
+          this.xNorm = 0.08 + Math.random() * 0.84;
+          this.zKm = randomZ ? Math.random() * 12.0 : 0.0;
+          this.speed = 2.2 + Math.random() * 2.2;
+          this.state = 'rising'; // 'rising', 'absorbed', 'escaping'
+          this.timer = 0;
+        }
+        step(dt, escKm) {
+          if (this.state === 'absorbed') {
+            this.timer -= dt;
+            if (this.timer <= 0) {
+              this.state = (this.zKm >= escKm) ? 'escaping' : 'rising';
+              this.xNorm = Math.max(0.06, Math.min(0.94, this.xNorm + (Math.random() - 0.5) * 0.12));
+            }
             return;
           }
+
+          this.zKm += this.speed * dt;
+
+          // Absorption probability in lower atmosphere
+          if (this.state === 'rising' && this.zKm < escKm) {
+            const density = Math.exp(-this.zKm / 7.0);
+            if (Math.random() < 0.05 * density) {
+              this.state = 'absorbed';
+              this.timer = 0.12 + Math.random() * 0.22;
+              return;
+            }
+          }
+
+          if (this.zKm >= escKm) {
+            this.state = 'escaping';
+          }
+
+          if (this.zKm > 14.5) {
+            this.reset(false);
+          }
+        }
+      }
+
+      function initParticles() {
+        atmosphericDots.length = 0;
+        for (let i = 0; i < NUM_DOTS; i++) {
+          atmosphericDots.push(new AtmosphericDot());
+        }
+        photons.length = 0;
+        for (let i = 0; i < NUM_PHOTONS; i++) {
+          photons.push(new Photon());
+        }
+      }
+
+      // --- High-DPI Canvas Sizing ---
+      function handleResize() {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const w = rect.width || canvas.parentElement.clientWidth || 600;
+        const h = rect.height || canvas.parentElement.clientHeight || 400;
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+      }
+      window.addEventListener('resize', handleResize);
+
+      // --- Physics Core Calculations ---
+      function computePhysics() {
+        // 1. Radiative forcing from CO2
+        const rf_co2 = 5.35 * Math.log(co2 / BASELINE_CO2);
+
+        // 2. Water vapor feedback
+        let effH2o = h2oMultiplier;
+        if (autoH2oFeedback) {
+          const deltaT = Math.max(-5, T_surface_C - 13.8);
+          effH2o = Math.min(2.0, Math.max(0.5, 1.0 * Math.pow(1.07, deltaT)));
+          h2oSlider.value = effH2o.toFixed(2);
+          h2oDisplay.textContent = `${effH2o.toFixed(2)}×`;
+        }
+        const rf_h2o = 2.0 * Math.log(effH2o);
+        radiativeForcing = rf_co2 + rf_h2o;
+
+        // 3. Effective radiating altitude elevation
+        const baseAlt = 5.0;
+        const altDelta = (0.78 * Math.log(co2 / BASELINE_CO2)) + (1.2 * (effH2o - 1.0));
+        effectiveAltitudeKm = Math.max(1.8, Math.min(tropoHeightKm * 0.95, baseAlt + altDelta));
+
+        // 4. Equilibrium surface temperature
+        const T_eff_C = T_EFF_EQ - 273.15;
+        T_surface_equilibrium_C = T_eff_C + (LAPSE_RATE * effectiveAltitudeKm);
+
+        // 5. Surface and Outbound Longwave Radiation (OLR)
+        const Ts_K = T_surface_C + 273.15;
+        surfaceEmissionFlux = SIGMA * Math.pow(Ts_K, 4);
+
+        const emitTempC = T_surface_C - (LAPSE_RATE * effectiveAltitudeKm);
+        const emitTempK = emitTempC + 273.15;
+        currentOLR = SIGMA * Math.pow(Math.max(100, emitTempK), 4);
+
+        // 6. Earth Energy Imbalance
+        currentEEI = ASR - currentOLR;
+      }
+
+      function getProfileAt(zKm) {
+        const Tz_C = (zKm <= tropoHeightKm)
+          ? T_surface_C - (LAPSE_RATE * zKm)
+          : T_surface_C - (LAPSE_RATE * tropoHeightKm);
+
+        const opticalFraction = Math.min(1.0, zKm / effectiveAltitudeKm);
+        const F_up = currentOLR + (surfaceEmissionFlux - currentOLR) * Math.exp(-1.45 * opticalFraction);
+
+        return { Tz_C, F_up };
+      }
+
+      function stepSimulation(dtYears) {
+        // Continuous CO2 growth ramp
+        if (emissionRatePpmYr > 0) {
+          co2 = Math.min(CO2_MAX, co2 + emissionRatePpmYr * dtYears);
+          co2Slider.value = co2ToPos(co2).toFixed(4);
         }
 
-        if (this.zKm >= currentEscapeKm) {
-          this.state = 'escaping';
-        }
+        computePhysics();
 
-        if (this.zKm > 14.5) {
-          this.reset(false);
-        }
-      }
-    }
+        if (!isRunning) return;
 
-    function initAtmosphere() {
-      atmosphericDots.length = 0;
-      for (let i = 0; i < NUM_DOTS; i++) {
-        atmosphericDots.push(new AtmosphericDot());
-      }
-      photons.length = 0;
-      for (let i = 0; i < MAX_PHOTONS; i++) {
-        photons.push(new Photon());
-      }
-    }
+        simTimeYears += dtYears;
 
-    function handleResize() {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      const width = rect.width || canvas.parentElement.clientWidth || 600;
-      const height = rect.height || canvas.parentElement.clientHeight || 420;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-    }
-    window.addEventListener('resize', handleResize);
+        // Ocean thermal lag response
+        // Effective heat capacity C_eff scales with ocean lag years
+        // dT/dt = EEI / C_eff where C_eff ~ lag_years * 0.08 W yr / (m^2 °C)
+        const C_eff = Math.max(0.5, oceanLagYears * 0.075);
+        const dT = (currentEEI / C_eff) * dtYears;
+        T_surface_C += dT;
 
-    /**
-     * Compute Atmospheric Equilibrium and Transient State
-     */
-    function computeAtmosphericEquilibrium() {
-      const rf_co2 = 5.35 * Math.log(co2 / BASELINE_CO2);
-
-      let effH2o = h2oMultiplier;
-      if (autoH2oFeedback) {
-        const deltaT = Math.max(-5, T_surface_C - 13.8);
-        effH2o = 1.0 * Math.pow(1.07, deltaT);
-        effH2o = Math.min(2.5, Math.max(0.5, effH2o));
-        h2oSlider.value = effH2o.toFixed(2);
-        h2oDisplay.textContent = `${effH2o.toFixed(2)}×`;
-      }
-      
-      const rf_h2o = 2.2 * Math.log(effH2o);
-      radiativeForcing = rf_co2 + rf_h2o;
-
-      const baseAlt = 5.0;
-      const altDelta = (0.75 * Math.log(co2 / BASELINE_CO2)) + (1.2 * (effH2o - 1.0));
-      effectiveAltitudeKm = Math.max(1.5, Math.min(tropoHeightKm * 0.95, baseAlt + altDelta));
-
-      const T_eff_C = T_EFF_EQ - 273.15;
-      T_surface_equilibrium_C = T_eff_C + (LAPSE_RATE * effectiveAltitudeKm);
-
-      const Ts_K = T_surface_C + 273.15;
-      surfaceEmissionFlux = SIGMA * Math.pow(Ts_K, 4);
-
-      const actualEmissionTempC = T_surface_C - (LAPSE_RATE * effectiveAltitudeKm);
-      const actualEmissionTempK = actualEmissionTempC + 273.15;
-      
-      currentOLR = SIGMA * Math.pow(Math.max(100, actualEmissionTempK), 4);
-      currentEEI = ASR - currentOLR;
-    }
-
-    function getVerticalProfileAt(z) {
-      const Tz_C = (z <= tropoHeightKm) 
-        ? T_surface_C - (LAPSE_RATE * z)
-        : T_surface_C - (LAPSE_RATE * tropoHeightKm);
-      
-      const opticalFraction = Math.min(1.0, z / effectiveAltitudeKm);
-      const F_up = currentOLR + (surfaceEmissionFlux - currentOLR) * Math.exp(-1.4 * opticalFraction);
-
-      return { Tz_C, F_up };
-    }
-
-    function stepSimulation(dtYears) {
-      computeAtmosphericEquilibrium();
-      if (!isRunning) return;
-
-      simTimeYears += dtYears;
-
-      const C_eff = 1.2 * thermalInertia;
-      const dT = (currentEEI / C_eff) * dtYears;
-      T_surface_C += dT;
-
-      const dJoulesZJ = (currentEEI * 5.10e14 * (dtYears * 3.1536e7)) / 1e21;
-      cumulativeJoulesZJ += dJoulesZJ;
-    }
-
-    function updateUI() {
-      computeAtmosphericEquilibrium();
-
-      co2Display.textContent = `${Math.round(co2)} ppm`;
-      tropoDisplay.textContent = `${tropoHeightKm.toFixed(1)} km`;
-
-      inboundVal.textContent = ASR.toFixed(1);
-      outboundVal.textContent = currentOLR.toFixed(1);
-
-      const olrDelta = currentOLR - ASR;
-      const sign = olrDelta >= 0 ? '+' : '';
-      olrDeltaIndicator.textContent = `Δ: ${sign}${olrDelta.toFixed(1)}`;
-      olrDeltaIndicator.className = `mono text-[10px] ${Math.abs(olrDelta) < 0.15 ? 'text-slate-400' : (olrDelta < 0 ? 'text-rose-400' : 'text-emerald-400')}`;
-
-      const eeiSign = currentEEI >= 0 ? '+' : '';
-      eeiVal.textContent = `${eeiSign}${currentEEI.toFixed(2)}`;
-      
-      if (Math.abs(currentEEI) < 0.1) {
-        eeiStatusTag.textContent = "Equilibrium";
-        eeiStatusTag.className = "text-[9px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800 text-emerald-400 mono";
-        eeiVal.className = "text-2xl font-black mono text-emerald-400";
-        eeiDesc.textContent = "Stable radiation balance (Inbound = Outbound)";
-        eeiCard.className = "bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 shadow-lg relative overflow-hidden";
-      } else if (currentEEI > 0) {
-        eeiStatusTag.textContent = "Trapping Heat";
-        eeiStatusTag.className = "text-[9px] px-1.5 py-0.5 rounded bg-rose-950 border border-rose-800 text-rose-400 mono heating-pulse";
-        eeiVal.className = "text-2xl font-black mono text-rose-400";
-        eeiDesc.textContent = "Surplus trapped energy heating planetary system";
-        eeiCard.className = "bg-slate-900/90 border border-rose-900/60 rounded-2xl p-3.5 shadow-lg relative overflow-hidden";
-      } else {
-        eeiStatusTag.textContent = "Cooling";
-        eeiStatusTag.className = "text-[9px] px-1.5 py-0.5 rounded bg-blue-950 border border-blue-800 text-blue-400 mono";
-        eeiVal.className = "text-2xl font-black mono text-blue-400";
-        eeiDesc.textContent = "Net heat loss to space";
-        eeiCard.className = "bg-slate-900/90 border border-blue-900/60 rounded-2xl p-3.5 shadow-lg relative overflow-hidden";
+        // Cumulative heat stored in ocean (ZJ)
+        // Global surface area = 5.10e14 m^2; 1 yr = 3.1536e7 s; 1 ZJ = 1e21 J
+        const joulesPerYear = currentEEI * 5.10e14 * 3.1536e7;
+        cumulativeHeatZJ += (joulesPerYear * dtYears) / 1e21;
       }
 
-      canvasSurfTemp.textContent = `${T_surface_C.toFixed(2)} °C`;
-      const anomaly = T_surface_C - 13.80;
-      const anomSign = anomaly >= 0 ? '+' : '';
-      canvasTempAnomaly.textContent = `Anomaly: ${anomSign}${anomaly.toFixed(2)} °C`;
+      // --- UI Updates ---
+      function updateUI() {
+        computePhysics();
 
-      canvasForcing.textContent = `${radiativeForcing >= 0 ? '+' : ''}${radiativeForcing.toFixed(2)} W/m²`;
-      canvasEqTemp.textContent = `${T_surface_equilibrium_C.toFixed(2)} °C`;
+        co2Display.textContent = `${Math.round(co2)} ppm`;
+        emissionRateDisplay.textContent = emissionRatePpmYr > 0 
+          ? `+${emissionRatePpmYr.toFixed(2)} ppm/yr` 
+          : `0.00 ppm/yr (Net Zero)`;
 
-      const remainingWarm = T_surface_equilibrium_C - T_surface_C;
-      canvasWarmRemaining.textContent = `Remaining: ${remainingWarm >= 0 ? '+' : ''}${remainingWarm.toFixed(2)} °C`;
-
-      canvasHeatStored.textContent = `${cumulativeJoulesZJ >= 0 ? '+' : ''}${cumulativeJoulesZJ.toFixed(1)} ZJ`;
-      elapsedYears.textContent = `Year: ${simTimeYears.toFixed(1)}`;
-
-      badgeHeightKm.textContent = effectiveAltitudeKm.toFixed(1);
-      const emissionTemp = T_surface_C - (LAPSE_RATE * effectiveAltitudeKm);
-      badgeTempC.textContent = emissionTemp.toFixed(1);
-    }
-
-    /**
-     * Render the Canvas
-     */
-    function renderCanvas() {
-      const rect = canvas.getBoundingClientRect();
-      const w = rect.width || canvas.parentElement.clientWidth || 600;
-      const h = rect.height || canvas.parentElement.clientHeight || 420;
-
-      ctx.clearRect(0, 0, w, h);
-
-      const groundY = h - 52;
-      const spaceY = 38;
-      const atmosH = groundY - spaceY;
-      const maxAltitudeKm = 14.0;
-
-      const splitX = Math.floor(w * 0.50);
-      const altToY = (altKm) => groundY - (altKm / maxAltitudeKm) * atmosH;
-      const escapeY = altToY(effectiveAltitudeKm);
-
-      escapeAltitudeBadge.style.top = `${Math.max(12, escapeY - 14)}px`;
-
-      // 1. Column panel background
-      ctx.fillStyle = '#020617';
-      ctx.fillRect(0, 0, splitX, spaceY);
-
-      const opacity = Math.min(0.85, 0.20 + (co2 / 1600) * 0.45 + (h2oMultiplier - 0.5) * 0.2);
-      const atmosGrad = ctx.createLinearGradient(0, groundY, 0, spaceY);
-      atmosGrad.addColorStop(0, `rgba(30, 58, 138, ${opacity * 0.9})`);
-      atmosGrad.addColorStop(0.4, `rgba(14, 116, 144, ${opacity * 0.6})`);
-      atmosGrad.addColorStop(1, 'rgba(15, 23, 42, 0.15)');
-      ctx.fillStyle = atmosGrad;
-      ctx.fillRect(0, spaceY, splitX, atmosH);
-
-      // Barometric molecular dots
-      atmosphericDots.forEach(dot => {
-        if (dot.zKm <= maxAltitudeKm) {
-          const dy = altToY(dot.zKm);
-          const dx = 20 + dot.xNorm * (splitX - 40);
-
-          ctx.fillStyle = dot.color;
-          ctx.beginPath();
-          ctx.arc(dx, dy, dot.radius, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      });
-
-      // Solar Inbound Beam
-      const sunX = 30;
-      ctx.strokeStyle = 'rgba(251, 191, 36, 0.45)';
-      ctx.lineWidth = 2.5;
-      ctx.setLineDash([4, 4]);
-      ctx.beginPath();
-      ctx.moveTo(sunX, spaceY);
-      ctx.lineTo(sunX, groundY);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      ctx.fillStyle = '#fbbf24';
-      ctx.beginPath();
-      ctx.moveTo(sunX, groundY - 2);
-      ctx.lineTo(sunX - 4, groundY - 10);
-      ctx.lineTo(sunX + 4, groundY - 10);
-      ctx.fill();
-
-      ctx.fillStyle = '#fde68a';
-      ctx.font = '600 9px Inter, sans-serif';
-      ctx.fillText('Solar 239 W/m²', sunX - 16, spaceY + 12);
-
-      // Upward Infrared Photons
-      photons.forEach(p => {
-        const py = altToY(p.zKm);
-        const px = 50 + p.xNorm * (splitX - 70);
-
-        if (p.state === 'absorbed') {
-          ctx.strokeStyle = 'rgba(251, 146, 60, 0.8)';
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.arc(px, py, 4.5, 0, Math.PI * 2);
-          ctx.stroke();
-
-          ctx.fillStyle = '#f97316';
-          ctx.beginPath();
-          ctx.arc(px, py, 2, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (p.state === 'escaping') {
-          ctx.fillStyle = '#38bdf8';
-          ctx.beginPath();
-          ctx.arc(px, py, 2.5, 0, Math.PI * 2);
-          ctx.fill();
+        if (emissionRatePpmYr === 0) {
+          rateStatusText.textContent = "Net Zero: committed warming decaying";
+          rateStatusText.className = "text-emerald-400 font-mono text-[10px]";
         } else {
-          ctx.fillStyle = '#fb923c';
-          ctx.beginPath();
-          ctx.arc(px, py, 2.2, 0, Math.PI * 2);
-          ctx.fill();
+          rateStatusText.textContent = `Continuous ramp: +${(emissionRatePpmYr * 10).toFixed(0)} ppm/decade`;
+          rateStatusText.className = "text-rose-400 font-mono text-[10px]";
         }
-      });
 
-      // Radiating altitude boundary line
-      ctx.save();
-      ctx.strokeStyle = '#f43f5e';
-      ctx.lineWidth = 1.8;
-      ctx.setLineDash([5, 5]);
-      ctx.shadowColor = 'rgba(244, 63, 94, 0.7)';
-      ctx.shadowBlur = 6;
-      ctx.beginPath();
-      ctx.moveTo(10, escapeY);
-      ctx.lineTo(splitX - 10, escapeY);
-      ctx.stroke();
-      ctx.restore();
+        tropoDisplay.textContent = `${tropoHeightKm.toFixed(1)} km`;
+        inertiaDisplay.textContent = `${Math.round(oceanLagYears)} years`;
 
-      ctx.fillStyle = '#f43f5e';
-      ctx.font = '600 10px JetBrains Mono, monospace';
-      ctx.fillText(`Radiating Layer (${effectiveAltitudeKm.toFixed(1)} km)`, 45, escapeY - 6);
+        inboundVal.textContent = ASR.toFixed(1);
+        outboundVal.textContent = currentOLR.toFixed(1);
 
-      // 2. Right Panel: Vertical Profiles
-      ctx.fillStyle = '#090d16';
-      ctx.fillRect(splitX, 0, w - splitX, groundY);
+        const olrDelta = currentOLR - ASR;
+        const sign = olrDelta >= 0 ? '+' : '';
+        olrDeltaIndicator.textContent = `Δ: ${sign}${olrDelta.toFixed(1)}`;
+        olrDeltaIndicator.className = `mono text-[9px] ${Math.abs(olrDelta) < 0.1 ? 'text-slate-400' : (olrDelta < 0 ? 'text-rose-400' : 'text-emerald-400')}`;
 
-      ctx.strokeStyle = '#1e293b';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(splitX, 0);
-      ctx.lineTo(splitX, groundY);
-      ctx.stroke();
+        const eeiSign = currentEEI >= 0 ? '+' : '';
+        eeiVal.textContent = `${eeiSign}${currentEEI.toFixed(2)}`;
 
-      const chartLeft = splitX + 40;
-      const chartRight = w - 25;
-      const chartW = chartRight - chartLeft;
+        if (Math.abs(currentEEI) < 0.1) {
+          eeiStatusTag.textContent = "Balanced";
+          eeiStatusTag.className = "text-[8px] px-1.5 py-0.2 rounded bg-emerald-950 border border-emerald-800 text-emerald-400 mono";
+          eeiVal.className = "text-xl font-black mono text-emerald-400";
+          eeiDesc.textContent = "Stable equilibrium (ASR = OLR)";
+          eeiCard.className = "bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-lg relative overflow-hidden";
+        } else if (currentEEI > 0) {
+          eeiStatusTag.textContent = (emissionRatePpmYr > 0) ? "Active Imbalance" : "Committed Warming";
+          eeiStatusTag.className = "text-[8px] px-1.5 py-0.2 rounded bg-rose-950 border border-rose-800 text-rose-300 mono heating-pulse";
+          eeiVal.className = "text-xl font-black mono text-rose-400";
+          eeiDesc.textContent = (emissionRatePpmYr > 0) ? "Emissions outpace ocean lag" : "Warming toward equilibrium";
+          eeiCard.className = "bg-slate-900/90 border border-rose-900/60 rounded-2xl p-3 shadow-lg relative overflow-hidden";
+        } else {
+          eeiStatusTag.textContent = "Cooling Deficit";
+          eeiStatusTag.className = "text-[8px] px-1.5 py-0.2 rounded bg-blue-950 border border-blue-800 text-blue-300 mono";
+          eeiVal.className = "text-xl font-black mono text-blue-400";
+          eeiDesc.textContent = "Heat loss escaping to space";
+          eeiCard.className = "bg-slate-900/90 border border-blue-900/60 rounded-2xl p-3 shadow-lg relative overflow-hidden";
+        }
 
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '600 10px Inter, sans-serif';
-      ctx.fillText('VERTICAL FLUX & TEMPERATURE PROFILES', chartLeft, 16);
+        // Warming Since Start Calculation
+        const deltaT = T_surface_C - T_start_C;
+        const deltaSign = deltaT >= 0 ? '+' : '';
+        const deltaText = `${deltaSign}${deltaT.toFixed(2)} °C`;
+        deltaTempVal.textContent = deltaText;
 
-      ctx.fillStyle = '#38bdf8';
-      ctx.fillRect(chartLeft, 24, 10, 3);
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '9px Inter, sans-serif';
-      ctx.fillText('Upward Flux F↑ (W/m²)', chartLeft + 14, 28);
+        if (Math.abs(deltaT) < 0.02) {
+          deltaTempVal.className = "text-xl font-black mono text-slate-200";
+          canvasDeltaBadge.className = "font-mono text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-300";
+        } else if (deltaT > 0) {
+          deltaTempVal.className = "text-xl font-black mono text-rose-400";
+          canvasDeltaBadge.className = "font-mono text-[9px] px-1 py-0.2 rounded bg-rose-950/90 text-rose-300 border border-rose-800/60 font-semibold";
+        } else {
+          deltaTempVal.className = "text-xl font-black mono text-blue-400";
+          canvasDeltaBadge.className = "font-mono text-[9px] px-1 py-0.2 rounded bg-blue-950/90 text-blue-300 border border-blue-800/60 font-semibold";
+        }
 
-      ctx.fillStyle = '#f59e0b';
-      ctx.fillRect(chartLeft + 130, 24, 10, 3);
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText('Temperature T (°C)', chartLeft + 144, 28);
+        canvasDeltaBadge.textContent = `ΔT: ${deltaText}`;
+        startTempDisplay.textContent = `${T_start_C.toFixed(2)} °C`;
+        currentTempSmallDisplay.textContent = `Now: ${T_surface_C.toFixed(2)} °C`;
+        canvasBaselineLabel.textContent = `from ${T_start_C.toFixed(2)}°C`;
 
-      // Grid lines
-      ctx.strokeStyle = 'rgba(51, 65, 85, 0.4)';
-      ctx.lineWidth = 1;
-      for (let alt = 0; alt <= 14; alt += 2) {
-        const y = altToY(alt);
-        if (y >= spaceY - 5 && y <= groundY) {
+        canvasSurfTemp.textContent = `${T_surface_C.toFixed(2)} °C`;
+        const anomaly = T_surface_C - 13.80;
+        canvasTempAnomaly.textContent = `Anomaly: ${anomaly >= 0 ? '+' : ''}${anomaly.toFixed(2)} °C`;
+
+        canvasForcing.textContent = `${radiativeForcing >= 0 ? '+' : ''}${radiativeForcing.toFixed(2)} W/m²`;
+        canvasEqTemp.textContent = `${T_surface_equilibrium_C.toFixed(2)} °C`;
+
+        const remaining = T_surface_equilibrium_C - T_surface_C;
+        canvasWarmRemaining.textContent = `Committed: ${remaining >= 0 ? '+' : ''}${remaining.toFixed(2)} °C`;
+
+        canvasHeatStored.textContent = `${cumulativeHeatZJ >= 0 ? '+' : ''}${cumulativeHeatZJ.toFixed(1)} ZJ`;
+        elapsedYears.textContent = `Year: ${simTimeYears.toFixed(1)}`;
+
+        badgeHeightKm.textContent = effectiveAltitudeKm.toFixed(1);
+        const emitTemp = T_surface_C - (LAPSE_RATE * effectiveAltitudeKm);
+        badgeTempC.textContent = emitTemp.toFixed(1);
+      }
+
+      function setBaseline(newT = T_surface_C) {
+        T_start_C = newT;
+        simTimeYears = 0.0;
+        cumulativeHeatZJ = 0.0;
+        updateUI();
+      }
+
+      // --- Canvas Rendering ---
+      function renderCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        const w = rect.width || canvas.parentElement.clientWidth || 600;
+        const h = rect.height || canvas.parentElement.clientHeight || 400;
+
+        ctx.clearRect(0, 0, w, h);
+
+        const groundY = h - 52;
+        const spaceY = 38;
+        const atmosH = groundY - spaceY;
+        const maxAltKm = 14.0;
+        const splitX = Math.floor(w * 0.50);
+
+        const altToY = (alt) => groundY - (alt / maxAltKm) * atmosH;
+        const escapeY = altToY(effectiveAltitudeKm);
+
+        escapeAltitudeBadge.style.top = `${Math.max(12, escapeY - 14)}px`;
+
+        // 1. LEFT PANEL: Atmospheric Column
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(0, 0, splitX, spaceY);
+
+        const opac = Math.min(0.85, 0.20 + (co2 / 1600) * 0.45 + (h2oMultiplier - 0.5) * 0.2);
+        const grad = ctx.createLinearGradient(0, groundY, 0, spaceY);
+        grad.addColorStop(0, `rgba(30, 58, 138, ${opac * 0.9})`);
+        grad.addColorStop(0.4, `rgba(14, 116, 144, ${opac * 0.6})`);
+        grad.addColorStop(1, 'rgba(15, 23, 42, 0.12)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, spaceY, splitX, atmosH);
+
+        // Exponential barometric dots
+        for (let i = 0; i < atmosphericDots.length; i++) {
+          const dot = atmosphericDots[i];
+          if (dot.zKm <= maxAltKm) {
+            const dy = altToY(dot.zKm);
+            const dx = 18 + dot.xNorm * (splitX - 36);
+            ctx.fillStyle = dot.color;
+            ctx.beginPath();
+            ctx.arc(dx, dy, dot.radius, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // Inbound Solar Beam
+        const sunX = 30;
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.45)';
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(sunX, spaceY);
+        ctx.lineTo(sunX, groundY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.moveTo(sunX, groundY - 2);
+        ctx.lineTo(sunX - 4, groundY - 9);
+        ctx.lineTo(sunX + 4, groundY - 9);
+        ctx.fill();
+
+        ctx.fillStyle = '#fde68a';
+        ctx.font = '600 8.5px Inter, sans-serif';
+        ctx.fillText('Solar 239', sunX - 14, spaceY + 12);
+
+        // Photons
+        for (let i = 0; i < photons.length; i++) {
+          const p = photons[i];
+          const py = altToY(p.zKm);
+          const px = 46 + p.xNorm * (splitX - 66);
+
+          if (p.state === 'absorbed') {
+            ctx.strokeStyle = 'rgba(251, 146, 60, 0.85)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(px, py, 4.5, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = '#f97316';
+            ctx.beginPath();
+            ctx.arc(px, py, 2, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (p.state === 'escaping') {
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.fillStyle = '#fb923c';
+            ctx.beginPath();
+            ctx.arc(px, py, 2.2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // Red Dashed Effective Radiating Altitude
+        ctx.save();
+        ctx.strokeStyle = '#f43f5e';
+        ctx.lineWidth = 1.8;
+        ctx.setLineDash([5, 5]);
+        ctx.shadowColor = 'rgba(244, 63, 94, 0.7)';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.moveTo(10, escapeY);
+        ctx.lineTo(splitX - 10, escapeY);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = '#f43f5e';
+        ctx.font = '600 10px JetBrains Mono, monospace';
+        ctx.fillText(`Radiating Layer (${effectiveAltitudeKm.toFixed(1)} km)`, 44, escapeY - 6);
+
+        // 2. RIGHT PANEL: Vertical Profiles Chart
+        ctx.fillStyle = '#090d16';
+        ctx.fillRect(splitX, 0, w - splitX, groundY);
+
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(splitX, 0);
+        ctx.lineTo(splitX, groundY);
+        ctx.stroke();
+
+        const chartHeaderTop = 14;
+        const chartPlotTop = spaceY + 12;
+        const chartLeft = splitX + 44;
+        const chartRight = w - 24;
+        const chartW = chartRight - chartLeft;
+
+        // Chart Header
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '700 10px Inter, sans-serif';
+        ctx.fillText('VERTICAL FLUX & TEMPERATURE PROFILES', chartLeft, chartHeaderTop);
+
+        // Legend Row
+        const legendY = chartHeaderTop + 14;
+
+        // Upward Flux legend
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(chartLeft, legendY - 5, 12, 3, 1.5);
+        else ctx.rect(chartLeft, legendY - 5, 12, 3);
+        ctx.fill();
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '500 9px Inter, sans-serif';
+        ctx.fillText('Upward Flux F↑ (W/m²)', chartLeft + 16, legendY - 2);
+
+        // Temperature legend
+        const legTempX = chartLeft + 130;
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(legTempX, legendY - 5, 12, 3, 1.5);
+        else ctx.rect(legTempX, legendY - 5, 12, 3);
+        ctx.fill();
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText('Temperature T (°C)', legTempX + 16, legendY - 2);
+
+        // Scales & Grid
+        const plotH = groundY - chartPlotTop;
+        const cAltToY = (alt) => groundY - (alt / maxAltKm) * plotH;
+
+        ctx.strokeStyle = 'rgba(51, 65, 85, 0.4)';
+        ctx.lineWidth = 1;
+        const altTicks = [0, 4, 8, 12, 14];
+        for (let t = 0; t < altTicks.length; t++) {
+          const alt = altTicks[t];
+          const y = cAltToY(alt);
           ctx.beginPath();
           ctx.moveTo(chartLeft, y);
           ctx.lineTo(chartRight, y);
           ctx.stroke();
 
           ctx.fillStyle = '#64748b';
-          ctx.font = '9px JetBrains Mono, monospace';
+          ctx.font = '500 9px JetBrains Mono, monospace';
           ctx.fillText(`${alt}km`, splitX + 10, y + 3);
         }
-      }
 
-      const fluxMin = 200;
-      const fluxMax = 420;
-      const fluxToX = (f) => chartLeft + ((f - fluxMin) / (fluxMax - fluxMin)) * chartW;
+        const fluxMin = 200, fluxMax = 420;
+        const fluxToX = (f) => chartLeft + ((f - fluxMin) / (fluxMax - fluxMin)) * chartW;
 
-      const tempMin = -65;
-      const tempMax = 25;
-      const tempToX = (t) => chartLeft + ((t - tempMin) / (tempMax - tempMin)) * chartW;
+        const tempMin = -65, tempMax = 25;
+        const tempToX = (t) => chartLeft + ((t - tempMin) / (tempMax - tempMin)) * chartW;
 
-      // Inbound ASR Reference
-      const asrX = fluxToX(ASR);
-      ctx.strokeStyle = 'rgba(251, 191, 36, 0.5)';
-      ctx.setLineDash([3, 3]);
-      ctx.beginPath();
-      ctx.moveTo(asrX, spaceY);
-      ctx.lineTo(asrX, groundY);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = '9px JetBrains Mono, monospace';
-      ctx.fillText('ASR (239)', asrX - 18, spaceY - 4);
+        // ASR 239 Reference Line & Pill Badge
+        const asrX = fluxToX(ASR);
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.55)';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(asrX, chartPlotTop);
+        ctx.lineTo(asrX, groundY);
+        ctx.stroke();
+        ctx.setLineDash([]);
 
-      // Temperature profile
-      ctx.strokeStyle = '#f59e0b';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      for (let alt = 0; alt <= maxAltitudeKm; alt += 0.5) {
-        const prof = getVerticalProfileAt(alt);
-        const px = tempToX(prof.Tz_C);
-        const py = altToY(alt);
-        if (alt === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-      }
-      ctx.stroke();
+        const badgeW = 54, badgeH = 15;
+        const bX = Math.max(chartLeft + 2, asrX - badgeW / 2);
+        const bY = chartPlotTop + 4;
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.5)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(bX, bY, badgeW, badgeH, 3);
+        else ctx.rect(bX, bY, badgeW, badgeH);
+        ctx.fill();
+        ctx.stroke();
 
-      // Upward Flux profile
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      for (let alt = 0; alt <= maxAltitudeKm; alt += 0.4) {
-        const prof = getVerticalProfileAt(alt);
-        const px = fluxToX(prof.F_up);
-        const py = altToY(alt);
-        if (alt === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-      }
-      ctx.stroke();
+        ctx.fillStyle = '#fde68a';
+        ctx.font = '600 8.5px JetBrains Mono, monospace';
+        ctx.fillText('ASR: 239', bX + 5, bY + 10.5);
 
-      // Highlight Points
-      const surfFluxX = fluxToX(surfaceEmissionFlux);
-      ctx.fillStyle = '#38bdf8';
-      ctx.beginPath();
-      ctx.arc(surfFluxX, groundY, 4, 0, Math.PI * 2);
-      ctx.fill();
-
-      const escapeProf = getVerticalProfileAt(effectiveAltitudeKm);
-      const escFluxX = fluxToX(escapeProf.F_up);
-      ctx.fillStyle = '#f43f5e';
-      ctx.beginPath();
-      ctx.arc(escFluxX, escapeY, 4.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.strokeStyle = 'rgba(244, 63, 94, 0.4)';
-      ctx.setLineDash([4, 4]);
-      ctx.beginPath();
-      ctx.moveTo(chartLeft, escapeY);
-      ctx.lineTo(chartRight, escapeY);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Ground area
-      let groundGrad = ctx.createLinearGradient(0, groundY, 0, h);
-      if (T_surface_C > 18) {
-        groundGrad.addColorStop(0, '#78350f');
-        groundGrad.addColorStop(1, '#451a03');
-      } else if (T_surface_C < 11) {
-        groundGrad.addColorStop(0, '#334155');
-        groundGrad.addColorStop(1, '#0f172a');
-      } else {
-        groundGrad.addColorStop(0, '#166534');
-        groundGrad.addColorStop(1, '#14532d');
-      }
-      ctx.fillStyle = groundGrad;
-      ctx.fillRect(0, groundY, w, h - groundY);
-
-      ctx.strokeStyle = '#22c55e';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(0, groundY);
-      ctx.lineTo(w, groundY);
-      ctx.stroke();
-
-      ctx.fillStyle = '#f8fafc';
-      ctx.font = '600 11px Inter, sans-serif';
-      ctx.fillText(`Earth Surface · Ts = ${T_surface_C.toFixed(2)}°C`, 15, groundY + 22);
-      ctx.fillStyle = 'rgba(203, 213, 225, 0.7)';
-      ctx.font = '10px Inter, sans-serif';
-      ctx.fillText(`Heat Reservoir: ${cumulativeJoulesZJ.toFixed(1)} ZJ stored`, 15, groundY + 38);
-
-      ctx.fillStyle = '#bae6fd';
-      ctx.font = '600 10px JetBrains Mono, monospace';
-      ctx.fillText(`Ground Flux: σ·Ts⁴ = ${surfaceEmissionFlux.toFixed(1)} W/m²`, splitX + 15, groundY + 22);
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '9px Inter, sans-serif';
-      ctx.fillText(`Net Escaping OLR = ${currentOLR.toFixed(1)} W/m²`, splitX + 15, groundY + 38);
-    }
-
-    /**
-     * Animation Loop
-     */
-    let lastTime = performance.now();
-    function animate(now) {
-      const dtMs = now - lastTime;
-      lastTime = now;
-
-      const dtSec = Math.min(0.1, dtMs / 1000);
-      const dtYears = dtSec * 2.5 * simSpeed;
-
-      if (isRunning) {
-        stepSimulation(dtYears);
-        photons.forEach(p => p.step(dtSec, effectiveAltitudeKm));
-      }
-
-      updateUI();
-      renderCanvas();
-
-      requestAnimationFrame(animate);
-    }
-
-    /**
-     * Event Handlers
-     */
-    function setupEvents() {
-      co2Slider.addEventListener('input', (e) => {
-        const pos = parseFloat(e.target.value);
-        co2 = Math.round(sliderPosToCO2(pos));
-        updateUI();
-      });
-
-      h2oSlider.addEventListener('input', (e) => {
-        h2oMultiplier = parseFloat(e.target.value);
-        if (autoH2oFeedback) {
-          autoH2oFeedback = false;
-          h2oAutoFeedback.checked = false;
+        // Temperature curve T(z)
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let alt = 0; alt <= maxAltKm; alt += 0.5) {
+          const prof = getProfileAt(alt);
+          const px = tempToX(prof.Tz_C);
+          const py = cAltToY(alt);
+          if (alt === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
         }
-        updateUI();
-      });
+        ctx.stroke();
 
-      h2oAutoFeedback.addEventListener('change', (e) => {
-        autoH2oFeedback = e.target.checked;
-        updateUI();
-      });
+        // Upward Flux curve F_up(z)
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        for (let alt = 0; alt <= maxAltKm; alt += 0.4) {
+          const prof = getProfileAt(alt);
+          const px = fluxToX(prof.F_up);
+          const py = cAltToY(alt);
+          if (alt === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
 
-      tropoSlider.addEventListener('input', (e) => {
-        tropoHeightKm = parseFloat(e.target.value);
-        updateUI();
-      });
+        // Surface point & Escape marker
+        const sX = fluxToX(surfaceEmissionFlux);
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(sX, groundY, 4, 0, Math.PI * 2);
+        ctx.fill();
 
-      inertiaSlider.addEventListener('input', (e) => {
-        thermalInertia = parseFloat(e.target.value);
-        if (thermalInertia < 0.6) {
-          inertiaDisplay.textContent = 'Low (Atmosphere only)';
-        } else if (thermalInertia > 2.0) {
-          inertiaDisplay.textContent = 'Deep Ocean Lag';
+        const escProf = getProfileAt(effectiveAltitudeKm);
+        const escX = fluxToX(escProf.F_up);
+        const cEscapeY = cAltToY(effectiveAltitudeKm);
+        ctx.fillStyle = '#f43f5e';
+        ctx.beginPath();
+        ctx.arc(escX, cEscapeY, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(244, 63, 94, 0.4)';
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(chartLeft, cEscapeY);
+        ctx.lineTo(chartRight, cEscapeY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Ground Area
+        const groundGrad = ctx.createLinearGradient(0, groundY, 0, h);
+        if (T_surface_C > 18) {
+          groundGrad.addColorStop(0, '#78350f');
+          groundGrad.addColorStop(1, '#451a03');
+        } else if (T_surface_C < 11) {
+          groundGrad.addColorStop(0, '#334155');
+          groundGrad.addColorStop(1, '#0f172a');
         } else {
-          inertiaDisplay.textContent = 'Normal (~50m ocean)';
+          groundGrad.addColorStop(0, '#166534');
+          groundGrad.addColorStop(1, '#14532d');
         }
-      });
+        ctx.fillStyle = groundGrad;
+        ctx.fillRect(0, groundY, w, h - groundY);
 
-      togglePlayBtn.addEventListener('click', () => {
-        isRunning = !isRunning;
+        ctx.strokeStyle = '#22c55e';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(0, groundY);
+        ctx.lineTo(w, groundY);
+        ctx.stroke();
+
+        const deltaT = T_surface_C - T_start_C;
+        const deltaSign = deltaT >= 0 ? '+' : '';
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.fillText(`Earth Surface · Ts = ${T_surface_C.toFixed(2)}°C`, 15, groundY + 20);
+
+        ctx.fillStyle = Math.abs(deltaT) < 0.02 ? '#cbd5e1' : (deltaT > 0 ? '#fda4af' : '#93c5fd');
+        ctx.font = '600 10px JetBrains Mono, monospace';
+        ctx.fillText(`ΔT since start: ${deltaSign}${deltaT.toFixed(2)}°C (Start: ${T_start_C.toFixed(2)}°C)`, 15, groundY + 36);
+
+        ctx.fillStyle = '#bae6fd';
+        ctx.font = '600 10px JetBrains Mono, monospace';
+        ctx.fillText(`Ground Flux: σ·Ts⁴ = ${surfaceEmissionFlux.toFixed(1)} W/m²`, splitX + 15, groundY + 20);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '9px Inter, sans-serif';
+        ctx.fillText(`Net Escaping OLR = ${currentOLR.toFixed(1)} W/m² · ${cumulativeHeatZJ.toFixed(1)} ZJ stored`, splitX + 15, groundY + 36);
+      }
+
+      // --- Animation Loop ---
+      let lastTime = performance.now();
+      function animate(now) {
+        const dtMs = now - lastTime;
+        lastTime = now;
+
+        const dtSec = Math.min(0.1, dtMs / 1000);
+        const dtYears = dtSec * 2.5 * simSpeed;
+
         if (isRunning) {
-          playBtnText.textContent = 'Pause';
-          playIcon.classList.add('hidden');
-          pauseIcon.classList.remove('hidden');
-          simStatusLabel.textContent = 'Dynamic Simulation: Running';
-          simStatePing.classList.remove('hidden');
-          simStateDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500';
-        } else {
-          playBtnText.textContent = 'Play';
-          playIcon.classList.remove('hidden');
-          pauseIcon.classList.add('hidden');
-          simStatusLabel.textContent = 'Simulation: Paused';
-          simStatePing.classList.add('hidden');
-          simStateDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500';
+          stepSimulation(dtYears);
+          for (let i = 0; i < photons.length; i++) {
+            photons[i].step(dtSec, effectiveAltitudeKm);
+          }
         }
-      });
 
-      fastForwardBtn.addEventListener('click', () => {
-        computeAtmosphericEquilibrium();
-        T_surface_C = T_surface_equilibrium_C;
-        currentOLR = ASR;
-        currentEEI = 0.0;
         updateUI();
-      });
+        renderCanvas();
 
-      resetSimBtn.addEventListener('click', () => {
-        setCO2Value(280);
-        h2oMultiplier = 1.0;
-        h2oSlider.value = 1.0;
-        autoH2oFeedback = true;
-        h2oAutoFeedback.checked = true;
-        tropoHeightKm = 12.0;
-        tropoSlider.value = 12.0;
-        thermalInertia = 1.0;
-        inertiaSlider.value = 1.0;
-        inertiaDisplay.textContent = 'Normal (~50m ocean)';
-        simTimeYears = 0.0;
-        cumulativeJoulesZJ = 0.0;
+        requestAnimationFrame(animate);
+      }
 
-        computeAtmosphericEquilibrium();
-        T_surface_C = T_surface_equilibrium_C;
-        updateUI();
-      });
-
-      document.querySelectorAll('.speed-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.speed-btn').forEach(b => {
-            b.className = 'speed-btn px-2 py-0.5 rounded text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300';
-          });
-          btn.className = 'speed-btn px-2 py-0.5 rounded text-[11px] bg-cyan-700 text-white font-semibold';
-          simSpeed = parseFloat(btn.dataset.speed);
+      // --- Event Listeners Setup ---
+      function setupEvents() {
+        co2Slider.addEventListener('input', (e) => {
+          const pos = parseFloat(e.target.value);
+          co2 = Math.round(posToCO2(pos));
+          updateUI();
         });
-      });
 
-      document.getElementById('btnPreInd').addEventListener('click', () => {
-        setCO2Value(280);
-        computeAtmosphericEquilibrium();
-        T_surface_C = T_surface_equilibrium_C;
-        updateUI();
-      });
+        emissionRateSlider.addEventListener('input', (e) => {
+          emissionRatePpmYr = parseFloat(e.target.value);
+          updateRateButtons();
+          updateUI();
+        });
 
-      document.getElementById('btnCurrent').addEventListener('click', () => {
-        setCO2Value(420);
-        updateUI();
-      });
-
-      document.getElementById('btnDoubled').addEventListener('click', () => {
-        setCO2Value(560);
-        updateUI();
-      });
-
-      document.getElementById('btnExtreme').addEventListener('click', () => {
-        setCO2Value(1120);
-        updateUI();
-      });
-
-      const openModal = () => guideModal.classList.remove('hidden');
-      const closeModal = () => guideModal.classList.add('hidden');
-
-      openGuideBtn.addEventListener('click', openModal);
-      closeGuideBtn.addEventListener('click', closeModal);
-      closeGuideFooterBtn.addEventListener('click', closeModal);
-      guideModal.addEventListener('click', (e) => {
-        if (e.target === guideModal) closeModal();
-      });
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !guideModal.classList.contains('hidden')) {
-          closeModal();
+        function updateRateButtons() {
+          document.querySelectorAll('.rate-preset-btn').forEach(btn => {
+            const r = parseFloat(btn.dataset.rate);
+            if (Math.abs(r - emissionRatePpmYr) < 0.05) {
+              btn.className = 'rate-preset-btn px-2 py-1 rounded-lg bg-rose-900/60 text-[10px] text-rose-200 font-semibold border border-rose-700 transition text-center';
+            } else {
+              btn.className = 'rate-preset-btn px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 border border-slate-700 transition text-center';
+            }
+          });
         }
-      });
-    }
 
-    // Startup
-    window.onload = function () {
-      handleResize();
-      initAtmosphere();
-      setupEvents();
+        document.querySelectorAll('.rate-preset-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            emissionRatePpmYr = parseFloat(btn.dataset.rate);
+            emissionRateSlider.value = emissionRatePpmYr.toFixed(1);
+            updateRateButtons();
+            updateUI();
+          });
+        });
 
-      setCO2Value(420);
-      computeAtmosphericEquilibrium();
-      T_surface_C = 14.85;
+        h2oSlider.addEventListener('input', (e) => {
+          h2oMultiplier = parseFloat(e.target.value);
+          if (autoH2oFeedback) {
+            autoH2oFeedback = false;
+            h2oAutoFeedback.checked = false;
+          }
+          updateUI();
+        });
 
-      updateUI();
-      lastTime = performance.now();
-      requestAnimationFrame(animate);
-    };
+        h2oAutoFeedback.addEventListener('change', (e) => {
+          autoH2oFeedback = e.target.checked;
+          updateUI();
+        });
+
+        tropoSlider.addEventListener('input', (e) => {
+          tropoHeightKm = parseFloat(e.target.value);
+          updateUI();
+        });
+
+        inertiaSlider.addEventListener('input', (e) => {
+          oceanLagYears = parseFloat(e.target.value);
+          updateUI();
+        });
+
+        togglePlayBtn.addEventListener('click', () => {
+          isRunning = !isRunning;
+          if (isRunning) {
+            playBtnText.textContent = 'Pause';
+            playIcon.classList.add('hidden');
+            pauseIcon.classList.remove('hidden');
+            simStatusLabel.textContent = 'Dynamic Simulation: Running';
+            simStatePing.classList.remove('hidden');
+            simStateDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500';
+          } else {
+            playBtnText.textContent = 'Play';
+            playIcon.classList.remove('hidden');
+            pauseIcon.classList.add('hidden');
+            simStatusLabel.textContent = 'Simulation: Paused';
+            simStatePing.classList.add('hidden');
+            simStateDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500';
+          }
+        });
+
+        snapEquilibriumBtn.addEventListener('click', () => {
+          computePhysics();
+          T_surface_C = T_surface_equilibrium_C;
+          currentOLR = ASR;
+          currentEEI = 0.0;
+          updateUI();
+        });
+
+        rebaselineBtn.addEventListener('click', () => {
+          setBaseline(T_surface_C);
+        });
+
+        resetSimBtn.addEventListener('click', () => {
+          updateCO2UI(280);
+          emissionRatePpmYr = 0.0;
+          emissionRateSlider.value = "0.0";
+          updateRateButtons();
+
+          h2oMultiplier = 1.0;
+          h2oSlider.value = "1.00";
+          autoH2oFeedback = true;
+          h2oAutoFeedback.checked = true;
+
+          tropoHeightKm = 12.0;
+          tropoSlider.value = "12.0";
+          oceanLagYears = 20.0;
+          inertiaSlider.value = "20";
+
+          computePhysics();
+          T_surface_C = T_surface_equilibrium_C;
+          setBaseline(T_surface_C);
+        });
+
+        document.querySelectorAll('.speed-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.speed-btn').forEach(b => {
+              b.className = 'speed-btn px-2 py-0.5 rounded text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300';
+            });
+            btn.className = 'speed-btn px-2 py-0.5 rounded text-[11px] bg-cyan-700 text-white font-semibold';
+            simSpeed = parseFloat(btn.dataset.speed);
+          });
+        });
+
+        // Preset Buttons
+        document.getElementById('btnPreInd').addEventListener('click', () => {
+          updateCO2UI(280);
+          emissionRatePpmYr = 0.0;
+          emissionRateSlider.value = "0.0";
+          updateRateButtons();
+          computePhysics();
+          T_surface_C = T_surface_equilibrium_C;
+          setBaseline(T_surface_C);
+        });
+
+        document.getElementById('btnCurrent').addEventListener('click', () => {
+          updateCO2UI(425);
+          emissionRatePpmYr = 2.5;
+          emissionRateSlider.value = "2.5";
+          updateRateButtons();
+          computePhysics();
+          T_surface_C = 14.95;
+          setBaseline(14.95);
+        });
+
+        document.getElementById('btnDoubled').addEventListener('click', () => {
+          updateCO2UI(560);
+          emissionRatePpmYr = 0.0;
+          emissionRateSlider.value = "0.0";
+          updateRateButtons();
+          computePhysics();
+          setBaseline(T_surface_C);
+        });
+
+        document.getElementById('btnExtreme').addEventListener('click', () => {
+          updateCO2UI(1120);
+          emissionRatePpmYr = 4.0;
+          emissionRateSlider.value = "4.0";
+          updateRateButtons();
+          computePhysics();
+          setBaseline(T_surface_C);
+        });
+
+        // Modal Handlers
+        const openModal = () => guideModal.classList.remove('hidden');
+        const closeModal = () => guideModal.classList.add('hidden');
+
+        openGuideBtn.addEventListener('click', openModal);
+        closeGuideBtn.addEventListener('click', closeModal);
+        closeGuideFooterBtn.addEventListener('click', closeModal);
+        guideModal.addEventListener('click', (e) => {
+          if (e.target === guideModal) closeModal();
+        });
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !guideModal.classList.contains('hidden')) {
+            closeModal();
+          }
+        });
+      }
+
+      // --- Initialization On Load ---
+      window.onload = function () {
+        try {
+          handleResize();
+          initParticles();
+          setupEvents();
+
+          updateCO2UI(425);
+          computePhysics();
+          T_surface_C = 14.95;
+          setBaseline(14.95);
+
+          lastTime = performance.now();
+          requestAnimationFrame(animate);
+        } catch (err) {
+          console.error("Simulation initialization failed:", err);
+        }
+      };
+    })();
   </script>
 </body>
 </html>
