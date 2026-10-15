@@ -152,21 +152,64 @@
       <!-- Parameter Sliders -->
       <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col gap-4">
         
-        <!-- CO2 Slider -->
+        <!-- CO2 Slider (Logarithmic Scale) -->
         <div>
           <div class="flex justify-between items-center text-xs mb-1.5">
             <label for="co2Slider" class="font-semibold text-slate-200 flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
               Atmospheric CO₂ Concentration
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/50 font-mono">Log scale (doublings equal space)</span>
             </label>
             <span class="mono font-bold text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800/60" id="co2Display">420 ppm</span>
           </div>
-          <input type="range" id="co2Slider" min="100" max="1600" step="5" value="420" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
-          <div class="flex justify-between text-[10px] text-slate-400 mt-1 mono">
-            <span>100 (Glacial min)</span>
-            <span>280 (Pre-Ind)</span>
-            <span>560 (2×)</span>
-            <span>1600 ppm</span>
+          <!-- Logarithmic input slider with normalized range [0, 1] -->
+          <div class="relative w-full pt-1 pb-6">
+            <input type="range" id="co2Slider" min="0" max="1" step="0.001" value="0.518" class="w-full h-1.5 bg-slate-700 rounded-lg cursor-pointer">
+            
+            <!-- Mathematical Log Scale Tick Marks & Labels -->
+            <!-- pos(C) = (ln(C) - ln(100)) / (ln(1600) - ln(100)) -->
+            <!-- 100 ppm -> 0.0% -->
+            <!-- 280 ppm (Pre-Ind) -> 37.1% -->
+            <!-- 420 ppm (Present) -> 51.8% -->
+            <!-- 560 ppm (2x) -> 62.1% -->
+            <!-- 1120 ppm (4x) -> 87.1% -->
+            <!-- 1600 ppm -> 100.0% -->
+            <div class="relative w-full h-4 mt-1 pointer-events-none text-[10px] font-mono text-slate-400">
+              <!-- 100 ppm -->
+              <div class="absolute left-0 -translate-x-0 flex flex-col items-start">
+                <span class="w-px h-1.5 bg-slate-600 mb-0.5"></span>
+                <span>100</span>
+              </div>
+              <!-- 280 ppm -->
+              <div class="absolute -translate-x-1/2 flex flex-col items-center" style="left: 37.14%;">
+                <span class="w-px h-1.5 bg-slate-500 mb-0.5"></span>
+                <span class="text-slate-300 font-semibold">280</span>
+                <span class="text-[9px] text-slate-400 font-sans -mt-0.5">Pre-Ind</span>
+              </div>
+              <!-- 420 ppm -->
+              <div class="absolute -translate-x-1/2 flex flex-col items-center" style="left: 51.76%;">
+                <span class="w-px h-1.5 bg-cyan-500/80 mb-0.5"></span>
+                <span class="text-cyan-400 font-semibold">420</span>
+                <span class="text-[9px] text-cyan-400/80 font-sans -mt-0.5">Now</span>
+              </div>
+              <!-- 560 ppm -->
+              <div class="absolute -translate-x-1/2 flex flex-col items-center" style="left: 62.15%;">
+                <span class="w-px h-1.5 bg-amber-500/80 mb-0.5"></span>
+                <span class="text-amber-300 font-semibold">560</span>
+                <span class="text-[9px] text-amber-300/80 font-sans -mt-0.5">2×</span>
+              </div>
+              <!-- 1120 ppm -->
+              <div class="absolute -translate-x-1/2 flex flex-col items-center hidden sm:flex" style="left: 87.15%;">
+                <span class="w-px h-1.5 bg-rose-500/80 mb-0.5"></span>
+                <span class="text-rose-300 font-semibold">1120</span>
+                <span class="text-[9px] text-rose-300/80 font-sans -mt-0.5">4×</span>
+              </div>
+              <!-- 1600 ppm -->
+              <div class="absolute right-0 translate-x-0 flex flex-col items-end">
+                <span class="w-px h-1.5 bg-slate-600 mb-0.5"></span>
+                <span>1600</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -659,27 +702,25 @@
           return;
         }
 
-        // Upward propagation
-        this.zKm += this.speed * dt * 3.5;
+    // Logarithmic CO2 Slider Math Utilities
+    // Min CO2: 100 ppm, Max CO2: 1600 ppm (4 doublings = 100 -> 200 -> 400 -> 800 -> 1600)
+    const CO2_MIN = 100;
+    const CO2_MAX = 1600;
+    const LN_CO2_MIN = Math.log(CO2_MIN);
+    const LN_CO2_MAX = Math.log(CO2_MAX);
 
-        // Absorption probability depends strongly on density (optical depth) below escape altitude
-        if (this.zKm < currentEscapeKm) {
-          // Density decays exponentially
-          const densityFactor = Math.exp(-this.zKm / 4.5) * (co2 / 400);
-          const absorbChance = 0.035 * densityFactor;
-          if (Math.random() < absorbChance) {
-            this.state = 'absorbed';
-            this.scatterTimer = 0.25 + Math.random() * 0.3; // absorbed/delay briefly
-            return;
-          }
-        } else {
-          this.state = 'escaping'; // photon free to escape to space
-        }
+    function co2ToSliderPos(c) {
+      return (Math.log(c) - LN_CO2_MIN) / (LN_CO2_MAX - LN_CO2_MIN);
+    }
 
-        if (this.zKm > 14.5) {
-          this.reset(false);
-        }
-      }
+    function sliderPosToCO2(pos) {
+      const clamped = Math.max(0, Math.min(1, pos));
+      return Math.exp(LN_CO2_MIN + clamped * (LN_CO2_MAX - LN_CO2_MIN));
+    }
+
+    function setCO2Value(val) {
+      co2 = Math.round(val);
+      co2Slider.value = co2ToSliderPos(co2).toFixed(4);
     }
 
     function initAtmosphericStructure() {
@@ -1215,7 +1256,8 @@
     function setupEvents() {
       // Sliders
       co2Slider.addEventListener('input', (e) => {
-        co2 = parseFloat(e.target.value);
+        const pos = parseFloat(e.target.value);
+        co2 = Math.round(sliderPosToCO2(pos));
         updateUI();
       });
 
@@ -1280,8 +1322,7 @@
       });
 
       resetSimBtn.addEventListener('click', () => {
-        co2 = 280;
-        co2Slider.value = 280;
+        setCO2Value(280);
         h2oMultiplier = 1.0;
         h2oSlider.value = 1.0;
         autoH2oFeedback = true;
@@ -1310,31 +1351,27 @@
         });
       });
 
-      // Experiment Presets
+      // Experiment Presets (Updated to use setCO2Value for log slider)
       document.getElementById('btnPreInd').addEventListener('click', () => {
-        co2 = 280;
-        co2Slider.value = 280;
+        setCO2Value(280);
         computeAtmosphericEquilibrium();
         T_surface_C = T_surface_equilibrium_C; // snaps to balanced state
         updateUI();
       });
 
       document.getElementById('btnCurrent').addEventListener('click', () => {
-        co2 = 425;
-        co2Slider.value = 425;
+        setCO2Value(425);
         // Keep current transient temperature so user can watch remaining lag
         updateUI();
       });
 
       document.getElementById('btnDoubled').addEventListener('click', () => {
-        co2 = 560; // 2x Pre-industrial
-        co2Slider.value = 560;
+        setCO2Value(560); // 2x Pre-industrial
         updateUI();
       });
 
       document.getElementById('btnExtreme').addEventListener('click', () => {
-        co2 = 1120; // 4x Pre-industrial
-        co2Slider.value = 1120;
+        setCO2Value(1120); // 4x Pre-industrial
         updateUI();
       });
 
@@ -1362,8 +1399,7 @@
       setupEvents();
 
       // Initial state configuration (Current ~420 ppm with active transient warming)
-      co2 = 420;
-      co2Slider.value = 420;
+      setCO2Value(420);
       computeAtmosphericEquilibrium();
       // Set surface temp to represent present day (~15.0 °C, still lagging ~0.6°C behind full equilibrium)
       T_surface_C = 14.90;
