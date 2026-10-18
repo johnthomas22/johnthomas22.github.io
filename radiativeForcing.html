@@ -49,10 +49,18 @@
     }
     .brand-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
     .badge {
-      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px;
       font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+      text-decoration: none; cursor: default;
     }
-    .badge-cyan { background: rgba(0, 229, 255, 0.15); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.35); }
+    .badge-cyan { background: rgba(0, 229, 255, 0.12); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.35); }
+    .badge-link {
+      cursor: pointer; transition: all 0.15s ease;
+    }
+    .badge-link:hover {
+      background: rgba(0, 229, 255, 0.25); border-color: var(--cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3); transform: translateY(-1px);
+    }
     .badge-rose { background: rgba(244, 63, 94, 0.15); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.35); }
     .badge-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.35); }
     .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.35); }
@@ -199,6 +207,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      position: relative;
     }
     .canvas-header-bar {
       display: flex; justify-content: space-between; align-items: center;
@@ -219,10 +228,142 @@
     }
     canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 
+    /* Interactive Physical Callout Pins */
+    .callout-pin {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #0b1320;
+      border: 2px solid var(--cyan);
+      color: var(--cyan);
+      font-size: 0.72rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+      transform: translate(-50%, -50%);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.35);
+      user-select: none;
+    }
+    .callout-pin:hover, .callout-pin.active {
+      background: var(--cyan);
+      color: #05080f;
+      transform: translate(-50%, -50%) scale(1.18);
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.85);
+    }
+
+    /* Fixed Opaque High-Z-Index Speech Bubble Card with Clean Offset & Pointer Tail */
+    .callout-bubble {
+      position: absolute;
+      display: none;
+      width: 290px;
+      background: #0b1322 !important; /* Fully opaque dark background: no graphics bleed through */
+      border: 1px solid var(--cyan);
+      border-radius: 9px;
+      padding: 12px 14px;
+      color: #f8fafc;
+      font-size: 0.75rem;
+      line-height: 1.48;
+      z-index: 1000 !important; /* Always above all pins, canvas layers, and labels */
+      box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.92), 0 0 16px rgba(0, 229, 255, 0.25);
+      pointer-events: auto; /* Enables clicking step navigation buttons */
+    }
+    .callout-bubble.visible { display: flex; flex-direction: column; gap: 8px; }
+
+    /* Pointing Tail connecting Bubble to Pin */
+    .callout-bubble::before {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #0b1322;
+      border-left: 1px solid var(--cyan);
+      border-bottom: 1px solid var(--cyan);
+      transform: rotate(45deg);
+      left: -6px;
+      top: var(--tail-top, 22px);
+      z-index: 1001;
+    }
+
+    .callout-bubble-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .callout-bubble-title {
+      font-weight: 700;
+      color: var(--cyan);
+      font-size: 0.82rem;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+    .callout-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+    .callout-close-btn:hover { color: #ffffff; background: rgba(255, 255, 255, 0.1); }
+    .callout-bubble-body {
+      color: #cbd5e1;
+      font-size: 0.74rem;
+      line-height: 1.48;
+    }
+
+    /* Step Navigation Controls Inside Active Bubble */
+    .callout-bubble-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .callout-step-indicator {
+      font-family: ui-monospace, monospace;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .callout-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .callout-nav-btn {
+      background: #152238;
+      border: 1px solid var(--border);
+      color: #f8fafc;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .callout-nav-btn:hover:not(:disabled) {
+      background: var(--cyan);
+      color: #070c16;
+      border-color: var(--cyan);
+    }
+    .callout-nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
     /* Modal Documentation */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88);
-      z-index: 1000; justify-content: center; align-items: center; padding: 20px;
+      z-index: 2000; justify-content: center; align-items: center; padding: 20px;
     }
     .modal-card {
       background: #0f172a; border: 1px solid var(--border); border-radius: 10px;
@@ -252,8 +393,12 @@
           <div style="font-size: 0.72rem; color: var(--text-muted);">IPCC AR6 Calibrated 2-Box Model · 1750–2250 Timeline (SI Metres)</div>
         </div>
       </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span class="badge badge-cyan">IPCC AR6 Calibrated 2-Box EBM</span>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <!-- Interactive Badge link to IPCC AR6 Chapter 7 & Geoffroy et al. -->
+        <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-7/" target="_blank" rel="noopener noreferrer" class="badge badge-cyan badge-link" title="Open IPCC AR6 Chapter 7 & Cross-Chapter Box 7.1 (Two-Layer EBM Formulation)">
+          <span>IPCC AR6 Calibrated 2-Box EBM</span>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
         <button class="btn-modal" id="openModalBtn">📖 Physics Guide & Model Documentation</button>
       </div>
     </header>
@@ -301,9 +446,9 @@
             <span>Simulation Pace:</span>
             <div class="speed-btns">
               <button class="speed-btn" data-speed="0.5">0.5×</button>
-              <button class="speed-btn active" data-speed="1.0">1×</button>
-              <button class="speed-btn" data-speed="2.5">2.5×</button>
-              <button class="speed-btn" data-speed="5.0">5×</button>
+              <button class="speed-btn active" data-speed="1.0">1.0×</button>
+              <button class="speed-btn" data-speed="2.0">2.0×</button>
+              <button class="speed-btn" data-speed="4.0">4.0×</button>
             </div>
           </div>
         </div>
@@ -315,8 +460,8 @@
           </div>
           <div class="presets-grid">
             <button class="preset-card active" id="presetPreInd">
-              <div class="preset-name">1. Pre-Industrial (1750)</div>
-              <div class="preset-sub">278 ppm · EEI = 0.0 W/m²</div>
+              <div class="preset-name">1. Pre-Industrial Historical</div>
+              <div class="preset-sub">Simulates 1750 → 2026 recorded CO₂ track</div>
             </button>
             <button class="preset-card" id="presetPresent">
               <div class="preset-name">2. Present Day (2026)</div>
@@ -347,7 +492,7 @@
               <div class="slider-tick-anchor" style="left: 44.7%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--emerald);">350</div></div>
               <div class="slider-tick-anchor" style="left: 55.2%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--amber);">427</div></div>
               <div class="slider-tick-anchor" style="left: 69.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--rose);">556</div></div>
-              <div class="slider-tick-anchor" style="left: 100%;"><div class="tick-line"></div><div class="tick-label">1000</div></div>
+              <div class="slider-tick-anchor" style="left: 100%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--text-muted);">1000</div></div>
             </div>
           </div>
 
@@ -404,8 +549,31 @@
           </div>
         </div>
 
-        <div class="canvas-container">
+        <div class="canvas-container" id="canvasContainer">
           <canvas id="simCanvas"></canvas>
+
+          <!-- Five Interactive Physical Explanation Marker Pins (Radiative Sequence: Top -> Ground -> Mid -> Escape -> Trapping) -->
+          <div class="callout-pin" id="pin1" data-pin="1" style="left: 12%; top: 9%;" title="1. Solar Inflow">1</div>
+          <div class="callout-pin" id="pin2" data-pin="2" style="left: 14%; top: 90%;" title="2. Surface Absorption & IR">2</div>
+          <div class="callout-pin" id="pin3" data-pin="3" style="left: 16%; top: 68%;" title="3. Molecular Excitation & Percolation">3</div>
+          <div class="callout-pin" id="pin4" data-pin="4" style="left: 15%; top: 38%;" title="4. Density Thinning & Escape">4</div>
+          <div class="callout-pin" id="pin5" data-pin="5" style="left: 12%; top: 49%;" title="5. Elevation & Heat Trapping">5</div>
+
+          <!-- High-Contrast Speech Bubble Card with Offset, Tail Notch, and Step Navigation -->
+          <div class="callout-bubble" id="bubbleBox">
+            <div class="callout-bubble-header">
+              <div class="callout-bubble-title" id="bubbleTitle"></div>
+              <button class="callout-close-btn" id="bubbleCloseBtn" title="Close callout">&times;</button>
+            </div>
+            <div class="callout-bubble-body" id="bubbleContent"></div>
+            <div class="callout-bubble-footer">
+              <span class="callout-step-indicator" id="bubbleStepIndicator">Step 1 of 5</span>
+              <div class="callout-nav-group">
+                <button class="callout-nav-btn" id="bubblePrevBtn">← Prev</button>
+                <button class="callout-nav-btn" id="bubbleNextBtn">Next →</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -456,35 +624,76 @@
 
       // --- Physical Constants & Benchmarks ---
       const ASR = 239.0;
-      const CO2_BASE = 278.0;      // 1750 Pre-Industrial baseline (Antarctic Law Dome ice cores)
+      const CO2_BASE = 278.0;      // 1750 Pre-Industrial baseline (Law Dome ice core record)
       const TS_BASE = 13.85;       // 1750 Pre-Industrial surface temperature (°C)
       const SIGMA = 5.670374e-8;   // Stefan-Boltzmann constant
       const LAPSE_RATE = 0.0065;   // 6.5 K / 1000 m (SI: K/m)
       const F2X = 3.71;            // IPCC 2x CO2 forcing (W/m²)
       const ECS = 3.00;            // IPCC AR6 central ECS (°C)
-      const LAMBDA = F2X / ECS;    // Net Climate feedback parameter: 1.2367 W/m²/K (Includes WV, lapse rate, albedo feedbacks)
+      const LAMBDA = F2X / ECS;    // Net Climate feedback parameter: 1.2367 W/m²/K
       const CM = 8.2;              // Mixed-layer heat capacity (W*yr/m²/K)
       const CD = 105.0;            // Deep-ocean heat capacity (W*yr/m²/K)
       const GAMMA = 0.73;          // Ocean heat uptake coefficient (W/m²/K)
 
       const T_START = 1750.0;
+      const T_PRESENT = 2026.0;
       const T_END = 2250.0;
 
-      // Robust empirical historical record (Law Dome ice cores + Mauna Loa Keeling Curve + HadCRUT5/GISTEMP)
-      const HISTORICAL_WARMING = [
-        { year: 1750, deltaTs: 0.00, co2: 278.0 },
-        { year: 1800, deltaTs: 0.01, co2: 282.0 },
-        { year: 1850, deltaTs: 0.04, co2: 285.0 },
-        { year: 1880, deltaTs: 0.06, co2: 290.0 },
-        { year: 1900, deltaTs: 0.12, co2: 296.0 },
-        { year: 1920, deltaTs: 0.18, co2: 303.0 },
-        { year: 1940, deltaTs: 0.24, co2: 310.0 },
-        { year: 1960, deltaTs: 0.30, co2: 317.0 },
-        { year: 1980, deltaTs: 0.48, co2: 339.0 },
-        { year: 2000, deltaTs: 0.76, co2: 370.0 },
-        { year: 2010, deltaTs: 0.95, co2: 390.0 },
-        { year: 2020, deltaTs: 1.18, co2: 414.0 },
-        { year: 2026, deltaTs: 1.26, co2: 427.0 }
+      // Robust empirical historical record of CO2 (Antarctic Law Dome ice cores 1750-1958; Mauna Loa Keeling curve 1958-2026)
+      const HISTORICAL_CO2_RECORDS = [
+        { year: 1750, co2: 278.0 },
+        { year: 1780, co2: 280.0 },
+        { year: 1800, co2: 283.0 },
+        { year: 1830, co2: 284.0 },
+        { year: 1850, co2: 285.5 },
+        { year: 1870, co2: 287.5 },
+        { year: 1880, co2: 290.0 },
+        { year: 1890, co2: 293.0 },
+        { year: 1900, co2: 296.0 },
+        { year: 1910, co2: 300.0 },
+        { year: 1920, co2: 303.0 },
+        { year: 1930, co2: 307.0 },
+        { year: 1940, co2: 310.0 },
+        { year: 1950, co2: 311.5 },
+        { year: 1960, co2: 317.0 },
+        { year: 1970, co2: 325.5 },
+        { year: 1980, co2: 338.5 },
+        { year: 1990, co2: 354.0 },
+        { year: 2000, co2: 369.5 },
+        { year: 2010, co2: 389.8 },
+        { year: 2020, co2: 414.2 },
+        { year: 2026, co2: 427.0 }
+      ];
+
+      function getHistoricalCO2(year) {
+        if (year <= 1750) return 278.0;
+        if (year >= 2026) return 427.0;
+        for (let i = 0; i < HISTORICAL_CO2_RECORDS.length - 1; i++) {
+          const p1 = HISTORICAL_CO2_RECORDS[i];
+          const p2 = HISTORICAL_CO2_RECORDS[i + 1];
+          if (year >= p1.year && year <= p2.year) {
+            const frac = (year - p1.year) / (p2.year - p1.year);
+            return p1.co2 + frac * (p2.co2 - p1.co2);
+          }
+        }
+        return 427.0;
+      }
+
+      // Pre-calculated empirical warming curve for the background overlay
+      const HISTORICAL_WARMING_BENCHMARKS = [
+        { year: 1750, deltaTs: 0.00 },
+        { year: 1800, deltaTs: 0.01 },
+        { year: 1850, deltaTs: 0.04 },
+        { year: 1880, deltaTs: 0.06 },
+        { year: 1900, deltaTs: 0.12 },
+        { year: 1920, deltaTs: 0.18 },
+        { year: 1940, deltaTs: 0.24 },
+        { year: 1960, deltaTs: 0.30 },
+        { year: 1980, deltaTs: 0.48 },
+        { year: 2000, deltaTs: 0.76 },
+        { year: 2010, deltaTs: 0.95 },
+        { year: 2020, deltaTs: 1.18 },
+        { year: 2026, deltaTs: 1.26 }
       ];
 
       // Dynamic Simulation State - Starts PAUSED on load
@@ -495,7 +704,8 @@
         deltaTd: 0.0,
         year: 1750.0,
         speed: 1.0,
-        running: false, // Must NOT run on initial page load!
+        running: false,
+        isHistoricalRun: true,
         history: [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }]
       };
 
@@ -509,7 +719,7 @@
         photons.push({
           x: 20 + Math.random() * 260,
           y: Math.random() * 400,
-          speed: 0.22 + Math.random() * 0.25, // Calm speed
+          speed: 0.22 + Math.random() * 0.25,
           radius: 1.8 + Math.random() * 1.2
         });
       }
@@ -564,7 +774,6 @@
 
         const p = computePhysics();
 
-        // 100% full height layout: Left (Atmosphere + Overlaid Trajectory) and Right (Profiles)
         const groundBarH = 28;
         const atmosTopY = 24;
         const groundY = h - groundBarH;
@@ -603,7 +812,7 @@
         ctx.font = "bold 10px ui-monospace, monospace";
         ctx.fillText(`Radiating Layer: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, 14, zEffY - 8);
 
-        // Gentle, calm upward-drifting photons
+        // Gentle upward-drifting photons
         photons.forEach(pt => {
           if (state.running) {
             pt.y -= pt.speed;
@@ -641,7 +850,7 @@
         const tlTop = tlBottom - tlH;
 
         // Translucent overlay frame
-        ctx.fillStyle = "rgba(10, 17, 32, 0.78)";
+        ctx.fillStyle = "rgba(10, 17, 32, 0.82)";
         ctx.fillRect(tlLeft, tlTop, tlW, tlH);
         ctx.strokeStyle = "rgba(51, 65, 85, 0.65)";
         ctx.strokeRect(tlLeft, tlTop, tlW, tlH);
@@ -656,12 +865,11 @@
           return tlLeft + Math.max(0, Math.min(1, frac)) * tlW;
         }
         function tlDeltaToY(dT) {
-          // Range: -0.5°C to +4.0°C
           const frac = (dT - (-0.5)) / (4.0 - (-0.5));
           return tlBottom - frac * (tlH - 24);
         }
 
-        // Horizontal Threshold Reference Lines: 0.0°C, 1.5°C (Paris), 2.0°C
+        // Horizontal Threshold Reference Lines
         [0.0, 1.5, 2.0].forEach(th => {
           const y = tlDeltaToY(th);
           ctx.strokeStyle = th === 0.0 ? "rgba(148, 163, 184, 0.4)" : (th === 1.5 ? "rgba(245, 158, 11, 0.5)" : "rgba(244, 63, 94, 0.5)");
@@ -695,7 +903,6 @@
 
         // Draw Overlaid Continuous Warming Trajectory Line & Gradient Shaded Area
         if (state.history.length > 1) {
-          // 1. Shaded area beneath the curve
           ctx.beginPath();
           ctx.moveTo(tlYearToX(state.history[0].year), tlDeltaToY(0.0));
           state.history.forEach(pt => {
@@ -712,7 +919,7 @@
           ctx.fillStyle = areaGrad;
           ctx.fill();
 
-          // 2. Historical Segment (1750 to 2026) in Bright Amber
+          // Historical Segment (1750 to 2026) in Bright Amber
           ctx.strokeStyle = "#fbbf24";
           ctx.lineWidth = 2.5;
           ctx.beginPath();
@@ -726,7 +933,7 @@
           }
           ctx.stroke();
 
-          // 3. Projected Dynamic Future Segment (2026 onward) in Bright Rose
+          // Projected Dynamic Future Segment (2026 onward) in Bright Rose
           if (state.history.length > splitIdx) {
             ctx.strokeStyle = "#f43f5e";
             ctx.lineWidth = 2.5;
@@ -782,7 +989,6 @@
         const chartBottom = groundY;
         const chartH = chartBottom - chartTop;
 
-        // Chart background and border
         ctx.fillStyle = "#080e1a";
         ctx.fillRect(chartLeft, chartTop, chartW, chartH);
         ctx.strokeStyle = "rgba(51, 65, 85, 0.6)";
@@ -804,7 +1010,7 @@
 
         // 1. MEASURE 1: SOLAR 239 REFERENCE (Dashed Yellow with Pill Badge)
         function fluxToX(fluxVal) {
-          const frac = (fluxVal - 200) / (420 - 200); // 200 to 420 W/m²
+          const frac = (fluxVal - 200) / (420 - 200);
           return chartLeft + Math.max(0, Math.min(1, frac)) * chartW;
         }
 
@@ -832,7 +1038,7 @@
 
         // 2. MEASURE 2: TEMPERATURE T(z) (Solid Amber Curve)
         function tempToX(tC) {
-          const frac = (tC - (-70)) / (30 - (-70)); // -70°C to +30°C
+          const frac = (tC - (-70)) / (30 - (-70));
           return chartLeft + Math.max(0, Math.min(1, frac)) * chartW;
         }
 
@@ -902,49 +1108,52 @@
 
       function update() {
         if (state.running) {
-          const dt = 0.35 * state.speed;
+          const dt = 0.175 * state.speed;
 
-          // Dynamic CO2 integration under active ramp rate
-          if (state.rate !== 0) {
-            state.co2 = Math.max(150, Math.min(1000, state.co2 + state.rate * dt));
+          if (state.isHistoricalRun && state.year < T_PRESENT) {
+            state.year = Math.min(T_PRESENT, state.year + dt);
+            state.co2 = getHistoricalCO2(state.year);
+
             const frac = (Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150));
             document.getElementById("sliderCO2").value = Math.round(frac * 1000);
             document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
+
+            if (state.year >= T_PRESENT) {
+              setRate(2.5);
+            }
+          } else {
+            if (state.rate !== 0) {
+              state.co2 = Math.max(150, Math.min(1000, state.co2 + state.rate * dt));
+              const frac = (Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150));
+              document.getElementById("sliderCO2").value = Math.round(frac * 1000);
+              document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
+            }
+            state.year = Math.min(T_END, state.year + dt);
           }
 
-          // Rigorous IPCC AR6 Two-Layer Ocean Energy Balance Equations
           const rf = 5.35 * Math.log(Math.max(10, state.co2) / CO2_BASE);
-          
-          // Mixed layer & deep ocean ODEs:
           const dTs = (rf - (LAMBDA * state.deltaTs) - (GAMMA * (state.deltaTs - state.deltaTd))) / CM;
           const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
 
           state.deltaTs += dTs * dt;
           state.deltaTd += dTd * dt;
 
-          // Numerical safety bounds
           state.deltaTs = Math.max(-10.0, Math.min(15.0, state.deltaTs));
           state.deltaTd = Math.max(-10.0, Math.min(15.0, state.deltaTd));
 
-          state.year = Math.min(T_END, state.year + dt);
-
-          // Stop if reached the end of the 500-year timeline
           if (state.year >= T_END) {
             state.running = false;
             updatePlayPauseButton();
           }
 
-          // Record trajectory in 500-year history deck
           const lastEntry = state.history[state.history.length - 1];
           if (!lastEntry || (state.year - lastEntry.year) >= 1.0) {
             state.history.push({ year: state.year, deltaTs: state.deltaTs, co2: state.co2 });
           }
         }
 
-        // Always update physics diagnostics & DOM metrics
         const p = computePhysics();
 
-        // Update Top Cards
         document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
         const dOLR = p.OLR - ASR;
         document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${dOLR >= 0 ? "+" : ""}${dOLR.toFixed(1)} W/m²`;
@@ -956,8 +1165,8 @@
           document.getElementById("subEEI").textContent = "Steady radiative equilibrium";
         } else if (p.EEI > 0) {
           document.getElementById("badgeEEI").className = "badge badge-rose";
-          document.getElementById("badgeEEI").textContent = state.rate > 0 ? "Active Imbalance" : "Committed Warming";
-          document.getElementById("subEEI").textContent = state.rate > 0 ? "Emissions outpace ocean lag" : "Heat accumulating in ocean";
+          document.getElementById("badgeEEI").textContent = (state.rate > 0 || state.isHistoricalRun) ? "Active Imbalance" : "Committed Warming";
+          document.getElementById("subEEI").textContent = (state.rate > 0 || state.isHistoricalRun) ? "Emissions outpace ocean lag" : "Heat accumulating in ocean";
         } else {
           document.getElementById("badgeEEI").className = "badge badge-cyan";
           document.getElementById("badgeEEI").textContent = "Cooling Deficit";
@@ -967,7 +1176,6 @@
         document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
         document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (1750 Baseline: 13.85°C)`;
 
-        // Secondary Readouts
         document.getElementById("simYearDisplay").textContent = `Year: ${Math.round(state.year)} CE`;
         document.getElementById("valTs").textContent = `${p.currentTs.toFixed(2)} °C`;
         document.getElementById("valRF").textContent = `${p.rf >= 0 ? "+" : ""}${p.rf.toFixed(2)} W/m²`;
@@ -982,6 +1190,7 @@
 
       // Slider Listeners
       document.getElementById("sliderCO2").addEventListener("input", e => {
+        state.isHistoricalRun = false;
         const frac = e.target.value / 1000;
         state.co2 = Math.exp(Math.log(150) + frac * (Math.log(1000) - Math.log(150)));
         document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
@@ -1004,7 +1213,6 @@
         state.deltaTd = p.deltaTeq;
       });
 
-      // Comprehensive Reset Button: fully resets all simulation state and UI to clean 1750 initial state
       document.getElementById("btnReset").addEventListener("click", () => {
         applyPreset("pre-industrial");
       });
@@ -1034,12 +1242,11 @@
       // Experiment Presets
       function applyPreset(type) {
         document.querySelectorAll(".preset-card").forEach(el => el.classList.remove("active"));
-        
-        // When applying any preset or reset, pause simulation to let the user review initial conditions
         state.running = false;
 
         if (type === "pre-industrial") {
           document.getElementById("presetPreInd").classList.add("active");
+          state.isHistoricalRun = true;
           state.co2 = 278.0;
           setRate(0.0);
           state.deltaTs = 0.0;
@@ -1048,28 +1255,31 @@
           state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
         } else if (type === "present") {
           document.getElementById("presetPresent").classList.add("active");
+          state.isHistoricalRun = false;
           state.co2 = 427.0;
           setRate(2.5);
           state.deltaTs = 1.26;
           state.deltaTd = 0.55;
           state.year = 2026.0;
-          state.history = HISTORICAL_WARMING.map(d => ({ ...d }));
+          state.history = HISTORICAL_WARMING_BENCHMARKS.map(d => ({ ...d }));
         } else if (type === "2x") {
           document.getElementById("preset2x").classList.add("active");
+          state.isHistoricalRun = false;
           state.co2 = 556.0;
           setRate(0.0);
           state.deltaTs = 1.26;
           state.deltaTd = 0.55;
           state.year = 2026.0;
-          state.history = HISTORICAL_WARMING.map(d => ({ ...d }));
+          state.history = HISTORICAL_WARMING_BENCHMARKS.map(d => ({ ...d }));
         } else if (type === "drawdown") {
           document.getElementById("presetDrawdown").classList.add("active");
+          state.isHistoricalRun = false;
           state.co2 = 350.0;
           setRate(-1.5);
           state.deltaTs = 1.26;
           state.deltaTd = 0.55;
           state.year = 2026.0;
-          state.history = HISTORICAL_WARMING.map(d => ({ ...d }));
+          state.history = HISTORICAL_WARMING_BENCHMARKS.map(d => ({ ...d }));
         }
 
         const frac = (Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150));
@@ -1083,6 +1293,141 @@
       document.getElementById("presetPresent").addEventListener("click", () => applyPreset("present"));
       document.getElementById("preset2x").addEventListener("click", () => applyPreset("2x"));
       document.getElementById("presetDrawdown").addEventListener("click", () => applyPreset("drawdown"));
+
+      // -----------------------------------------------------------------------
+      // Interactive Five Physical Callouts with Clean Offset & Step Controls
+      // -----------------------------------------------------------------------
+      const CALLOUT_DATA = {
+        1: {
+          title: "1. Incoming Solar Radiation",
+          text: "Solar radiation arrives across ultraviolet, visible, and near-infrared wavelengths. Earth's atmosphere is largely transparent to incoming shortwave solar energy, which passes through with minimal atmospheric absorption to reach the planet's surface."
+        },
+        2: {
+          title: "2. Surface Absorption & Thermal Re-Emission",
+          text: "Solar shortwave energy is absorbed by dark surfaces, oceans, and soils. Because Earth is far cooler than the Sun, it re-emits this energy as longwave thermal infrared (~15 µm). This frequency matches the vibrational bending resonance modes of greenhouse molecules like CO₂ and H₂O."
+        },
+        3: {
+          title: "3. Molecular Excitation & Percolation",
+          text: "Thermal IR excites greenhouse molecules, absorbing photons and immediately equilibrating via molecular collisions to warm the air. The atmosphere re-radiates IR omnidirectionally, so energy percolates slowly upward through repeated absorption and re-emission cycles."
+        },
+        4: {
+          title: "4. Barometric Thinning & Escape to Space",
+          text: "With increasing altitude, atmospheric density falls exponentially. CO₂ and H₂O molecules thin out until the mean free path of an IR photon is long enough that it escapes freely into space without being re-absorbed."
+        },
+        5: {
+          title: "5. Altitude Elevation & Heat Trapping",
+          text: "Adding CO₂ raises this effective emission altitude into higher, colder air. Because colder air radiates less power (Stefan-Boltzmann law: σT⁴), less thermal energy escapes to space. The lower atmosphere and surface must warm until outbound radiation matches inbound solar (ASR)."
+        }
+      };
+
+      let currentCalloutId = 1;
+      const bubbleBox = document.getElementById("bubbleBox");
+      const bubbleTitle = document.getElementById("bubbleTitle");
+      const bubbleContent = document.getElementById("bubbleContent");
+      const bubbleStepIndicator = document.getElementById("bubbleStepIndicator");
+      const bubblePrevBtn = document.getElementById("bubblePrevBtn");
+      const bubbleNextBtn = document.getElementById("bubbleNextBtn");
+      const bubbleCloseBtn = document.getElementById("bubbleCloseBtn");
+      const canvasContainer = document.getElementById("canvasContainer");
+      const pins = document.querySelectorAll(".callout-pin");
+
+      function showCalloutById(id) {
+        id = Math.max(1, Math.min(5, parseInt(id, 10)));
+        currentCalloutId = id;
+
+        pins.forEach(p => {
+          if (parseInt(p.dataset.pin, 10) === id) {
+            p.classList.add("active");
+          } else {
+            p.classList.remove("active");
+          }
+        });
+
+        const activePin = document.getElementById(`pin${id}`);
+        const data = CALLOUT_DATA[id];
+
+        bubbleTitle.textContent = data.title;
+        bubbleContent.textContent = data.text;
+        bubbleStepIndicator.textContent = `Step ${id} of 5`;
+
+        bubblePrevBtn.disabled = (id <= 1);
+        bubbleNextBtn.disabled = (id >= 5);
+
+        // Position bubble outside pin's footprint (46px to the right)
+        bubbleBox.style.display = "flex";
+        const pinRect = activePin.getBoundingClientRect();
+        const containerRect = canvasContainer.getBoundingClientRect();
+
+        const pinCenterX = pinRect.left - containerRect.left + (pinRect.width / 2);
+        const pinCenterY = pinRect.top - containerRect.top + (pinRect.height / 2);
+
+        // Safe horizontal offset so no overlap with the pin circle
+        const bubbleLeft = pinCenterX + 46;
+        bubbleBox.style.left = `${bubbleLeft}px`;
+
+        const bubbleHeight = bubbleBox.offsetHeight || 155;
+
+        // Smart Vertical Anchoring:
+        // Pin 1 (Top): anchor downwards
+        if (id === 1) {
+          const topPos = Math.max(8, pinCenterY - 14);
+          bubbleBox.style.top = `${topPos}px`;
+          bubbleBox.style.bottom = "auto";
+          bubbleBox.style.setProperty("--tail-top", "14px");
+        }
+        // Pin 2 (Surface / Bottom): anchor upwards to guarantee no bottom clipping
+        else if (id === 2) {
+          const bottomPos = Math.max(12, containerRect.height - pinCenterY - 18);
+          bubbleBox.style.top = "auto";
+          bubbleBox.style.bottom = `${bottomPos}px`;
+          bubbleBox.style.setProperty("--tail-top", `${bubbleHeight - 26}px`);
+        }
+        // Pins 3, 4, 5 (Troposphere): center vertically on the pin
+        else {
+          let topPos = pinCenterY - (bubbleHeight / 2);
+          topPos = Math.max(12, Math.min(containerRect.height - bubbleHeight - 14, topPos));
+          bubbleBox.style.top = `${topPos}px`;
+          bubbleBox.style.bottom = "auto";
+          const tailOffset = Math.max(14, Math.min(bubbleHeight - 18, pinCenterY - topPos));
+          bubbleBox.style.setProperty("--tail-top", `${tailOffset}px`);
+        }
+
+        bubbleBox.classList.add("visible");
+      }
+
+      function hideCallout() {
+        pins.forEach(p => p.classList.remove("active"));
+        bubbleBox.classList.remove("visible");
+        bubbleBox.style.display = "none";
+      }
+
+      pins.forEach(pin => {
+        pin.addEventListener("click", e => {
+          e.stopPropagation();
+          showCalloutById(pin.dataset.pin);
+        });
+      });
+
+      bubblePrevBtn.addEventListener("click", e => {
+        e.stopPropagation();
+        if (currentCalloutId > 1) showCalloutById(currentCalloutId - 1);
+      });
+
+      bubbleNextBtn.addEventListener("click", e => {
+        e.stopPropagation();
+        if (currentCalloutId < 5) showCalloutById(currentCalloutId + 1);
+      });
+
+      bubbleCloseBtn.addEventListener("click", e => {
+        e.stopPropagation();
+        hideCallout();
+      });
+
+      document.addEventListener("click", e => {
+        if (!bubbleBox.contains(e.target) && !e.target.classList.contains("callout-pin")) {
+          hideCallout();
+        }
+      });
 
       // Modal Handlers
       document.getElementById("openModalBtn").addEventListener("click", () => document.getElementById("modalOverlay").style.display = "flex");
