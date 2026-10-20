@@ -54,9 +54,7 @@
     }
     .badge-cyan {
       background: rgba(0, 229, 255, 0.15); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.3);
-      cursor: pointer; transition: all 0.2s ease;
     }
-    .badge-cyan:hover { background: rgba(0, 229, 255, 0.3); border-color: var(--cyan); }
     .badge-rose { background: rgba(244, 63, 94, 0.15); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.3); }
     .badge-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
     .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
@@ -320,6 +318,29 @@
       color: var(--cyan); text-decoration: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;
     }
     .toc-link:hover { text-decoration: underline; color: #fff; }
+    
+    .commentary-box {
+      background: #091220;
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      border-left: 4px solid var(--cyan);
+      border-radius: 6px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      font-size: 0.84rem;
+      line-height: 1.65;
+      color: #e2e8f0;
+    }
+    .commentary-box p {
+      margin-bottom: 10px;
+    }
+    .commentary-box p:last-child {
+      margin-bottom: 0;
+    }
+    .commentary-box a {
+      color: var(--cyan);
+      word-break: break-all;
+    }
+
     table.data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.82rem; }
     table.data-table th, table.data-table td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
     table.data-table th { background: #152238; color: #fff; }
@@ -335,9 +356,6 @@
         <div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <div class="brand-title">Earth Energy Imbalance & Radiative Transfer</div>
-            <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-7/" target="_blank" rel="noopener noreferrer" class="badge badge-cyan" title="Open IPCC AR6 Chapter 7: Cross-Chapter Box 7.1 in a new window">
-              IPCC AR6 CALIBRATED 2-BOX EBM ↗
-            </a>
           </div>
           <div style="font-size: 0.75rem; color: var(--text-muted);">Empirical Radiative Transfer & Two-Layer Ocean Thermal Inertia</div>
         </div>
@@ -359,7 +377,7 @@
       <div class="stat-card">
         <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald" id="badgeEEI">Balanced</span></div>
         <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-        <div class="stat-sub">Steady radiative equilibrium</div>
+        <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
       </div>
       <div class="stat-card">
         <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose">ΔT</span></div>
@@ -511,6 +529,19 @@
         <div class="doc-page active" id="page-toc">
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff;">Documentation Overview</h3>
+            
+            <!-- User Commentary & Context Note -->
+            <div class="commentary-box">
+              <p>This document was inspired by a denier citing an argument in a paper co-authored by a former MIT Professor of Physics. I'm no professor. The simulator is based on mathematics from the referenced IPCC report.</p>
+              <p>It is possible that Prof Lindzen is right, and this is wrong. The atmosphere's sensitivity to increases in carbon would then be much lower and the peril much less.</p>
+              <p>However, the simulator uses the IPCC assumptions from the start of the Keeling measurements of actual atmospheric carbon, dating back to the 1950s. It then arrives at roughly the measured atmospheric warming today.</p>
+              <p>It is possible that the warning will tail off, and the worst predictions start to match the Lindzen theory. But we won't know that until we're there, and if the model is right, we will then be in deep trouble, and beyond any possibility of returning our climate to the one in which human civilization has thrived.</p>
+              <p>The only option available is to stop polluting our atmosphere with waste carbon molecules.</p>
+              <p>For a detailed critique of Lindzen's paper start here:<br>
+                <a href="https://www.carbonbrief.org/a-disservice-to-the-scientific-method-climate-scientists-take-on-richard-lindzen#" target="_blank" rel="noopener noreferrer">https://www.carbonbrief.org/a-disservice-to-the-scientific-method-climate-scientists-take-on-richard-lindzen#</a>
+              </p>
+            </div>
+
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
               Select a chapter below or use the navigation tabs above to review the physical foundations, closed-form mathematical proofs, and empirical calibration data powering this simulation.
             </p>
@@ -528,15 +559,16 @@
                   <span>☀️</span> <strong>Page 2: Vertical Radiative Transfer & The "Saturation Myth" Refutation</strong>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Detailed physical breakdown of the five atmospheric pins: Solar shortwave transparency, greenhouse 15 µm molecular resonance, barometric optical depth thinning (τ ≈ 1), and radiative choking at altitude (σ<i>T</i>⁴).
+                  Detailed physical breakdown of the five atmospheric pins: Solar shortwave transparency and albedo reflection, greenhouse 15 µm molecular resonance, barometric optical depth thinning (τ ≈ 1), and radiative choking at altitude (σ<i>T</i>⁴).
                 </div>
               </li>
               <li>
                 <a class="toc-link" data-target="page-ebm">
                   <span>🌊</span> <strong>Page 3: IPCC AR6 Calibrated Two-Layer Ocean EBM</strong>
+                  <span class="badge badge-cyan" style="margin-left: 8px;">IPCC AR6 Calibrated 2-Box EBM</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), mixed layer and deep ocean heat capacities (<i>C</i><sub>m</sub>, <i>C</i><sub>d</sub>), heat uptake efficiency (γ), and empirical Law Dome/Keeling historical calibration.
+                  Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), mixed layer and deep ocean heat capacities (<i>C</i><sub>m</sub>, <i>C</i><sub>d</sub>), heat uptake efficiency (γ), and empirical Law Dome/Keeling historical calibration. Includes direct link to IPCC AR6 Chapter 7.
                 </div>
               </li>
             </ul>
@@ -630,7 +662,7 @@
               <tr>
                 <td><strong>2</strong></td>
                 <td>Earth Surface (0 m)</td>
-                <td>Shortwave absorbed; re-emitted as thermal infrared resonant with CO₂ bending modes (15 µm).</td>
+                <td>Solar energy hitting dark surfaces is absorbed and re-emitted as longwave thermal infrared (~15 µm). Solar radiation hitting reflective white surfaces, like ice, is reflected back to space.</td>
               </tr>
               <tr>
                 <td><strong>3</strong></td>
@@ -655,7 +687,8 @@
         <div class="doc-page" id="page-ebm">
           <h3>Page 3: Two-Layer Ocean EBM Formulation</h3>
           <p>
-            Based on Geoffroy et al. (2013) and IPCC AR6 Chapter 7 (<em>Cross-Chapter Box 7.1</em>):
+            Based on Geoffroy et al. (2013) and the 
+            <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-7/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700;">IPCC AR6 Chapter 7 Report (Cross-Chapter Box 7.1) ↗</a>:
           </p>
           <div class="code-box">
             <i>C</i><sub>m</sub> · (<i>d</i>Δ<i>T</i><sub>s</sub> / <i>dt</i>) = Δ<i>F</i> - λ·Δ<i>T</i><sub>s</sub> - γ·(Δ<i>T</i><sub>s</sub> - Δ<i>T</i><sub>d</sub>)<br>
@@ -763,7 +796,7 @@
         photons.push({
           x: 20 + Math.random() * 260,
           y: Math.random() * 480,
-          speed: 0.16 + Math.random() * 0.22,
+          speed: 0.08 + Math.random() * 0.11,
           radius: 1.8 + Math.random() * 1.2
         });
       }
@@ -862,17 +895,52 @@
           ctx.fillText(`+${th.toFixed(1)}°C`, tGridLeft + 2, y - 2);
         });
 
-        // Plot Accumulated History
+        // 1958 Keeling Boundary Marker
+        const keelingX = yrToX(1958);
+        ctx.strokeStyle = "rgba(245, 158, 11, 0.4)";
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath(); ctx.moveTo(keelingX, tGridTop + 14); ctx.lineTo(keelingX, tGridBottom); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = "#f59e0b";
+        ctx.font = "7px ui-monospace, monospace";
+        ctx.fillText("1958 Keeling", keelingX - 18, tGridTop + 11);
+
+        // Plot Accumulated History (Orange up to 1958 Keeling boundary, Rose thereafter)
         if (state.history.length > 1) {
-          ctx.strokeStyle = "#f43f5e";
           ctx.lineWidth = 2;
-          ctx.beginPath();
-          state.history.forEach((pt, i) => {
-            const x = yrToX(pt.year);
-            const y = dtToY(pt.deltaTs);
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-          });
-          ctx.stroke();
+          for (let i = 0; i < state.history.length - 1; i++) {
+            const p1 = state.history[i];
+            const p2 = state.history[i + 1];
+
+            if (p2.year <= 1958) {
+              ctx.strokeStyle = "#f59e0b";
+              ctx.beginPath();
+              ctx.moveTo(yrToX(p1.year), dtToY(p1.deltaTs));
+              ctx.lineTo(yrToX(p2.year), dtToY(p2.deltaTs));
+              ctx.stroke();
+            } else if (p1.year >= 1958) {
+              ctx.strokeStyle = "#f43f5e";
+              ctx.beginPath();
+              ctx.moveTo(yrToX(p1.year), dtToY(p1.deltaTs));
+              ctx.lineTo(yrToX(p2.year), dtToY(p2.deltaTs));
+              ctx.stroke();
+            } else {
+              const frac = (1958 - p1.year) / (p2.year - p1.year);
+              const midDt = p1.deltaTs + frac * (p2.deltaTs - p1.deltaTs);
+
+              ctx.strokeStyle = "#f59e0b";
+              ctx.beginPath();
+              ctx.moveTo(yrToX(p1.year), dtToY(p1.deltaTs));
+              ctx.lineTo(yrToX(1958), dtToY(midDt));
+              ctx.stroke();
+
+              ctx.strokeStyle = "#f43f5e";
+              ctx.beginPath();
+              ctx.moveTo(yrToX(1958), dtToY(midDt));
+              ctx.lineTo(yrToX(p2.year), dtToY(p2.deltaTs));
+              ctx.stroke();
+            }
+          }
         }
 
         // Earth Surface Ground Bar
@@ -959,7 +1027,7 @@
 
       function update() {
         if (state.running) {
-          const dt = 0.175 * state.speed; // Halved simulation progression speed
+          const dt = 0.0875 * state.speed; // Halved simulation progression speed
 
           if (state.isHistoricalPreset && state.year < 2026) {
             state.co2 = getHistoricalCO2(state.year);
@@ -1006,7 +1074,7 @@
         {
           pinId: "pin2",
           title: "Step 2: Surface Absorption & Infrared Re-emission",
-          text: "Solar energy is absorbed by dark surfaces, mostly soils and oceans. It is re-emitted as longwave thermal infrared (~15 µm), which matches the molecular bending resonance of carbon dioxide."
+          text: "Sunlight reaching the surface is not always absorbed. Solar radiation hitting a white surface, like ice, is all reflected back to space. Solar energy absorbed by dark surfaces, mostly soils and oceans, can only be re-emitted as longwave thermal infrared (~15 µm), matching the molecular bending resonance of carbon dioxide."
         },
         {
           pinId: "pin3",
@@ -1052,7 +1120,7 @@
         bubbleCard.style.left = (pinLeft + 28) + "px";
 
         if (index === 1) { // Surface Pin 2: anchor upward so it doesn't clip off bottom
-          bubbleCard.style.top = (pinTop - 160) + "px";
+          bubbleCard.style.top = (pinTop - 180) + "px";
         } else {
           bubbleCard.style.top = Math.max(10, pinTop - 40) + "px";
         }
