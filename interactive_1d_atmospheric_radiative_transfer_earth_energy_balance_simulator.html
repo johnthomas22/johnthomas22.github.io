@@ -290,16 +290,16 @@
     }
     .modal-title { font-size: 1.15rem; font-weight: 700; color: var(--cyan); }
     .modal-nav {
-      display: flex; background: #080d1a; border-bottom: 1px solid var(--border); padding: 0 24px; gap: 8px;
-      overflow-x: auto;
+      display: flex; flex-wrap: wrap; background: #080d1a; border-bottom: 1px solid var(--border);
+      padding: 8px 16px; gap: 8px;
     }
     .modal-tab-btn {
-      background: none; border: none; border-bottom: 2px solid transparent; color: var(--text-muted);
-      padding: 12px 14px; font-size: 0.84rem; font-weight: 700; cursor: pointer; white-space: nowrap;
-      transition: all 0.2s;
+      background: var(--card-inner); border: 1px solid var(--border); color: var(--text-muted);
+      padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 6px; cursor: pointer;
+      transition: all 0.15s ease;
     }
-    .modal-tab-btn:hover { color: #fff; }
-    .modal-tab-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+    .modal-tab-btn:hover { color: #fff; border-color: var(--text-muted); }
+    .modal-tab-btn.active { color: #000; background: var(--cyan); border-color: var(--cyan); }
     .modal-body {
       padding: 24px; overflow-y: auto; font-size: 0.88rem; line-height: 1.65; color: #cbd5e1;
     }
@@ -309,7 +309,7 @@
     .doc-page h4 { font-size: 0.95rem; color: var(--cyan); margin: 14px 0 6px 0; }
     .code-box {
       background: #080d19; padding: 12px 16px; border-radius: 6px; border: 1px solid var(--border);
-      font-family: ui-monospace, monospace; font-size: 0.82rem; color: #93c5fd; line-height: 1.45; margin: 10px 0;
+      font-family: ui-monospace, monospace; font-size: 0.84rem; color: #93c5fd; line-height: 1.5; margin: 10px 0;
     }
     .toc-card {
       background: var(--card-inner); border: 1px solid var(--border); border-radius: 8px;
@@ -359,7 +359,7 @@
       <div class="stat-card">
         <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald" id="badgeEEI">Balanced</span></div>
         <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-        <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
+        <div class="stat-sub">Steady radiative equilibrium</div>
       </div>
       <div class="stat-card">
         <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose">ΔT</span></div>
@@ -427,7 +427,7 @@
               <div class="slider-tick-anchor" style="left: 0%;"><div class="tick-line"></div><div class="tick-label">150</div></div>
               <div class="slider-tick-anchor" style="left: 32.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--cyan);">278 (1750)</div></div>
               <div class="slider-tick-anchor" style="left: 44.7%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--emerald);">350</div></div>
-              <div class="slider-tick-anchor" style="left: 55.2%;"><div class="tick-line"></div><div class="tick-label">427 (2026)</div></div>
+              <div class="slider-tick-anchor" style="left: 55.2%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--cyan);">427 (2026)</div></div>
               <div class="slider-tick-anchor" style="left: 69.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--amber);">556 (2×)</div></div>
               <div class="slider-tick-anchor" style="left: 100%;"><div class="tick-line"></div><div class="tick-label">1000</div></div>
             </div>
@@ -490,7 +490,7 @@
 
   </div>
 
-  <!-- MULTI-PAGE MODAL DOCUMENTATION WITH CONTENTS & PROOFS -->
+  <!-- MULTI-PAGE MODAL DOCUMENTATION WITH CONTENTS & PROOFS (CLEAN UNICODE) -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-card">
       <div class="modal-header">
@@ -520,7 +520,7 @@
                   <span>📐</span> <strong>Page 1: Mathematical Proofs & Model Verification</strong>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Complete analytical proofs: Equilibrium Climate Sensitivity ($\Delta T_{\text{eq}} = \Delta F/\lambda$), Stefan-Boltzmann radiating altitude inversion in SI metres ($z_{\text{eff}}$), and eigenvalue decomposition of ocean thermal lag ($\tau_f, \tau_s$).
+                  Complete analytical proofs: Equilibrium Climate Sensitivity (Δ<i>T</i><sub>eq</sub> = Δ<i>F</i> / λ), Stefan-Boltzmann radiating altitude inversion in SI metres (<i>z</i><sub>eff</sub>), and eigenvalue decomposition of ocean thermal lag.
                 </div>
               </li>
               <li>
@@ -528,7 +528,7 @@
                   <span>☀️</span> <strong>Page 2: Vertical Radiative Transfer & The "Saturation Myth" Refutation</strong>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Detailed physical breakdown of the five atmospheric pins: Solar shortwave transparency, greenhouse $15\,\mu\text{m}$ molecular resonance, barometric optical depth thinning ($\tau \approx 1$), and radiative choking at altitude ($\sigma T^4$).
+                  Detailed physical breakdown of the five atmospheric pins: Solar shortwave transparency, greenhouse 15 µm molecular resonance, barometric optical depth thinning (τ ≈ 1), and radiative choking at altitude (σ<i>T</i>⁴).
                 </div>
               </li>
               <li>
@@ -536,7 +536,7 @@
                   <span>🌊</span> <strong>Page 3: IPCC AR6 Calibrated Two-Layer Ocean EBM</strong>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), mixed layer and deep ocean heat capacities ($C_m, C_d$), heat uptake efficiency ($\gamma$), and empirical Law Dome/Keeling historical calibration.
+                  Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), mixed layer and deep ocean heat capacities (<i>C</i><sub>m</sub>, <i>C</i><sub>d</sub>), heat uptake efficiency (γ), and empirical Law Dome/Keeling historical calibration.
                 </div>
               </li>
             </ul>
@@ -547,63 +547,63 @@
         <div class="doc-page" id="page-proofs">
           <h3>Page 1: Mathematical Proofs & Model Verification</h3>
           <p>
-            The mathematical validity of the simulation can be rigorously confirmed using closed-form analytical solutions of the governing equations.
+            The mathematical validity of the simulation can be verified directly using closed-form analytical solutions of the governing differential equations.
           </p>
 
           <h4>Proof 1: Equilibrium Climate Sensitivity (ECS) Closed-Form Limit</h4>
           <p>
-            At thermal equilibrium, time derivatives vanish ($\frac{d\Delta T_s}{dt} = 0$, $\frac{d\Delta T_d}{dt} = 0$). Consequently, the mixed layer and deep ocean equilibrate to the same temperature ($\Delta T_s = \Delta T_d = \Delta T_{\text{eq}}$). Substituting into the mixed-layer ODE:
+            At thermal equilibrium, time derivatives vanish (<i>d</i>Δ<i>T</i><sub>s</sub>/<i>dt</i> = 0, <i>d</i>Δ<i>T</i><sub>d</sub>/<i>dt</i> = 0). Consequently, the mixed layer and deep ocean equilibrate to the exact same temperature (Δ<i>T</i><sub>s</sub> = Δ<i>T</i><sub>d</sub> = Δ<i>T</i><sub>eq</sub>). Substituting this into the mixed-layer ordinary differential equation:
           </p>
           <div class="code-box">
-            C_m · (dΔT_s / dt) = ΔF - λ·ΔT_s - γ·(ΔT_s - ΔT_d) = 0<br>
-            ΔF - λ·ΔT_eq - γ·(ΔT_eq - ΔT_eq) = 0<br>
-            ΔF - λ·ΔT_eq = 0  ⟹  ΔT_eq = ΔF / λ
+            <i>C</i><sub>m</sub> · (<i>d</i>Δ<i>T</i><sub>s</sub> / <i>dt</i>) = Δ<i>F</i> - λ·Δ<i>T</i><sub>s</sub> - γ·(Δ<i>T</i><sub>s</sub> - Δ<i>T</i><sub>d</sub>) = 0<br>
+            Δ<i>F</i> - λ·Δ<i>T</i><sub>eq</sub> - γ·(Δ<i>T</i><sub>eq</sub> - Δ<i>T</i><sub>eq</sub>) = 0<br>
+            Δ<i>F</i> - λ·Δ<i>T</i><sub>eq</sub> = 0  ⟹  <b>Δ<i>T</i><sub>eq</sub> = Δ<i>F</i> / λ</b>
           </div>
           <p>
-            For a doubling of atmospheric $\text{CO}_2$ ($C/C_0 = 2$), the radiative forcing is $\Delta F = 5.35 \cdot \ln(2) \approx 3.70818\text{ W/m}^2$. With the IPCC AR6 calibrated net feedback $\lambda = 1.23606\text{ W/m}^2/\text{K}$:
+            For a doubling of atmospheric CO₂ (<i>C</i> / <i>C</i><sub>0</sub> = 2), the direct radiative forcing is Δ<i>F</i> = 5.35 · ln(2) ≈ 3.708 W/m². Using the IPCC AR6 net climate feedback parameter λ = 1.236 W/m²/K:
           </p>
           <div class="code-box">
-            ΔT_eq = 3.70818 / 1.23606 = 3.000 °C
+            Δ<i>T</i><sub>eq</sub> = 3.708 W/m² / 1.236 W/m²/K = <b>3.000 °C</b>
           </div>
           <p>
-            <em>Verification:</em> Clicking <strong>"3. Instant 2× CO₂ Pulse"</strong> and then <strong>"⚡ Instant Eq."</strong> sets $\Delta T$ to exactly $+3.00^\circ\text{C}$ and $\text{EEI} = 0.00\text{ W/m}^2$.
+            <em>Verification:</em> Clicking <strong>"3. Instant 2× CO₂ Pulse"</strong> and then <strong>"⚡ Instant Eq."</strong> sets Δ<i>T</i> to exactly +3.00 °C and Net Imbalance (EEI) = 0.00 W/m².
           </p>
 
-          <h4>Proof 2: Analytical Derivation of Effective Radiating Altitude ($z_{\text{eff}}$ in Metres)</h4>
+          <h4>Proof 2: Analytical Derivation of Effective Radiating Altitude (<i>z</i><sub>eff</sub> in Metres)</h4>
           <p>
-            Earth's Outgoing Longwave Radiation ($\text{OLR}$) escaping to space originates from the effective radiating layer where the atmosphere becomes optically thin. Inverting the Stefan-Boltzmann law:
+            Earth's Outgoing Longwave Radiation (OLR) escaping to space originates from the altitude where the atmosphere becomes optically thin. Inverting the Stefan-Boltzmann law:
           </p>
           <div class="code-box">
-            OLR = σ · (T_eff)^4  ⟹  T_eff = (OLR / σ)^(1/4)
+            OLR = σ · (<i>T</i><sub>eff</sub>)⁴  ⟹  <b><i>T</i><sub>eff</sub> = (OLR / σ)<sup>1/4</sup></b>
           </div>
           <p>
-            Combining this with the environmental tropospheric lapse rate ($\Gamma = 0.0065\text{ K/m}$), where $T(z) = T_s - \Gamma \cdot z$:
+            Coupling this with the standard tropospheric lapse rate (Γ = 0.0065 K/m, or 6.5 °C/km), where <i>T</i>(<i>z</i>) = <i>T</i><sub>s</sub> - Γ·<i>z</i>:
           </p>
           <div class="code-box">
-            T_eff = T_s - Γ · z_eff  ⟹  z_eff (metres) = (T_s - T_eff) / 0.0065
+            <i>T</i><sub>eff</sub> = <i>T</i><sub>s</sub> - Γ · <i>z</i><sub>eff</sub>  ⟹  <b><i>z</i><sub>eff</sub> (metres) = (<i>T</i><sub>s</sub> - <i>T</i><sub>eff</sub>) / 0.0065</b>
           </div>
           <p>
-            At pre-industrial equilibrium ($\text{OLR} = 239.0\text{ W/m}^2$, $T_s = 13.85^\circ\text{C} = 287.0\text{ K}$, $\sigma = 5.670374 \times 10^{-8}\text{ W/m}^2/\text{K}^4$):
+            At pre-industrial equilibrium (OLR = 239.0 W/m², <i>T</i><sub>s</sub> = 13.85 °C = 287.00 K, σ = 5.670374 × 10⁻⁸ W/m²/K⁴):
           </p>
           <div class="code-box">
-            T_eff = (239.0 / 5.670374×10^-8)^(1/4) = 254.76 K (-18.39 °C)<br>
-            ΔT = 287.0 K - 254.76 K = 32.24 K<br>
-            z_eff = 32.24 / 0.0065 = 4,959.8 metres
+            <i>T</i><sub>eff</sub> = (239.0 / 5.670374×10⁻⁸)<sup>1/4</sup> = 254.76 K (-18.39 °C)<br>
+            Δ<i>T</i> = 287.00 K - 254.76 K = 32.24 K<br>
+            <i>z</i><sub>eff</sub> = 32.24 K / 0.0065 K/m = <b>4,959.8 metres</b>
           </div>
           <p>
-            <em>Verification:</em> In the pre-industrial state, the app displays **4,954 m (-18.4°C)**.
+            <em>Verification:</em> In the pre-industrial baseline state, the app displays <strong>4,954 m (-18.4 °C)</strong>, matching the analytical calculation.
           </p>
 
           <h4>Proof 3: Eigenmode Decomposition of Ocean Thermal Lag</h4>
           <p>
-            The two-layer ocean differential system exhibits two distinct physical eigenvalues corresponding to fast mixed-layer response and slow deep-ocean heat diffusion:
+            The two-layer ocean differential system exhibits two distinct physical eigenvalues corresponding to the fast upper-ocean response and slow deep-ocean heat uptake:
           </p>
           <div class="code-box">
-            τ_fast = 3.9 years  (Upper ocean mixed layer warming)<br>
-            τ_slow = 230 years  (Deep ocean thermal equilibration)
+            τ<sub>fast</sub> ≈ 3.9 years  (Upper ocean mixed layer warming)<br>
+            τ<sub>slow</sub> ≈ 230 years  (Deep ocean thermal diffusion)
           </div>
           <p>
-            This ensures that when greenhouse emissions accelerate, surface warming lags radiative forcing, establishing the modern satellite-observed Earth Energy Imbalance of $+0.8\text{ to }+1.0\text{ W/m}^2$.
+            Because human emissions ramp up year after year (+2.5 ppm/yr), surface warming continuously lags radiative forcing, sustaining the modern satellite-observed Earth Energy Imbalance of +0.8 to +1.0 W/m².
           </p>
         </div>
 
@@ -630,7 +630,7 @@
               <tr>
                 <td><strong>2</strong></td>
                 <td>Earth Surface (0 m)</td>
-                <td>Shortwave absorbed; re-emitted as thermal infrared resonant with $\text{CO}_2$ bending modes ($15\,\mu\text{m}$).</td>
+                <td>Shortwave absorbed; re-emitted as thermal infrared resonant with CO₂ bending modes (15 µm).</td>
               </tr>
               <tr>
                 <td><strong>3</strong></td>
@@ -640,12 +640,12 @@
               <tr>
                 <td><strong>4</strong></td>
                 <td>Upper Troposphere (5,000 m)</td>
-                <td>Exponential barometric density thinning allows optical depth to space to drop ($\tau \approx 1$), escaping freely.</td>
+                <td>Exponential barometric density thinning allows optical depth to space to drop (τ ≈ 1), escaping freely.</td>
               </tr>
               <tr>
                 <td><strong>5</strong></td>
                 <td>Mid/Lower Column</td>
-                <td>Adding greenhouse gases pushes the escape layer higher into colder air. Radiating less energy ($\sigma T^4$) traps excess heat below.</td>
+                <td>Adding greenhouse gases pushes the escape layer higher into colder air. Radiating less energy (σ<i>T</i>⁴) traps excess heat below.</td>
               </tr>
             </tbody>
           </table>
@@ -655,11 +655,11 @@
         <div class="doc-page" id="page-ebm">
           <h3>Page 3: Two-Layer Ocean EBM Formulation</h3>
           <p>
-            Based on Geoffroy et al. (2013) and IPCC AR6 Chapter 7 (*Cross-Chapter Box 7.1*):
+            Based on Geoffroy et al. (2013) and IPCC AR6 Chapter 7 (<em>Cross-Chapter Box 7.1</em>):
           </p>
           <div class="code-box">
-            C_m · (dΔT_s / dt) = ΔF - λ·ΔT_s - γ·(ΔT_s - ΔT_d)<br>
-            C_d · (dΔT_d / dt) = γ·(ΔT_s - ΔT_d)
+            <i>C</i><sub>m</sub> · (<i>d</i>Δ<i>T</i><sub>s</sub> / <i>dt</i>) = Δ<i>F</i> - λ·Δ<i>T</i><sub>s</sub> - γ·(Δ<i>T</i><sub>s</sub> - Δ<i>T</i><sub>d</sub>)<br>
+            <i>C</i><sub>d</sub> · (<i>d</i>Δ<i>T</i><sub>d</sub> / <i>dt</i>) = γ·(Δ<i>T</i><sub>s</sub> - Δ<i>T</i><sub>d</sub>)
           </div>
           <table class="data-table">
             <thead>
@@ -673,27 +673,27 @@
             <tbody>
               <tr>
                 <td>Mixed Layer Heat Capacity</td>
-                <td>$C_m$</td>
+                <td><i>C</i><sub>m</sub></td>
                 <td>8.2 W·yr/m²/K</td>
                 <td>Thermal capacity of the upper ~75m ocean layer</td>
               </tr>
               <tr>
                 <td>Deep Ocean Heat Capacity</td>
-                <td>$C_d$</td>
+                <td><i>C</i><sub>d</sub></td>
                 <td>105.0 W·yr/m²/K</td>
                 <td>Thermal capacity of the intermediate and deep abyss</td>
               </tr>
               <tr>
                 <td>Heat Uptake Efficiency</td>
-                <td>$\gamma$</td>
+                <td>γ</td>
                 <td>0.73 W/m²/K</td>
                 <td>Downward turbulent and thermohaline heat transfer</td>
               </tr>
               <tr>
                 <td>Net Climate Feedback</td>
-                <td>$\lambda$</td>
+                <td>λ</td>
                 <td>1.236 W/m²/K</td>
-                <td>Net Planck, water vapor, lapse rate, and albedo response ($F_{2\times}/\text{ECS}$)</td>
+                <td>Net Planck, water vapor, lapse rate, and albedo response (<i>F</i><sub>2×</sub> / ECS)</td>
               </tr>
             </tbody>
           </table>
@@ -1212,11 +1212,17 @@
         document.getElementById("rateDisplay").textContent = "+2.50 ppm/yr";
       });
 
-      // Modal Tabs & Navigation
+      // Modal Tabs & Navigation Handlers
       const modalOverlay = document.getElementById("modalOverlay");
-      document.getElementById("openModalBtn").addEventListener("click", () => modalOverlay.style.display = "flex");
-      document.getElementById("closeModalBtn").addEventListener("click", () => modalOverlay.style.display = "none");
-      modalOverlay.addEventListener("click", e => { if (e.target === modalOverlay) modalOverlay.style.display = "none"; });
+      document.getElementById("openModalBtn").addEventListener("click", () => {
+        modalOverlay.style.display = "flex";
+      });
+      document.getElementById("closeModalBtn").addEventListener("click", () => {
+        modalOverlay.style.display = "none";
+      });
+      modalOverlay.addEventListener("click", e => {
+        if (e.target === modalOverlay) modalOverlay.style.display = "none";
+      });
 
       function setDocPage(pageId) {
         document.querySelectorAll(".modal-tab-btn").forEach(b => {
