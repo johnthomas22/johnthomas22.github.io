@@ -66,6 +66,119 @@
     }
     .btn-modal:hover { background: var(--cyan); color: #000; }
 
+    /* Mode Switcher (Simple Intro vs Advanced) */
+    .mode-switch-group {
+      display: inline-flex;
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 3px;
+      gap: 4px;
+    }
+    .mode-switch-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .mode-switch-btn:hover { color: #fff; }
+    .mode-switch-btn.active {
+      background: var(--cyan);
+      color: #000;
+    }
+
+    /* Simple Intro Mode Layout Overrides */
+    .app-wrapper.simple-mode {
+      max-width: 760px;
+    }
+    .app-wrapper.simple-mode .top-stats-strip,
+    .app-wrapper.simple-mode .controls-panel,
+    .app-wrapper.simple-mode .profile-legend {
+      display: none !important;
+    }
+    .app-wrapper.simple-mode .main-grid {
+      grid-template-columns: 1fr;
+    }
+    .app-wrapper.simple-mode #pin1 { left: 36% !important; top: 7% !important; }
+    .app-wrapper.simple-mode #pin2 { left: 36% !important; top: 55% !important; }
+    .app-wrapper.simple-mode #pin3 { left: 50% !important; top: 43% !important; }
+    .app-wrapper.simple-mode #pin4 { left: 58% !important; top: 25% !important; }
+    .app-wrapper.simple-mode #pin5 { left: 32% !important; top: 34% !important; }
+
+    /* Custom Tooltip for Legend Items */
+    .has-tooltip {
+      position: relative;
+      cursor: help;
+      border-bottom: 1px dotted rgba(234, 179, 8, 0.6);
+    }
+    .has-tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0b1322;
+      color: #eab308;
+      border: 1px solid #eab308;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: ui-monospace, monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      z-index: 100;
+    }
+    .has-tooltip:hover::after {
+      opacity: 1;
+    }
+    .intro-banner {
+      display: none;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), rgba(18, 27, 43, 0.95));
+      border: 1px solid rgba(0, 229, 255, 0.28);
+      border-radius: 10px;
+      padding: 14px 18px;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .app-wrapper.simple-mode .intro-banner {
+      display: flex;
+    }
+    .intro-banner-text {
+      flex: 1;
+      min-width: 280px;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+    }
+    .intro-banner-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .intro-metric-pill {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: ui-monospace, monospace;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .top-stats-strip {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -173,7 +286,7 @@
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 640px;
+      height: 710px;
       background: #05080f;
       border-radius: 8px;
       overflow: hidden;
@@ -348,7 +461,7 @@
 </head>
 <body>
 
-  <div class="app-wrapper">
+  <div class="app-wrapper simple-mode" id="appWrapper">
 
     <header>
       <div style="display: flex; align-items: center; gap: 12px;">
@@ -357,11 +470,41 @@
           <div style="display: flex; align-items: center; gap: 8px;">
             <div class="brand-title">Earth Energy Imbalance & Radiative Transfer</div>
           </div>
-          <div style="font-size: 0.75rem; color: var(--text-muted);">Empirical Radiative Transfer & Two-Layer Ocean Thermal Inertia</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
         </div>
       </div>
-      <button class="btn-modal" id="openModalBtn">📖 Guide, Contents & Proofs</button>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div class="mode-switch-group" role="group" aria-label="View Mode">
+          <button class="mode-switch-btn active" id="btnModeSimple">Introduction</button>
+          <button class="mode-switch-btn" id="btnModeAdvanced">⚙️ Advanced Version</button>
+        </div>
+        <button class="btn-modal" id="openModalBtn">📖 Guide, Contents & Proofs</button>
+      </div>
     </header>
+
+    <!-- Gentle Intro Banner (Visible in Simple Mode) -->
+    <div class="intro-banner" id="introBanner">
+      <div class="intro-banner-text">
+        <strong style="color: var(--cyan);">Present Day (2026) → Future Projection:</strong>
+        Rising CO₂ (+2.5 ppm/yr) pushes the altitude where heat escapes to space higher into colder air. Because colder air radiates less heat, Earth retains energy and the surface warms. Click numbered pins <strong>①–⑤</strong> on the chart to explore each physical step.
+      </div>
+      <div class="intro-banner-controls">
+        <div class="intro-metric-pill">
+          <span style="color: var(--text-muted);">Year:</span>
+          <strong style="color: var(--cyan);" id="introYearDisplay">2026 CE</strong>
+        </div>
+        <div class="intro-metric-pill">
+          <span style="color: var(--text-muted);">CO₂:</span>
+          <strong style="color: var(--amber);" id="introCO2Display">427 ppm</strong>
+        </div>
+        <div class="intro-metric-pill">
+          <span style="color: var(--text-muted);">Warming:</span>
+          <strong style="color: var(--rose);" id="introDeltaTDisplay">+1.26 °C</strong>
+        </div>
+        <button class="btn btn-pause" id="btnIntroPlayPause" style="padding: 6px 12px;">⏸ Pause</button>
+        <button class="btn btn-secondary" id="btnIntroReset2026" style="padding: 6px 10px;">↺ Restart (2026)</button>
+      </div>
+    </div>
 
     <div class="top-stats-strip">
       <div class="stat-card">
@@ -469,10 +612,9 @@
       </div>
 
       <div class="canvas-panel">
-        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); padding: 0 4px;">
-          <span>1D Atmospheric Column & Vertical Radiative Profiles</span>
-          <div style="display: flex; gap: 12px;">
-            <span><span style="color: #eab308;">■</span> Solar 239</span>
+        <div style="display: flex; justify-content: flex-end; font-size: 0.75rem; color: var(--text-muted); padding: 0 4px;">
+          <div class="profile-legend" style="display: flex; gap: 12px;">
+            <span class="has-tooltip" data-tooltip="239 W/m²" title="239 W/m²"><span style="color: #eab308;">■</span> Solar</span>
             <span><span style="color: var(--cyan);">■</span> Upward Flux F↑</span>
             <span><span style="color: var(--amber);">■</span> Temperature T(z)</span>
             <span><span style="color: var(--rose);">■</span> Emission Layer (m)</span>
@@ -482,11 +624,11 @@
           <canvas id="simCanvas"></canvas>
 
           <!-- 5 Sequential Physical Explanation Pins -->
-          <div class="speech-pin" id="pin1" style="top: 8%; left: 16%;">1</div>
-          <div class="speech-pin" id="pin2" style="top: 88%; left: 16%;">2</div>
-          <div class="speech-pin" id="pin3" style="top: 68%; left: 22%;">3</div>
-          <div class="speech-pin" id="pin4" style="top: 48%; left: 26%;">4</div>
-          <div class="speech-pin" id="pin5" style="top: 56%; left: 14%;">5</div>
+          <div class="speech-pin" id="pin1" style="top: 7%; left: 16%;">1</div>
+          <div class="speech-pin" id="pin2" style="top: 55%; left: 16%;">2</div>
+          <div class="speech-pin" id="pin3" style="top: 43%; left: 22%;">3</div>
+          <div class="speech-pin" id="pin4" style="top: 25%; left: 26%;">4</div>
+          <div class="speech-pin" id="pin5" style="top: 34%; left: 14%;">5</div>
 
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
@@ -753,15 +895,20 @@
       const GAMMA = 0.73;
 
       let state = {
-        co2: 278.0,
-        rate: 0.0,
-        deltaTs: 0.0,
-        deltaTd: 0.0,
-        year: 1750.0,
+        co2: 427.0,
+        rate: 2.5,
+        deltaTs: 1.26,
+        deltaTd: 0.55,
+        year: 2026.0,
         speed: 1.0,
-        running: false, // LAUNCHES PAUSED
-        isHistoricalPreset: true,
-        history: [{ year: 1750.0, deltaTs: 0.0 }]
+        running: true, // Launches running from Present Day (2026) into the future
+        isHistoricalPreset: false,
+        history: [
+          { year: 1750, deltaTs: 0 },
+          { year: 1850, deltaTs: 0.05 },
+          { year: 1958, deltaTs: 0.30 },
+          { year: 2026, deltaTs: 1.26 }
+        ]
       };
 
       // Empirical Historical CO2 Spline (Law Dome Ice Cores 1750-1958 + Mauna Loa Keeling 1958-2026)
@@ -790,14 +937,34 @@
       const canvas = document.getElementById("simCanvas");
       const ctx = canvas.getContext("2d");
 
-      // Photons with gentle, relaxed velocity
-      const photons = [];
-      for (let i = 0; i < 48; i++) {
-        photons.push({
-          x: 20 + Math.random() * 260,
-          y: Math.random() * 480,
-          speed: 0.08 + Math.random() * 0.11,
-          radius: 1.8 + Math.random() * 1.2
+      // Stationary Greenhouse Gas Molecules (Density decreases exponentially with altitude, +100% density)
+      const MAX_ALT = 10500;
+      const H_SCALE = 3800; // Exponential scale height for greenhouse gases
+      const molecules = [];
+      for (let i = 0; i < 150; i++) {
+        const u = Math.random();
+        const altM = -H_SCALE * Math.log(1 - u * (1 - Math.exp(-MAX_ALT / H_SCALE)));
+        molecules.push({
+          xFrac: 0.05 + Math.random() * 0.90,
+          altM: altM,
+          radius: 2.6 + Math.random() * 2.0
+        });
+      }
+
+      // Thermal IR Rays executing short absorption/re-emission jumps between bubbles, escaping as sinusoidal EM waves
+      const irRays = [];
+      for (let i = 0; i < 16; i++) {
+        const lowMols = molecules.filter(m => m.altM < 2200);
+        const startMol = lowMols[Math.floor(Math.random() * lowMols.length)] || molecules[0];
+        irRays.push({
+          fromMol: startMol,
+          toMol: null,
+          progress: Math.random(),
+          speed: 0.0056 + Math.random() * 0.0048, // Relaxed, gentle pace (-20%)
+          isWave: false,
+          waveY: 0,
+          waveBaseXFrac: 0,
+          wavePhase: Math.random() * Math.PI * 2
         });
       }
 
@@ -830,17 +997,18 @@
         ctx.clearRect(0, 0, w, h);
 
         const p = computePhysics();
+        const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
 
-        const splitX = w * 0.44;
-        const groundH = 28;
-        const atmosH = h - groundH;
+        const splitX = isSimple ? w : w * 0.44;
+        const atmosH = 425;
+        const groundH = 26;
 
-        // 1. LEFT PANEL: Atmospheric Column
+        // 1. TOP PANEL: Atmospheric Column (Reduced oversized space above radiating layer via MAX_ALT = 10,500m)
         ctx.fillStyle = "#0a1322";
         ctx.fillRect(0, 0, splitX, atmosH);
 
         // Effective Radiating Layer in SI Metres
-        const zEffY = atmosH - (p.zEffM / 14000.0) * atmosH;
+        const zEffY = atmosH - (p.zEffM / MAX_ALT) * atmosH;
         ctx.strokeStyle = "rgba(244, 63, 94, 0.85)";
         ctx.lineWidth = 1.5;
         ctx.setLineDash([4, 4]);
@@ -854,56 +1022,226 @@
         ctx.font = "bold 10px ui-monospace, monospace";
         ctx.fillText(`Radiating Layer: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, 14, zEffY - 8);
 
-        // Gentle Photon Particles
-        photons.forEach(pt => {
-          pt.y -= pt.speed;
-          if (pt.y < 10) pt.y = atmosH - 10;
-          const isEscaped = pt.y < zEffY;
-          ctx.fillStyle = isEscaped ? "rgba(0, 229, 255, 0.65)" : "rgba(249, 115, 22, 0.6)";
-          ctx.beginPath();
-          ctx.arc(pt.x, pt.y, pt.radius, 0, Math.PI * 2);
-          ctx.fill();
+        // 1a. Stationary Greenhouse Gas Molecules (Warm Orange lower bubbles, exponential thinning)
+        molecules.forEach(m => {
+          const mx = m.xFrac * splitX;
+          const my = atmosH - (m.altM / MAX_ALT) * atmosH;
+          const isBelow = m.altM < p.zEffM;
+
+          if (isBelow) {
+            // Lower molecules: rich, warm orange greenhouse bubbles
+            ctx.fillStyle = "rgba(249, 115, 22, 0.30)";
+            ctx.strokeStyle = "rgba(249, 115, 22, 0.88)";
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.arc(mx, my, m.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Orange nucleus
+            ctx.fillStyle = "#ffedd5";
+            ctx.beginPath();
+            ctx.arc(mx, my, 1.2, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            // Upper atmosphere: sparse, faint in optically thin air
+            ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
+            ctx.strokeStyle = "rgba(148, 163, 184, 0.28)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(mx, my, m.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+          }
         });
 
-        // 500-Year ΔT Timeline Curve Overlaid Across Left Column Base
-        const tGridBottom = atmosH - 6;
-        const tGridTop = atmosH - 95;
+        // 1b. Thermal IR Radiation (Short paths between bubbles; sinusoidal EM waves once escaped)
+        irRays.forEach(ray => {
+          if (ray.isWave) {
+            // Past radiating layer: propagating sinusoidal electromagnetic wave packet to space
+            ray.waveY -= 0.38;
+            ray.wavePhase += 0.072;
+
+            const baseX = ray.waveBaseXFrac * splitX;
+            const waveLen = 28;
+
+            ctx.strokeStyle = "rgba(0, 229, 255, 0.92)";
+            ctx.lineWidth = 1.8;
+            ctx.beginPath();
+            for (let dy = 0; dy <= waveLen; dy += 2) {
+              const wy = ray.waveY + dy;
+              const wx = baseX + 4.5 * Math.sin((wy * 0.32) - ray.wavePhase);
+              if (dy === 0) ctx.moveTo(wx, wy); else ctx.lineTo(wx, wy);
+            }
+            ctx.stroke();
+
+            // Leading wave crest photon dot
+            const tipX = baseX + 4.5 * Math.sin((ray.waveY * 0.32) - ray.wavePhase);
+            ctx.fillStyle = "#00e5ff";
+            ctx.beginPath();
+            ctx.arc(tipX, ray.waveY, 2.0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Reset upon escaping to space
+            if (ray.waveY < 8) {
+              const lowMols = molecules.filter(m => m.altM < 2000);
+              ray.fromMol = lowMols[Math.floor(Math.random() * lowMols.length)] || molecules[0];
+              ray.toMol = null;
+              ray.progress = 0;
+              ray.isWave = false;
+            }
+          } else {
+            // Below radiating layer: short absorption/re-emission path directly connecting two bubbles
+            if (!ray.toMol) {
+              const candidates = molecules.filter(cand => {
+                if (cand === ray.fromMol) return false;
+                const dAlt = cand.altM - ray.fromMol.altM;
+                const dX = Math.abs(cand.xFrac - ray.fromMol.xFrac);
+                return dAlt >= -200 && dAlt <= 1100 && dX <= 0.22;
+              });
+
+              if (candidates.length > 0) {
+                ray.toMol = candidates[Math.floor(Math.random() * candidates.length)];
+              } else {
+                if (ray.fromMol.altM >= p.zEffM - 400) {
+                  ray.isWave = true;
+                  ray.waveY = atmosH - (ray.fromMol.altM / MAX_ALT) * atmosH;
+                  ray.waveBaseXFrac = ray.fromMol.xFrac;
+                  ray.wavePhase = 0;
+                } else {
+                  const higher = molecules.filter(cand => cand.altM > ray.fromMol.altM);
+                  if (higher.length > 0) {
+                    ray.toMol = higher[Math.floor(Math.random() * higher.length)];
+                  } else {
+                    ray.isWave = true;
+                    ray.waveY = atmosH - (ray.fromMol.altM / MAX_ALT) * atmosH;
+                    ray.waveBaseXFrac = ray.fromMol.xFrac;
+                    ray.wavePhase = 0;
+                  }
+                }
+              }
+            }
+
+            if (ray.toMol) {
+              ray.progress += ray.speed;
+
+              const x1 = ray.fromMol.xFrac * splitX;
+              const y1 = atmosH - (ray.fromMol.altM / MAX_ALT) * atmosH;
+              const x2 = ray.toMol.xFrac * splitX;
+              const y2 = atmosH - (ray.toMol.altM / MAX_ALT) * atmosH;
+
+              const curX = x1 + (x2 - x1) * Math.min(1.0, ray.progress);
+              const curY = y1 + (y2 - y1) * Math.min(1.0, ray.progress);
+
+              // Luminous orange path connecting the two bubbles
+              ctx.strokeStyle = "rgba(249, 115, 22, 0.85)";
+              ctx.lineWidth = 1.6;
+              ctx.beginPath();
+              ctx.moveTo(x1, y1);
+              ctx.lineTo(curX, curY);
+              ctx.stroke();
+
+              // Photon energy packet
+              ctx.fillStyle = "#ffedd5";
+              ctx.beginPath();
+              ctx.arc(curX, curY, 2.2, 0, Math.PI * 2);
+              ctx.fill();
+
+              if (ray.progress >= 1.0) {
+                ray.fromMol = ray.toMol;
+                ray.toMol = null;
+                ray.progress = 0;
+
+                // If reached radiating layer, escape as EM wave
+                if (ray.fromMol.altM >= p.zEffM) {
+                  ray.isWave = true;
+                  ray.waveY = atmosH - (ray.fromMol.altM / MAX_ALT) * atmosH;
+                  ray.waveBaseXFrac = ray.fromMol.xFrac;
+                  ray.wavePhase = 0;
+                }
+              }
+            }
+          }
+        });
+
+        // Earth Surface Ground Bar (Separates atmospheric column from the line chart below)
+        ctx.fillStyle = "#1e293b";
+        ctx.fillRect(0, atmosH, splitX, groundH);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 10px system-ui";
+        ctx.fillText(`Earth Surface Ts = ${p.currentTs.toFixed(2)}°C`, 10, atmosH + 17);
+
+        // 2. DEDICATED LOWER PANEL: 500-Year ΔT Timeline Curve (No overlap with bubbles!)
+        const tGridTop = atmosH + groundH + 12; // Starts cleanly below ground bar
+        const tGridBottom = h - 14;
         const tGridH = tGridBottom - tGridTop;
         const tGridLeft = 24;
-        const tGridRight = splitX - 24;
+        const tGridRight = isSimple ? (w - 24) : (splitX - 24);
         const tGridW = tGridRight - tGridLeft;
 
-        ctx.fillStyle = "rgba(11, 19, 32, 0.65)";
+        ctx.fillStyle = "rgba(11, 19, 32, 0.72)";
         ctx.fillRect(tGridLeft, tGridTop, tGridW, tGridH);
-        ctx.strokeStyle = "rgba(51, 65, 85, 0.45)";
+        ctx.strokeStyle = "rgba(51, 65, 85, 0.55)";
         ctx.strokeRect(tGridLeft, tGridTop, tGridW, tGridH);
 
-        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-        ctx.font = "bold 8px system-ui";
-        ctx.fillText("500-YEAR WARMING TRAJECTORY (1750–2250 CE)", tGridLeft + 6, tGridTop + 10);
+        // Headline scaled up by 100%
+        const titleFontSize = tGridW < 400 ? 13 : 16;
+        ctx.fillStyle = "rgba(255, 255, 255, 0.92)";
+        ctx.font = `bold ${titleFontSize}px system-ui, -apple-system, sans-serif`;
+        ctx.fillText("500-YEAR WARMING TRAJECTORY (1750–2250 CE)", tGridLeft + 8, tGridTop + (titleFontSize + 4));
 
         function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
-        function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.2)) / 3.8) * tGridH; }
+        // Scaled to 5.2°C span so +2.5 ppm/yr trajectory comfortably sits in upper chart with head room
+        function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.2)) / 5.2) * tGridH; }
+
+        // 25-Year Interval Marks Along X-Axis (12px year labels)
+        const yearStep = tGridW < 450 ? 100 : 50;
+        for (let yr = 1750; yr <= 2250; yr += 25) {
+          const x = yrToX(yr);
+          const isMajor = yr % yearStep === 0;
+          ctx.strokeStyle = isMajor ? "rgba(148, 163, 184, 0.45)" : "rgba(148, 163, 184, 0.2)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(x, tGridBottom);
+          ctx.lineTo(x, tGridBottom - (isMajor ? 6 : 3));
+          ctx.stroke();
+
+          if (isMajor && yr > 1750 && yr < 2250) {
+            ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
+            ctx.font = "12px ui-monospace, monospace";
+            ctx.fillText(yr.toString(), x - 14, tGridBottom - 9);
+          }
+        }
 
         // Threshold Reference Lines
-        [0.0, 1.5, 2.0].forEach(th => {
+        [0.0, 1.5, 2.0, 3.0].forEach(th => {
           const y = dtToY(th);
           ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (th === 1.5 ? "rgba(245,158,11,0.4)" : "rgba(244,63,94,0.4)");
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
           ctx.fillStyle = th === 0.0 ? "#94a3b8" : (th === 1.5 ? "#f59e0b" : "#f43f5e");
-          ctx.font = "7px ui-monospace, monospace";
-          ctx.fillText(`+${th.toFixed(1)}°C`, tGridLeft + 2, y - 2);
+          ctx.font = "bold 9px ui-monospace, monospace";
+          ctx.fillText(`+${th.toFixed(1)}°C`, tGridLeft + 3, y - 2);
         });
 
-        // 1958 Keeling Boundary Marker
+        // 1958 Keeling Boundary Marker (Vertical dashed line)
         const keelingX = yrToX(1958);
-        ctx.strokeStyle = "rgba(245, 158, 11, 0.4)";
-        ctx.setLineDash([2, 2]);
-        ctx.beginPath(); ctx.moveTo(keelingX, tGridTop + 14); ctx.lineTo(keelingX, tGridBottom); ctx.stroke();
+        ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(keelingX, tGridTop);
+        ctx.lineTo(keelingX, tGridBottom);
+        ctx.stroke();
         ctx.setLineDash([]);
+
+        // 1958 Keeling Label rotated 90 degrees clockwise running vertically down alongside dashed line (clear of Heading)
+        const keelingFontSize = tGridW < 400 ? 10 : 12;
+        ctx.save();
+        ctx.translate(keelingX + (keelingFontSize + 2), tGridTop + 38);
+        ctx.rotate(Math.PI / 2);
         ctx.fillStyle = "#f59e0b";
-        ctx.font = "7px ui-monospace, monospace";
-        ctx.fillText("1958 Keeling", keelingX - 18, tGridTop + 11);
+        ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+        ctx.fillText("1958 Keeling", 0, 0);
+        ctx.restore();
 
         // Plot Accumulated History (Orange up to 1958 Keeling boundary, Rose thereafter)
         if (state.history.length > 1) {
@@ -943,100 +1281,130 @@
           }
         }
 
-        // Earth Surface Ground Bar
-        ctx.fillStyle = "#1e293b";
-        ctx.fillRect(0, atmosH, splitX, groundH);
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 10px system-ui";
-        ctx.fillText(`Earth Surface Ts = ${p.currentTs.toFixed(2)}°C`, 10, h - 9);
+        // 3. RIGHT PANEL: 4 Measures on Radiative Profile Chart (Advanced Mode Only, Aligned to MAX_ALT)
+        if (!isSimple) {
+          const chartLeft = splitX + 50;
+          const chartRight = w - 24;
+          const chartW = chartRight - chartLeft;
+          const chartTop = 24;
+          const chartH = atmosH - chartTop - 8;
+          const chartBottom = chartTop + chartH;
 
-        // 2. RIGHT PANEL: 4 Measures on Radiative Profile Chart
-        const chartLeft = splitX + 50;
-        const chartRight = w - 24;
-        const chartW = chartRight - chartLeft;
-        const chartTop = 30;
-        const chartH = atmosH - chartTop - 10;
-        const chartBottom = chartTop + chartH;
+          ctx.strokeStyle = "rgba(51, 65, 85, 0.5)";
+          ctx.strokeRect(chartLeft, chartTop, chartW, chartH);
 
-        ctx.strokeStyle = "rgba(51, 65, 85, 0.5)";
-        ctx.strokeRect(chartLeft, chartTop, chartW, chartH);
+          // Metric Ticks
+          [0, 2000, 4000, 6000, 8000, 10000].forEach(alt => {
+            const y = chartBottom - (alt / MAX_ALT) * chartH;
+            ctx.strokeStyle = "rgba(51, 65, 85, 0.25)";
+            ctx.beginPath(); ctx.moveTo(chartLeft, y); ctx.lineTo(chartRight, y); ctx.stroke();
+            ctx.fillStyle = "#64748b";
+            ctx.font = "9px ui-monospace, monospace";
+            ctx.fillText(`${alt.toLocaleString()} m`, chartLeft - 45, y + 3);
+          });
 
-        // Metric Ticks
-        [0, 3000, 6000, 9000, 12000, 14000].forEach(alt => {
-          const y = chartBottom - (alt / 14000.0) * chartH;
-          ctx.strokeStyle = "rgba(51, 65, 85, 0.25)";
-          ctx.beginPath(); ctx.moveTo(chartLeft, y); ctx.lineTo(chartRight, y); ctx.stroke();
-          ctx.fillStyle = "#64748b";
-          ctx.font = "9px ui-monospace, monospace";
-          ctx.fillText(`${alt.toLocaleString()} m`, chartLeft - 45, y + 3);
-        });
+          // Measure 1: ASR 239 Reference Line (Yellow Dashed)
+          const asrX = chartLeft + ((ASR - 200) / 220) * chartW;
+          ctx.strokeStyle = "#eab308";
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath(); ctx.moveTo(asrX, chartTop); ctx.lineTo(asrX, chartBottom); ctx.stroke();
+          ctx.setLineDash([]);
 
-        // Measure 1: ASR 239 Reference Line (Yellow Dashed)
-        const asrX = chartLeft + ((ASR - 200) / 220) * chartW;
-        ctx.strokeStyle = "#eab308";
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath(); ctx.moveTo(asrX, chartTop); ctx.lineTo(asrX, chartBottom); ctx.stroke();
-        ctx.setLineDash([]);
+          // Measure 2: Temperature T(z) in Solid Amber
+          ctx.strokeStyle = "#f59e0b";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          for (let alt = 0; alt <= MAX_ALT; alt += 500) {
+            const t = p.currentTs - LAPSE_RATE * alt;
+            const x = chartLeft + ((t - (-70)) / 100) * chartW;
+            const y = chartBottom - (alt / MAX_ALT) * chartH;
+            if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
 
-        // Measure 2: Temperature T(z) in Solid Amber
-        ctx.strokeStyle = "#f59e0b";
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        for (let alt = 0; alt <= 14000; alt += 500) {
-          const t = p.currentTs - LAPSE_RATE * alt;
-          const x = chartLeft + ((t - (-70)) / 100) * chartW;
-          const y = chartBottom - (alt / 14000.0) * chartH;
-          if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          // Measure 3: Upward Flux F↑ in Pure Cyan
+          const groundFlux = SIGMA * Math.pow(p.currentTsK, 4);
+          ctx.strokeStyle = "#00e5ff";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          for (let alt = 0; alt <= MAX_ALT; alt += 500) {
+            const sig = 1 / (1 + Math.exp(-((alt - p.zEffM) / 1500.0)));
+            const flux = groundFlux - sig * (groundFlux - p.OLR);
+            const x = chartLeft + ((flux - 200) / 220) * chartW;
+            const y = chartBottom - (alt / MAX_ALT) * chartH;
+            if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+
+          // Measure 4: Radiating Layer Crosshair & Badge
+          const rY = chartBottom - (p.zEffM / MAX_ALT) * chartH;
+          ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath(); ctx.moveTo(chartLeft, rY); ctx.lineTo(chartRight, rY); ctx.stroke();
+          ctx.setLineDash([]);
+
+          const badgeW = 205;
+          const badgeX = chartRight - badgeW - 6;
+          ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
+          ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.roundRect(badgeX, rY - 10, badgeW, 18, 4); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = "#fca5a5";
+          ctx.font = "bold 9px ui-monospace, monospace";
+          ctx.fillText(`Emission Alt: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, badgeX + 8, rY + 3);
         }
-        ctx.stroke();
-
-        // Measure 3: Upward Flux F↑ in Pure Cyan
-        const groundFlux = SIGMA * Math.pow(p.currentTsK, 4);
-        ctx.strokeStyle = "#00e5ff";
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        for (let alt = 0; alt <= 14000; alt += 500) {
-          const sig = 1 / (1 + Math.exp(-((alt - p.zEffM) / 1500.0)));
-          const flux = groundFlux - sig * (groundFlux - p.OLR);
-          const x = chartLeft + ((flux - 200) / 220) * chartW;
-          const y = chartBottom - (alt / 14000.0) * chartH;
-          if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-
-        // Measure 4: Radiating Layer Crosshair & Badge
-        const rY = chartBottom - (p.zEffM / 14000.0) * chartH;
-        ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath(); ctx.moveTo(chartLeft, rY); ctx.lineTo(chartRight, rY); ctx.stroke();
-        ctx.setLineDash([]);
-
-        const badgeW = 205;
-        const badgeX = chartRight - badgeW - 6;
-        ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
-        ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.roundRect(badgeX, rY - 10, badgeW, 18, 4); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = "#fca5a5";
-        ctx.font = "bold 9px ui-monospace, monospace";
-        ctx.fillText(`Emission Alt: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, badgeX + 8, rY + 3);
 
         ctx.restore();
       }
 
+      const btnPlayPause = document.getElementById("btnPlayPause");
+      const btnIntroPlayPause = document.getElementById("btnIntroPlayPause");
+
+      function syncUI() {
+        const p = computePhysics();
+        const sliderVal = Math.round(((Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150))) * 1000);
+        document.getElementById("sliderCO2").value = sliderVal;
+        document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
+        document.getElementById("sliderRate").value = state.rate.toFixed(1);
+        document.getElementById("rateDisplay").textContent = `${state.rate >= 0 ? "+" : ""}${state.rate.toFixed(2)} ppm/yr`;
+
+        document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
+        document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${(p.OLR - ASR >= 0 ? "+" : "")}${(p.OLR - ASR).toFixed(2)} W/m²`;
+        document.getElementById("valEEI").innerHTML = `${p.EEI >= 0 ? "+" : ""}${p.EEI.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
+        document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
+        document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (Anomaly: ${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} °C)`;
+        document.getElementById("simYearDisplay").textContent = `Year: ${Math.round(state.year)} CE`;
+
+        // Sync Gentle Intro Bar
+        document.getElementById("introYearDisplay").textContent = `${Math.round(state.year)} CE`;
+        document.getElementById("introCO2Display").textContent = `${Math.round(state.co2)} ppm`;
+        document.getElementById("introDeltaTDisplay").textContent = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} °C`;
+
+        if (state.running) {
+          btnPlayPause.textContent = "⏸ Pause Simulation";
+          btnPlayPause.className = "btn btn-pause";
+          btnIntroPlayPause.textContent = "⏸ Pause";
+          btnIntroPlayPause.className = "btn btn-pause";
+        } else {
+          btnPlayPause.textContent = "▶ Resume Simulation";
+          btnPlayPause.className = "btn btn-start";
+          btnIntroPlayPause.textContent = "▶ Resume";
+          btnIntroPlayPause.className = "btn btn-start";
+        }
+      }
+
       function update() {
         if (state.running) {
-          const dt = 0.0875 * state.speed; // Halved simulation progression speed
+          const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
+          // 50% slower pace in Introduction view for a gentle, easy-to-follow experience
+          const baseSpeedFactor = isSimple ? 0.04375 : 0.0875;
+          const dt = baseSpeedFactor * state.speed;
 
           if (state.isHistoricalPreset && state.year < 2026) {
             state.co2 = getHistoricalCO2(state.year);
-            document.getElementById("sliderCO2").value = Math.round(((Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150))) * 1000);
-            document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
           } else if (state.rate !== 0) {
             state.co2 = Math.max(150, Math.min(1000, state.co2 + state.rate * dt));
-            document.getElementById("sliderCO2").value = Math.round(((Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150))) * 1000);
-            document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
           }
 
           // Coupled Two-Layer EBM (Held et al. 2010; Geoffroy et al. 2013)
@@ -1052,13 +1420,7 @@
             state.history.push({ year: state.year, deltaTs: state.deltaTs });
           }
 
-          const p = computePhysics();
-          document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
-          document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${(p.OLR - ASR >= 0 ? "+" : "")}${(p.OLR - ASR).toFixed(2)} W/m²`;
-          document.getElementById("valEEI").innerHTML = `${p.EEI >= 0 ? "+" : ""}${p.EEI.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
-          document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
-          document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (Anomaly: ${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} °C)`;
-          document.getElementById("simYearDisplay").textContent = `Year: ${Math.round(state.year)} CE`;
+          syncUI();
         }
         draw();
         requestAnimationFrame(update);
@@ -1141,27 +1503,65 @@
         showSpeechBubble((currentStep + 4) % 5);
       });
 
-      // Simulation Controls
-      const btnPlayPause = document.getElementById("btnPlayPause");
-      btnPlayPause.addEventListener("click", () => {
-        state.running = !state.running;
-        if (state.running) {
-          btnPlayPause.textContent = "⏸ Pause Simulation";
-          btnPlayPause.className = "btn btn-pause";
-        } else {
-          btnPlayPause.textContent = "▶ Resume Simulation";
-          btnPlayPause.className = "btn btn-start";
+      // View Mode Switching (Simple Intro vs Advanced Controls)
+      const appWrapper = document.getElementById("appWrapper");
+      const btnModeSimple = document.getElementById("btnModeSimple");
+      const btnModeAdvanced = document.getElementById("btnModeAdvanced");
+
+      function setViewMode(mode) {
+        const isSimple = mode === "simple";
+        appWrapper.classList.toggle("simple-mode", isSimple);
+        btnModeSimple.classList.toggle("active", isSimple);
+        btnModeAdvanced.classList.toggle("active", !isSimple);
+        document.getElementById("headerSubtitle").textContent = isSimple
+          ? "How greenhouse gases trap heat and warm the planet"
+          : "Empirical Radiative Transfer & Two-Layer Ocean Thermal Inertia";
+        if (bubbleCard.style.display === "block") {
+          requestAnimationFrame(() => showSpeechBubble(currentStep));
         }
-      });
+        draw();
+      }
+
+      btnModeSimple.addEventListener("click", () => setViewMode("simple"));
+      btnModeAdvanced.addEventListener("click", () => setViewMode("advanced"));
+
+      // Simulation Controls
+      function togglePlayPause() {
+        state.running = !state.running;
+        syncUI();
+      }
+      btnPlayPause.addEventListener("click", togglePlayPause);
+      btnIntroPlayPause.addEventListener("click", togglePlayPause);
+
+      function resetToPresentDay(autoRun) {
+        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
+        document.getElementById("presetPresent").classList.add("active");
+        state.isHistoricalPreset = false;
+        state.co2 = 427.0;
+        state.rate = 2.5;
+        state.deltaTs = 1.26;
+        state.deltaTd = 0.55;
+        state.year = 2026.0;
+        state.history = [
+          { year: 1750, deltaTs: 0 },
+          { year: 1850, deltaTs: 0.05 },
+          { year: 1958, deltaTs: 0.30 },
+          { year: 2026, deltaTs: 1.26 }
+        ];
+        if (typeof autoRun === "boolean") {
+          state.running = autoRun;
+        }
+        syncUI();
+        draw();
+      }
+
+      document.getElementById("btnIntroReset2026").addEventListener("click", () => resetToPresentDay(true));
 
       document.getElementById("btnSnapEquilibrium").addEventListener("click", () => {
         const rf = 5.35 * Math.log(Math.max(100, state.co2) / CO2_BASE);
         state.deltaTs = rf / LAMBDA_FEEDBACK;
         state.deltaTd = state.deltaTs;
-        const p = computePhysics();
-        document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
-        document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (Anomaly: ${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} °C)`;
-        document.getElementById("valEEI").innerHTML = `+0.00 <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
+        syncUI();
         draw();
       });
 
@@ -1175,23 +1575,10 @@
         state.isHistoricalPreset = true;
         state.history = [{ year: 1750.0, deltaTs: 0.0 }];
 
-        btnPlayPause.textContent = "▶ Start Simulation";
-        btnPlayPause.className = "btn btn-start";
-
-        document.getElementById("sliderRate").value = "0.0";
-        document.getElementById("rateDisplay").textContent = "+0.00 ppm/yr";
-        document.getElementById("sliderCO2").value = "325";
-        document.getElementById("co2Display").textContent = "278 ppm";
-        document.getElementById("simYearDisplay").textContent = "Year: 1750 CE";
-
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("presetPreInd").classList.add("active");
 
-        const p = computePhysics();
-        document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
-        document.getElementById("valEEI").innerHTML = `+0.00 <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
-        document.getElementById("valDeltaT").innerHTML = `+0.00 <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
-        document.getElementById("subDeltaT").textContent = `Ts = 13.85 °C (Anomaly: +0.00 °C)`;
+        syncUI();
         draw();
       });
 
@@ -1210,31 +1597,19 @@
         state.isHistoricalPreset = true;
         state.co2 = 278.0; state.rate = 0.0; state.deltaTs = 0.0; state.deltaTd = 0.0; state.year = 1750.0;
         state.history = [{ year: 1750.0, deltaTs: 0.0 }];
-        document.getElementById("sliderCO2").value = "325";
-        document.getElementById("co2Display").textContent = "278 ppm";
+        syncUI();
+        draw();
       });
 
-      document.getElementById("presetPresent").addEventListener("click", () => {
-        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
-        document.getElementById("presetPresent").classList.add("active");
-        state.isHistoricalPreset = false;
-        state.co2 = 427.0; state.rate = 2.5; state.deltaTs = 1.26; state.deltaTd = 0.55; state.year = 2026.0;
-        state.history = [
-          { year: 1750, deltaTs: 0 }, { year: 1850, deltaTs: 0.05 }, { year: 1950, deltaTs: 0.28 }, { year: 2026, deltaTs: 1.26 }
-        ];
-        document.getElementById("sliderRate").value = "2.5";
-        document.getElementById("rateDisplay").textContent = "+2.50 ppm/yr";
-        document.getElementById("sliderCO2").value = "552";
-        document.getElementById("co2Display").textContent = "427 ppm";
-      });
+      document.getElementById("presetPresent").addEventListener("click", () => resetToPresentDay());
 
       document.getElementById("preset2x").addEventListener("click", () => {
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("preset2x").classList.add("active");
         state.isHistoricalPreset = false;
         state.co2 = 556.0; state.rate = 0.0;
-        document.getElementById("sliderCO2").value = "695";
-        document.getElementById("co2Display").textContent = "556 ppm";
+        syncUI();
+        draw();
       });
 
       document.getElementById("presetDrawdown").addEventListener("click", () => {
@@ -1242,42 +1617,40 @@
         document.getElementById("presetDrawdown").classList.add("active");
         state.isHistoricalPreset = false;
         state.rate = -1.5;
-        document.getElementById("sliderRate").value = "-1.5";
-        document.getElementById("rateDisplay").textContent = "-1.50 ppm/yr";
+        syncUI();
+        draw();
       });
 
       document.getElementById("sliderCO2").addEventListener("input", e => {
         state.isHistoricalPreset = false;
         const frac = e.target.value / 1000;
         state.co2 = Math.exp(Math.log(150) + frac * (Math.log(1000) - Math.log(150)));
-        document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
+        syncUI();
+        draw();
       });
 
       document.getElementById("sliderRate").addEventListener("input", e => {
         state.isHistoricalPreset = false;
         state.rate = parseFloat(e.target.value);
-        document.getElementById("rateDisplay").textContent = `${state.rate >= 0 ? "+" : ""}${state.rate.toFixed(1)} ppm/yr`;
+        syncUI();
+        draw();
       });
 
       document.getElementById("ratePresetM1").addEventListener("click", () => {
         state.isHistoricalPreset = false; state.rate = -1.5;
-        document.getElementById("sliderRate").value = "-1.5";
-        document.getElementById("rateDisplay").textContent = "-1.50 ppm/yr";
+        syncUI();
       });
       document.getElementById("ratePreset0").addEventListener("click", () => {
         state.isHistoricalPreset = false; state.rate = 0.0;
-        document.getElementById("sliderRate").value = "0.0";
-        document.getElementById("rateDisplay").textContent = "+0.00 ppm/yr";
+        syncUI();
       });
       document.getElementById("ratePreset15").addEventListener("click", () => {
         state.isHistoricalPreset = false; state.rate = 1.5;
-        document.getElementById("sliderRate").value = "1.5";
-        document.getElementById("rateDisplay").textContent = "+1.50 ppm/yr";
+        syncUI();
       });
       document.getElementById("ratePreset25").addEventListener("click", () => {
         state.isHistoricalPreset = false; state.rate = 2.5;
-        document.getElementById("sliderRate").value = "2.5";
-        document.getElementById("rateDisplay").textContent = "+2.50 ppm/yr";
+        syncUI();
       });
 
       // Modal Tabs & Navigation Handlers
@@ -1308,8 +1681,8 @@
         link.addEventListener("click", () => setDocPage(link.dataset.target));
       });
 
-      // Launch
-      draw();
+      // Launch initialized to Present Day (2026) running into future
+      resetToPresentDay(true);
       requestAnimationFrame(update);
     })();
   </script>
