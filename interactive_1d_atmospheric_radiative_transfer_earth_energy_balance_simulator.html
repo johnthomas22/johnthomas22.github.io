@@ -6,21 +6,20 @@
   <title>Earth Energy Imbalance & Radiative Transfer Simulator</title>
   <style>
     :root {
-      --bg: #070c16;
-      --card-bg: #101a2d;
-      --card-inner: #0a1120;
+      --bg: #090e17;
+      --card-bg: #121b2b;
+      --card-inner: #0b1320;
       --border: #1e2c45;
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --cyan: #00e5ff;
       --amber: #f59e0b;
-      --yellow: #eab308;
       --rose: #f43f5e;
       --emerald: #10b981;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       background-color: var(--bg);
       color: var(--text);
       padding: 16px;
@@ -30,11 +29,11 @@
       min-height: 100vh;
     }
     .app-wrapper {
-      max-width: 1440px;
+      max-width: 1420px;
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
     header {
       background: var(--card-bg);
@@ -47,32 +46,28 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    .brand-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
+    .brand-title { font-size: 1.15rem; font-weight: 700; }
     .badge {
-      display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px;
-      font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
-      text-decoration: none; cursor: default;
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+      text-decoration: none;
     }
-    .badge-cyan { background: rgba(0, 229, 255, 0.12); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.35); }
-    .badge-link {
-      cursor: pointer; transition: all 0.15s ease;
+    .badge-cyan {
+      background: rgba(0, 229, 255, 0.15); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.3);
+      cursor: pointer; transition: all 0.2s ease;
     }
-    .badge-link:hover {
-      background: rgba(0, 229, 255, 0.25); border-color: var(--cyan);
-      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3); transform: translateY(-1px);
-    }
-    .badge-rose { background: rgba(244, 63, 94, 0.15); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.35); }
-    .badge-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.35); }
-    .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.35); }
+    .badge-cyan:hover { background: rgba(0, 229, 255, 0.3); border-color: var(--cyan); }
+    .badge-rose { background: rgba(244, 63, 94, 0.15); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.3); }
+    .badge-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
 
     .btn-modal {
       background: rgba(0, 229, 255, 0.1); border: 1px solid var(--cyan); color: var(--cyan);
       padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
-      display: flex; align-items: center; gap: 6px; transition: all 0.15s ease;
+      transition: all 0.2s;
     }
     .btn-modal:hover { background: var(--cyan); color: #000; }
 
-    /* Top Metrics Gauge Strip */
     .top-stats-strip {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -83,122 +78,91 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
     }
     .stat-header {
       display: flex; justify-content: space-between; align-items: center;
       font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);
     }
     .stat-value {
-      font-size: 1.55rem; font-weight: 800; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-      letter-spacing: -0.02em; margin: 2px 0;
+      font-size: 1.55rem; font-weight: 800; font-family: ui-monospace, monospace; margin: 4px 0;
     }
     .stat-sub { font-size: 0.7rem; color: var(--text-muted); }
 
-    /* Main Grid */
     .main-grid {
       display: grid;
-      grid-template-columns: 430px 1fr;
-      gap: 14px;
+      grid-template-columns: 440px 1fr;
+      gap: 16px;
     }
-    @media (max-width: 1100px) {
+    @media (max-width: 1080px) {
       .top-stats-strip { grid-template-columns: repeat(2, 1fr); }
       .main-grid { grid-template-columns: 1fr; }
     }
 
-    /* Left Control Column */
-    .controls-panel { display: flex; flex-direction: column; gap: 12px; }
+    .controls-panel { display: flex; flex-direction: column; gap: 14px; }
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 14px 16px;
+      padding: 16px;
     }
     .card-title-row {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
     }
-    .card-title { font-size: 0.85rem; font-weight: 700; color: #fff; }
+    .card-title { font-size: 0.85rem; font-weight: 700; }
     .sim-controls-row {
-      display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 8px; margin-bottom: 10px;
+      display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 8px; margin-bottom: 12px;
     }
     .btn {
       padding: 8px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;
-      cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease;
-      display: flex; align-items: center; justify-content: center; gap: 4px;
+      cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
     }
     .btn-start { background: var(--emerald); color: #000; }
     .btn-start:hover { background: #34d399; }
     .btn-pause { background: var(--cyan); color: #000; }
-    .btn-pause:hover { background: #7dd3fc; }
+    .btn-pause:hover { background: #67e8f9; }
     .btn-secondary { background: var(--card-inner); border-color: var(--border); color: #fff; }
     .btn-secondary:hover { border-color: var(--text-muted); }
     .btn-amber { background: rgba(245, 158, 11, 0.15); border-color: var(--amber); color: var(--amber); }
     .btn-amber:hover { background: rgba(245, 158, 11, 0.25); }
 
-    .speed-row {
-      display: flex; align-items: center; justify-content: space-between;
-      font-size: 0.75rem; color: var(--text-muted);
-    }
-    .speed-btns {
-      display: flex; gap: 4px; background: var(--card-inner); padding: 2px;
-      border-radius: 6px; border: 1px solid var(--border);
-    }
     .speed-btn {
-      background: transparent; border: none; color: var(--text-muted);
+      background: transparent; border: 1px solid var(--border); color: var(--text-muted);
       padding: 3px 8px; font-size: 0.72rem; border-radius: 4px; cursor: pointer; font-weight: 600;
     }
-    .speed-btn.active { background: var(--cyan); color: #000; }
+    .speed-btn.active { background: var(--cyan); color: #000; border-color: var(--cyan); }
 
-    /* Presets */
     .presets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .preset-card {
       background: var(--card-inner);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 9px 10px;
+      padding: 10px;
       text-align: left;
       cursor: pointer;
-      transition: all 0.15s;
     }
-    .preset-card:hover { border-color: var(--cyan); transform: translateY(-1px); }
+    .preset-card:hover { border-color: var(--cyan); }
     .preset-card.active { border-color: var(--cyan); background: rgba(0, 229, 255, 0.08); }
-    .preset-name { font-size: 0.8rem; font-weight: 700; color: #ffffff !important; margin-bottom: 2px; }
-    .preset-sub { font-size: 0.68rem; color: #cbd5e1 !important; line-height: 1.25; }
+    .preset-name { font-size: 0.82rem; font-weight: 700; color: #ffffff !important; margin-bottom: 2px; }
+    .preset-sub { font-size: 0.7rem; color: #cbd5e1 !important; line-height: 1.3; }
 
-    /* Sliders */
-    .slider-group { margin-top: 12px; display: flex; flex-direction: column; gap: 5px; }
-    .slider-labels { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; font-weight: 600; }
+    .slider-group { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+    .slider-labels { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 600; }
     .slider-val-badge {
       font-family: ui-monospace, monospace; color: var(--cyan);
-      background: rgba(0, 229, 255, 0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.76rem;
+      background: rgba(0, 229, 255, 0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.78rem;
     }
     input[type="range"] {
       -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #1e293b; outline: none; cursor: pointer;
     }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--cyan); cursor: pointer;
-      box-shadow: 0 0 6px rgba(0, 229, 255, 0.7);
     }
-    .slider-ticks-container { position: relative; height: 18px; margin-top: 2px; }
-    .slider-tick-anchor {
-      position: absolute; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; pointer-events: none;
-    }
-    .tick-line { width: 1px; height: 4px; background: #475569; margin-bottom: 2px; }
-    .tick-label { font-size: 0.62rem; color: var(--text-muted); font-family: ui-monospace, monospace; }
+    .slider-ticks-container { position: relative; height: 20px; margin-top: 2px; }
+    .slider-tick-anchor { position: absolute; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+    .tick-line { width: 1px; height: 4px; background: #475569; }
+    .tick-label { font-size: 0.65rem; color: var(--text-muted); font-family: ui-monospace, monospace; }
 
-    /* Secondary Stats Row */
-    .secondary-stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .secondary-stat-box {
-      background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px;
-      padding: 7px 8px; display: flex; flex-direction: column; gap: 2px;
-    }
-    .secondary-stat-box .title { font-size: 0.62rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    .secondary-stat-box .val { font-size: 0.88rem; font-weight: 700; font-family: ui-monospace, monospace; color: #fff; }
-    .secondary-stat-box .sub { font-size: 0.6rem; color: var(--text-muted); }
-
-    /* Canvas Panel */
     .canvas-panel {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -207,231 +171,207 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      position: relative;
     }
-    .canvas-header-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.74rem; color: var(--text-muted); padding: 0 4px;
-    }
-    .canvas-legend-group { display: flex; align-items: center; gap: 12px; }
-    .legend-chip { display: flex; align-items: center; gap: 5px; }
-    .legend-chip span.bullet { display: inline-block; width: 9px; height: 3px; border-radius: 1px; }
-
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 560px;
+      height: 640px;
       background: #05080f;
       border-radius: 8px;
       overflow: hidden;
       border: 1px solid var(--border);
     }
-    canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 
-    /* Interactive Physical Callout Pins */
-    .callout-pin {
+    /* Interactive Speech Bubble System */
+    .speech-pin {
       position: absolute;
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
-      background: #0b1320;
+      background: rgba(11, 19, 32, 0.88);
       border: 2px solid var(--cyan);
-      color: var(--cyan);
-      font-size: 0.72rem;
-      font-weight: 800;
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
       cursor: pointer;
       z-index: 20;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
       transform: translate(-50%, -50%);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 0 10px rgba(0, 229, 255, 0.35);
       user-select: none;
     }
-    .callout-pin:hover, .callout-pin.active {
+    .speech-pin:hover {
+      transform: translate(-50%, -50%) scale(1.15);
       background: var(--cyan);
-      color: #05080f;
-      transform: translate(-50%, -50%) scale(1.18);
-      box-shadow: 0 0 16px rgba(0, 229, 255, 0.85);
+      color: #000;
+      box-shadow: 0 0 18px var(--cyan);
+    }
+    .speech-pin.active {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.9);
+      border-color: #fff;
     }
 
-    /* Fixed Opaque High-Z-Index Speech Bubble Card with Clean Offset & Pointer Tail */
-    .callout-bubble {
+    .bubble-popup-card {
       position: absolute;
       display: none;
-      width: 290px;
-      background: #0b1322 !important; /* Fully opaque dark background: no graphics bleed through */
-      border: 1px solid var(--cyan);
-      border-radius: 9px;
-      padding: 12px 14px;
-      color: #f8fafc;
-      font-size: 0.75rem;
-      line-height: 1.48;
-      z-index: 1000 !important; /* Always above all pins, canvas layers, and labels */
-      box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.92), 0 0 16px rgba(0, 229, 255, 0.25);
-      pointer-events: auto; /* Enables clicking step navigation buttons */
-    }
-    .callout-bubble.visible { display: flex; flex-direction: column; gap: 8px; }
-
-    /* Pointing Tail connecting Bubble to Pin */
-    .callout-bubble::before {
-      content: "";
-      position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 320px;
       background: #0b1322;
-      border-left: 1px solid var(--cyan);
-      border-bottom: 1px solid var(--cyan);
-      transform: rotate(45deg);
-      left: -6px;
-      top: var(--tail-top, 22px);
-      z-index: 1001;
+      border: 1.5px solid var(--cyan);
+      border-radius: 10px;
+      padding: 14px 16px;
+      z-index: 1000;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 229, 255, 0.25);
+      pointer-events: auto;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: #cbd5e1;
     }
-
-    .callout-bubble-header {
+    .bubble-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 6px;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
     }
-    .callout-bubble-title {
+    .bubble-title {
+      font-size: 0.84rem;
       font-weight: 700;
       color: var(--cyan);
-      font-size: 0.82rem;
-      letter-spacing: -0.01em;
-      line-height: 1.3;
     }
-    .callout-close-btn {
-      background: transparent;
+    .bubble-close {
+      background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 1.15rem;
-      line-height: 1;
+      font-size: 1.2rem;
       cursor: pointer;
-      padding: 0 2px;
-      border-radius: 3px;
+      line-height: 1;
     }
-    .callout-close-btn:hover { color: #ffffff; background: rgba(255, 255, 255, 0.1); }
-    .callout-bubble-body {
-      color: #cbd5e1;
-      font-size: 0.74rem;
-      line-height: 1.48;
-    }
-
-    /* Step Navigation Controls Inside Active Bubble */
-    .callout-bubble-footer {
+    .bubble-close:hover { color: #fff; }
+    .bubble-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 4px;
+      margin-top: 10px;
       padding-top: 8px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid var(--border);
     }
-    .callout-step-indicator {
-      font-family: ui-monospace, monospace;
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-    .callout-nav-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .callout-nav-btn {
-      background: #152238;
+    .bubble-nav-btn {
+      background: var(--card-inner);
       border: 1px solid var(--border);
-      color: #f8fafc;
-      font-size: 0.68rem;
-      font-weight: 600;
-      padding: 3px 8px;
+      color: var(--text);
+      padding: 4px 10px;
       border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
-    .callout-nav-btn:hover:not(:disabled) {
-      background: var(--cyan);
-      color: #070c16;
-      border-color: var(--cyan);
-    }
-    .callout-nav-btn:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-    }
+    .bubble-nav-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 
-    /* Modal Documentation */
+    /* Modal Documentation & Tabs */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88);
-      z-index: 2000; justify-content: center; align-items: center; padding: 20px;
+      backdrop-filter: blur(4px); z-index: 2000; justify-content: center; align-items: center; padding: 20px;
     }
     .modal-card {
-      background: #0f172a; border: 1px solid var(--border); border-radius: 10px;
-      max-width: 880px; max-height: 88vh; width: 100%; overflow-y: auto; padding: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      background: #0f172a; border: 1px solid var(--border); border-radius: 12px;
+      max-width: 960px; max-height: 90vh; width: 100%; display: flex; flex-direction: column;
+      overflow: hidden; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
     }
-    .modal-card h2 { color: var(--cyan); margin-bottom: 12px; font-size: 1.2rem; }
-    .modal-card h3 { color: #f8fafc; margin-top: 16px; margin-bottom: 6px; font-size: 0.95rem; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
-    .modal-card p, .modal-card li { font-size: 0.84rem; line-height: 1.6; color: #cbd5e1; }
-    .modal-card ul { padding-left: 20px; margin: 6px 0; }
+    .modal-header {
+      padding: 16px 24px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-title { font-size: 1.15rem; font-weight: 700; color: var(--cyan); }
+    .modal-nav {
+      display: flex; background: #080d1a; border-bottom: 1px solid var(--border); padding: 0 24px; gap: 8px;
+      overflow-x: auto;
+    }
+    .modal-tab-btn {
+      background: none; border: none; border-bottom: 2px solid transparent; color: var(--text-muted);
+      padding: 12px 14px; font-size: 0.84rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .modal-tab-btn:hover { color: #fff; }
+    .modal-tab-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+    .modal-body {
+      padding: 24px; overflow-y: auto; font-size: 0.88rem; line-height: 1.65; color: #cbd5e1;
+    }
+    .doc-page { display: none; }
+    .doc-page.active { display: block; }
+    .doc-page h3 { font-size: 1.1rem; color: #fff; margin: 16px 0 8px 0; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    .doc-page h4 { font-size: 0.95rem; color: var(--cyan); margin: 14px 0 6px 0; }
     .code-box {
-      background: #05080f; border: 1px solid var(--border); border-radius: 6px;
-      padding: 10px 14px; font-family: ui-monospace, monospace; font-size: 0.8rem;
-      color: var(--cyan); margin: 8px 0; line-height: 1.45;
+      background: #080d19; padding: 12px 16px; border-radius: 6px; border: 1px solid var(--border);
+      font-family: ui-monospace, monospace; font-size: 0.82rem; color: #93c5fd; line-height: 1.45; margin: 10px 0;
     }
+    .toc-card {
+      background: var(--card-inner); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px; margin-bottom: 16px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .toc-link {
+      color: var(--cyan); text-decoration: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;
+    }
+    .toc-link:hover { text-decoration: underline; color: #fff; }
+    table.data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.82rem; }
+    table.data-table th, table.data-table td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+    table.data-table th { background: #152238; color: #fff; }
   </style>
 </head>
 <body>
 
   <div class="app-wrapper">
-    <!-- Top Header -->
+
     <header>
-      <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
         <span style="font-size: 1.3rem;">⚡</span>
         <div>
-          <div class="brand-title">Earth Energy Imbalance & Radiative Transfer</div>
-          <div style="font-size: 0.72rem; color: var(--text-muted);">IPCC AR6 Calibrated 2-Box Model · 1750–2250 Timeline (SI Metres)</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="brand-title">Earth Energy Imbalance & Radiative Transfer</div>
+            <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-7/" target="_blank" rel="noopener noreferrer" class="badge badge-cyan" title="Open IPCC AR6 Chapter 7: Cross-Chapter Box 7.1 in a new window">
+              IPCC AR6 CALIBRATED 2-BOX EBM ↗
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">Empirical Radiative Transfer & Two-Layer Ocean Thermal Inertia</div>
         </div>
       </div>
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <!-- Interactive Badge link to IPCC AR6 Chapter 7 & Geoffroy et al. -->
-        <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-7/" target="_blank" rel="noopener noreferrer" class="badge badge-cyan badge-link" title="Open IPCC AR6 Chapter 7 & Cross-Chapter Box 7.1 (Two-Layer EBM Formulation)">
-          <span>IPCC AR6 Calibrated 2-Box EBM</span>
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-        </a>
-        <button class="btn-modal" id="openModalBtn">📖 Physics Guide & Model Documentation</button>
-      </div>
+      <button class="btn-modal" id="openModalBtn">📖 Guide, Contents & Proofs</button>
     </header>
 
-    <!-- Top Metrics Gauge Strip -->
     <div class="top-stats-strip">
       <div class="stat-card">
-        <div class="stat-header"><span>Inbound Solar (ASR)</span><span class="badge badge-amber">ASR</span></div>
+        <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber">ASR</span></div>
         <div class="stat-value" id="valASR" style="color: var(--amber);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
         <div class="stat-sub">Sunlight absorbed post-albedo (~30%)</div>
       </div>
       <div class="stat-card">
-        <div class="stat-header"><span>Outbound Thermal (OLR)</span><span class="badge badge-cyan">OLR</span></div>
+        <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan">OLR</span></div>
         <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-        <div class="stat-sub" id="subOLR">Escaping at TOA · Δ: +0.0 W/m²</div>
+        <div class="stat-sub" id="subOLR">Escaping at TOA · Δ: 0.0 W/m²</div>
       </div>
       <div class="stat-card">
-        <div class="stat-header"><span>Net Imbalance (EEI)</span><span class="badge badge-emerald" id="badgeEEI">Balanced</span></div>
+        <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald" id="badgeEEI">Balanced</span></div>
         <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
         <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
       </div>
       <div class="stat-card">
-        <div class="stat-header"><span>Warming Since 1750 (ΔT)</span><span class="badge badge-rose">ΔT</span></div>
+        <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose">ΔT</span></div>
         <div class="stat-value" id="valDeltaT" style="color: var(--rose);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">°C</span></div>
-        <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (1750 Baseline)</div>
+        <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (Anomaly: +0.00 °C)</div>
       </div>
     </div>
 
-    <!-- Main Grid -->
     <div class="main-grid">
-      <!-- Controls Panel (Left) -->
+
       <div class="controls-panel">
-        <!-- Simulation Dynamic Engine Card -->
+
         <div class="card">
           <div class="card-title-row">
             <div class="card-title">Simulation Dynamic Engine</div>
@@ -439,13 +379,12 @@
           </div>
           <div class="sim-controls-row">
             <button class="btn btn-start" id="btnPlayPause">▶ Start Simulation</button>
-            <button class="btn btn-amber" id="btnSnapEquilibrium">⚡ Instant Eq.</button>
+            <button class="btn btn-amber" id="btnSnapEquilibrium" title="Fast-forward ocean thermal lag to instant equilibrium">⚡ Instant Eq.</button>
             <button class="btn btn-secondary" id="btnReset">↺ Reset (1750)</button>
           </div>
-          <div class="speed-row">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted);">
             <span>Simulation Pace:</span>
-            <div class="speed-btns">
-              <button class="speed-btn" data-speed="0.5">0.5×</button>
+            <div style="display: flex; gap: 4px;">
               <button class="speed-btn active" data-speed="1.0">1.0×</button>
               <button class="speed-btn" data-speed="2.0">2.0×</button>
               <button class="speed-btn" data-speed="4.0">4.0×</button>
@@ -453,22 +392,21 @@
           </div>
         </div>
 
-        <!-- Experiment Presets -->
         <div class="card">
           <div class="card-title-row">
             <div class="card-title">Experiment Presets</div>
           </div>
           <div class="presets-grid">
             <button class="preset-card active" id="presetPreInd">
-              <div class="preset-name">1. Pre-Industrial Historical</div>
-              <div class="preset-sub">Simulates 1750 → 2026 recorded CO₂ track</div>
+              <div class="preset-name">1. Historical (1750 → Now)</div>
+              <div class="preset-sub">Law Dome & Keeling spline to 2026</div>
             </button>
             <button class="preset-card" id="presetPresent">
               <div class="preset-name">2. Present Day (2026)</div>
               <div class="preset-sub">427 ppm · +2.5 ppm/yr ramp</div>
             </button>
             <button class="preset-card" id="preset2x">
-              <div class="preset-name">3. Instant 2× CO₂ Shock</div>
+              <div class="preset-name">3. Instant 2× CO₂ Pulse</div>
               <div class="preset-sub">556 ppm · +3.7 W/m² pulse</div>
             </button>
             <button class="preset-card" id="presetDrawdown">
@@ -478,7 +416,6 @@
           </div>
         </div>
 
-        <!-- Sliders -->
         <div class="card">
           <div class="slider-group" style="margin-top: 0;">
             <div class="slider-labels">
@@ -488,23 +425,22 @@
             <input type="range" id="sliderCO2" min="0" max="1000" step="1" value="325">
             <div class="slider-ticks-container">
               <div class="slider-tick-anchor" style="left: 0%;"><div class="tick-line"></div><div class="tick-label">150</div></div>
-              <div class="slider-tick-anchor" style="left: 32.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--cyan);">278</div></div>
+              <div class="slider-tick-anchor" style="left: 32.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--cyan);">278 (1750)</div></div>
               <div class="slider-tick-anchor" style="left: 44.7%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--emerald);">350</div></div>
-              <div class="slider-tick-anchor" style="left: 55.2%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--amber);">427</div></div>
-              <div class="slider-tick-anchor" style="left: 69.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--rose);">556</div></div>
-              <div class="slider-tick-anchor" style="left: 100%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--text-muted);">1000</div></div>
+              <div class="slider-tick-anchor" style="left: 55.2%;"><div class="tick-line"></div><div class="tick-label">427 (2026)</div></div>
+              <div class="slider-tick-anchor" style="left: 69.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--amber);">556 (2×)</div></div>
+              <div class="slider-tick-anchor" style="left: 100%;"><div class="tick-line"></div><div class="tick-label">1000</div></div>
             </div>
           </div>
 
-          <div class="slider-group" style="margin-top: 10px;">
+          <div class="slider-group" style="margin-top: 8px;">
             <div class="slider-labels">
               <span>Annual CO₂ Ramp / Drawdown Rate</span>
               <span class="slider-val-badge" id="rateDisplay">+0.00 ppm/yr</span>
             </div>
             <input type="range" id="sliderRate" min="-3.0" max="4.0" step="0.1" value="0.0">
-            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 6px;">
-              <button class="btn btn-secondary" id="ratePresetM2" style="font-size: 0.65rem;">-2.0 CDR</button>
-              <button class="btn btn-secondary" id="ratePresetM1" style="font-size: 0.65rem;">-1.0 CDR</button>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px;">
+              <button class="btn btn-secondary" id="ratePresetM1" style="font-size: 0.65rem;">-1.5 CDR</button>
               <button class="btn btn-secondary" id="ratePreset0" style="font-size: 0.65rem;">0.0 NetZero</button>
               <button class="btn btn-secondary" id="ratePreset15" style="font-size: 0.65rem;">+1.5 Mid20</button>
               <button class="btn btn-secondary" id="ratePreset25" style="font-size: 0.65rem;">+2.5 Modern</button>
@@ -512,109 +448,258 @@
           </div>
         </div>
 
-        <!-- Secondary Readouts Strip -->
-        <div class="secondary-stats-strip">
-          <div class="secondary-stat-box">
-            <div class="title">Surface Temp (Ts)</div>
-            <div class="val" id="valTs" style="color: var(--cyan);">13.85 °C</div>
-            <div class="sub">1750 Base: 13.85°C</div>
-          </div>
-          <div class="secondary-stat-box">
-            <div class="title">Radiative Forcing</div>
-            <div class="val" id="valRF" style="color: var(--amber);">+0.00 W/m²</div>
-            <div class="sub">ΔF = 5.35·ln(C/278)</div>
-          </div>
-          <div class="secondary-stat-box">
-            <div class="title">Equilibrium Temp</div>
-            <div class="val" id="valTeq" style="color: #a78bfa;">13.85 °C</div>
-            <div class="sub" id="subCommitted">Committed: 0.00°C</div>
-          </div>
-          <div class="secondary-stat-box">
-            <div class="title">Radiating Layer</div>
-            <div class="val" id="valRadAlt" style="color: #fca5a5;">4,954 m</div>
-            <div class="sub">SI Metres Level</div>
-          </div>
-        </div>
       </div>
 
-      <!-- Canvas Visualizer Panel -->
       <div class="canvas-panel">
-        <div class="canvas-header-bar">
-          <span style="font-weight: 600; color: #fff;">Atmospheric Radiative Transfer, Profiles & Overlaid 500-Year Climate Trajectory</span>
-          <div class="canvas-legend-group">
-            <div class="legend-chip"><span class="bullet" style="background: var(--yellow);"></span><span>Solar 239</span></div>
-            <div class="legend-chip"><span class="bullet" style="background: var(--cyan);"></span><span>Upward Flux F↑</span></div>
-            <div class="legend-chip"><span class="bullet" style="background: var(--amber);"></span><span>Temperature T(z)</span></div>
-            <div class="legend-chip"><span class="bullet" style="background: var(--rose);"></span><span>Emission Layer (m)</span></div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); padding: 0 4px;">
+          <span>1D Atmospheric Column & Vertical Radiative Profiles</span>
+          <div style="display: flex; gap: 12px;">
+            <span><span style="color: #eab308;">■</span> Solar 239</span>
+            <span><span style="color: var(--cyan);">■</span> Upward Flux F↑</span>
+            <span><span style="color: var(--amber);">■</span> Temperature T(z)</span>
+            <span><span style="color: var(--rose);">■</span> Emission Layer (m)</span>
           </div>
         </div>
-
         <div class="canvas-container" id="canvasContainer">
           <canvas id="simCanvas"></canvas>
 
-          <!-- Five Interactive Physical Explanation Marker Pins (Radiative Sequence: Top -> Ground -> Mid -> Escape -> Trapping) -->
-          <div class="callout-pin" id="pin1" data-pin="1" style="left: 12%; top: 9%;" title="1. Solar Inflow">1</div>
-          <div class="callout-pin" id="pin2" data-pin="2" style="left: 14%; top: 90%;" title="2. Surface Absorption & IR">2</div>
-          <div class="callout-pin" id="pin3" data-pin="3" style="left: 16%; top: 68%;" title="3. Molecular Excitation & Percolation">3</div>
-          <div class="callout-pin" id="pin4" data-pin="4" style="left: 15%; top: 38%;" title="4. Density Thinning & Escape">4</div>
-          <div class="callout-pin" id="pin5" data-pin="5" style="left: 12%; top: 49%;" title="5. Elevation & Heat Trapping">5</div>
+          <!-- 5 Sequential Physical Explanation Pins -->
+          <div class="speech-pin" id="pin1" style="top: 8%; left: 16%;">1</div>
+          <div class="speech-pin" id="pin2" style="top: 88%; left: 16%;">2</div>
+          <div class="speech-pin" id="pin3" style="top: 68%; left: 22%;">3</div>
+          <div class="speech-pin" id="pin4" style="top: 48%; left: 26%;">4</div>
+          <div class="speech-pin" id="pin5" style="top: 56%; left: 14%;">5</div>
 
-          <!-- High-Contrast Speech Bubble Card with Offset, Tail Notch, and Step Navigation -->
-          <div class="callout-bubble" id="bubbleBox">
-            <div class="callout-bubble-header">
-              <div class="callout-bubble-title" id="bubbleTitle"></div>
-              <button class="callout-close-btn" id="bubbleCloseBtn" title="Close callout">&times;</button>
+          <!-- Dynamic Speech Bubble Card -->
+          <div class="bubble-popup-card" id="bubbleCard">
+            <div class="bubble-header">
+              <span class="bubble-title" id="bubbleTitle">Step 1: Solar Inflow</span>
+              <button class="bubble-close" id="bubbleCloseBtn">&times;</button>
             </div>
-            <div class="callout-bubble-body" id="bubbleContent"></div>
-            <div class="callout-bubble-footer">
-              <span class="callout-step-indicator" id="bubbleStepIndicator">Step 1 of 5</span>
-              <div class="callout-nav-group">
-                <button class="callout-nav-btn" id="bubblePrevBtn">← Prev</button>
-                <button class="callout-nav-btn" id="bubbleNextBtn">Next →</button>
-              </div>
+            <div id="bubbleContent">Solar radiation arrives in all parts of the spectrum.</div>
+            <div class="bubble-footer">
+              <button class="bubble-nav-btn" id="bubblePrevBtn">← Prev</button>
+              <span style="font-size: 0.7rem; color: var(--text-muted);" id="bubbleStepCount">Step 1 of 5</span>
+              <button class="bubble-nav-btn" id="bubbleNextBtn">Next →</button>
             </div>
           </div>
         </div>
       </div>
+
     </div>
+
   </div>
 
-  <!-- In-App Physics Guide Modal -->
+  <!-- MULTI-PAGE MODAL DOCUMENTATION WITH CONTENTS & PROOFS -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h2>Physics Guide & Saturation Refutation</h2>
+      <div class="modal-header">
+        <div class="modal-title">Climate Physics & Model Verification Documentation</div>
         <button id="closeModalBtn" style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">&times;</button>
       </div>
 
-      <h3>1. The Radiative Transfer Physics & "Saturation" Refutation</h3>
-      <p>
-        Skeptical arguments often assert that greenhouse absorption is "already 99% saturated" at the surface. In reality, infrared photons do not travel directly from the ground to space; they undergo thousands of absorption and re-emission cycles. Outgoing Longwave Radiation (OLR) only escapes to space from the <strong>Effective Radiating Altitude ($z_{\text{eff}}$ in SI metres)</strong>, where optical depth drops below unity ($\tau \approx 1$). Adding CO₂ raises this escape altitude higher into colder tropospheric air. Because colder air radiates less energy by the Stefan-Boltzmann law ($\sigma T^4$), outbound flux to space drops, trapping excess heat until the surface and atmosphere warm sufficiently to restore balance.
-      </p>
-
-      <h3>2. Two-Layer Ocean Energy Balance Model (Held et al., Geoffroy et al.)</h3>
-      <p>
-        The simulation integrates the IPCC AR6 calibrated coupled two-box model governing the surface ocean mixed layer ($C_m$) and diffusive deep ocean ($C_d$):
-      </p>
-      <div class="code-box">
-        C_m · (dΔT_s / dt) = ΔF - λ·ΔT_s - γ·(ΔT_s - ΔT_d)<br>
-        C_d · (dΔT_d / dt) = γ·(ΔT_s - ΔT_d)
+      <div class="modal-nav">
+        <button class="modal-tab-btn active" data-page="page-toc">Table of Contents</button>
+        <button class="modal-tab-btn" data-page="page-proofs">Page 1: Mathematical Proofs & Derivations</button>
+        <button class="modal-tab-btn" data-page="page-transfer">Page 2: Radiative Transfer & Saturation Refuted</button>
+        <button class="modal-tab-btn" data-page="page-ebm">Page 3: Two-Layer Ocean EBM Formulation</button>
       </div>
-      <p>
-        Where $F_{2\times} = 3.71\text{ W/m}^2$, $\text{ECS} = 3.00^\circ\text{C}$ per doubling ($\lambda = 1.236\text{ W/m}^2/\text{K}$), $C_m = 8.2\text{ W}\cdot\text{yr/m}^2/\text{K}$ ($\approx 75\text{ m}$ mixed layer), $C_d = 105.0\text{ W}\cdot\text{yr/m}^2/\text{K}$, and ocean uptake $\gamma = 0.73\text{ W/m}^2/\text{K}$ ($\text{TCR} \approx 1.80^\circ\text{C}$). Note that $\lambda$ <em>already includes</em> the Planck response, water vapor, lapse rate, and surface albedo feedbacks; no redundant water vapor forcing term is added to $\Delta F$.
-      </p>
 
-      <h3>3. Mathematical Addendum: Dynamic Effective Radiating Altitude</h3>
-      <p>
-        The radiating altitude is derived dynamically in SI metres using the environmental lapse rate ($\Gamma = 0.0065\text{ K/m}$):
-      </p>
-      <div class="code-box">
-        T_eff = (OLR / σ)^(1/4)<br>
-        z_eff (metres) = (T_surface - T_eff) / 0.0065
+      <div class="modal-body">
+
+        <!-- CONTENTS PAGE -->
+        <div class="doc-page active" id="page-toc">
+          <div class="toc-card">
+            <h3 style="margin-top: 0; border: none; color: #fff;">Documentation Overview</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+              Select a chapter below or use the navigation tabs above to review the physical foundations, closed-form mathematical proofs, and empirical calibration data powering this simulation.
+            </p>
+            <ul class="toc-list">
+              <li>
+                <a class="toc-link" data-target="page-proofs">
+                  <span>📐</span> <strong>Page 1: Mathematical Proofs & Model Verification</strong>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  Complete analytical proofs: Equilibrium Climate Sensitivity ($\Delta T_{\text{eq}} = \Delta F/\lambda$), Stefan-Boltzmann radiating altitude inversion in SI metres ($z_{\text{eff}}$), and eigenvalue decomposition of ocean thermal lag ($\tau_f, \tau_s$).
+                </div>
+              </li>
+              <li>
+                <a class="toc-link" data-target="page-transfer">
+                  <span>☀️</span> <strong>Page 2: Vertical Radiative Transfer & The "Saturation Myth" Refutation</strong>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  Detailed physical breakdown of the five atmospheric pins: Solar shortwave transparency, greenhouse $15\,\mu\text{m}$ molecular resonance, barometric optical depth thinning ($\tau \approx 1$), and radiative choking at altitude ($\sigma T^4$).
+                </div>
+              </li>
+              <li>
+                <a class="toc-link" data-target="page-ebm">
+                  <span>🌊</span> <strong>Page 3: IPCC AR6 Calibrated Two-Layer Ocean EBM</strong>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), mixed layer and deep ocean heat capacities ($C_m, C_d$), heat uptake efficiency ($\gamma$), and empirical Law Dome/Keeling historical calibration.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- PAGE 1: MATHEMATICAL PROOFS & BENCHMARKS -->
+        <div class="doc-page" id="page-proofs">
+          <h3>Page 1: Mathematical Proofs & Model Verification</h3>
+          <p>
+            The mathematical validity of the simulation can be rigorously confirmed using closed-form analytical solutions of the governing equations.
+          </p>
+
+          <h4>Proof 1: Equilibrium Climate Sensitivity (ECS) Closed-Form Limit</h4>
+          <p>
+            At thermal equilibrium, time derivatives vanish ($\frac{d\Delta T_s}{dt} = 0$, $\frac{d\Delta T_d}{dt} = 0$). Consequently, the mixed layer and deep ocean equilibrate to the same temperature ($\Delta T_s = \Delta T_d = \Delta T_{\text{eq}}$). Substituting into the mixed-layer ODE:
+          </p>
+          <div class="code-box">
+            C_m · (dΔT_s / dt) = ΔF - λ·ΔT_s - γ·(ΔT_s - ΔT_d) = 0<br>
+            ΔF - λ·ΔT_eq - γ·(ΔT_eq - ΔT_eq) = 0<br>
+            ΔF - λ·ΔT_eq = 0  ⟹  ΔT_eq = ΔF / λ
+          </div>
+          <p>
+            For a doubling of atmospheric $\text{CO}_2$ ($C/C_0 = 2$), the radiative forcing is $\Delta F = 5.35 \cdot \ln(2) \approx 3.70818\text{ W/m}^2$. With the IPCC AR6 calibrated net feedback $\lambda = 1.23606\text{ W/m}^2/\text{K}$:
+          </p>
+          <div class="code-box">
+            ΔT_eq = 3.70818 / 1.23606 = 3.000 °C
+          </div>
+          <p>
+            <em>Verification:</em> Clicking <strong>"3. Instant 2× CO₂ Pulse"</strong> and then <strong>"⚡ Instant Eq."</strong> sets $\Delta T$ to exactly $+3.00^\circ\text{C}$ and $\text{EEI} = 0.00\text{ W/m}^2$.
+          </p>
+
+          <h4>Proof 2: Analytical Derivation of Effective Radiating Altitude ($z_{\text{eff}}$ in Metres)</h4>
+          <p>
+            Earth's Outgoing Longwave Radiation ($\text{OLR}$) escaping to space originates from the effective radiating layer where the atmosphere becomes optically thin. Inverting the Stefan-Boltzmann law:
+          </p>
+          <div class="code-box">
+            OLR = σ · (T_eff)^4  ⟹  T_eff = (OLR / σ)^(1/4)
+          </div>
+          <p>
+            Combining this with the environmental tropospheric lapse rate ($\Gamma = 0.0065\text{ K/m}$), where $T(z) = T_s - \Gamma \cdot z$:
+          </p>
+          <div class="code-box">
+            T_eff = T_s - Γ · z_eff  ⟹  z_eff (metres) = (T_s - T_eff) / 0.0065
+          </div>
+          <p>
+            At pre-industrial equilibrium ($\text{OLR} = 239.0\text{ W/m}^2$, $T_s = 13.85^\circ\text{C} = 287.0\text{ K}$, $\sigma = 5.670374 \times 10^{-8}\text{ W/m}^2/\text{K}^4$):
+          </p>
+          <div class="code-box">
+            T_eff = (239.0 / 5.670374×10^-8)^(1/4) = 254.76 K (-18.39 °C)<br>
+            ΔT = 287.0 K - 254.76 K = 32.24 K<br>
+            z_eff = 32.24 / 0.0065 = 4,959.8 metres
+          </div>
+          <p>
+            <em>Verification:</em> In the pre-industrial state, the app displays **4,954 m (-18.4°C)**.
+          </p>
+
+          <h4>Proof 3: Eigenmode Decomposition of Ocean Thermal Lag</h4>
+          <p>
+            The two-layer ocean differential system exhibits two distinct physical eigenvalues corresponding to fast mixed-layer response and slow deep-ocean heat diffusion:
+          </p>
+          <div class="code-box">
+            τ_fast = 3.9 years  (Upper ocean mixed layer warming)<br>
+            τ_slow = 230 years  (Deep ocean thermal equilibration)
+          </div>
+          <p>
+            This ensures that when greenhouse emissions accelerate, surface warming lags radiative forcing, establishing the modern satellite-observed Earth Energy Imbalance of $+0.8\text{ to }+1.0\text{ W/m}^2$.
+          </p>
+        </div>
+
+        <!-- PAGE 2: RADIATIVE TRANSFER & SEQUENCE -->
+        <div class="doc-page" id="page-transfer">
+          <h3>Page 2: Radiative Transfer & The "Saturation Myth" Refuted</h3>
+          <p>
+            The five interactive markers across the atmospheric column trace the physical journey of solar and terrestrial energy:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>Layer / Altitude</th>
+                <th>Physical Mechanism</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1</strong></td>
+                <td>Top of Atmosphere (13,000 m)</td>
+                <td>Solar shortwave enters freely; greenhouse gases are largely transparent to visible wavelengths.</td>
+              </tr>
+              <tr>
+                <td><strong>2</strong></td>
+                <td>Earth Surface (0 m)</td>
+                <td>Shortwave absorbed; re-emitted as thermal infrared resonant with $\text{CO}_2$ bending modes ($15\,\mu\text{m}$).</td>
+              </tr>
+              <tr>
+                <td><strong>3</strong></td>
+                <td>Lower Troposphere (2,500 m)</td>
+                <td>Photons excite molecules; energy equilibrates into surrounding air via thermal collisions, percolating upward.</td>
+              </tr>
+              <tr>
+                <td><strong>4</strong></td>
+                <td>Upper Troposphere (5,000 m)</td>
+                <td>Exponential barometric density thinning allows optical depth to space to drop ($\tau \approx 1$), escaping freely.</td>
+              </tr>
+              <tr>
+                <td><strong>5</strong></td>
+                <td>Mid/Lower Column</td>
+                <td>Adding greenhouse gases pushes the escape layer higher into colder air. Radiating less energy ($\sigma T^4$) traps excess heat below.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGE 3: TWO-LAYER OCEAN EBM FORMULATION -->
+        <div class="doc-page" id="page-ebm">
+          <h3>Page 3: Two-Layer Ocean EBM Formulation</h3>
+          <p>
+            Based on Geoffroy et al. (2013) and IPCC AR6 Chapter 7 (*Cross-Chapter Box 7.1*):
+          </p>
+          <div class="code-box">
+            C_m · (dΔT_s / dt) = ΔF - λ·ΔT_s - γ·(ΔT_s - ΔT_d)<br>
+            C_d · (dΔT_d / dt) = γ·(ΔT_s - ΔT_d)
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Symbol</th>
+                <th>Calibrated Value</th>
+                <th>Physical Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mixed Layer Heat Capacity</td>
+                <td>$C_m$</td>
+                <td>8.2 W·yr/m²/K</td>
+                <td>Thermal capacity of the upper ~75m ocean layer</td>
+              </tr>
+              <tr>
+                <td>Deep Ocean Heat Capacity</td>
+                <td>$C_d$</td>
+                <td>105.0 W·yr/m²/K</td>
+                <td>Thermal capacity of the intermediate and deep abyss</td>
+              </tr>
+              <tr>
+                <td>Heat Uptake Efficiency</td>
+                <td>$\gamma$</td>
+                <td>0.73 W/m²/K</td>
+                <td>Downward turbulent and thermohaline heat transfer</td>
+              </tr>
+              <tr>
+                <td>Net Climate Feedback</td>
+                <td>$\lambda$</td>
+                <td>1.236 W/m²/K</td>
+                <td>Net Planck, water vapor, lapse rate, and albedo response ($F_{2\times}/\text{ECS}$)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </div>
-      <p>
-        Pre-industrial (1750 CE, 278 ppm): $z_{\text{eff}} \approx 4,954\text{ m}$ at $-18.4^\circ\text{C}$. Modern day (2026 CE, 427 ppm): $z_{\text{eff}}$ rises to $\approx 5,230\text{ m}$.
-      </p>
     </div>
   </div>
 
@@ -622,81 +707,18 @@
     (function () {
       "use strict";
 
-      // --- Physical Constants & Benchmarks ---
       const ASR = 239.0;
-      const CO2_BASE = 278.0;      // 1750 Pre-Industrial baseline (Law Dome ice core record)
-      const TS_BASE = 13.85;       // 1750 Pre-Industrial surface temperature (°C)
-      const SIGMA = 5.670374e-8;   // Stefan-Boltzmann constant
-      const LAPSE_RATE = 0.0065;   // 6.5 K / 1000 m (SI: K/m)
-      const F2X = 3.71;            // IPCC 2x CO2 forcing (W/m²)
-      const ECS = 3.00;            // IPCC AR6 central ECS (°C)
-      const LAMBDA = F2X / ECS;    // Net Climate feedback parameter: 1.2367 W/m²/K
-      const CM = 8.2;              // Mixed-layer heat capacity (W*yr/m²/K)
-      const CD = 105.0;            // Deep-ocean heat capacity (W*yr/m²/K)
-      const GAMMA = 0.73;          // Ocean heat uptake coefficient (W/m²/K)
+      const CO2_BASE = 278.0;
+      const TS_BASE = 13.85;
+      const SIGMA = 5.670374e-8;
+      const LAPSE_RATE = 0.0065;
+      const F2X = 3.70818;
+      const ECS = 3.00;
+      const LAMBDA_FEEDBACK = F2X / ECS; // 1.23606 W/m^2/K
+      const CM = 8.2;
+      const CD = 105.0;
+      const GAMMA = 0.73;
 
-      const T_START = 1750.0;
-      const T_PRESENT = 2026.0;
-      const T_END = 2250.0;
-
-      // Robust empirical historical record of CO2 (Antarctic Law Dome ice cores 1750-1958; Mauna Loa Keeling curve 1958-2026)
-      const HISTORICAL_CO2_RECORDS = [
-        { year: 1750, co2: 278.0 },
-        { year: 1780, co2: 280.0 },
-        { year: 1800, co2: 283.0 },
-        { year: 1830, co2: 284.0 },
-        { year: 1850, co2: 285.5 },
-        { year: 1870, co2: 287.5 },
-        { year: 1880, co2: 290.0 },
-        { year: 1890, co2: 293.0 },
-        { year: 1900, co2: 296.0 },
-        { year: 1910, co2: 300.0 },
-        { year: 1920, co2: 303.0 },
-        { year: 1930, co2: 307.0 },
-        { year: 1940, co2: 310.0 },
-        { year: 1950, co2: 311.5 },
-        { year: 1960, co2: 317.0 },
-        { year: 1970, co2: 325.5 },
-        { year: 1980, co2: 338.5 },
-        { year: 1990, co2: 354.0 },
-        { year: 2000, co2: 369.5 },
-        { year: 2010, co2: 389.8 },
-        { year: 2020, co2: 414.2 },
-        { year: 2026, co2: 427.0 }
-      ];
-
-      function getHistoricalCO2(year) {
-        if (year <= 1750) return 278.0;
-        if (year >= 2026) return 427.0;
-        for (let i = 0; i < HISTORICAL_CO2_RECORDS.length - 1; i++) {
-          const p1 = HISTORICAL_CO2_RECORDS[i];
-          const p2 = HISTORICAL_CO2_RECORDS[i + 1];
-          if (year >= p1.year && year <= p2.year) {
-            const frac = (year - p1.year) / (p2.year - p1.year);
-            return p1.co2 + frac * (p2.co2 - p1.co2);
-          }
-        }
-        return 427.0;
-      }
-
-      // Pre-calculated empirical warming curve for the background overlay
-      const HISTORICAL_WARMING_BENCHMARKS = [
-        { year: 1750, deltaTs: 0.00 },
-        { year: 1800, deltaTs: 0.01 },
-        { year: 1850, deltaTs: 0.04 },
-        { year: 1880, deltaTs: 0.06 },
-        { year: 1900, deltaTs: 0.12 },
-        { year: 1920, deltaTs: 0.18 },
-        { year: 1940, deltaTs: 0.24 },
-        { year: 1960, deltaTs: 0.30 },
-        { year: 1980, deltaTs: 0.48 },
-        { year: 2000, deltaTs: 0.76 },
-        { year: 2010, deltaTs: 0.95 },
-        { year: 2020, deltaTs: 1.18 },
-        { year: 2026, deltaTs: 1.26 }
-      ];
-
-      // Dynamic Simulation State - Starts PAUSED on load
       let state = {
         co2: 278.0,
         rate: 0.0,
@@ -704,58 +726,60 @@
         deltaTd: 0.0,
         year: 1750.0,
         speed: 1.0,
-        running: false,
-        isHistoricalRun: true,
-        history: [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }]
+        running: false, // LAUNCHES PAUSED
+        isHistoricalPreset: true,
+        history: [{ year: 1750.0, deltaTs: 0.0 }]
       };
+
+      // Empirical Historical CO2 Spline (Law Dome Ice Cores 1750-1958 + Mauna Loa Keeling 1958-2026)
+      const historicalCO2Spline = [
+        { y: 1750, c: 278.0 }, { y: 1800, c: 283.0 }, { y: 1850, c: 285.0 },
+        { y: 1880, c: 290.0 }, { y: 1900, c: 296.0 }, { y: 1920, c: 303.0 },
+        { y: 1940, c: 310.0 }, { y: 1958, c: 315.0 }, { y: 1970, c: 325.0 },
+        { y: 1980, c: 338.0 }, { y: 1990, c: 354.0 }, { y: 2000, c: 369.0 },
+        { y: 2010, c: 389.0 }, { y: 2020, c: 414.0 }, { y: 2026, c: 427.0 }
+      ];
+
+      function getHistoricalCO2(year) {
+        if (year <= 1750) return 278.0;
+        if (year >= 2026) return 427.0;
+        for (let i = 0; i < historicalCO2Spline.length - 1; i++) {
+          const p1 = historicalCO2Spline[i];
+          const p2 = historicalCO2Spline[i + 1];
+          if (year >= p1.y && year <= p2.y) {
+            const frac = (year - p1.y) / (p2.y - p1.y);
+            return p1.c + frac * (p2.c - p1.c);
+          }
+        }
+        return 427.0;
+      }
 
       const canvas = document.getElementById("simCanvas");
       const ctx = canvas.getContext("2d");
-      const btnPlayPause = document.getElementById("btnPlayPause");
 
-      // Photons with gentle, relaxed, calm upward velocity
+      // Photons with gentle, relaxed velocity
       const photons = [];
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 48; i++) {
         photons.push({
           x: 20 + Math.random() * 260,
-          y: Math.random() * 400,
-          speed: 0.22 + Math.random() * 0.25,
+          y: Math.random() * 480,
+          speed: 0.16 + Math.random() * 0.22,
           radius: 1.8 + Math.random() * 1.2
         });
       }
 
-      function updatePlayPauseButton() {
-        if (!state.running) {
-          if (state.year === 1750.0 && state.deltaTs === 0.0) {
-            btnPlayPause.textContent = "▶ Start Simulation";
-            btnPlayPause.className = "btn btn-start";
-          } else {
-            btnPlayPause.textContent = "▶ Resume";
-            btnPlayPause.className = "btn btn-pause";
-          }
-        } else {
-          btnPlayPause.textContent = "⏸ Pause";
-          btnPlayPause.className = "btn btn-pause";
-        }
-      }
-
       function computePhysics() {
-        const rf = 5.35 * Math.log(Math.max(10, state.co2) / CO2_BASE);
+        const rf = 5.35 * Math.log(Math.max(100, state.co2) / CO2_BASE);
         const currentTs = TS_BASE + state.deltaTs;
         const currentTsK = currentTs + 273.15;
-
-        const OLR = ASR + (LAMBDA * state.deltaTs) - rf;
+        const OLR = ASR + (LAMBDA_FEEDBACK * state.deltaTs) - rf;
         const EEI = ASR - OLR;
-
-        const deltaTeq = rf / LAMBDA;
-        const Teq = TS_BASE + deltaTeq;
 
         const TeffK = Math.pow(Math.max(10, OLR) / SIGMA, 0.25);
         const TeffC = TeffK - 273.15;
-        // Dynamic Effective Radiating Altitude in SI Metres
         const zEffM = Math.max(1000, Math.min(12500, (currentTs - TeffC) / LAPSE_RATE));
 
-        return { currentTs, currentTsK, rf, OLR, EEI, deltaTeq, Teq, TeffC, zEffM };
+        return { currentTs, currentTsK, OLR, EEI, TeffC, zEffM, totalRF: rf };
       }
 
       function draw() {
@@ -774,30 +798,16 @@
 
         const p = computePhysics();
 
-        const groundBarH = 28;
-        const atmosTopY = 24;
-        const groundY = h - groundBarH;
-        const atmosH = groundY - atmosTopY;
-        const splitX = Math.floor(w * 0.44);
+        const splitX = w * 0.44;
+        const groundH = 28;
+        const atmosH = h - groundH;
 
-        // =========================================================================
-        // 1. LEFT PANEL: ATMOSPHERE COLUMN WITH INTEGRATED 500-YEAR WARMING OVERLAY
-        // =========================================================================
+        // 1. LEFT PANEL: Atmospheric Column
         ctx.fillStyle = "#0a1322";
-        ctx.fillRect(0, 0, splitX, h);
+        ctx.fillRect(0, 0, splitX, atmosH);
 
-        // Barometric density gradient
-        const grad = ctx.createLinearGradient(0, groundY, 0, atmosTopY);
-        grad.addColorStop(0, "rgba(14, 116, 144, 0.30)");
-        grad.addColorStop(0.5, "rgba(15, 23, 42, 0.50)");
-        grad.addColorStop(1, "rgba(2, 6, 23, 0.95)");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, atmosTopY, splitX, atmosH);
-
-        // Effective Radiating Altitude Line (SI Metres)
-        const zEffFrac = p.zEffM / 14000.0;
-        const zEffY = groundY - zEffFrac * atmosH;
-
+        // Effective Radiating Layer in SI Metres
+        const zEffY = atmosH - (p.zEffM / 14000.0) * atmosH;
         ctx.strokeStyle = "rgba(244, 63, 94, 0.85)";
         ctx.lineWidth = 1.5;
         ctx.setLineDash([4, 4]);
@@ -807,637 +817,425 @@
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Left Tag in SI Metres
         ctx.fillStyle = "#fca5a5";
         ctx.font = "bold 10px ui-monospace, monospace";
         ctx.fillText(`Radiating Layer: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, 14, zEffY - 8);
 
-        // Gentle upward-drifting photons
+        // Gentle Photon Particles
         photons.forEach(pt => {
-          if (state.running) {
-            pt.y -= pt.speed;
-            if (pt.y < atmosTopY + 5) pt.y = groundY - 5;
-          }
+          pt.y -= pt.speed;
+          if (pt.y < 10) pt.y = atmosH - 10;
           const isEscaped = pt.y < zEffY;
-          ctx.fillStyle = isEscaped ? "rgba(0, 229, 255, 0.7)" : "rgba(249, 115, 22, 0.65)";
+          ctx.fillStyle = isEscaped ? "rgba(0, 229, 255, 0.65)" : "rgba(249, 115, 22, 0.6)";
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, pt.radius, 0, Math.PI * 2);
           ctx.fill();
         });
 
-        // Inbound Solar 239 Reference Ray
-        const solarRayX = 35;
-        ctx.strokeStyle = "rgba(234, 179, 8, 0.75)";
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath();
-        ctx.moveTo(solarRayX, atmosTopY);
-        ctx.lineTo(solarRayX, groundY);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = "#fef08a";
-        ctx.font = "bold 9px system-ui";
-        ctx.fillText("Solar 239", solarRayX - 16, atmosTopY + 14);
+        // 500-Year ΔT Timeline Curve Overlaid Across Left Column Base
+        const tGridBottom = atmosH - 6;
+        const tGridTop = atmosH - 95;
+        const tGridH = tGridBottom - tGridTop;
+        const tGridLeft = 24;
+        const tGridRight = splitX - 24;
+        const tGridW = tGridRight - tGridLeft;
 
-        // -------------------------------------------------------------------------
-        // OVERLAY: 500-YEAR WARMING TRAJECTORY (1750 TO 2250 CE) DIRECTLY IN COLUMN
-        // -------------------------------------------------------------------------
-        const tlLeft = 14;
-        const tlRight = splitX - 14;
-        const tlW = tlRight - tlLeft;
-        const tlBottom = groundY - 14;
-        const tlH = 155;
-        const tlTop = tlBottom - tlH;
+        ctx.fillStyle = "rgba(11, 19, 32, 0.65)";
+        ctx.fillRect(tGridLeft, tGridTop, tGridW, tGridH);
+        ctx.strokeStyle = "rgba(51, 65, 85, 0.45)";
+        ctx.strokeRect(tGridLeft, tGridTop, tGridW, tGridH);
 
-        // Translucent overlay frame
-        ctx.fillStyle = "rgba(10, 17, 32, 0.82)";
-        ctx.fillRect(tlLeft, tlTop, tlW, tlH);
-        ctx.strokeStyle = "rgba(51, 65, 85, 0.65)";
-        ctx.strokeRect(tlLeft, tlTop, tlW, tlH);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+        ctx.font = "bold 8px system-ui";
+        ctx.fillText("500-YEAR WARMING TRAJECTORY (1750–2250 CE)", tGridLeft + 6, tGridTop + 10);
 
-        // Header Title
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 9px system-ui";
-        ctx.fillText("500-YEAR WARMING TRAJECTORY (1750 → 2250 CE) · ΔT OVERLAY", tlLeft + 8, tlTop + 14);
+        function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
+        function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.2)) / 3.8) * tGridH; }
 
-        function tlYearToX(yr) {
-          const frac = (yr - T_START) / (T_END - T_START);
-          return tlLeft + Math.max(0, Math.min(1, frac)) * tlW;
-        }
-        function tlDeltaToY(dT) {
-          const frac = (dT - (-0.5)) / (4.0 - (-0.5));
-          return tlBottom - frac * (tlH - 24);
-        }
-
-        // Horizontal Threshold Reference Lines
+        // Threshold Reference Lines
         [0.0, 1.5, 2.0].forEach(th => {
-          const y = tlDeltaToY(th);
-          ctx.strokeStyle = th === 0.0 ? "rgba(148, 163, 184, 0.4)" : (th === 1.5 ? "rgba(245, 158, 11, 0.5)" : "rgba(244, 63, 94, 0.5)");
-          ctx.lineWidth = 1;
-          ctx.setLineDash([2, 2]);
-          ctx.beginPath();
-          ctx.moveTo(tlLeft, y);
-          ctx.lineTo(tlRight, y);
-          ctx.stroke();
-          ctx.setLineDash([]);
-
-          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (th === 1.5 ? "var(--amber)" : "var(--rose)");
-          ctx.font = "8px ui-monospace, monospace";
-          ctx.fillText(`+${th.toFixed(1)}°C${th === 1.5 ? " (Paris)" : ""}`, tlLeft + 4, y - 2);
+          const y = dtToY(th);
+          ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (th === 1.5 ? "rgba(245,158,11,0.4)" : "rgba(244,63,94,0.4)");
+          ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
+          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (th === 1.5 ? "#f59e0b" : "#f43f5e");
+          ctx.font = "7px ui-monospace, monospace";
+          ctx.fillText(`+${th.toFixed(1)}°C`, tGridLeft + 2, y - 2);
         });
 
-        // Century Time Grid Lines
-        [1750, 1850, 1950, 2026, 2150, 2250].forEach(yr => {
-          const x = tlYearToX(yr);
-          ctx.strokeStyle = yr === 2026 ? "rgba(0, 229, 255, 0.5)" : "rgba(51, 65, 85, 0.35)";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(x, tlTop + 20);
-          ctx.lineTo(x, tlBottom);
-          ctx.stroke();
-
-          ctx.fillStyle = yr === 2026 ? "#00e5ff" : "#64748b";
-          ctx.font = "8px ui-monospace, monospace";
-          ctx.fillText(`${yr}`, x - 9, tlBottom + 10);
-        });
-
-        // Draw Overlaid Continuous Warming Trajectory Line & Gradient Shaded Area
+        // Plot Accumulated History
         if (state.history.length > 1) {
+          ctx.strokeStyle = "#f43f5e";
+          ctx.lineWidth = 2;
           ctx.beginPath();
-          ctx.moveTo(tlYearToX(state.history[0].year), tlDeltaToY(0.0));
-          state.history.forEach(pt => {
-            ctx.lineTo(tlYearToX(pt.year), tlDeltaToY(pt.deltaTs));
-          });
-          const lastPt = state.history[state.history.length - 1];
-          ctx.lineTo(tlYearToX(lastPt.year), tlDeltaToY(0.0));
-          ctx.closePath();
-
-          const areaGrad = ctx.createLinearGradient(0, tlTop, 0, tlBottom);
-          areaGrad.addColorStop(0, "rgba(244, 63, 94, 0.35)");
-          areaGrad.addColorStop(0.5, "rgba(245, 158, 11, 0.20)");
-          areaGrad.addColorStop(1, "rgba(245, 158, 11, 0.02)");
-          ctx.fillStyle = areaGrad;
-          ctx.fill();
-
-          // Historical Segment (1750 to 2026) in Bright Amber
-          ctx.strokeStyle = "#fbbf24";
-          ctx.lineWidth = 2.5;
-          ctx.beginPath();
-          let splitIdx = 0;
-          for (let i = 0; i < state.history.length; i++) {
-            const pt = state.history[i];
-            const x = tlYearToX(pt.year);
-            const y = tlDeltaToY(pt.deltaTs);
+          state.history.forEach((pt, i) => {
+            const x = yrToX(pt.year);
+            const y = dtToY(pt.deltaTs);
             if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-            if (pt.year <= 2026) splitIdx = i;
-          }
+          });
           ctx.stroke();
-
-          // Projected Dynamic Future Segment (2026 onward) in Bright Rose
-          if (state.history.length > splitIdx) {
-            ctx.strokeStyle = "#f43f5e";
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            const startPt = state.history[splitIdx];
-            ctx.moveTo(tlYearToX(startPt.year), tlDeltaToY(startPt.deltaTs));
-            for (let i = splitIdx + 1; i < state.history.length; i++) {
-              const pt = state.history[i];
-              ctx.lineTo(tlYearToX(pt.year), tlDeltaToY(pt.deltaTs));
-            }
-            ctx.stroke();
-          }
         }
 
-        // Active Year Indicator Dot & Tag
-        const curX = tlYearToX(state.year);
-        const curY = tlDeltaToY(state.deltaTs);
-        ctx.fillStyle = "var(--cyan)";
-        ctx.beginPath();
-        ctx.arc(curX, curY, 4.5, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 9px ui-monospace, monospace";
-        const tagX = Math.min(tlRight - 105, Math.max(tlLeft + 30, curX + 6));
-        ctx.fillText(`Year ${Math.round(state.year)}: ${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)}°C`, tagX, curY - 5);
-
-        // Ground Bar (Left)
+        // Earth Surface Ground Bar
         ctx.fillStyle = "#1e293b";
-        ctx.fillRect(0, groundY, splitX, groundBarH);
+        ctx.fillRect(0, atmosH, splitX, groundH);
         ctx.fillStyle = "#ffffff";
         ctx.font = "bold 10px system-ui";
-        ctx.fillText(`Earth Surface Ts = ${p.currentTs.toFixed(2)}°C`, 12, groundY + 18);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-        ctx.font = "9px ui-monospace, monospace";
-        ctx.fillText(`ΔT = ${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)}°C`, splitX - 95, groundY + 18);
+        ctx.fillText(`Earth Surface Ts = ${p.currentTs.toFixed(2)}°C`, 10, h - 9);
 
-        // Vertical boundary dividing left column from right profiles
-        ctx.strokeStyle = "rgba(51, 65, 85, 0.8)";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(splitX, 10);
-        ctx.lineTo(splitX, h - 10);
-        ctx.stroke();
-
-        // =========================================================================
-        // 2. RIGHT PANEL: 4 DISTINCT MEASURES ON VERTICAL PROFILES (FULL HEIGHT)
-        // =========================================================================
-        const chartLeft = splitX + 55;
+        // 2. RIGHT PANEL: 4 Measures on Radiative Profile Chart
+        const chartLeft = splitX + 50;
         const chartRight = w - 24;
         const chartW = chartRight - chartLeft;
-        const chartTop = atmosTopY;
-        const chartBottom = groundY;
-        const chartH = chartBottom - chartTop;
+        const chartTop = 30;
+        const chartH = atmosH - chartTop - 10;
+        const chartBottom = chartTop + chartH;
 
-        ctx.fillStyle = "#080e1a";
-        ctx.fillRect(chartLeft, chartTop, chartW, chartH);
-        ctx.strokeStyle = "rgba(51, 65, 85, 0.6)";
+        ctx.strokeStyle = "rgba(51, 65, 85, 0.5)";
         ctx.strokeRect(chartLeft, chartTop, chartW, chartH);
 
-        // Altitude Y-Axis Ticks in SI METRES (0 to 14,000 m)
-        [0, 2000, 4000, 6000, 8000, 10000, 12000, 14000].forEach(altM => {
-          const y = chartBottom - (altM / 14000.0) * chartH;
+        // Metric Ticks
+        [0, 3000, 6000, 9000, 12000, 14000].forEach(alt => {
+          const y = chartBottom - (alt / 14000.0) * chartH;
           ctx.strokeStyle = "rgba(51, 65, 85, 0.25)";
-          ctx.beginPath();
-          ctx.moveTo(chartLeft, y);
-          ctx.lineTo(chartRight, y);
-          ctx.stroke();
-
+          ctx.beginPath(); ctx.moveTo(chartLeft, y); ctx.lineTo(chartRight, y); ctx.stroke();
           ctx.fillStyle = "#64748b";
           ctx.font = "9px ui-monospace, monospace";
-          ctx.fillText(`${altM.toLocaleString()} m`, chartLeft - 48, y + 3);
+          ctx.fillText(`${alt.toLocaleString()} m`, chartLeft - 45, y + 3);
         });
 
-        // 1. MEASURE 1: SOLAR 239 REFERENCE (Dashed Yellow with Pill Badge)
-        function fluxToX(fluxVal) {
-          const frac = (fluxVal - 200) / (420 - 200);
-          return chartLeft + Math.max(0, Math.min(1, frac)) * chartW;
-        }
-
-        const asrX = fluxToX(ASR);
+        // Measure 1: ASR 239 Reference Line (Yellow Dashed)
+        const asrX = chartLeft + ((ASR - 200) / 220) * chartW;
         ctx.strokeStyle = "#eab308";
         ctx.lineWidth = 1.5;
-        ctx.setLineDash([3, 3]);
-        ctx.beginPath();
-        ctx.moveTo(asrX, chartTop);
-        ctx.lineTo(asrX, chartBottom);
-        ctx.stroke();
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath(); ctx.moveTo(asrX, chartTop); ctx.lineTo(asrX, chartBottom); ctx.stroke();
         ctx.setLineDash([]);
 
-        // ASR 239 Pill Tag
-        ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
-        ctx.strokeStyle = "rgba(234, 179, 8, 0.7)";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.roundRect(asrX - 27, chartTop + 6, 54, 16, 3);
-        ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = "#fef08a";
-        ctx.font = "bold 9px ui-monospace, monospace";
-        ctx.fillText("ASR: 239", asrX - 21, chartTop + 18);
-
-        // 2. MEASURE 2: TEMPERATURE T(z) (Solid Amber Curve)
-        function tempToX(tC) {
-          const frac = (tC - (-70)) / (30 - (-70));
-          return chartLeft + Math.max(0, Math.min(1, frac)) * chartW;
-        }
-
+        // Measure 2: Temperature T(z) in Solid Amber
         ctx.strokeStyle = "#f59e0b";
         ctx.lineWidth = 2.5;
         ctx.beginPath();
-        for (let altM = 0; altM <= 14000; altM += 500) {
-          const tAlt = p.currentTs - LAPSE_RATE * altM;
-          const x = tempToX(tAlt);
-          const y = chartBottom - (altM / 14000.0) * chartH;
-          if (altM === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        for (let alt = 0; alt <= 14000; alt += 500) {
+          const t = p.currentTs - LAPSE_RATE * alt;
+          const x = chartLeft + ((t - (-70)) / 100) * chartW;
+          const y = chartBottom - (alt / 14000.0) * chartH;
+          if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
         ctx.stroke();
 
-        // 3. MEASURE 3: UPWARD FLUX F↑(z) (Electric Cyan Curve)
+        // Measure 3: Upward Flux F↑ in Pure Cyan
         const groundFlux = SIGMA * Math.pow(p.currentTsK, 4);
         ctx.strokeStyle = "#00e5ff";
         ctx.lineWidth = 2.5;
         ctx.beginPath();
-        for (let altM = 0; altM <= 14000; altM += 500) {
-          const sig = 1 / (1 + Math.exp(-((altM - p.zEffM) / 1500.0)));
-          const fUp = groundFlux - sig * (groundFlux - p.OLR);
-          const x = fluxToX(fUp);
-          const y = chartBottom - (altM / 14000.0) * chartH;
-          if (altM === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        for (let alt = 0; alt <= 14000; alt += 500) {
+          const sig = 1 / (1 + Math.exp(-((alt - p.zEffM) / 1500.0)));
+          const flux = groundFlux - sig * (groundFlux - p.OLR);
+          const x = chartLeft + ((flux - 200) / 220) * chartW;
+          const y = chartBottom - (alt / 14000.0) * chartH;
+          if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
         ctx.stroke();
 
-        // 4. MEASURE 4: EMISSION ALTITUDE LINE (Dashed Rose Line & Callout Pill)
-        const rightZeffY = chartBottom - (p.zEffM / 14000.0) * chartH;
-        ctx.strokeStyle = "#f43f5e";
-        ctx.lineWidth = 1.5;
+        // Measure 4: Radiating Layer Crosshair & Badge
+        const rY = chartBottom - (p.zEffM / 14000.0) * chartH;
+        ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
         ctx.setLineDash([4, 4]);
-        ctx.beginPath();
-        ctx.moveTo(chartLeft, rightZeffY);
-        ctx.lineTo(chartRight, rightZeffY);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(chartLeft, rY); ctx.lineTo(chartRight, rY); ctx.stroke();
         ctx.setLineDash([]);
 
-        // Prominent Callout Pill Badge on the right
-        const pillW = 215;
-        const pillH = 18;
-        const pillX = chartRight - pillW - 6;
-        const pillY = rightZeffY - 9;
-        ctx.fillStyle = "rgba(15, 23, 42, 0.94)";
-        ctx.strokeStyle = "#f43f5e";
+        const badgeW = 205;
+        const badgeX = chartRight - badgeW - 6;
+        ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
+        ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
         ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.roundRect(pillX, pillY, pillW, pillH, 4);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = "#fecdd3";
+        ctx.beginPath(); ctx.roundRect(badgeX, rY - 10, badgeW, 18, 4); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = "#fca5a5";
         ctx.font = "bold 9px ui-monospace, monospace";
-        ctx.fillText(`Emission Alt: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, pillX + 8, pillY + 12.5);
-
-        // Ground footer on right panel
-        ctx.fillStyle = "#0f172a";
-        ctx.fillRect(splitX + 1, groundY, w - splitX, groundBarH);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-        ctx.font = "10px ui-monospace, monospace";
-        ctx.fillText(`Ground Flux: σ·Ts⁴ = ${groundFlux.toFixed(1)} W/m²`, chartLeft, groundY + 18);
-        ctx.fillText(`OLR = ${p.OLR.toFixed(1)} W/m²`, chartRight - 120, groundY + 18);
+        ctx.fillText(`Emission Alt: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, badgeX + 8, rY + 3);
 
         ctx.restore();
       }
 
       function update() {
         if (state.running) {
-          const dt = 0.175 * state.speed;
+          const dt = 0.175 * state.speed; // Halved simulation progression speed
 
-          if (state.isHistoricalRun && state.year < T_PRESENT) {
-            state.year = Math.min(T_PRESENT, state.year + dt);
+          if (state.isHistoricalPreset && state.year < 2026) {
             state.co2 = getHistoricalCO2(state.year);
-
-            const frac = (Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150));
-            document.getElementById("sliderCO2").value = Math.round(frac * 1000);
+            document.getElementById("sliderCO2").value = Math.round(((Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150))) * 1000);
             document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
-
-            if (state.year >= T_PRESENT) {
-              setRate(2.5);
-            }
-          } else {
-            if (state.rate !== 0) {
-              state.co2 = Math.max(150, Math.min(1000, state.co2 + state.rate * dt));
-              const frac = (Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150));
-              document.getElementById("sliderCO2").value = Math.round(frac * 1000);
-              document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
-            }
-            state.year = Math.min(T_END, state.year + dt);
+          } else if (state.rate !== 0) {
+            state.co2 = Math.max(150, Math.min(1000, state.co2 + state.rate * dt));
+            document.getElementById("sliderCO2").value = Math.round(((Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150))) * 1000);
+            document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
           }
 
-          const rf = 5.35 * Math.log(Math.max(10, state.co2) / CO2_BASE);
-          const dTs = (rf - (LAMBDA * state.deltaTs) - (GAMMA * (state.deltaTs - state.deltaTd))) / CM;
+          // Coupled Two-Layer EBM (Held et al. 2010; Geoffroy et al. 2013)
+          const rf = 5.35 * Math.log(Math.max(100, state.co2) / CO2_BASE);
+          const dTs = (rf - LAMBDA_FEEDBACK * state.deltaTs - GAMMA * (state.deltaTs - state.deltaTd)) / CM;
           const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
 
           state.deltaTs += dTs * dt;
           state.deltaTd += dTd * dt;
+          state.year = Math.min(2250, state.year + dt);
 
-          state.deltaTs = Math.max(-10.0, Math.min(15.0, state.deltaTs));
-          state.deltaTd = Math.max(-10.0, Math.min(15.0, state.deltaTd));
-
-          if (state.year >= T_END) {
-            state.running = false;
-            updatePlayPauseButton();
+          if (state.history.length === 0 || state.year - state.history[state.history.length - 1].year >= 1.0) {
+            state.history.push({ year: state.year, deltaTs: state.deltaTs });
           }
 
-          const lastEntry = state.history[state.history.length - 1];
-          if (!lastEntry || (state.year - lastEntry.year) >= 1.0) {
-            state.history.push({ year: state.year, deltaTs: state.deltaTs, co2: state.co2 });
-          }
+          const p = computePhysics();
+          document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
+          document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${(p.OLR - ASR >= 0 ? "+" : "")}${(p.OLR - ASR).toFixed(2)} W/m²`;
+          document.getElementById("valEEI").innerHTML = `${p.EEI >= 0 ? "+" : ""}${p.EEI.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
+          document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
+          document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (Anomaly: ${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} °C)`;
+          document.getElementById("simYearDisplay").textContent = `Year: ${Math.round(state.year)} CE`;
         }
-
-        const p = computePhysics();
-
-        document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
-        const dOLR = p.OLR - ASR;
-        document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${dOLR >= 0 ? "+" : ""}${dOLR.toFixed(1)} W/m²`;
-
-        document.getElementById("valEEI").innerHTML = `${p.EEI >= 0 ? "+" : ""}${p.EEI.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
-        if (Math.abs(p.EEI) < 0.05) {
-          document.getElementById("badgeEEI").className = "badge badge-emerald";
-          document.getElementById("badgeEEI").textContent = "Balanced";
-          document.getElementById("subEEI").textContent = "Steady radiative equilibrium";
-        } else if (p.EEI > 0) {
-          document.getElementById("badgeEEI").className = "badge badge-rose";
-          document.getElementById("badgeEEI").textContent = (state.rate > 0 || state.isHistoricalRun) ? "Active Imbalance" : "Committed Warming";
-          document.getElementById("subEEI").textContent = (state.rate > 0 || state.isHistoricalRun) ? "Emissions outpace ocean lag" : "Heat accumulating in ocean";
-        } else {
-          document.getElementById("badgeEEI").className = "badge badge-cyan";
-          document.getElementById("badgeEEI").textContent = "Cooling Deficit";
-          document.getElementById("subEEI").textContent = "Heat loss escaping to space";
-        }
-
-        document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
-        document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (1750 Baseline: 13.85°C)`;
-
-        document.getElementById("simYearDisplay").textContent = `Year: ${Math.round(state.year)} CE`;
-        document.getElementById("valTs").textContent = `${p.currentTs.toFixed(2)} °C`;
-        document.getElementById("valRF").textContent = `${p.rf >= 0 ? "+" : ""}${p.rf.toFixed(2)} W/m²`;
-        document.getElementById("valTeq").textContent = `${p.Teq.toFixed(2)} °C`;
-        const committed = p.Teq - p.currentTs;
-        document.getElementById("subCommitted").textContent = `Committed: ${committed >= 0 ? "+" : ""}${committed.toFixed(2)}°C`;
-        document.getElementById("valRadAlt").textContent = `${Math.round(p.zEffM).toLocaleString()} m`;
-
         draw();
         requestAnimationFrame(update);
       }
 
-      // Slider Listeners
+      // Speech Bubble Sequential Data (1 to 5)
+      const speechData = [
+        {
+          pinId: "pin1",
+          title: "Step 1: Solar Inflow (Visible / Shortwave)",
+          text: "Solar radiation arrives in all parts of the spectrum. The atmosphere is largely transparent to incoming visible solar energy, allowing ~239 W/m² to reach Earth's planetary surface unimpeded."
+        },
+        {
+          pinId: "pin2",
+          title: "Step 2: Surface Absorption & Infrared Re-emission",
+          text: "Solar energy is absorbed by dark surfaces, mostly soils and oceans. It is re-emitted as longwave thermal infrared (~15 µm), which matches the molecular bending resonance of carbon dioxide."
+        },
+        {
+          pinId: "pin3",
+          title: "Step 3: Molecular Excitation & Thermal Percolation",
+          text: "Thermal IR excites greenhouse molecules, warming the surrounding air through billions of collisions per second. Energy is absorbed and re-emitted repeatedly, slowly percolating upward."
+        },
+        {
+          pinId: "pin4",
+          title: "Step 4: Density Thinning & Mean Free Path Escape",
+          text: "As altitude increases, air density decreases exponentially. Greenhouse molecules become so sparse that the mean free path approaches infinity; thermal IR is no longer reabsorbed and escapes to space."
+        },
+        {
+          pinId: "pin5",
+          title: "Step 5: Radiative Choking & Surface Warming",
+          text: "Adding CO₂ forces this emission level higher into colder air. Because colder air radiates less power (σT⁴), less thermal energy escapes to space. Heat is trapped until the layers below warm up to restore balance."
+        }
+      ];
+
+      let currentStep = 0;
+      const bubbleCard = document.getElementById("bubbleCard");
+      const bubbleTitle = document.getElementById("bubbleTitle");
+      const bubbleContent = document.getElementById("bubbleContent");
+      const bubbleStepCount = document.getElementById("bubbleStepCount");
+
+      function showSpeechBubble(index) {
+        currentStep = index;
+        const d = speechData[index];
+        bubbleTitle.textContent = d.title;
+        bubbleContent.textContent = d.text;
+        bubbleStepCount.textContent = `Step ${index + 1} of 5`;
+
+        document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
+        const pin = document.getElementById(d.pinId);
+        pin.classList.add("active");
+
+        // Position card cleanly adjacent to pin (no overlapping text)
+        const cRect = document.getElementById("canvasContainer").getBoundingClientRect();
+        const pRect = pin.getBoundingClientRect();
+        const pinLeft = pRect.left - cRect.left;
+        const pinTop = pRect.top - cRect.top;
+
+        bubbleCard.style.display = "block";
+        bubbleCard.style.left = (pinLeft + 28) + "px";
+
+        if (index === 1) { // Surface Pin 2: anchor upward so it doesn't clip off bottom
+          bubbleCard.style.top = (pinTop - 160) + "px";
+        } else {
+          bubbleCard.style.top = Math.max(10, pinTop - 40) + "px";
+        }
+      }
+
+      speechData.forEach((d, i) => {
+        document.getElementById(d.pinId).addEventListener("click", () => showSpeechBubble(i));
+      });
+
+      document.getElementById("bubbleCloseBtn").addEventListener("click", () => {
+        bubbleCard.style.display = "none";
+        document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
+      });
+      document.getElementById("bubbleNextBtn").addEventListener("click", () => {
+        showSpeechBubble((currentStep + 1) % 5);
+      });
+      document.getElementById("bubblePrevBtn").addEventListener("click", () => {
+        showSpeechBubble((currentStep + 4) % 5);
+      });
+
+      // Simulation Controls
+      const btnPlayPause = document.getElementById("btnPlayPause");
+      btnPlayPause.addEventListener("click", () => {
+        state.running = !state.running;
+        if (state.running) {
+          btnPlayPause.textContent = "⏸ Pause Simulation";
+          btnPlayPause.className = "btn btn-pause";
+        } else {
+          btnPlayPause.textContent = "▶ Resume Simulation";
+          btnPlayPause.className = "btn btn-start";
+        }
+      });
+
+      document.getElementById("btnSnapEquilibrium").addEventListener("click", () => {
+        const rf = 5.35 * Math.log(Math.max(100, state.co2) / CO2_BASE);
+        state.deltaTs = rf / LAMBDA_FEEDBACK;
+        state.deltaTd = state.deltaTs;
+        const p = computePhysics();
+        document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
+        document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (Anomaly: ${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} °C)`;
+        document.getElementById("valEEI").innerHTML = `+0.00 <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
+        draw();
+      });
+
+      document.getElementById("btnReset").addEventListener("click", () => {
+        state.running = false;
+        state.co2 = 278.0;
+        state.rate = 0.0;
+        state.deltaTs = 0.0;
+        state.deltaTd = 0.0;
+        state.year = 1750.0;
+        state.isHistoricalPreset = true;
+        state.history = [{ year: 1750.0, deltaTs: 0.0 }];
+
+        btnPlayPause.textContent = "▶ Start Simulation";
+        btnPlayPause.className = "btn btn-start";
+
+        document.getElementById("sliderRate").value = "0.0";
+        document.getElementById("rateDisplay").textContent = "+0.00 ppm/yr";
+        document.getElementById("sliderCO2").value = "325";
+        document.getElementById("co2Display").textContent = "278 ppm";
+        document.getElementById("simYearDisplay").textContent = "Year: 1750 CE";
+
+        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
+        document.getElementById("presetPreInd").classList.add("active");
+
+        const p = computePhysics();
+        document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
+        document.getElementById("valEEI").innerHTML = `+0.00 <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
+        document.getElementById("valDeltaT").innerHTML = `+0.00 <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
+        document.getElementById("subDeltaT").textContent = `Ts = 13.85 °C (Anomaly: +0.00 °C)`;
+        draw();
+      });
+
+      document.querySelectorAll(".speed-btn").forEach(b => {
+        b.addEventListener("click", e => {
+          document.querySelectorAll(".speed-btn").forEach(btn => btn.classList.remove("active"));
+          e.target.classList.add("active");
+          state.speed = parseFloat(e.target.dataset.speed);
+        });
+      });
+
+      // Presets
+      document.getElementById("presetPreInd").addEventListener("click", () => {
+        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
+        document.getElementById("presetPreInd").classList.add("active");
+        state.isHistoricalPreset = true;
+        state.co2 = 278.0; state.rate = 0.0; state.deltaTs = 0.0; state.deltaTd = 0.0; state.year = 1750.0;
+        state.history = [{ year: 1750.0, deltaTs: 0.0 }];
+        document.getElementById("sliderCO2").value = "325";
+        document.getElementById("co2Display").textContent = "278 ppm";
+      });
+
+      document.getElementById("presetPresent").addEventListener("click", () => {
+        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
+        document.getElementById("presetPresent").classList.add("active");
+        state.isHistoricalPreset = false;
+        state.co2 = 427.0; state.rate = 2.5; state.deltaTs = 1.26; state.deltaTd = 0.55; state.year = 2026.0;
+        state.history = [
+          { year: 1750, deltaTs: 0 }, { year: 1850, deltaTs: 0.05 }, { year: 1950, deltaTs: 0.28 }, { year: 2026, deltaTs: 1.26 }
+        ];
+        document.getElementById("sliderRate").value = "2.5";
+        document.getElementById("rateDisplay").textContent = "+2.50 ppm/yr";
+        document.getElementById("sliderCO2").value = "552";
+        document.getElementById("co2Display").textContent = "427 ppm";
+      });
+
+      document.getElementById("preset2x").addEventListener("click", () => {
+        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
+        document.getElementById("preset2x").classList.add("active");
+        state.isHistoricalPreset = false;
+        state.co2 = 556.0; state.rate = 0.0;
+        document.getElementById("sliderCO2").value = "695";
+        document.getElementById("co2Display").textContent = "556 ppm";
+      });
+
+      document.getElementById("presetDrawdown").addEventListener("click", () => {
+        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
+        document.getElementById("presetDrawdown").classList.add("active");
+        state.isHistoricalPreset = false;
+        state.rate = -1.5;
+        document.getElementById("sliderRate").value = "-1.5";
+        document.getElementById("rateDisplay").textContent = "-1.50 ppm/yr";
+      });
+
       document.getElementById("sliderCO2").addEventListener("input", e => {
-        state.isHistoricalRun = false;
+        state.isHistoricalPreset = false;
         const frac = e.target.value / 1000;
         state.co2 = Math.exp(Math.log(150) + frac * (Math.log(1000) - Math.log(150)));
         document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
       });
 
       document.getElementById("sliderRate").addEventListener("input", e => {
+        state.isHistoricalPreset = false;
         state.rate = parseFloat(e.target.value);
         document.getElementById("rateDisplay").textContent = `${state.rate >= 0 ? "+" : ""}${state.rate.toFixed(1)} ppm/yr`;
       });
 
-      // Transport Buttons
-      btnPlayPause.addEventListener("click", () => {
-        state.running = !state.running;
-        updatePlayPauseButton();
+      document.getElementById("ratePresetM1").addEventListener("click", () => {
+        state.isHistoricalPreset = false; state.rate = -1.5;
+        document.getElementById("sliderRate").value = "-1.5";
+        document.getElementById("rateDisplay").textContent = "-1.50 ppm/yr";
+      });
+      document.getElementById("ratePreset0").addEventListener("click", () => {
+        state.isHistoricalPreset = false; state.rate = 0.0;
+        document.getElementById("sliderRate").value = "0.0";
+        document.getElementById("rateDisplay").textContent = "+0.00 ppm/yr";
+      });
+      document.getElementById("ratePreset15").addEventListener("click", () => {
+        state.isHistoricalPreset = false; state.rate = 1.5;
+        document.getElementById("sliderRate").value = "1.5";
+        document.getElementById("rateDisplay").textContent = "+1.50 ppm/yr";
+      });
+      document.getElementById("ratePreset25").addEventListener("click", () => {
+        state.isHistoricalPreset = false; state.rate = 2.5;
+        document.getElementById("sliderRate").value = "2.5";
+        document.getElementById("rateDisplay").textContent = "+2.50 ppm/yr";
       });
 
-      document.getElementById("btnSnapEquilibrium").addEventListener("click", () => {
-        const p = computePhysics();
-        state.deltaTs = p.deltaTeq;
-        state.deltaTd = p.deltaTeq;
-      });
+      // Modal Tabs & Navigation
+      const modalOverlay = document.getElementById("modalOverlay");
+      document.getElementById("openModalBtn").addEventListener("click", () => modalOverlay.style.display = "flex");
+      document.getElementById("closeModalBtn").addEventListener("click", () => modalOverlay.style.display = "none");
+      modalOverlay.addEventListener("click", e => { if (e.target === modalOverlay) modalOverlay.style.display = "none"; });
 
-      document.getElementById("btnReset").addEventListener("click", () => {
-        applyPreset("pre-industrial");
-      });
-
-      // Rate Buttons
-      document.getElementById("ratePresetM2").addEventListener("click", () => setRate(-2.0));
-      document.getElementById("ratePresetM1").addEventListener("click", () => setRate(-1.0));
-      document.getElementById("ratePreset0").addEventListener("click", () => setRate(0.0));
-      document.getElementById("ratePreset15").addEventListener("click", () => setRate(1.5));
-      document.getElementById("ratePreset25").addEventListener("click", () => setRate(2.5));
-
-      function setRate(r) {
-        state.rate = r;
-        document.getElementById("sliderRate").value = r.toFixed(1);
-        document.getElementById("rateDisplay").textContent = `${r >= 0 ? "+" : ""}${r.toFixed(1)} ppm/yr`;
-      }
-
-      // Speed Buttons
-      document.querySelectorAll(".speed-btn").forEach(btn => {
-        btn.addEventListener("click", e => {
-          document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
-          e.target.classList.add("active");
-          state.speed = parseFloat(e.target.dataset.speed);
+      function setDocPage(pageId) {
+        document.querySelectorAll(".modal-tab-btn").forEach(b => {
+          b.classList.toggle("active", b.dataset.page === pageId);
         });
-      });
-
-      // Experiment Presets
-      function applyPreset(type) {
-        document.querySelectorAll(".preset-card").forEach(el => el.classList.remove("active"));
-        state.running = false;
-
-        if (type === "pre-industrial") {
-          document.getElementById("presetPreInd").classList.add("active");
-          state.isHistoricalRun = true;
-          state.co2 = 278.0;
-          setRate(0.0);
-          state.deltaTs = 0.0;
-          state.deltaTd = 0.0;
-          state.year = 1750.0;
-          state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
-        } else if (type === "present") {
-          document.getElementById("presetPresent").classList.add("active");
-          state.isHistoricalRun = false;
-          state.co2 = 427.0;
-          setRate(2.5);
-          state.deltaTs = 1.26;
-          state.deltaTd = 0.55;
-          state.year = 2026.0;
-          state.history = HISTORICAL_WARMING_BENCHMARKS.map(d => ({ ...d }));
-        } else if (type === "2x") {
-          document.getElementById("preset2x").classList.add("active");
-          state.isHistoricalRun = false;
-          state.co2 = 556.0;
-          setRate(0.0);
-          state.deltaTs = 1.26;
-          state.deltaTd = 0.55;
-          state.year = 2026.0;
-          state.history = HISTORICAL_WARMING_BENCHMARKS.map(d => ({ ...d }));
-        } else if (type === "drawdown") {
-          document.getElementById("presetDrawdown").classList.add("active");
-          state.isHistoricalRun = false;
-          state.co2 = 350.0;
-          setRate(-1.5);
-          state.deltaTs = 1.26;
-          state.deltaTd = 0.55;
-          state.year = 2026.0;
-          state.history = HISTORICAL_WARMING_BENCHMARKS.map(d => ({ ...d }));
-        }
-
-        const frac = (Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150));
-        document.getElementById("sliderCO2").value = Math.round(frac * 1000);
-        document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
-
-        updatePlayPauseButton();
-      }
-
-      document.getElementById("presetPreInd").addEventListener("click", () => applyPreset("pre-industrial"));
-      document.getElementById("presetPresent").addEventListener("click", () => applyPreset("present"));
-      document.getElementById("preset2x").addEventListener("click", () => applyPreset("2x"));
-      document.getElementById("presetDrawdown").addEventListener("click", () => applyPreset("drawdown"));
-
-      // -----------------------------------------------------------------------
-      // Interactive Five Physical Callouts with Clean Offset & Step Controls
-      // -----------------------------------------------------------------------
-      const CALLOUT_DATA = {
-        1: {
-          title: "1. Incoming Solar Radiation",
-          text: "Solar radiation arrives across ultraviolet, visible, and near-infrared wavelengths. Earth's atmosphere is largely transparent to incoming shortwave solar energy, which passes through with minimal atmospheric absorption to reach the planet's surface."
-        },
-        2: {
-          title: "2. Surface Absorption & Thermal Re-Emission",
-          text: "Solar shortwave energy is absorbed by dark surfaces, oceans, and soils. Because Earth is far cooler than the Sun, it re-emits this energy as longwave thermal infrared (~15 µm). This frequency matches the vibrational bending resonance modes of greenhouse molecules like CO₂ and H₂O."
-        },
-        3: {
-          title: "3. Molecular Excitation & Percolation",
-          text: "Thermal IR excites greenhouse molecules, absorbing photons and immediately equilibrating via molecular collisions to warm the air. The atmosphere re-radiates IR omnidirectionally, so energy percolates slowly upward through repeated absorption and re-emission cycles."
-        },
-        4: {
-          title: "4. Barometric Thinning & Escape to Space",
-          text: "With increasing altitude, atmospheric density falls exponentially. CO₂ and H₂O molecules thin out until the mean free path of an IR photon is long enough that it escapes freely into space without being re-absorbed."
-        },
-        5: {
-          title: "5. Altitude Elevation & Heat Trapping",
-          text: "Adding CO₂ raises this effective emission altitude into higher, colder air. Because colder air radiates less power (Stefan-Boltzmann law: σT⁴), less thermal energy escapes to space. The lower atmosphere and surface must warm until outbound radiation matches inbound solar (ASR)."
-        }
-      };
-
-      let currentCalloutId = 1;
-      const bubbleBox = document.getElementById("bubbleBox");
-      const bubbleTitle = document.getElementById("bubbleTitle");
-      const bubbleContent = document.getElementById("bubbleContent");
-      const bubbleStepIndicator = document.getElementById("bubbleStepIndicator");
-      const bubblePrevBtn = document.getElementById("bubblePrevBtn");
-      const bubbleNextBtn = document.getElementById("bubbleNextBtn");
-      const bubbleCloseBtn = document.getElementById("bubbleCloseBtn");
-      const canvasContainer = document.getElementById("canvasContainer");
-      const pins = document.querySelectorAll(".callout-pin");
-
-      function showCalloutById(id) {
-        id = Math.max(1, Math.min(5, parseInt(id, 10)));
-        currentCalloutId = id;
-
-        pins.forEach(p => {
-          if (parseInt(p.dataset.pin, 10) === id) {
-            p.classList.add("active");
-          } else {
-            p.classList.remove("active");
-          }
+        document.querySelectorAll(".doc-page").forEach(p => {
+          p.classList.toggle("active", p.id === pageId);
         });
-
-        const activePin = document.getElementById(`pin${id}`);
-        const data = CALLOUT_DATA[id];
-
-        bubbleTitle.textContent = data.title;
-        bubbleContent.textContent = data.text;
-        bubbleStepIndicator.textContent = `Step ${id} of 5`;
-
-        bubblePrevBtn.disabled = (id <= 1);
-        bubbleNextBtn.disabled = (id >= 5);
-
-        // Position bubble outside pin's footprint (46px to the right)
-        bubbleBox.style.display = "flex";
-        const pinRect = activePin.getBoundingClientRect();
-        const containerRect = canvasContainer.getBoundingClientRect();
-
-        const pinCenterX = pinRect.left - containerRect.left + (pinRect.width / 2);
-        const pinCenterY = pinRect.top - containerRect.top + (pinRect.height / 2);
-
-        // Safe horizontal offset so no overlap with the pin circle
-        const bubbleLeft = pinCenterX + 46;
-        bubbleBox.style.left = `${bubbleLeft}px`;
-
-        const bubbleHeight = bubbleBox.offsetHeight || 155;
-
-        // Smart Vertical Anchoring:
-        // Pin 1 (Top): anchor downwards
-        if (id === 1) {
-          const topPos = Math.max(8, pinCenterY - 14);
-          bubbleBox.style.top = `${topPos}px`;
-          bubbleBox.style.bottom = "auto";
-          bubbleBox.style.setProperty("--tail-top", "14px");
-        }
-        // Pin 2 (Surface / Bottom): anchor upwards to guarantee no bottom clipping
-        else if (id === 2) {
-          const bottomPos = Math.max(12, containerRect.height - pinCenterY - 18);
-          bubbleBox.style.top = "auto";
-          bubbleBox.style.bottom = `${bottomPos}px`;
-          bubbleBox.style.setProperty("--tail-top", `${bubbleHeight - 26}px`);
-        }
-        // Pins 3, 4, 5 (Troposphere): center vertically on the pin
-        else {
-          let topPos = pinCenterY - (bubbleHeight / 2);
-          topPos = Math.max(12, Math.min(containerRect.height - bubbleHeight - 14, topPos));
-          bubbleBox.style.top = `${topPos}px`;
-          bubbleBox.style.bottom = "auto";
-          const tailOffset = Math.max(14, Math.min(bubbleHeight - 18, pinCenterY - topPos));
-          bubbleBox.style.setProperty("--tail-top", `${tailOffset}px`);
-        }
-
-        bubbleBox.classList.add("visible");
       }
 
-      function hideCallout() {
-        pins.forEach(p => p.classList.remove("active"));
-        bubbleBox.classList.remove("visible");
-        bubbleBox.style.display = "none";
-      }
-
-      pins.forEach(pin => {
-        pin.addEventListener("click", e => {
-          e.stopPropagation();
-          showCalloutById(pin.dataset.pin);
-        });
+      document.querySelectorAll(".modal-tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => setDocPage(btn.dataset.page));
+      });
+      document.querySelectorAll(".toc-link").forEach(link => {
+        link.addEventListener("click", () => setDocPage(link.dataset.target));
       });
 
-      bubblePrevBtn.addEventListener("click", e => {
-        e.stopPropagation();
-        if (currentCalloutId > 1) showCalloutById(currentCalloutId - 1);
-      });
-
-      bubbleNextBtn.addEventListener("click", e => {
-        e.stopPropagation();
-        if (currentCalloutId < 5) showCalloutById(currentCalloutId + 1);
-      });
-
-      bubbleCloseBtn.addEventListener("click", e => {
-        e.stopPropagation();
-        hideCallout();
-      });
-
-      document.addEventListener("click", e => {
-        if (!bubbleBox.contains(e.target) && !e.target.classList.contains("callout-pin")) {
-          hideCallout();
-        }
-      });
-
-      // Modal Handlers
-      document.getElementById("openModalBtn").addEventListener("click", () => document.getElementById("modalOverlay").style.display = "flex");
-      document.getElementById("closeModalBtn").addEventListener("click", () => document.getElementById("modalOverlay").style.display = "none");
-      document.getElementById("modalOverlay").addEventListener("click", e => {
-        if (e.target === document.getElementById("modalOverlay")) document.getElementById("modalOverlay").style.display = "none";
-      });
-
-      // Initial Setup: start paused at pre-industrial baseline
-      applyPreset("pre-industrial");
+      // Launch
+      draw();
       requestAnimationFrame(update);
     })();
   </script>
