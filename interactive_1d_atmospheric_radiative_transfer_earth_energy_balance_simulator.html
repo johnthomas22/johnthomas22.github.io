@@ -1605,7 +1605,7 @@
         ctx.rotate(Math.PI / 2);
         ctx.fillStyle = "#f59e0b";
         ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
-        ctx.fillText("2026 Present", 0, 0);
+        ctx.fillText("2026", 0, 0);
         ctx.restore();
 
         // Plot Accumulated History: Temperature (Orange up to 1958 Keeling, Rose thereafter)
@@ -2740,10 +2740,10 @@
           }
           cCtx.textAlign = "left";
 
-          // 1958 Keeling & 2026 Present Reference Markers (Clean labels without "+year" clutter)
+          // 1958 Keeling & 2026 Reference Markers (Clean labels without "+year" clutter)
           [
             { off: 208, label: "1958 Keeling", tooltip: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring." },
-            { off: 276, label: "2026 Present", tooltip: "Present-day observational benchmark (+1.26°C anomaly, 427 ppm CO2), dividing instrumental history from future warming trajectories." }
+            { off: 276, label: "2026", tooltip: "Present-day observational benchmark (+1.26°C anomaly, 427 ppm CO2), dividing instrumental history from future warming trajectories." }
           ].forEach(mk => {
             const mx = offsetToX(mk.off);
             cCtx.strokeStyle = "rgba(245, 158, 11, 0.45)";
