@@ -959,6 +959,8 @@
         irRays.push({
           fromMol: startMol,
           toMol: null,
+          visited: [startMol],
+          jumpCount: 0,
           progress: Math.random(),
           speed: 0.0056 + Math.random() * 0.0048, // Relaxed, gentle pace (-20%)
           isWave: false,
@@ -1085,31 +1087,38 @@
             // Reset upon escaping to space
             if (ray.waveY < 8) {
               const lowMols = molecules.filter(m => m.altM < 2000);
-              ray.fromMol = lowMols[Math.floor(Math.random() * lowMols.length)] || molecules[0];
+              const startMol = lowMols[Math.floor(Math.random() * lowMols.length)] || molecules[0];
+              ray.fromMol = startMol;
               ray.toMol = null;
+              ray.visited = [startMol];
+              ray.jumpCount = 0;
               ray.progress = 0;
               ray.isWave = false;
             }
           } else {
             // Below radiating layer: short absorption/re-emission path directly connecting two bubbles
             if (!ray.toMol) {
+              // Ensure we don't ping-pong between the same two bubbles or get trapped in local loops
+              const recentVisited = ray.visited || [];
               const candidates = molecules.filter(cand => {
-                if (cand === ray.fromMol) return false;
+                if (cand === ray.fromMol || recentVisited.includes(cand)) return false;
                 const dAlt = cand.altM - ray.fromMol.altM;
                 const dX = Math.abs(cand.xFrac - ray.fromMol.xFrac);
-                return dAlt >= -200 && dAlt <= 1100 && dX <= 0.22;
+                // Prefer upward propagation (dAlt between 50m and 1400m) while allowing lateral percolation
+                return dAlt >= 50 && dAlt <= 1400 && dX <= 0.25;
               });
 
               if (candidates.length > 0) {
                 ray.toMol = candidates[Math.floor(Math.random() * candidates.length)];
               } else {
-                if (ray.fromMol.altM >= p.zEffM - 400) {
+                // If no fresh upward neighbor found or high enough, escape or jump to any higher unvisited molecule
+                if (ray.fromMol.altM >= p.zEffM - 400 || (ray.jumpCount && ray.jumpCount > 8)) {
                   ray.isWave = true;
                   ray.waveY = atmosH - (ray.fromMol.altM / MAX_ALT) * atmosH;
                   ray.waveBaseXFrac = ray.fromMol.xFrac;
                   ray.wavePhase = 0;
                 } else {
-                  const higher = molecules.filter(cand => cand.altM > ray.fromMol.altM);
+                  const higher = molecules.filter(cand => cand.altM > ray.fromMol.altM && !recentVisited.includes(cand));
                   if (higher.length > 0) {
                     ray.toMol = higher[Math.floor(Math.random() * higher.length)];
                   } else {
@@ -1148,11 +1157,17 @@
               ctx.fill();
 
               if (ray.progress >= 1.0) {
+                if (!ray.visited) ray.visited = [];
+                ray.visited.push(ray.toMol);
+                // Keep history of last 5 visited molecules to eliminate 2-bubble and small ring traps
+                if (ray.visited.length > 5) ray.visited.shift();
+                ray.jumpCount = (ray.jumpCount || 0) + 1;
+
                 ray.fromMol = ray.toMol;
                 ray.toMol = null;
                 ray.progress = 0;
 
-                // If reached radiating layer, escape as EM wave
+                // If reached radiating layer or exceeded jump limit, transition to EM wave escaping to space
                 if (ray.fromMol.altM >= p.zEffM) {
                   ray.isWave = true;
                   ray.waveY = atmosH - (ray.fromMol.altM / MAX_ALT) * atmosH;
