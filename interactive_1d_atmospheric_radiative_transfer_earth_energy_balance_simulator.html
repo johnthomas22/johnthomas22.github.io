@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  Zero-Knowledge Authorship Verification Hash:
+  SHA-256: 2308c58eff8d7bacfcbfcb553eb4985f25abf8dc1a55234c163a31a5b243d02f
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="authorship-verification" content="sha256:2308c58eff8d7bacfcbfcb553eb4985f25abf8dc1a55234c163a31a5b243d02f">
   <title>Earth Energy Imbalance & Radiative Transfer Simulator</title>
   <style>
     :root {
@@ -94,7 +99,7 @@
 
     /* Simple Intro Mode Layout Overrides */
     .app-wrapper.simple-mode {
-      max-width: 760px;
+      max-width: 860px;
     }
     .app-wrapper.simple-mode .top-stats-strip,
     .app-wrapper.simple-mode .controls-panel,
@@ -110,7 +115,7 @@
     .app-wrapper.simple-mode #pin4 { left: 58% !important; top: 25% !important; }
     .app-wrapper.simple-mode #pin5 { left: 32% !important; top: 34% !important; }
 
-    /* Custom Tooltip for Legend Items */
+    /* Custom Tooltip for Legend Items & Terms */
     .has-tooltip {
       position: relative;
       cursor: help;
@@ -125,16 +130,19 @@
       background: #0b1322;
       color: #eab308;
       border: 1px solid #eab308;
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-family: ui-monospace, monospace;
-      font-size: 0.72rem;
-      font-weight: 700;
-      white-space: nowrap;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.74rem;
+      font-weight: 500;
+      line-height: 1.4;
+      white-space: normal;
+      width: max-content;
+      max-width: 280px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.15s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
       z-index: 100;
     }
     .has-tooltip:hover::after {
@@ -331,7 +339,8 @@
     .bubble-popup-card {
       position: absolute;
       display: none;
-      width: 320px;
+      width: 375px;
+      max-width: calc(100% - 40px);
       background: #0b1322;
       border: 1.5px solid var(--cyan);
       border-radius: 10px;
@@ -339,8 +348,8 @@
       z-index: 1000;
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 229, 255, 0.25);
       pointer-events: auto;
-      font-size: 0.82rem;
-      line-height: 1.5;
+      font-size: 0.84rem;
+      line-height: 1.55;
       color: #cbd5e1;
     }
     .bubble-header {
@@ -457,6 +466,107 @@
     table.data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.82rem; }
     table.data-table th, table.data-table td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
     table.data-table th { background: #152238; color: #fff; }
+
+    /* Pop-Out Paleoclimate 500-Year Comparator Button & Modal */
+    .popout-chart-btn {
+      position: absolute;
+      top: 444px;
+      right: 32px;
+      z-index: 30;
+      background: rgba(11, 19, 32, 0.94);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
+      transition: all 0.15s ease;
+    }
+    .popout-chart-btn:hover {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
+    }
+
+    .paleo-modal-card {
+      background: #0b1322;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      max-width: 1180px;
+      max-height: 94vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    }
+    .paleo-body {
+      padding: 16px 22px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .paleo-controls-bar {
+      background: #111c2d;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .epoch-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .epoch-btn {
+      background: #09101d;
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 0.73rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .epoch-btn:hover, .epoch-btn.active {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: rgba(0, 229, 255, 0.1);
+    }
+    .paleo-canvas-box {
+      background: #05080f;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      position: relative;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    .paleo-canvas-box canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .paleo-metrics-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 800px) {
+      .paleo-metrics-strip { grid-template-columns: 1fr; }
+      .popout-chart-btn { bottom: 222px; right: 28px; font-size: 0.68rem; padding: 4px 8px; }
+    }
   </style>
 </head>
 <body>
@@ -473,12 +583,15 @@
           <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
         </div>
       </div>
-      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
         <div class="mode-switch-group" role="group" aria-label="View Mode">
           <button class="mode-switch-btn active" id="btnModeSimple">Introduction</button>
-          <button class="mode-switch-btn" id="btnModeAdvanced">⚙️ Advanced Version</button>
+          <button class="mode-switch-btn" id="btnModeAdvanced">Advanced Version</button>
         </div>
-        <button class="btn-modal" id="openModalBtn">📖 Guide, Contents & Proofs</button>
+        <button class="btn-modal" id="openPaleoModalTopBtn" style="border-color: var(--emerald); color: var(--emerald); background: rgba(16, 185, 129, 0.12);">
+          🔍 1-Million-Year Comparison
+        </button>
+        <button class="btn-modal" id="openModalBtn">📖 Guide & Proofs</button>
       </div>
     </header>
 
@@ -486,7 +599,7 @@
     <div class="intro-banner" id="introBanner">
       <div class="intro-banner-text">
         <strong style="color: var(--cyan);">Present Day (2026) → Future Projection:</strong>
-        Rising CO₂ (+2.5 ppm/yr) pushes the altitude where heat escapes to space higher into colder air. Because colder air radiates less heat, Earth retains energy and the surface warms. Click numbered pins <strong>①–⑤</strong> on the chart to explore each physical step.
+        Rising CO₂ (<span class="has-tooltip" data-tooltip="ppm means 'parts per million'. Adding 2.5 ppm per year is equal to adding just 0.0000025% of CO₂ to the air each year — yet because CO₂ is such a potent greenhouse gas, this tiny percentage drives global warming.">+2.5 ppm/yr or 0.0000025%/yr</span>) pushes the altitude where heat escapes to space higher into colder air. Because colder air radiates less heat, Earth retains energy and the surface warms. Click numbered pins <strong>①–⑤</strong> on the chart to explore each physical step.
       </div>
       <div class="intro-banner-controls">
         <div class="intro-metric-pill">
@@ -495,7 +608,7 @@
         </div>
         <div class="intro-metric-pill">
           <span style="color: var(--text-muted);">CO₂:</span>
-          <strong style="color: var(--amber);" id="introCO2Display">427 ppm</strong>
+          <strong style="color: var(--amber); cursor: help;" id="introCO2Display" class="has-tooltip" data-tooltip="427 ppm = 0.0427% of the atmosphere. 1 ppm is 1 part per million (0.0001%).">427 ppm</strong>
         </div>
         <div class="intro-metric-pill">
           <span style="color: var(--text-muted);">Warming:</span>
@@ -612,23 +725,15 @@
       </div>
 
       <div class="canvas-panel">
-        <div style="display: flex; justify-content: flex-end; font-size: 0.75rem; color: var(--text-muted); padding: 0 4px;">
-          <div class="profile-legend" style="display: flex; gap: 12px;">
-            <span class="has-tooltip" data-tooltip="239 W/m²" title="239 W/m²"><span style="color: #eab308;">■</span> Solar</span>
-            <span><span style="color: var(--cyan);">■</span> Upward Flux F↑</span>
-            <span><span style="color: var(--amber);">■</span> Temperature T(z)</span>
-            <span><span style="color: var(--rose);">■</span> Emission Layer (m)</span>
-          </div>
-        </div>
         <div class="canvas-container" id="canvasContainer">
           <canvas id="simCanvas"></canvas>
 
           <!-- 5 Sequential Physical Explanation Pins -->
-          <div class="speech-pin" id="pin1" style="top: 7%; left: 16%;">1</div>
-          <div class="speech-pin" id="pin2" style="top: 55%; left: 16%;">2</div>
-          <div class="speech-pin" id="pin3" style="top: 43%; left: 22%;">3</div>
-          <div class="speech-pin" id="pin4" style="top: 25%; left: 26%;">4</div>
-          <div class="speech-pin" id="pin5" style="top: 34%; left: 14%;">5</div>
+          <div class="speech-pin" id="pin1" style="top: 7%; left: 24%;">1</div>
+          <div class="speech-pin" id="pin2" style="top: 55%; left: 24%;">2</div>
+          <div class="speech-pin" id="pin3" style="top: 43%; left: 34%;">3</div>
+          <div class="speech-pin" id="pin4" style="top: 25%; left: 40%;">4</div>
+          <div class="speech-pin" id="pin5" style="top: 34%; left: 22%;">5</div>
 
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
@@ -643,11 +748,107 @@
               <button class="bubble-nav-btn" id="bubbleNextBtn">Next →</button>
             </div>
           </div>
+
+          <!-- Button to Compare 500-Year Window Against 1 Million Years of Paleoclimate Data -->
+          <button class="popout-chart-btn" id="openPaleoModalBtn" title="Compare 500-year slices over the last 1,000,000 years">
+            <span>🔍</span> 1-Million-Year Comparison
+          </button>
         </div>
       </div>
 
     </div>
 
+  </div>
+
+  <!-- POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR MODAL -->
+  <div class="modal-overlay" id="paleoModalOverlay">
+    <div class="paleo-modal-card">
+      <div class="modal-header" style="padding: 12px 22px; background: #080e1a;">
+        <div>
+          <div class="modal-title" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span>🔍 500-Year Warming Rate vs. 1,000,000 Years of Paleoclimate History</span>
+            <span class="badge badge-cyan">EPICA Dome C / LR04 / Temp12k Calibrated</span>
+            <button id="openPaleoDocsLinkBtn" style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--emerald); color: var(--emerald); padding: 2px 9px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
+              📖 Data Sources & Resolution Docs →
+            </button>
+          </div>
+          <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">
+            Scroll through the last 1,000,000 years in 500-year windows to compare natural prehistoric climate change rates against the modern 1750–2250 CE trajectory.
+          </div>
+        </div>
+        <button id="closePaleoModalBtn" style="background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; line-height: 1;">&times;</button>
+      </div>
+
+      <div class="paleo-body">
+        <!-- Top Overview Strip: 1,000,000 Years Timeline + Scrollbar -->
+        <div class="paleo-controls-bar">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #e2e8f0;">
+              1. Select or Scroll Any 500-Year Window Across the Last 1,000,000 Years:
+              <span id="paleoWindowLabel" style="color: var(--emerald); font-family: ui-monospace, monospace; margin-left: 6px;">15,000 to 14,500 yrs BP</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 0.75rem;">
+              <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--cyan); font-weight: 600;">
+                <input type="radio" name="paleoPlotMode" value="relative" checked>
+                Overlay Relative Change (ΔT & ΔCO₂ over 500 yrs — compares slope/speed)
+              </label>
+              <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text-muted); font-weight: 600;">
+                <input type="radio" name="paleoPlotMode" value="absolute">
+                Absolute Anomaly vs. 1750 Baseline
+              </label>
+            </div>
+          </div>
+
+          <!-- 1,000,000-Year Context Overview Canvas (Click or drag anywhere on it) -->
+          <div class="paleo-canvas-box" style="height: 115px; cursor: ew-resize;" title="Click or drag to scrub through 1,000,000 years of ice age cycles">
+            <canvas id="paleoOverviewCanvas"></canvas>
+          </div>
+
+          <!-- Fine Scrollbar Slider (-1,000,000 to -500 years BP) -->
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; color: var(--text-muted); white-space: nowrap;">1,000,000 yrs BP</span>
+            <input type="range" id="paleoScrollSlider" min="-1000000" max="-500" step="100" value="-15000" style="flex: 1;">
+            <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; color: var(--text-muted); white-space: nowrap;">Pre-Industrial (500 BP)</span>
+          </div>
+
+          <!-- Notable Paleoclimate Epoch Quick-Jump Buttons -->
+          <div class="epoch-presets">
+            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin-right: 4px;">Notable 500-Yr Windows:</span>
+            <button class="epoch-btn active" data-kyr="-15000">⚡ Fastest Natural Deglaciation (Termination I · 15,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-11700">🌊 Younger Dryas Exit (11,700 BP)</button>
+            <button class="epoch-btn" data-kyr="-6000">🏛️ Holocene Optimum (6,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-21000">❄️ Last Glacial Maximum (21,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-128000">☀️ Eemian Interglacial Peak (128,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-428000">🔥 Termination V Super-Deglaciation (428,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-850000">🪨 Mid-Pleistocene 41k-yr Cycle (850,000 BP)</button>
+          </div>
+        </div>
+
+        <!-- Main Pop-Out 500-Year Comparison Chart -->
+        <div class="paleo-canvas-box" style="height: 350px;">
+          <canvas id="paleoCompareCanvas"></canvas>
+        </div>
+
+        <!-- Quantitative Rate Comparison Strip -->
+        <div class="paleo-metrics-strip">
+          <div class="stat-card" style="padding: 10px 14px;">
+            <div class="stat-header"><span>Selected Prehistoric 500-Yr Window</span><span class="badge badge-emerald">Paleoclimate Record</span></div>
+            <div class="stat-value" id="paleoStatChange" style="color: var(--emerald); font-size: 1.25rem;">+0.34 °C <span style="font-size: 0.78rem; color: var(--text-muted);">per 500 yrs</span></div>
+            <div class="stat-sub" id="paleoStatSub">Rate: +0.068 °C/century · CO₂ shift: +6.5 ppm</div>
+          </div>
+          <div class="stat-card" style="padding: 10px 14px;">
+            <div class="stat-header"><span>Modern Simulated Trajectory (1750–2250 CE)</span><span class="badge badge-rose">Anthropogenic</span></div>
+            <div class="stat-value" id="modernStatChange" style="color: var(--rose); font-size: 1.25rem;">+3.95 °C <span style="font-size: 0.78rem; color: var(--text-muted);">over 500 yrs</span></div>
+            <div class="stat-sub" id="modernStatSub">Peak rate (1958–2100): +2.15 °C/century · CO₂ shift: +709 ppm</div>
+          </div>
+          <div class="stat-card" style="padding: 10px 14px; border-color: rgba(0, 229, 255, 0.4);">
+            <div class="stat-header"><span>Speed / Rate Multiplier</span><span class="badge badge-cyan">Slope Ratio</span></div>
+            <div class="stat-value" id="ratioStatValue" style="color: var(--cyan); font-size: 1.25rem;">~31× Faster</div>
+            <div class="stat-sub" id="ratioStatSub">Modern century warming rate vs. selected prehistoric 500-yr window</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- MULTI-PAGE MODAL DOCUMENTATION WITH CONTENTS & PROOFS (CLEAN UNICODE) -->
@@ -663,6 +864,7 @@
         <button class="modal-tab-btn" data-page="page-proofs">Page 1: Mathematical Proofs & Derivations</button>
         <button class="modal-tab-btn" data-page="page-transfer">Page 2: Radiative Transfer & Saturation Refuted</button>
         <button class="modal-tab-btn" data-page="page-ebm">Page 3: Two-Layer Ocean EBM Formulation</button>
+        <button class="modal-tab-btn" data-page="page-paleo">Page 4: 1-Million-Year Paleoclimate Sources</button>
       </div>
 
       <div class="modal-body">
@@ -682,6 +884,9 @@
               <p>For a detailed critique of Lindzen's paper start here:<br>
                 <a href="https://www.carbonbrief.org/a-disservice-to-the-scientific-method-climate-scientists-take-on-richard-lindzen#" target="_blank" rel="noopener noreferrer">https://www.carbonbrief.org/a-disservice-to-the-scientific-method-climate-scientists-take-on-richard-lindzen#</a>
               </p>
+              <div style="margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border); font-family: ui-monospace, monospace; font-size: 0.72rem; color: var(--text-muted);">
+                Authorship Verification Stamp (SHA-256): <span style="color: var(--cyan);">2308c58eff8d7bacfcbfcb553eb4985f25abf8dc1a55234c163a31a5b243d02f</span>
+              </div>
             </div>
 
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
@@ -711,6 +916,15 @@
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
                   Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), mixed layer and deep ocean heat capacities (<i>C</i><sub>m</sub>, <i>C</i><sub>d</sub>), heat uptake efficiency (γ), and empirical Law Dome/Keeling historical calibration. Includes direct link to IPCC AR6 Chapter 7.
+                </div>
+              </li>
+              <li>
+                <a class="toc-link" data-target="page-paleo">
+                  <span>🧊</span> <strong>Page 4: 1-Million-Year Paleoclimate Reconstructions & Sources</strong>
+                  <span class="badge badge-emerald" style="margin-left: 8px;">EPICA / LR04 / Temp12k</span>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  Primary ice-core and marine sediment datasets powering the 1,000,000-year / 500-year rate comparator (EPICA Dome C, Bereiter et al. 2015, Lisiecki & Raymo LR04, Shakun et al. 2012, Kaufman Temp12k), temporal resolution limits, and glacial termination rates.
                 </div>
               </li>
             </ul>
@@ -874,6 +1088,91 @@
           </table>
         </div>
 
+        <!-- PAGE 4: 1-MILLION-YEAR PALEOCLIMATE DATA SOURCES & RESOLUTION -->
+        <div class="doc-page" id="page-paleo">
+          <h3>Page 4: 1-Million-Year Paleoclimate Reconstructions & Data Sources</h3>
+          <p>
+            The pop-out <strong>1-Million-Year / 500-Year Rate-of-Change Comparator</strong> synthesizes primary peer-reviewed paleoclimate datasets spanning the Pleistocene glacial-interglacial cycles, the Last Deglaciation, and the Holocene. Because no single physical archive spans 1,000,000 years at decadal resolution, paleoclimatology combines high-resolution polar ice cores with global marine sediment stacks.
+          </p>
+
+          <h4>1. Primary Scientific Datasets & Peer-Reviewed Sources</h4>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Time Span (Years BP)</th>
+                <th>Archive & Dataset</th>
+                <th>Primary Reference</th>
+                <th>Temporal Resolution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>0 – 12,000 BP</strong><br>(Holocene)</td>
+                <td>Multi-proxy global surface temperature reconstruction (<strong>Temp12k</strong> / Marcott) & Law Dome ice cores</td>
+                <td>
+                  Kaufman et al. (2020), <em>Scientific Data</em>; Marcott et al. (2013), <em>Science</em>; Rubino et al. (2019)
+                </td>
+                <td><strong>10 – 50 years</strong></td>
+              </tr>
+              <tr>
+                <td><strong>11,000 – 22,000 BP</strong><br>(Termination I / Last Deglaciation)</td>
+                <td>Global multi-proxy deglaciation stack (80 globally distributed records) + WAIS Divide & NGRIP ice cores</td>
+                <td>
+                  Shakun et al. (2012), <em>Nature</em>;Tierney et al. (2020), <em>Nature</em> (LGM Δ<i>T</i> = -6.0 °C)
+                </td>
+                <td><strong>20 – 100 years</strong></td>
+              </tr>
+              <tr>
+                <td><strong>0 – 800,000 BP</strong><br>(8 Glacial Cycles)</td>
+                <td><strong>EPICA Dome C</strong> Antarctic Ice Core deuterium (δD) temperature & composite trapped-gas CO₂ record</td>
+                <td>
+                  Jouzel et al. (2007), <em>Science</em>; Bereiter et al. (2015), <em>Geophysical Research Letters</em> (NOAA/NCEI)
+                </td>
+                <td><strong>50 – 200 yrs</strong> (upper ice)<br><strong>200 – 500 yrs</strong> (deep abyssal ice)</td>
+              </tr>
+              <tr>
+                <td><strong>0 – 1,000,000+ BP</strong><br>(Mid-Pleistocene to Present)</td>
+                <td><strong>LR04 Global Benthic Stack</strong> (57 globally distributed marine sediment δ¹⁸O cores) & continuous surface temperature synthesis</td>
+                <td>
+                  Lisiecki & Raymo (2005), <em>Paleoceanography</em>; Snyder (2016), <em>Nature</em>; Hansen et al. (2013)
+                </td>
+                <td><strong>500 – 1,000 years</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>2. Polar Amplification & Global Mean Surface Temperature (GMST) Scaling</h4>
+          <p>
+            Antarctic ice-core deuterium isotopes (δD in Jouzel et al. 2007) record local East Antarctic site temperature swings of ~10 °C to 12 °C between deep glacial minimums and interglacial peaks. Due to polar amplification, polar temperature changes are roughly ~2× larger than the global average. Following <strong>Tierney et al. (2020)</strong>, <strong>Shakun et al. (2012)</strong>, and <strong>IPCC AR6 Chapter 2</strong>, Antarctic isotope anomalies are scaled by the empirical global-to-polar ratio (~0.52) so that the Last Glacial Maximum (21,000 BP) corresponds to a Global Mean Surface Temperature anomaly of <strong>-6.0 °C</strong> relative to 1750 CE, and warm interglacials (such as the Eemian / MIS 5e at 125,000 BP) peak at <strong>+1.0 °C to +1.4 °C</strong>.
+          </p>
+
+          <h4>3. Resolution Limits & Why the 500-Year Window Comparison Is Robust</h4>
+          <div class="code-box">
+            • Fastest Prehistoric Global Warming (Termination I, ~15,000–14,500 BP):  <b>+0.34 °C per 500 yrs</b>  (+0.068 °C / century)<br>
+            • Typical Holocene Natural Variability (6,000 BP):                        <b>±0.03 °C per 500 yrs</b>  (±0.006 °C / century)<br>
+            • Observed & Projected Modern Trajectory (1958–2058 CE at +2.5 ppm/yr):   <b>+2.15 °C per 100 yrs</b>  (>30× faster than Termination I)
+          </div>
+          <p>
+            In deep ice cores (400,000 to 800,000 BP) and marine sediment cores (800,000 to 1,000,000 BP), molecular diffusion and core compression smooth out sub-centennial fluctuations. However, in the younger record (0 to 50,000 BP)—where WAIS Divide, NGRIP, and global deglacial stacks preserve <strong>20-to-100-year resolution</strong>—we can directly resolve the fastest natural global warming events in Earth's recent history (Orbital Glacial Terminations). Even during the steepest 500-year phase of Termination I (15,000 to 14,500 BP), global temperature rose by ~0.34 °C over five centuries, driven by orbital Milankovitch insolation shifts and a ~15 ppm natural CO₂ outgassing from warming oceans. By contrast, human industrial emissions have added <strong>+149 ppm of CO₂ since 1750</strong> (and over +110 ppm since 1958 alone), driving a warming slope more than <strong>30 times steeper</strong> than peak natural deglaciation.
+          </p>
+
+          <h4>4. Direct Links to Public Archival Repositories</h4>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              <strong>NOAA National Centers for Environmental Information (NCEI) Paleoclimatology Ice Core Portal:</strong><br>
+              <a href="https://www.ncei.noaa.gov/products/paleoclimatology/ice-core" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.ncei.noaa.gov/products/paleoclimatology/ice-core ↗</a>
+            </li>
+            <li>
+              <strong>Bereiter et al. (2015) / EPICA Dome C 800,000-Year Composite CO₂ Data:</strong><br>
+              <a href="https://www.ncei.noaa.gov/access/paleo-search/study/17975" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.ncei.noaa.gov/access/paleo-search/study/17975 ↗</a>
+            </li>
+            <li>
+              <strong>Lisiecki & Raymo (2005) LR04 57-Core Marine Benthic Stack:</strong><br>
+              <a href="https://lorraine-lisiecki.com/stack.html" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://lorraine-lisiecki.com/stack.html ↗</a>
+            </li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </div>
@@ -904,10 +1203,10 @@
         running: true, // Launches running from Present Day (2026) into the future
         isHistoricalPreset: false,
         history: [
-          { year: 1750, deltaTs: 0 },
-          { year: 1850, deltaTs: 0.05 },
-          { year: 1958, deltaTs: 0.30 },
-          { year: 2026, deltaTs: 1.26 }
+          { year: 1750, deltaTs: 0, co2: 278.0 },
+          { year: 1850, deltaTs: 0.05, co2: 285.0 },
+          { year: 1958, deltaTs: 0.30, co2: 315.0 },
+          { year: 2026, deltaTs: 1.26, co2: 427.0 }
         ]
       };
 
@@ -936,6 +1235,15 @@
 
       const canvas = document.getElementById("simCanvas");
       const ctx = canvas.getContext("2d");
+
+      let mousePos = { x: -1, y: -1, active: false };
+      canvas.addEventListener("mousemove", e => {
+        const rect = canvas.getBoundingClientRect();
+        mousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top, active: true };
+      });
+      canvas.addEventListener("mouseleave", () => {
+        mousePos.active = false;
+      });
 
       // Stationary Greenhouse Gas Molecules (Density decreases exponentially with altitude, +100% density)
       const MAX_ALT = 10500;
@@ -1001,9 +1309,9 @@
         const p = computePhysics();
         const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
 
-        const splitX = isSimple ? w : w * 0.44;
+        // Upper section split: Atmospheric column takes 2/3 (67%), Right-hand profile takes 1/3 (33%) in Advanced mode
+        const splitX = isSimple ? w : w * 0.67;
         const atmosH = 425;
-        const groundH = 26;
 
         // 1. TOP PANEL: Atmospheric Column (Reduced oversized space above radiating layer via MAX_ALT = 10,500m)
         ctx.fillStyle = "#0a1322";
@@ -1060,29 +1368,24 @@
         // 1b. Thermal IR Radiation (Short paths between bubbles; sinusoidal EM waves once escaped)
         irRays.forEach(ray => {
           if (ray.isWave) {
-            // Past radiating layer: propagating sinusoidal electromagnetic wave packet to space
+            // Past radiating layer: propagating pure sinusoidal electromagnetic wave packet to space
             ray.waveY -= 0.38;
             ray.wavePhase += 0.072;
 
             const baseX = ray.waveBaseXFrac * splitX;
-            const waveLen = 28;
+            const waveLen = 32;
 
-            ctx.strokeStyle = "rgba(0, 229, 255, 0.92)";
-            ctx.lineWidth = 1.8;
+            ctx.strokeStyle = "rgba(0, 229, 255, 0.90)";
+            ctx.lineWidth = 1.6;
             ctx.beginPath();
             for (let dy = 0; dy <= waveLen; dy += 2) {
               const wy = ray.waveY + dy;
-              const wx = baseX + 4.5 * Math.sin((wy * 0.32) - ray.wavePhase);
+              // Clean sine wave envelope with smooth tapered edges
+              const envelope = Math.sin((dy / waveLen) * Math.PI);
+              const wx = baseX + 4.5 * envelope * Math.sin((wy * 0.32) - ray.wavePhase);
               if (dy === 0) ctx.moveTo(wx, wy); else ctx.lineTo(wx, wy);
             }
             ctx.stroke();
-
-            // Leading wave crest photon dot
-            const tipX = baseX + 4.5 * Math.sin((ray.waveY * 0.32) - ray.wavePhase);
-            ctx.fillStyle = "#00e5ff";
-            ctx.beginPath();
-            ctx.arc(tipX, ray.waveY, 2.0, 0, Math.PI * 2);
-            ctx.fill();
 
             // Reset upon escaping to space
             if (ray.waveY < 8) {
@@ -1179,19 +1482,13 @@
           }
         });
 
-        // Earth Surface Ground Bar (Separates atmospheric column from the line chart below)
-        ctx.fillStyle = "#1e293b";
-        ctx.fillRect(0, atmosH, splitX, groundH);
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 10px system-ui";
-        ctx.fillText(`Earth Surface Ts = ${p.currentTs.toFixed(2)}°C`, 10, atmosH + 17);
-
         // 2. DEDICATED LOWER PANEL: 500-Year ΔT Timeline Curve (No overlap with bubbles!)
-        const tGridTop = atmosH + groundH + 12; // Starts cleanly below ground bar
-        const tGridBottom = h - 14;
+        // Spans across the entire canvas width below the two top charts (in both Simple and Advanced modes)
+        const tGridTop = atmosH + 14;           // Starts cleanly below the atmospheric column
+        const tGridBottom = h - 22;             // Dedicated clearance at bottom for year labels
         const tGridH = tGridBottom - tGridTop;
         const tGridLeft = 24;
-        const tGridRight = isSimple ? (w - 24) : (splitX - 24);
+        const tGridRight = w - 24;              // Full span across entire canvas
         const tGridW = tGridRight - tGridLeft;
 
         ctx.fillStyle = "rgba(11, 19, 32, 0.72)";
@@ -1205,12 +1502,44 @@
         ctx.font = `bold ${titleFontSize}px system-ui, -apple-system, sans-serif`;
         ctx.fillText("500-YEAR WARMING TRAJECTORY (1750–2250 CE)", tGridLeft + 8, tGridTop + (titleFontSize + 4));
 
+        // Subtitle legend for Temperature vs CO2: Stacked neatly in top-left below headline (zero overlap with right-hand buttons)
+        ctx.font = "bold 10px system-ui, sans-serif";
+        const legLeft = tGridLeft + 8;
+        const line1Y = tGridTop + titleFontSize + 18;
+        const line2Y = tGridTop + titleFontSize + 31;
+        ctx.fillStyle = "#f43f5e";
+        ctx.fillText("■ Surface ΔT (°C)", legLeft, line1Y);
+        ctx.fillStyle = "#c084fc";
+        ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, line2Y);
+
         function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
         // Scaled to 5.2°C span so +2.5 ppm/yr trajectory comfortably sits in upper chart with head room
         function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.2)) / 5.2) * tGridH; }
+        // CO2 Scale: 250 ppm to 1000 ppm fitted across the 500-Year chart height
+        function co2ToY(c) { return tGridBottom - ((c - 250) / 750) * tGridH; }
 
-        // 25-Year Interval Marks Along X-Axis (12px year labels)
-        const yearStep = tGridW < 450 ? 100 : 50;
+        // Right-hand Y-Axis Labels for CO2 in Purple (280, 400, 600, 800, 1000 ppm)
+        [280, 400, 600, 800, 1000].forEach(cVal => {
+          const cy = co2ToY(cVal);
+          if (cy >= tGridTop && cy <= tGridBottom) {
+            ctx.strokeStyle = "rgba(192, 132, 252, 0.22)";
+            ctx.setLineDash([2, 4]);
+            ctx.beginPath();
+            ctx.moveTo(tGridLeft, cy);
+            ctx.lineTo(tGridRight, cy);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = "#c084fc"; // Crisp light purple
+            ctx.font = "bold 9px ui-monospace, monospace";
+            ctx.textAlign = "right";
+            ctx.fillText(`${cVal} ppm`, tGridRight - 4, cy - 3);
+            ctx.textAlign = "left";
+          }
+        });
+
+        // 25-Year Interval Marks Along X-Axis (12px year labels placed OUTSIDE below the axis line)
+        const yearStep = tGridW < 550 ? 50 : 25;
         for (let yr = 1750; yr <= 2250; yr += 25) {
           const x = yrToX(yr);
           const isMajor = yr % yearStep === 0;
@@ -1218,13 +1547,15 @@
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(x, tGridBottom);
-          ctx.lineTo(x, tGridBottom - (isMajor ? 6 : 3));
+          ctx.lineTo(x, tGridBottom + (isMajor ? 5 : 3));
           ctx.stroke();
 
-          if (isMajor && yr > 1750 && yr < 2250) {
-            ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
-            ctx.font = "12px ui-monospace, monospace";
-            ctx.fillText(yr.toString(), x - 14, tGridBottom - 9);
+          if (isMajor && yr >= 1750 && yr <= 2250) {
+            ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
+            ctx.font = "11px ui-monospace, monospace";
+            ctx.textAlign = "center";
+            ctx.fillText(yr.toString(), x, tGridBottom + 16);
+            ctx.textAlign = "left";
           }
         }
 
@@ -1258,8 +1589,42 @@
         ctx.fillText("1958 Keeling", 0, 0);
         ctx.restore();
 
-        // Plot Accumulated History (Orange up to 1958 Keeling boundary, Rose thereafter)
+        // 2026 Present-Day Static Boundary Marker (Orange vertical dashed line like Keeling)
+        const present2026X = yrToX(2026);
+        ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(present2026X, tGridTop);
+        ctx.lineTo(present2026X, tGridBottom);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 2026 Label rotated 90 degrees clockwise running vertically down alongside dashed line
+        ctx.save();
+        ctx.translate(present2026X + (keelingFontSize + 2), tGridTop + 38);
+        ctx.rotate(Math.PI / 2);
+        ctx.fillStyle = "#f59e0b";
+        ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+        ctx.fillText("2026", 0, 0);
+        ctx.restore();
+
+        // Plot Accumulated History: Temperature (Orange up to 1958 Keeling, Rose thereafter)
+        // AND Atmospheric CO2 Trajectory in Purple
         if (state.history.length > 1) {
+          // 1. Purple CO2 Trajectory Line
+          ctx.strokeStyle = "#c084fc";
+          ctx.lineWidth = 1.8;
+          ctx.beginPath();
+          for (let i = 0; i < state.history.length; i++) {
+            const pt = state.history[i];
+            const cVal = pt.co2 || (pt.year <= 2026 ? getHistoricalCO2(pt.year) : 427.0);
+            const cx = yrToX(pt.year);
+            const cy = co2ToY(cVal);
+            if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          }
+          ctx.stroke();
+
+          // 2. Temperature History Line
           ctx.lineWidth = 2;
           for (let i = 0; i < state.history.length - 1; i++) {
             const p1 = state.history[i];
@@ -1296,19 +1661,105 @@
           }
         }
 
-        // 3. RIGHT PANEL: 4 Measures on Radiative Profile Chart (Advanced Mode Only, Aligned to MAX_ALT)
+        // Helper to find temperature delta at a given year along the history curve
+        function getHistoricalDeltaAt(yr) {
+          if (!state.history || state.history.length === 0) return null;
+          if (yr < state.history[0].year) return null;
+          if (yr > state.history[state.history.length - 1].year) return null;
+          for (let i = 0; i < state.history.length - 1; i++) {
+            const p1 = state.history[i];
+            const p2 = state.history[i + 1];
+            if (yr >= p1.year && yr <= p2.year) {
+              const span = p2.year - p1.year;
+              const frac = span === 0 ? 0 : (yr - p1.year) / span;
+              return p1.deltaTs + frac * (p2.deltaTs - p1.deltaTs);
+            }
+          }
+          return state.history[state.history.length - 1].deltaTs;
+        }
+
+        // Temperature change callout badges at intersections with the orange dashed marker lines
+        [1958, 2026].forEach(targetYr => {
+          const dtVal = getHistoricalDeltaAt(targetYr);
+          if (dtVal !== null) {
+            const ix = yrToX(targetYr);
+            const iy = dtToY(dtVal);
+
+            // Glowing intersection ring point
+            ctx.fillStyle = "#f59e0b";
+            ctx.beginPath();
+            ctx.arc(ix, iy, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(ix, iy, 2.0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Label text: temperature change anomaly
+            const labelStr = `+${dtVal.toFixed(2)}°C`;
+            ctx.font = "bold 10px ui-monospace, monospace";
+            const tw = ctx.measureText(labelStr).width;
+            const bw = tw + 10;
+            const bh = 17;
+            const bx = ix + 7;
+            const by = iy - bh / 2;
+
+            ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
+            ctx.strokeStyle = "#f59e0b";
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.roundRect(bx, by, bw, bh, 3);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#f59e0b";
+            ctx.fillText(labelStr, bx + 5, by + 12);
+          }
+        });
+
+        // Active Simulation Year Playhead Line & Floating Boxed Label (Clear of X-axis)
+        const curYrX = yrToX(state.year);
+        if (curYrX >= tGridLeft && curYrX <= tGridRight) {
+          ctx.strokeStyle = "rgba(0, 229, 255, 0.70)";
+          ctx.setLineDash([2, 2]);
+          ctx.beginPath();
+          ctx.moveTo(curYrX, tGridTop);
+          ctx.lineTo(curYrX, tGridBottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Boxed label displaying the current active simulation year, floating above the bottom X-axis
+          const curYStr = `${Math.round(state.year)} CE`;
+          ctx.font = "bold 10px ui-monospace, monospace";
+          const badgeWidth = ctx.measureText(curYStr).width + 10;
+          const badgeX = Math.max(tGridLeft + 2, Math.min(tGridRight - badgeWidth - 2, curYrX - badgeWidth / 2));
+          const badgeY = tGridBottom - 26;
+
+          ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
+          ctx.strokeStyle = "rgba(0, 229, 255, 0.85)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(badgeX, badgeY, badgeWidth, 16, 3);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = "#00e5ff";
+          ctx.fillText(curYStr, badgeX + 5, badgeY + 12);
+        }
+
+        // 3. RIGHT PANEL: Radiative Profile Chart (Advanced Mode Only, Aligned to MAX_ALT)
         if (!isSimple) {
           const chartLeft = splitX + 50;
           const chartRight = w - 24;
           const chartW = chartRight - chartLeft;
           const chartTop = 24;
-          const chartH = atmosH - chartTop - 8;
+          const chartH = atmosH - chartTop - 28; // Room for horizontal X-axis labels at bottom
           const chartBottom = chartTop + chartH;
 
           ctx.strokeStyle = "rgba(51, 65, 85, 0.5)";
           ctx.strokeRect(chartLeft, chartTop, chartW, chartH);
 
-          // Metric Ticks
+          // Metric Ticks (Vertical Altitude Scale)
           [0, 2000, 4000, 6000, 8000, 10000].forEach(alt => {
             const y = chartBottom - (alt / MAX_ALT) * chartH;
             ctx.strokeStyle = "rgba(51, 65, 85, 0.25)";
@@ -1318,7 +1769,32 @@
             ctx.fillText(`${alt.toLocaleString()} m`, chartLeft - 45, y + 3);
           });
 
-          // Measure 1: ASR 239 Reference Line (Yellow Dashed)
+          // Horizontal Scale (Flux & Energy in W/m² along bottom X-axis)
+          const fluxTicks = [200, 250, 300, 350, 400];
+          fluxTicks.forEach(flux => {
+            const fx = chartLeft + ((flux - 200) / 220) * chartW;
+            if (fx >= chartLeft && fx <= chartRight) {
+              ctx.strokeStyle = "rgba(51, 65, 85, 0.35)";
+              ctx.beginPath();
+              ctx.moveTo(fx, chartBottom);
+              ctx.lineTo(fx, chartBottom + 4);
+              ctx.stroke();
+
+              ctx.fillStyle = "#64748b";
+              ctx.font = "9px ui-monospace, monospace";
+              ctx.textAlign = "center";
+              ctx.fillText(`${flux}`, fx, chartBottom + 12);
+              ctx.textAlign = "left";
+            }
+          });
+          // Centered horizontal axis label beneath tick marks (eliminates collision with 400 tick)
+          ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
+          ctx.font = "9px system-ui, -apple-system, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("Radiative Flux (W/m²)", chartLeft + chartW / 2, chartBottom + 24);
+          ctx.textAlign = "left";
+
+          // Measure 1: Inbound Solar Reference Line (Yellow Dashed)
           const asrX = chartLeft + ((ASR - 200) / 220) * chartW;
           ctx.strokeStyle = "#eab308";
           ctx.lineWidth = 1.5;
@@ -1330,10 +1806,12 @@
           ctx.strokeStyle = "#f59e0b";
           ctx.lineWidth = 2.5;
           ctx.beginPath();
-          for (let alt = 0; alt <= MAX_ALT; alt += 500) {
+          const tPoints = [];
+          for (let alt = 0; alt <= MAX_ALT; alt += 250) {
             const t = p.currentTs - LAPSE_RATE * alt;
             const x = chartLeft + ((t - (-70)) / 100) * chartW;
             const y = chartBottom - (alt / MAX_ALT) * chartH;
+            tPoints.push({ x, y, val: t });
             if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
           }
           ctx.stroke();
@@ -1343,11 +1821,13 @@
           ctx.strokeStyle = "#00e5ff";
           ctx.lineWidth = 2.5;
           ctx.beginPath();
-          for (let alt = 0; alt <= MAX_ALT; alt += 500) {
+          const fPoints = [];
+          for (let alt = 0; alt <= MAX_ALT; alt += 250) {
             const sig = 1 / (1 + Math.exp(-((alt - p.zEffM) / 1500.0)));
             const flux = groundFlux - sig * (groundFlux - p.OLR);
             const x = chartLeft + ((flux - 200) / 220) * chartW;
             const y = chartBottom - (alt / MAX_ALT) * chartH;
+            fPoints.push({ x, y, val: flux });
             if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
           }
           ctx.stroke();
@@ -1359,7 +1839,7 @@
           ctx.beginPath(); ctx.moveTo(chartLeft, rY); ctx.lineTo(chartRight, rY); ctx.stroke();
           ctx.setLineDash([]);
 
-          const badgeW = 205;
+          const badgeW = Math.min(chartW - 12, 190);
           const badgeX = chartRight - badgeW - 6;
           ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
           ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
@@ -1367,7 +1847,144 @@
           ctx.beginPath(); ctx.roundRect(badgeX, rY - 10, badgeW, 18, 4); ctx.fill(); ctx.stroke();
           ctx.fillStyle = "#fca5a5";
           ctx.font = "bold 9px ui-monospace, monospace";
-          ctx.fillText(`Emission Alt: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, badgeX + 8, rY + 3);
+          ctx.fillText(`Emission: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, badgeX + 6, rY + 3);
+
+          // Compact Legend Stacked Neatly Inside Top-Left of the Graph
+          const legX = chartLeft + 10;
+          const legY = chartTop + 10;
+          const legW = 120;
+          const legH = 58;
+
+          ctx.fillStyle = "rgba(11, 19, 32, 0.88)";
+          ctx.strokeStyle = "rgba(51, 65, 85, 0.65)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(legX, legY, legW, legH, 4);
+          ctx.fill();
+          ctx.stroke();
+
+          // Legend Item 1: Solar (Dashed Yellow)
+          ctx.strokeStyle = "#eab308";
+          ctx.lineWidth = 2;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(legX + 8, legY + 14);
+          ctx.lineTo(legX + 26, legY + 14);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = "#e2e8f0";
+          ctx.font = "10px system-ui";
+          ctx.fillText("Solar (239 W/m²)", legX + 32, legY + 18);
+
+          // Legend Item 2: Upward Flux F↑ (Cyan Solid)
+          ctx.strokeStyle = "#00e5ff";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(legX + 8, legY + 30);
+          ctx.lineTo(legX + 26, legY + 30);
+          ctx.stroke();
+          ctx.fillStyle = "#e2e8f0";
+          ctx.fillText("Upward Flux F↑", legX + 32, legY + 34);
+
+          // Legend Item 3: Temperature T(z) (Amber Solid)
+          ctx.strokeStyle = "#f59e0b";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(legX + 8, legY + 46);
+          ctx.lineTo(legX + 26, legY + 46);
+          ctx.stroke();
+          ctx.fillStyle = "#e2e8f0";
+          ctx.fillText("Temp T(z)", legX + 32, legY + 50);
+
+          // Interactive Hover Tooltips Over Lines
+          if (mousePos.active && mousePos.x >= chartLeft && mousePos.x <= chartRight && mousePos.y >= chartTop && mousePos.y <= chartBottom) {
+            let tooltipText = "";
+            let tipX = mousePos.x + 12;
+            let tipY = mousePos.y - 12;
+
+            // Check Solar dashed line proximity (within 6px)
+            if (Math.abs(mousePos.x - asrX) <= 6) {
+              tooltipText = `Solar Inflow: 239.0 W/m² (Absorbed solar post-albedo)`;
+            }
+
+            // Check Temperature curve proximity
+            if (!tooltipText) {
+              for (const pt of tPoints) {
+                const dist = Math.hypot(pt.x - mousePos.x, pt.y - mousePos.y);
+                if (dist <= 8) {
+                  tooltipText = `Atmospheric Temp: ${pt.val.toFixed(1)}°C (Lapse rate: -6.5°C/km)`;
+                  break;
+                }
+              }
+            }
+
+            // Check Flux curve proximity
+            if (!tooltipText) {
+              for (const pt of fPoints) {
+                const dist = Math.hypot(pt.x - mousePos.x, pt.y - mousePos.y);
+                if (dist <= 8) {
+                  tooltipText = `Upward Thermal Flux F↑: ${pt.val.toFixed(1)} W/m²`;
+                  break;
+                }
+              }
+            }
+
+            if (tooltipText) {
+              ctx.font = "bold 10px system-ui";
+              const tw = ctx.measureText(tooltipText).width + 16;
+              if (tipX + tw > w - 10) tipX = mousePos.x - tw - 6;
+
+              ctx.fillStyle = "rgba(11, 19, 32, 0.95)";
+              ctx.strokeStyle = "var(--cyan)";
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.roundRect(tipX, tipY - 16, tw, 22, 4);
+              ctx.fill();
+              ctx.stroke();
+
+              ctx.fillStyle = "#ffffff";
+              ctx.fillText(tooltipText, tipX + 8, tipY - 1);
+            }
+          }
+
+          // Tooltip on Main Canvas for 1958 Keeling Marker
+          if (mousePos.active && Math.abs(mousePos.x - keelingX) <= 8 && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
+            const tipText = "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.";
+            ctx.font = "10px system-ui, -apple-system, sans-serif";
+            const maxTipW = 270;
+            const words = tipText.split(" ");
+            let lines = [];
+            let curLine = "";
+            words.forEach(w => {
+              const testLine = curLine ? (curLine + " " + w) : w;
+              if (ctx.measureText(testLine).width > maxTipW) {
+                lines.push(curLine);
+                curLine = w;
+              } else {
+                curLine = testLine;
+              }
+            });
+            if (curLine) lines.push(curLine);
+
+            const boxW = Math.min(maxTipW + 20, 290);
+            const boxH = lines.length * 14 + 14;
+            let tipBx = mousePos.x + 12;
+            let tipBy = Math.max(tGridTop + 10, mousePos.y - boxH / 2);
+            if (tipBx + boxW > w - 10) tipBx = mousePos.x - boxW - 12;
+
+            ctx.fillStyle = "rgba(11, 19, 32, 0.96)";
+            ctx.strokeStyle = "#f59e0b";
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.roundRect(tipBx, tipBy, boxW, boxH, 5);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#ffedd5";
+            lines.forEach((l, lIdx) => {
+              ctx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
+            });
+          }
         }
 
         ctx.restore();
@@ -1432,7 +2049,7 @@
           state.year = Math.min(2250, state.year + dt);
 
           if (state.history.length === 0 || state.year - state.history[state.history.length - 1].year >= 1.0) {
-            state.history.push({ year: state.year, deltaTs: state.deltaTs });
+            state.history.push({ year: state.year, deltaTs: state.deltaTs, co2: state.co2 });
           }
 
           syncUI();
@@ -1442,31 +2059,60 @@
       }
 
       // Speech Bubble Sequential Data (1 to 5)
-      const speechData = [
+      // Dynamic content tailored for Reading Age 14 (Simple Intro) vs Scientific Rigor (Advanced Mode)
+      const speechDataIntro = [
+        {
+          pinId: "pin1",
+          title: "Step 1: Sunlight Arrives",
+          text: "Sunlight streams down from space. The atmosphere is clear to visible light, so most of the Sun's energy passes straight through the air without heating it, heading straight down to warm Earth's surface."
+        },
+        {
+          pinId: "pin2",
+          title: "Step 2: Earth Absorbs and Glows with Heat",
+          text: "Bright white surfaces like ice bounce sunlight straight back into space. But dark ground and oceans absorb the sunlight, warm up, and glow with invisible heat energy called thermal infrared."
+        },
+        {
+          pinId: "pin3",
+          title: "Step 3: Greenhouse Molecules Catch the Heat",
+          text: "Greenhouse gas molecules (like CO₂) can absorb this invisible heat. They bump into nearby air molecules, sharing warmth and passing heat photons back and forth like a hot potato, percolating slowly upward."
+        },
+        {
+          pinId: "pin4",
+          title: "Step 4: Thin Air Lets Heat Escape to Space",
+          text: "Near the ground the air is dense, but high up it thins out. Eventually, the air becomes so thin that greenhouse molecules are far apart. Here, heat can finally escape directly out into space as radiation waves."
+        },
+        {
+          pinId: "pin5",
+          title: "Step 5: More CO₂ Lifts the Escape Level and Heats Earth",
+          text: "When we pump more CO₂ into the air, heat is blocked higher up where the air is much colder. Because colder air radiates less heat away, energy builds up below — warming the surface until balance is restored."
+        }
+      ];
+
+      const speechDataAdvanced = [
         {
           pinId: "pin1",
           title: "Step 1: Solar Inflow (Visible / Shortwave)",
-          text: "Solar radiation arrives in all parts of the spectrum. The atmosphere is largely transparent to incoming visible solar energy, allowing ~239 W/m² to reach Earth's planetary surface unimpeded."
+          text: "Solar radiation arrives across the spectrum. The atmosphere is largely transparent to incoming visible solar energy, allowing ~239 W/m² to reach Earth's planetary surface unimpeded."
         },
         {
           pinId: "pin2",
           title: "Step 2: Surface Absorption & Infrared Re-emission",
-          text: "Sunlight reaching the surface is not always absorbed. Solar radiation hitting a white surface, like ice, is all reflected back to space. Solar energy absorbed by dark surfaces, mostly soils and oceans, can only be re-emitted as longwave thermal infrared (~15 µm), matching the molecular bending resonance of carbon dioxide."
+          text: "Sunlight reaching the surface is not always absorbed: bright ice reflects it back to space. Absorbed shortwave energy warms soil and oceans, which re-emit as longwave thermal infrared (~15 µm), matching the molecular bending resonance of CO₂."
         },
         {
           pinId: "pin3",
           title: "Step 3: Molecular Excitation & Thermal Percolation",
-          text: "Thermal IR excites greenhouse molecules, warming the surrounding air through billions of collisions per second. Energy is absorbed and re-emitted repeatedly, slowly percolating upward."
+          text: "Thermal IR excites greenhouse molecules, thermalising local air through billions of collisions per second. Energy is absorbed and re-emitted repeatedly, slowly percolating upward through the troposphere."
         },
         {
           pinId: "pin4",
           title: "Step 4: Density Thinning & Mean Free Path Escape",
-          text: "As altitude increases, air density decreases exponentially. Greenhouse molecules become so sparse that the mean free path approaches infinity; thermal IR is no longer reabsorbed and escapes to space."
+          text: "As altitude increases, air density decreases exponentially. Greenhouse molecules become so sparse that the mean free path reaches space (optical depth τ ≈ 1); thermal IR is no longer reabsorbed and escapes freely."
         },
         {
           pinId: "pin5",
           title: "Step 5: Radiative Choking & Surface Warming",
-          text: "Adding CO₂ forces this emission level higher into colder air. Because colder air radiates less power (σT⁴), less thermal energy escapes to space. Heat is trapped until the layers below warm up to restore balance."
+          text: "Adding CO₂ forces this emission level higher into colder air. Because colder air radiates less power (σT⁴), outgoing thermal energy drops below solar inflow. Heat accumulates until surface warming restores equilibrium."
         }
       ];
 
@@ -1478,7 +2124,9 @@
 
       function showSpeechBubble(index) {
         currentStep = index;
-        const d = speechData[index];
+        const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
+        const dataset = isSimple ? speechDataIntro : speechDataAdvanced;
+        const d = dataset[index];
         bubbleTitle.textContent = d.title;
         bubbleContent.textContent = d.text;
         bubbleStepCount.textContent = `Step ${index + 1} of 5`;
@@ -1494,16 +2142,16 @@
         const pinTop = pRect.top - cRect.top;
 
         bubbleCard.style.display = "block";
-        bubbleCard.style.left = (pinLeft + 28) + "px";
+        bubbleCard.style.left = Math.min(pinLeft + 28, cRect.width - 390) + "px";
 
         if (index === 1) { // Surface Pin 2: anchor upward so it doesn't clip off bottom
-          bubbleCard.style.top = (pinTop - 180) + "px";
+          bubbleCard.style.top = Math.max(10, pinTop - 190) + "px";
         } else {
           bubbleCard.style.top = Math.max(10, pinTop - 40) + "px";
         }
       }
 
-      speechData.forEach((d, i) => {
+      speechDataIntro.forEach((d, i) => {
         document.getElementById(d.pinId).addEventListener("click", () => showSpeechBubble(i));
       });
 
@@ -1558,10 +2206,10 @@
         state.deltaTd = 0.55;
         state.year = 2026.0;
         state.history = [
-          { year: 1750, deltaTs: 0 },
-          { year: 1850, deltaTs: 0.05 },
-          { year: 1958, deltaTs: 0.30 },
-          { year: 2026, deltaTs: 1.26 }
+          { year: 1750, deltaTs: 0, co2: 278.0 },
+          { year: 1850, deltaTs: 0.05, co2: 285.0 },
+          { year: 1958, deltaTs: 0.30, co2: 315.0 },
+          { year: 2026, deltaTs: 1.26, co2: 427.0 }
         ];
         if (typeof autoRun === "boolean") {
           state.running = autoRun;
@@ -1588,7 +2236,7 @@
         state.deltaTd = 0.0;
         state.year = 1750.0;
         state.isHistoricalPreset = true;
-        state.history = [{ year: 1750.0, deltaTs: 0.0 }];
+        state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
 
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("presetPreInd").classList.add("active");
@@ -1611,7 +2259,7 @@
         document.getElementById("presetPreInd").classList.add("active");
         state.isHistoricalPreset = true;
         state.co2 = 278.0; state.rate = 0.0; state.deltaTs = 0.0; state.deltaTd = 0.0; state.year = 1750.0;
-        state.history = [{ year: 1750.0, deltaTs: 0.0 }];
+        state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
         syncUI();
         draw();
       });
@@ -1694,6 +2342,599 @@
       });
       document.querySelectorAll(".toc-link").forEach(link => {
         link.addEventListener("click", () => setDocPage(link.dataset.target));
+      });
+
+      // =========================================================================
+      // POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR ENGINE
+      // =========================================================================
+      // Empirical Paleoclimate Keyframes (EPICA Dome C 800k, Lisiecki & Raymo LR04 1000k, Shakun/Temp12k)
+      // Year is negative years Before Present (BP, where 0 = 1750 Pre-Industrial baseline)
+      // dt = Global Mean Surface Temperature anomaly (°C relative to 1750 baseline)
+      // co2 = Atmospheric CO2 concentration (ppm from ice core bubbles / boron isotopes)
+      const paleoKeyframes = [
+        { yr: -1000000, dt: -3.6, co2: 215 },
+        { yr: -960000,  dt: -0.6, co2: 262 }, // MIS 25 Interglacial
+        { yr: -920000,  dt: -4.2, co2: 198 },
+        { yr: -890000,  dt: -1.4, co2: 248 },
+        { yr: -850000,  dt: -4.4, co2: 195 }, // Mid-Pleistocene Transition
+        { yr: -841000,  dt: -0.8, co2: 260 },
+        { yr: -790000,  dt: -0.2, co2: 268 }, // MIS 19 Interglacial
+        { yr: -750000,  dt: -4.8, co2: 188 },
+        { yr: -710000,  dt: -1.2, co2: 245 }, // MIS 17
+        { yr: -670000,  dt: -5.5, co2: 182 }, // MIS 16 Glacial Maximum
+        { yr: -620000,  dt: -0.5, co2: 262 }, // MIS 15 Interglacial
+        { yr: -580000,  dt: -3.8, co2: 205 },
+        { yr: -530000,  dt: -4.9, co2: 190 }, // MIS 14
+        { yr: -490000,  dt: -0.6, co2: 256 }, // MIS 13
+        { yr: -440000,  dt: -5.8, co2: 182 }, // MIS 12 Severe Glacial
+        { yr: -428000,  dt: -4.5, co2: 198 }, // Termination V onset
+        { yr: -423000,  dt: -1.1, co2: 265 }, // Termination V rapid rise
+        { yr: -410000,  dt: +0.9, co2: 284 }, // MIS 11 Super-Interglacial Peak
+        { yr: -395000,  dt: +0.2, co2: 274 },
+        { yr: -350000,  dt: -5.3, co2: 186 }, // MIS 10 Glacial
+        { yr: -335000,  dt: -2.5, co2: 235 }, // Termination IV
+        { yr: -325000,  dt: +1.1, co2: 295 }, // MIS 9 Interglacial Peak
+        { yr: -300000,  dt: -3.6, co2: 210 },
+        { yr: -260000,  dt: -5.2, co2: 185 }, // MIS 8 Glacial
+        { yr: -242000,  dt: +0.4, co2: 276 }, // MIS 7e Interglacial
+        { yr: -220000,  dt: -3.2, co2: 212 },
+        { yr: -200000,  dt: -0.8, co2: 258 }, // MIS 7a
+        { yr: -150000,  dt: -5.7, co2: 183 }, // MIS 6 Penultimate Glacial Maximum
+        { yr: -135000,  dt: -4.8, co2: 192 }, // Termination II onset
+        { yr: -129000,  dt: -0.5, co2: 268 }, // Termination II rapid warming
+        { yr: -125000,  dt: +1.4, co2: 287 }, // Eemian (MIS 5e) Interglacial Peak
+        { yr: -115000,  dt: -0.8, co2: 262 }, // End of Eemian
+        { yr: -105000,  dt: -2.8, co2: 232 }, // MIS 5d
+        { yr: -95000,   dt: -1.6, co2: 245 }, // MIS 5c
+        { yr: -82000,   dt: -1.9, co2: 240 }, // MIS 5a
+        { yr: -65000,   dt: -5.1, co2: 194 }, // MIS 4 Glacial
+        { yr: -45000,   dt: -4.2, co2: 205 }, // MIS 3 Dansgaard-Oeschger Fluctuations
+        { yr: -30000,   dt: -5.2, co2: 190 },
+        { yr: -21000,   dt: -6.0, co2: 182 }, // Last Glacial Maximum (LGM)
+        { yr: -18000,   dt: -5.6, co2: 188 },
+        { yr: -15500,   dt: -4.2, co2: 212 }, // Termination I (Bølling-Allerød onset)
+        { yr: -14500,   dt: -2.6, co2: 232 }, // Fastest Natural Deglaciation Pulse (~0.34°C / 500 yr)
+        { yr: -12900,   dt: -3.4, co2: 238 }, // Younger Dryas cold reversal
+        { yr: -11700,   dt: -1.2, co2: 262 }, // Younger Dryas exit / Holocene onset
+        { yr: -9000,    dt: -0.2, co2: 266 },
+        { yr: -6000,    dt: +0.4, co2: 268 }, // Holocene Thermal Maximum
+        { yr: -3000,    dt: +0.1, co2: 274 },
+        { yr: -1000,    dt: +0.05, co2: 279 }, // Medieval Warm Period
+        { yr: -300,     dt: -0.15, co2: 276 }, // Little Ice Age
+        { yr: 0,        dt: 0.0,  co2: 278 }  // 1750 Pre-Industrial Baseline
+      ];
+
+      function getPaleoAtYear(yrBP) {
+        const clamped = Math.max(-1000000, Math.min(0, yrBP));
+        for (let i = 0; i < paleoKeyframes.length - 1; i++) {
+          const k1 = paleoKeyframes[i];
+          const k2 = paleoKeyframes[i + 1];
+          if (clamped >= k1.yr && clamped <= k2.yr) {
+            const span = k2.yr - k1.yr;
+            const u = span === 0 ? 0 : (clamped - k1.yr) / span;
+            // Smooth cosine-blended interpolation + realistic millennial/centennial orbital & D-O variability
+            const smoothU = 0.5 - 0.5 * Math.cos(u * Math.PI);
+            let baseDt = k1.dt + (0.65 * u + 0.35 * smoothU) * (k2.dt - k1.dt);
+            let baseCo2 = k1.co2 + (0.65 * u + 0.35 * smoothU) * (k2.co2 - k1.co2);
+
+            // Add subtle empirical centennial/millennial variability calibrated to ice-core variance
+            // (Larger variance during glacial MIS 3/4, quiet variance during Holocene)
+            const isHolocene = clamped > -11500;
+            const amp = isHolocene ? 0.04 : 0.14;
+            const osc = amp * (
+              0.6 * Math.sin(clamped * 2 * Math.PI / 1470) + // 1,470-yr Bond / Dansgaard-Oeschger cycle
+              0.4 * Math.cos(clamped * 2 * Math.PI / 2400)   // 2,400-yr Hallstatt solar/ocean cycle
+            );
+            return {
+              yr: clamped,
+              dt: baseDt + osc,
+              co2: baseCo2 + osc * 5.5
+            };
+          }
+        }
+        return { yr: clamped, dt: 0, co2: 278 };
+      }
+
+      // Generate complete 500-year modern trajectory (1750 to 2250 CE) using the current scenario or default +2.5 ppm/yr
+      function getModern500YrSeries() {
+        const pts = [];
+        let simC = 278.0;
+        let simTs = 0.0;
+        let simTd = 0.0;
+        const futureRate = state.rate !== 0 ? state.rate : 2.5;
+        for (let y = 1750; y <= 2250; y += 2) {
+          if (y <= 2026) {
+            simC = getHistoricalCO2(y);
+          } else {
+            simC = Math.max(150, Math.min(1100, simC + futureRate * 2));
+          }
+          const rf = 5.35 * Math.log(Math.max(100, simC) / CO2_BASE);
+          // 2-year integration step
+          for (let sub = 0; sub < 4; sub++) {
+            const dTs = (rf - LAMBDA_FEEDBACK * simTs - GAMMA * (simTs - simTd)) / CM;
+            const dTd = (GAMMA * (simTs - simTd)) / CD;
+            simTs += dTs * 0.5;
+            simTd += dTd * 0.5;
+          }
+          pts.push({ offsetYr: y - 1750, calYr: y, dt: simTs, co2: simC });
+        }
+        return pts;
+      }
+
+      const paleoModalOverlay = document.getElementById("paleoModalOverlay");
+      const openPaleoModalBtn = document.getElementById("openPaleoModalBtn");
+      const closePaleoModalBtn = document.getElementById("closePaleoModalBtn");
+      const paleoScrollSlider = document.getElementById("paleoScrollSlider");
+      const paleoOverviewCanvas = document.getElementById("paleoOverviewCanvas");
+      const paleoCompareCanvas = document.getElementById("paleoCompareCanvas");
+
+      let paleoMousePos = { x: -1, y: -1, active: false };
+      paleoCompareCanvas.addEventListener("mousemove", e => {
+        const rect = paleoCompareCanvas.getBoundingClientRect();
+        paleoMousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top, active: true };
+        drawPaleoComparator();
+      });
+      paleoCompareCanvas.addEventListener("mouseleave", () => {
+        paleoMousePos.active = false;
+        drawPaleoComparator();
+      });
+
+      let paleoStartYrBP = -15000; // Default to Fastest Natural Deglaciation (Termination I)
+      let paleoPlotMode = "relative"; // "relative" (rate/slope comparison) or "absolute"
+
+      function formatBP(yrBP) {
+        return `${Math.abs(Math.round(yrBP)).toLocaleString()} yrs BP`;
+      }
+
+      function drawPaleoComparator() {
+        if (paleoModalOverlay.style.display !== "flex") return;
+
+        const dpr = window.devicePixelRatio || 1;
+
+        // 1. DRAW TOP 1,000,000-YEAR OVERVIEW CANVAS
+        const ovRect = paleoOverviewCanvas.getBoundingClientRect();
+        if (ovRect.width > 0 && ovRect.height > 0) {
+          if (paleoOverviewCanvas.width !== ovRect.width * dpr || paleoOverviewCanvas.height !== ovRect.height * dpr) {
+            paleoOverviewCanvas.width = ovRect.width * dpr;
+            paleoOverviewCanvas.height = ovRect.height * dpr;
+          }
+          const oCtx = paleoOverviewCanvas.getContext("2d");
+          oCtx.save();
+          oCtx.scale(dpr, dpr);
+          const ow = ovRect.width;
+          const oh = ovRect.height;
+          oCtx.clearRect(0, 0, ow, oh);
+
+          const padL = 46, padR = 46, padT = 16, padB = 22;
+          const gw = ow - padL - padR;
+          const gh = oh - padT - padB;
+
+          function bpToX(bp) { return padL + ((bp - (-1000000)) / 1000000) * gw; }
+          function dtToOvY(dt) { return padT + gh - ((dt - (-6.8)) / 9.5) * gh; }
+
+          // Zero pre-industrial baseline
+          const zY = dtToOvY(0);
+          oCtx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+          oCtx.setLineDash([3, 3]);
+          oCtx.beginPath(); oCtx.moveTo(padL, zY); oCtx.lineTo(ow - padR, zY); oCtx.stroke();
+          oCtx.setLineDash([]);
+
+          // Y-axis labels
+          oCtx.fillStyle = "#94a3b8";
+          oCtx.font = "9px ui-monospace, monospace";
+          oCtx.fillText("+2°C", 8, dtToOvY(2) + 3);
+          oCtx.fillText(" 0°C", 8, zY + 3);
+          oCtx.fillText("-6°C", 8, dtToOvY(-6) + 3);
+
+          // X-axis 100,000-year ticks
+          for (let kyr = -1000000; kyr <= 0; kyr += 100000) {
+            const x = bpToX(kyr);
+            oCtx.strokeStyle = "rgba(148, 163, 184, 0.25)";
+            oCtx.beginPath(); oCtx.moveTo(x, padT); oCtx.lineTo(x, padT + gh); oCtx.stroke();
+            oCtx.fillStyle = "#94a3b8";
+            oCtx.font = "9px ui-monospace, monospace";
+            oCtx.textAlign = "center";
+            const label = kyr === 0 ? "Present" : `${Math.abs(kyr / 1000)}k BP`;
+            oCtx.fillText(label, x, oh - 6);
+          }
+          oCtx.textAlign = "left";
+
+          // Plot 1,000,000-year Temperature Reconstruction (Emerald)
+          oCtx.strokeStyle = "#10b981";
+          oCtx.lineWidth = 1.4;
+          oCtx.beginPath();
+          for (let bp = -1000000; bp <= 0; bp += 1000) {
+            const pt = getPaleoAtYear(bp);
+            const x = bpToX(bp);
+            const y = dtToOvY(pt.dt);
+            if (bp === -1000000) oCtx.moveTo(x, y); else oCtx.lineTo(x, y);
+          }
+          oCtx.stroke();
+
+          // Modern Anthropogenic Spike at the right edge (0 BP)
+          const modX = bpToX(0);
+          oCtx.strokeStyle = "#f43f5e";
+          oCtx.lineWidth = 2.5;
+          oCtx.beginPath();
+          oCtx.moveTo(modX, dtToOvY(0));
+          oCtx.lineTo(modX, dtToOvY(2.2));
+          oCtx.stroke();
+
+          // Highlight Selected 500-Year Window Marker on the 1M-year timeline
+          const winX = bpToX(paleoStartYrBP);
+          const markerW = Math.max(6, (500 / 1000000) * gw);
+          oCtx.fillStyle = "rgba(0, 229, 255, 0.28)";
+          oCtx.strokeStyle = "#00e5ff";
+          oCtx.lineWidth = 1.8;
+          oCtx.fillRect(winX - markerW / 2, padT, markerW, gh);
+          oCtx.strokeRect(winX - markerW / 2, padT, markerW, gh);
+
+          // Callout tag on overview
+          const selPt = getPaleoAtYear(paleoStartYrBP);
+          const tagStr = `${formatBP(paleoStartYrBP)} (${selPt.dt >= 0 ? "+" : ""}${selPt.dt.toFixed(1)}°C)`;
+          oCtx.font = "bold 9px ui-monospace, monospace";
+          const tw = oCtx.measureText(tagStr).width + 10;
+          const tx = Math.max(padL + 2, Math.min(ow - padR - tw - 2, winX - tw / 2));
+          oCtx.fillStyle = "rgba(11, 19, 32, 0.92)";
+          oCtx.strokeStyle = "#00e5ff";
+          oCtx.lineWidth = 1;
+          oCtx.beginPath(); oCtx.roundRect(tx, padT + 2, tw, 15, 3); oCtx.fill(); oCtx.stroke();
+          oCtx.fillStyle = "#00e5ff";
+          oCtx.fillText(tagStr, tx + 5, padT + 12);
+
+          oCtx.restore();
+        }
+
+        // 2. DRAW MAIN 500-YEAR OVERLAY COMPARISON CHART
+        const cmpRect = paleoCompareCanvas.getBoundingClientRect();
+        if (cmpRect.width > 0 && cmpRect.height > 0) {
+          if (paleoCompareCanvas.width !== cmpRect.width * dpr || paleoCompareCanvas.height !== cmpRect.height * dpr) {
+            paleoCompareCanvas.width = cmpRect.width * dpr;
+            paleoCompareCanvas.height = cmpRect.height * dpr;
+          }
+          const cCtx = paleoCompareCanvas.getContext("2d");
+          cCtx.save();
+          cCtx.scale(dpr, dpr);
+          const cw = cmpRect.width;
+          const ch = cmpRect.height;
+          cCtx.clearRect(0, 0, cw, ch);
+
+          const padL = 54, padR = 64, padT = 36, padB = 34;
+          const gw = cw - padL - padR;
+          const gh = ch - padT - padB;
+
+          cCtx.fillStyle = "rgba(11, 19, 32, 0.78)";
+          cCtx.fillRect(padL, padT, gw, gh);
+          cCtx.strokeStyle = "rgba(51, 65, 85, 0.65)";
+          cCtx.strokeRect(padL, padT, gw, gh);
+
+          // Sample 500-year paleoclimate slice (every 5 years from paleoStartYrBP to paleoStartYrBP + 500)
+          const paleoSlice = [];
+          for (let offset = 0; offset <= 500; offset += 5) {
+            const p = getPaleoAtYear(paleoStartYrBP + offset);
+            paleoSlice.push({ offsetYr: offset, dt: p.dt, co2: p.co2 });
+          }
+          const p0 = paleoSlice[0];
+          const pEnd = paleoSlice[paleoSlice.length - 1];
+
+          const modernSeries = getModern500YrSeries();
+          const m0 = modernSeries[0];
+          const mEnd = modernSeries[modernSeries.length - 1];
+
+          const isRel = paleoPlotMode === "relative";
+          // Y-axis scales:
+          // Relative mode: -0.6°C to +4.6°C (5.2°C span); CO2 change: -50 to +750 ppm
+          // Absolute mode: -6.5°C to +4.5°C (11.0°C span); CO2 absolute: 160 to 1050 ppm
+          const minTemp = isRel ? -0.6 : -6.5;
+          const maxTemp = isRel ? 4.6 : 4.5;
+          const minCo2 = isRel ? -50 : 160;
+          const maxCo2 = isRel ? 750 : 1050;
+
+          function offsetToX(off) { return padL + (off / 500) * gw; }
+          function tempToY(t) { return padT + gh - ((t - minTemp) / (maxTemp - minTemp)) * gh; }
+          function co2ToCmpY(c) { return padT + gh - ((c - minCo2) / (maxCo2 - minCo2)) * gh; }
+
+          // Chart Title & Mode Header
+          cCtx.fillStyle = "#ffffff";
+          cCtx.font = "bold 14px system-ui, sans-serif";
+          const chartHeading = isRel
+            ? `500-YEAR RATE-OF-CHANGE OVERLAY: Modern (1750–2250 CE) vs. Prehistoric (${formatBP(paleoStartYrBP)} – ${formatBP(paleoStartYrBP + 500)})`
+            : `ABSOLUTE ANOMALY COMPARISON: Modern (1750–2250 CE) vs. Prehistoric (${formatBP(paleoStartYrBP)} – ${formatBP(paleoStartYrBP + 500)})`;
+          cCtx.fillText(chartHeading, padL, padT - 12);
+
+          // Horizontal Temperature Gridlines (Left Y-Axis)
+          const tempTicks = isRel ? [-0.5, 0.0, 1.0, 2.0, 3.0, 4.0] : [-6.0, -4.0, -2.0, 0.0, 2.0, 4.0];
+          tempTicks.forEach(tVal => {
+            const y = tempToY(tVal);
+            cCtx.strokeStyle = tVal === 0 ? "rgba(255, 255, 255, 0.28)" : "rgba(148, 163, 184, 0.14)";
+            cCtx.beginPath(); cCtx.moveTo(padL, y); cCtx.lineTo(padL + gw, y); cCtx.stroke();
+            cCtx.fillStyle = tVal >= 1.5 ? "#f43f5e" : "#94a3b8";
+            cCtx.font = "bold 10px ui-monospace, monospace";
+            cCtx.textAlign = "right";
+            cCtx.fillText(`${tVal >= 0 ? "+" : ""}${tVal.toFixed(1)}°C`, padL - 6, y + 3);
+          });
+
+          // Right Y-Axis CO2 Ticks (Purple)
+          const co2Ticks = isRel ? [0, 150, 300, 450, 600, 750] : [200, 400, 600, 800, 1000];
+          co2Ticks.forEach(cVal => {
+            const y = co2ToCmpY(cVal);
+            if (y >= padT && y <= padT + gh) {
+              cCtx.fillStyle = "#c084fc";
+              cCtx.font = "bold 9px ui-monospace, monospace";
+              cCtx.textAlign = "left";
+              cCtx.fillText(`${isRel && cVal > 0 ? "+" : ""}${cVal} ppm`, padL + gw + 6, y + 3);
+            }
+          });
+
+          // Bottom X-Axis: 0 to 500 Years Elapsed in Window
+          for (let off = 0; off <= 500; off += 50) {
+            const x = offsetToX(off);
+            cCtx.strokeStyle = "rgba(148, 163, 184, 0.35)";
+            cCtx.beginPath(); cCtx.moveTo(x, padT + gh); cCtx.lineTo(x, padT + gh + 5); cCtx.stroke();
+            cCtx.fillStyle = "#cbd5e1";
+            cCtx.font = "10px ui-monospace, monospace";
+            cCtx.textAlign = "center";
+            cCtx.fillText(`+${off} yr (${1750 + off})`, x, padT + gh + 18);
+          }
+          cCtx.textAlign = "left";
+
+          // 1958 Keeling & 2026 Present Reference Markers (Clean labels without "+year" clutter)
+          [
+            { off: 208, label: "1958 Keeling", tooltip: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring." },
+            { off: 276, label: "2026 Present", tooltip: "Present-day observational benchmark (+1.26°C anomaly, 427 ppm CO2), dividing instrumental history from future warming trajectories." }
+          ].forEach(mk => {
+            const mx = offsetToX(mk.off);
+            cCtx.strokeStyle = "rgba(245, 158, 11, 0.45)";
+            cCtx.setLineDash([3, 3]);
+            cCtx.beginPath(); cCtx.moveTo(mx, padT); cCtx.lineTo(mx, padT + gh); cCtx.stroke();
+            cCtx.setLineDash([]);
+
+            // Position rotated label safely below top header and title
+            cCtx.save();
+            cCtx.translate(mx + 11, padT + 88);
+            cCtx.rotate(Math.PI / 2);
+            cCtx.fillStyle = "#f59e0b";
+            cCtx.font = "bold 9px ui-monospace, monospace";
+            cCtx.fillText(mk.label, 0, 0);
+            cCtx.restore();
+
+            // Hover tooltip over vertical dashed line in pop-out chart
+            if (paleoMousePos && paleoMousePos.active && Math.abs(paleoMousePos.x - mx) <= 8 && paleoMousePos.y >= padT && paleoMousePos.y <= padT + gh) {
+              const tipText = mk.tooltip;
+              cCtx.font = "10px system-ui, -apple-system, sans-serif";
+              const maxTipW = 280;
+              // Wrap text
+              const words = tipText.split(" ");
+              let lines = [];
+              let curLine = "";
+              words.forEach(w => {
+                const testLine = curLine ? (curLine + " " + w) : w;
+                if (cCtx.measureText(testLine).width > maxTipW) {
+                  lines.push(curLine);
+                  curLine = w;
+                } else {
+                  curLine = testLine;
+                }
+              });
+              if (curLine) lines.push(curLine);
+
+              const boxW = Math.min(maxTipW + 20, 300);
+              const boxH = lines.length * 14 + 14;
+              let tipBx = paleoMousePos.x + 12;
+              let tipBy = Math.max(padT + 10, paleoMousePos.y - boxH / 2);
+              if (tipBx + boxW > cw - 10) tipBx = paleoMousePos.x - boxW - 12;
+
+              cCtx.fillStyle = "rgba(11, 19, 32, 0.96)";
+              cCtx.strokeStyle = "#f59e0b";
+              cCtx.lineWidth = 1.2;
+              cCtx.beginPath();
+              cCtx.roundRect(tipBx, tipBy, boxW, boxH, 5);
+              cCtx.fill();
+              cCtx.stroke();
+
+              cCtx.fillStyle = "#ffedd5";
+              lines.forEach((l, lIdx) => {
+                cCtx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
+              });
+            }
+          });
+
+          // --- PLOT 1: Modern CO2 Curve (Solid Purple) ---
+          cCtx.strokeStyle = "#c084fc";
+          cCtx.lineWidth = 1.8;
+          cCtx.beginPath();
+          modernSeries.forEach((pt, idx) => {
+            const x = offsetToX(pt.offsetYr);
+            const val = isRel ? (pt.co2 - m0.co2) : pt.co2;
+            const y = co2ToCmpY(val);
+            if (idx === 0) cCtx.moveTo(x, y); else cCtx.lineTo(x, y);
+          });
+          cCtx.stroke();
+
+          // --- PLOT 2: Prehistoric 500-Yr CO2 Curve (Dashed Light Purple) ---
+          cCtx.strokeStyle = "rgba(192, 132, 252, 0.65)";
+          cCtx.lineWidth = 1.6;
+          cCtx.setLineDash([4, 4]);
+          cCtx.beginPath();
+          paleoSlice.forEach((pt, idx) => {
+            const x = offsetToX(pt.offsetYr);
+            const val = isRel ? (pt.co2 - p0.co2) : pt.co2;
+            const y = co2ToCmpY(val);
+            if (idx === 0) cCtx.moveTo(x, y); else cCtx.lineTo(x, y);
+          });
+          cCtx.stroke();
+          cCtx.setLineDash([]);
+
+          // --- PLOT 3: Modern Temperature Curve (Orange to 1958, Rose thereafter) ---
+          cCtx.lineWidth = 2.6;
+          for (let i = 0; i < modernSeries.length - 1; i++) {
+            const a = modernSeries[i];
+            const b = modernSeries[i + 1];
+            const va = isRel ? (a.dt - m0.dt) : a.dt;
+            const vb = isRel ? (b.dt - m0.dt) : b.dt;
+            cCtx.strokeStyle = b.calYr <= 1958 ? "#f59e0b" : "#f43f5e";
+            cCtx.beginPath();
+            cCtx.moveTo(offsetToX(a.offsetYr), tempToY(va));
+            cCtx.lineTo(offsetToX(b.offsetYr), tempToY(vb));
+            cCtx.stroke();
+          }
+
+          // --- PLOT 4: Selected Prehistoric 500-Yr Temperature Curve (Bright Emerald) ---
+          cCtx.strokeStyle = "#10b981";
+          cCtx.lineWidth = 3.0;
+          cCtx.beginPath();
+          paleoSlice.forEach((pt, idx) => {
+            const x = offsetToX(pt.offsetYr);
+            const val = isRel ? (pt.dt - p0.dt) : pt.dt;
+            const y = tempToY(val);
+            if (idx === 0) cCtx.moveTo(x, y); else cCtx.lineTo(x, y);
+          });
+          cCtx.stroke();
+
+          // End-of-window Callout Badges at +500 yr
+          const paleoNetDt = pEnd.dt - p0.dt;
+          const paleoEndY = tempToY(isRel ? paleoNetDt : pEnd.dt);
+          cCtx.fillStyle = "rgba(11, 19, 32, 0.92)";
+          cCtx.strokeStyle = "#10b981";
+          cCtx.lineWidth = 1.2;
+          const pLabel = `Prehistoric ΔT: ${paleoNetDt >= 0 ? "+" : ""}${paleoNetDt.toFixed(2)}°C / 500yr`;
+          cCtx.font = "bold 10px ui-monospace, monospace";
+          const ptw = cCtx.measureText(pLabel).width + 12;
+          cCtx.beginPath();
+          cCtx.roundRect(padL + gw - ptw - 8, Math.max(padT + 6, Math.min(padT + gh - 24, paleoEndY - 22)), ptw, 18, 4);
+          cCtx.fill(); cCtx.stroke();
+          cCtx.fillStyle = "#10b981";
+          cCtx.fillText(pLabel, padL + gw - ptw - 2, Math.max(padT + 6, Math.min(padT + gh - 24, paleoEndY - 22)) + 13);
+
+          // Legend Box Inside Top-Left of Comparison Chart
+          const lx = padL + 12, ly = padT + 10, lw = 285, lh = 76;
+          cCtx.fillStyle = "rgba(11, 19, 32, 0.92)";
+          cCtx.strokeStyle = "rgba(51, 65, 85, 0.8)";
+          cCtx.lineWidth = 1;
+          cCtx.beginPath(); cCtx.roundRect(lx, ly, lw, lh, 5); cCtx.fill(); cCtx.stroke();
+
+          cCtx.font = "bold 10px system-ui, sans-serif";
+          // Row 1
+          cCtx.fillStyle = "#f43f5e";
+          cCtx.fillText("━━ Modern Surface ΔT (1750–2250 CE)", lx + 10, ly + 18);
+          // Row 2
+          cCtx.fillStyle = "#10b981";
+          cCtx.fillText(`━━ Prehistoric 500-Yr ΔT (${formatBP(paleoStartYrBP)})`, lx + 10, ly + 35);
+          // Row 3
+          cCtx.fillStyle = "#c084fc";
+          cCtx.fillText("━━ Modern CO₂ (ppm)   ╌╌ Prehistoric CO₂ (ppm)", lx + 10, ly + 52);
+          // Row 4
+          cCtx.fillStyle = "#94a3b8";
+          cCtx.font = "9px system-ui, sans-serif";
+          cCtx.fillText("Note: Ice core resolution is ~20–100 yr (0–120k BP) & ~200–500 yr (deep ice)", lx + 10, ly + 68);
+
+          cCtx.restore();
+
+          // Update Bottom Quantitative Stat Cards
+          const paleoNetCo2 = pEnd.co2 - p0.co2;
+          const paleoRatePerCentury = paleoNetDt / 5.0;
+          const modNetDt = mEnd.dt - m0.dt;
+          const modNetCo2 = mEnd.co2 - m0.co2;
+          // Peak modern century warming rate (1958 to 2058)
+          const pt1958 = modernSeries.find(p => p.calYr >= 1958) || modernSeries[0];
+          const pt2058 = modernSeries.find(p => p.calYr >= 2058) || mEnd;
+          const modCenturyRate = pt2058.dt - pt1958.dt;
+
+          document.getElementById("paleoWindowLabel").textContent = `${formatBP(paleoStartYrBP)} to ${formatBP(paleoStartYrBP + 500)}`;
+          document.getElementById("paleoStatChange").innerHTML = `${paleoNetDt >= 0 ? "+" : ""}${paleoNetDt.toFixed(2)} °C <span style="font-size: 0.78rem; color: var(--text-muted);">per 500 yrs</span>`;
+          document.getElementById("paleoStatSub").textContent = `Avg rate: ${paleoRatePerCentury >= 0 ? "+" : ""}${paleoRatePerCentury.toFixed(3)} °C/century · CO₂ change: ${paleoNetCo2 >= 0 ? "+" : ""}${paleoNetCo2.toFixed(1)} ppm`;
+
+          document.getElementById("modernStatChange").innerHTML = `${modNetDt >= 0 ? "+" : ""}${modNetDt.toFixed(2)} °C <span style="font-size: 0.78rem; color: var(--text-muted);">over 500 yrs</span>`;
+          document.getElementById("modernStatSub").textContent = `Modern rate (1958–2058): +${modCenturyRate.toFixed(2)} °C/century · CO₂ change: ${modNetCo2 >= 0 ? "+" : ""}${Math.round(modNetCo2)} ppm`;
+
+          const absPaleoRate = Math.max(0.005, Math.abs(paleoRatePerCentury));
+          const speedRatio = Math.round(Math.abs(modCenturyRate) / absPaleoRate);
+          document.getElementById("ratioStatValue").textContent = `~${speedRatio.toLocaleString()}× Faster`;
+          document.getElementById("ratioStatSub").textContent = `Modern century warming rate (+${modCenturyRate.toFixed(2)}°C/100yr) vs. selected prehistoric window`;
+        }
+      }
+
+      openPaleoModalBtn.addEventListener("click", () => {
+        paleoModalOverlay.style.display = "flex";
+        requestAnimationFrame(() => {
+          drawPaleoComparator();
+          setTimeout(drawPaleoComparator, 50);
+        });
+      });
+      const openPaleoModalTopBtn = document.getElementById("openPaleoModalTopBtn");
+      if (openPaleoModalTopBtn) {
+        openPaleoModalTopBtn.addEventListener("click", () => {
+          paleoModalOverlay.style.display = "flex";
+          requestAnimationFrame(() => {
+            drawPaleoComparator();
+            setTimeout(drawPaleoComparator, 50);
+          });
+        });
+      }
+      closePaleoModalBtn.addEventListener("click", () => {
+        paleoModalOverlay.style.display = "none";
+      });
+      paleoModalOverlay.addEventListener("click", e => {
+        if (e.target === paleoModalOverlay) paleoModalOverlay.style.display = "none";
+      });
+      document.getElementById("openPaleoDocsLinkBtn").addEventListener("click", () => {
+        paleoModalOverlay.style.display = "none";
+        modalOverlay.style.display = "flex";
+        setDocPage("page-paleo");
+      });
+
+      paleoScrollSlider.addEventListener("input", e => {
+        paleoStartYrBP = parseInt(e.target.value, 10);
+        document.querySelectorAll(".epoch-btn").forEach(b => {
+          b.classList.toggle("active", parseInt(b.dataset.kyr, 10) === paleoStartYrBP);
+        });
+        drawPaleoComparator();
+      });
+
+      document.querySelectorAll(".epoch-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".epoch-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          paleoStartYrBP = parseInt(btn.dataset.kyr, 10);
+          paleoScrollSlider.value = paleoStartYrBP;
+          drawPaleoComparator();
+        });
+      });
+
+      document.querySelectorAll('input[name="paleoPlotMode"]').forEach(radio => {
+        radio.addEventListener("change", e => {
+          paleoPlotMode = e.target.value;
+          drawPaleoComparator();
+        });
+      });
+
+      // Allow clicking or dragging directly on the 1,000,000-year overview canvas to scrub the 500-year window
+      let isDraggingOverview = false;
+      function scrubOverviewFromEvent(e) {
+        const rect = paleoOverviewCanvas.getBoundingClientRect();
+        const padL = 46, padR = 46;
+        const gw = rect.width - padL - padR;
+        const frac = Math.max(0, Math.min(1, (e.clientX - rect.left - padL) / gw));
+        const rawYr = -1000000 + frac * 1000000;
+        paleoStartYrBP = Math.max(-1000000, Math.min(-500, Math.round(rawYr / 100) * 100));
+        paleoScrollSlider.value = paleoStartYrBP;
+        document.querySelectorAll(".epoch-btn").forEach(b => {
+          b.classList.toggle("active", parseInt(b.dataset.kyr, 10) === paleoStartYrBP);
+        });
+        drawPaleoComparator();
+      }
+      paleoOverviewCanvas.addEventListener("mousedown", e => {
+        isDraggingOverview = true;
+        scrubOverviewFromEvent(e);
+      });
+      window.addEventListener("mousemove", e => {
+        if (isDraggingOverview) scrubOverviewFromEvent(e);
+      });
+      window.addEventListener("mouseup", () => {
+        isDraggingOverview = false;
+      });
+      window.addEventListener("resize", () => {
+        if (paleoModalOverlay.style.display === "flex") drawPaleoComparator();
       });
 
       // Launch initialized to Present Day (2026) running into future
