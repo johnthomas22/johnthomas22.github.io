@@ -1735,9 +1735,10 @@
           const badgeX = Math.max(tGridLeft + 2, Math.min(tGridRight - badgeWidth - 2, curYrX - badgeWidth / 2));
           const badgeY = tGridBottom - 26;
 
-          ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
-          ctx.strokeStyle = "rgba(0, 229, 255, 0.85)";
-          ctx.lineWidth = 1;
+          // 100% solid opaque background (no transparency so graph lines do not bleed through)
+          ctx.fillStyle = "#070d17";
+          ctx.strokeStyle = "#00e5ff";
+          ctx.lineWidth = 1.2;
           ctx.beginPath();
           ctx.roundRect(badgeX, badgeY, badgeWidth, 16, 3);
           ctx.fill();
@@ -1934,9 +1935,9 @@
               const tw = ctx.measureText(tooltipText).width + 16;
               if (tipX + tw > w - 10) tipX = mousePos.x - tw - 6;
 
-              ctx.fillStyle = "rgba(11, 19, 32, 0.95)";
+              ctx.fillStyle = "#070d17"; // 100% solid opaque
               ctx.strokeStyle = "var(--cyan)";
-              ctx.lineWidth = 1;
+              ctx.lineWidth = 1.2;
               ctx.beginPath();
               ctx.roundRect(tipX, tipY - 16, tw, 22, 4);
               ctx.fill();
@@ -1947,12 +1948,31 @@
             }
           }
 
-          // Tooltip on Main Canvas for 1958 Keeling Marker
-          if (mousePos.active && Math.abs(mousePos.x - keelingX) <= 8 && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
-            const tipText = "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.";
+          // Tooltip on Main Canvas for 1958 Keeling, 2026 Present, or Active Year Markers
+          let activeTip = null;
+          if (mousePos.active && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
+            if (Math.abs(mousePos.x - keelingX) <= 8) {
+              activeTip = {
+                text: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.",
+                stroke: "#f59e0b"
+              };
+            } else if (Math.abs(mousePos.x - present2026X) <= 8) {
+              activeTip = {
+                text: "Present-day observational benchmark (+1.26°C anomaly, 427 ppm CO2), dividing instrumental history from future warming trajectories.",
+                stroke: "#f59e0b"
+              };
+            } else if (Math.abs(mousePos.x - curYrX) <= 8) {
+              activeTip = {
+                text: `Active Simulation Year: ${Math.round(state.year)} CE · Atmospheric CO2: ${Math.round(state.co2)} ppm · Surface Warming: +${p.deltaTs.toFixed(2)}°C.`,
+                stroke: "#00e5ff"
+              };
+            }
+          }
+
+          if (activeTip) {
             ctx.font = "10px system-ui, -apple-system, sans-serif";
             const maxTipW = 270;
-            const words = tipText.split(" ");
+            const words = activeTip.text.split(" ");
             let lines = [];
             let curLine = "";
             words.forEach(w => {
@@ -1972,15 +1992,16 @@
             let tipBy = Math.max(tGridTop + 10, mousePos.y - boxH / 2);
             if (tipBx + boxW > w - 10) tipBx = mousePos.x - boxW - 12;
 
-            ctx.fillStyle = "rgba(11, 19, 32, 0.96)";
-            ctx.strokeStyle = "#f59e0b";
-            ctx.lineWidth = 1.2;
+            // 100% solid opaque background to prevent graph lines from bleeding through
+            ctx.fillStyle = "#070d17";
+            ctx.strokeStyle = activeTip.stroke;
+            ctx.lineWidth = 1.4;
             ctx.beginPath();
             ctx.roundRect(tipBx, tipBy, boxW, boxH, 5);
             ctx.fill();
             ctx.stroke();
 
-            ctx.fillStyle = "#ffedd5";
+            ctx.fillStyle = "#ffffff";
             lines.forEach((l, lIdx) => {
               ctx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
             });
@@ -2724,15 +2745,15 @@
               let tipBy = Math.max(padT + 10, paleoMousePos.y - boxH / 2);
               if (tipBx + boxW > cw - 10) tipBx = paleoMousePos.x - boxW - 12;
 
-              cCtx.fillStyle = "rgba(11, 19, 32, 0.96)";
+              cCtx.fillStyle = "#070d17";
               cCtx.strokeStyle = "#f59e0b";
-              cCtx.lineWidth = 1.2;
+              cCtx.lineWidth = 1.4;
               cCtx.beginPath();
               cCtx.roundRect(tipBx, tipBy, boxW, boxH, 5);
               cCtx.fill();
               cCtx.stroke();
 
-              cCtx.fillStyle = "#ffedd5";
+              cCtx.fillStyle = "#ffffff";
               lines.forEach((l, lIdx) => {
                 cCtx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
               });
