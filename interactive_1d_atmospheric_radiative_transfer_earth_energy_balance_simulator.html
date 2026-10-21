@@ -1605,7 +1605,7 @@
         ctx.rotate(Math.PI / 2);
         ctx.fillStyle = "#f59e0b";
         ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
-        ctx.fillText("2026", 0, 0);
+        ctx.fillText("2026 Present", 0, 0);
         ctx.restore();
 
         // Plot Accumulated History: Temperature (Orange up to 1958 Keeling, Rose thereafter)
@@ -1719,6 +1719,7 @@
 
         // Active Simulation Year Playhead Line & Floating Boxed Label (Clear of X-axis)
         const curYrX = yrToX(state.year);
+        let curYrBadgeX = -999, curYrBadgeY = -999, curYrBadgeW = 0;
         if (curYrX >= tGridLeft && curYrX <= tGridRight) {
           ctx.strokeStyle = "rgba(0, 229, 255, 0.70)";
           ctx.setLineDash([2, 2]);
@@ -1734,6 +1735,7 @@
           const badgeWidth = ctx.measureText(curYStr).width + 10;
           const badgeX = Math.max(tGridLeft + 2, Math.min(tGridRight - badgeWidth - 2, curYrX - badgeWidth / 2));
           const badgeY = tGridBottom - 26;
+          curYrBadgeX = badgeX; curYrBadgeY = badgeY; curYrBadgeW = badgeWidth;
 
           // 100% solid opaque background (no transparency so graph lines do not bleed through)
           ctx.fillStyle = "#070d17";
@@ -1947,65 +1949,104 @@
               ctx.fillText(tooltipText, tipX + 8, tipY - 1);
             }
           }
+        } // End of if (!isSimple)
 
-          // Tooltip on Main Canvas for 1958 Keeling, 2026 Present, or Active Year Markers
-          let activeTip = null;
-          if (mousePos.active && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
-            if (Math.abs(mousePos.x - keelingX) <= 8) {
-              activeTip = {
-                text: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.",
-                stroke: "#f59e0b"
-              };
-            } else if (Math.abs(mousePos.x - present2026X) <= 8) {
-              activeTip = {
-                text: "Present-day observational benchmark (+1.26°C anomaly, 427 ppm CO2), dividing instrumental history from future warming trajectories.",
-                stroke: "#f59e0b"
-              };
-            } else if (Math.abs(mousePos.x - curYrX) <= 8) {
-              activeTip = {
-                text: `Active Simulation Year: ${Math.round(state.year)} CE · Atmospheric CO2: ${Math.round(state.co2)} ppm · Surface Warming: +${p.deltaTs.toFixed(2)}°C.`,
-                stroke: "#00e5ff"
-              };
+        // 4. INTERACTIVE TOOLTIPS FOR TEMPERATURE CHART MARKERS & LABELS (Runs on top of all panels)
+        let activeTip = null;
+        let isPointerHover = false;
+
+        const dtVal1958 = getHistoricalDeltaAt(1958);
+        const dtVal2026 = getHistoricalDeltaAt(2026);
+        const iy1958 = dtVal1958 !== null ? dtToY(dtVal1958) : -999;
+        const iy2026 = dtVal2026 !== null ? dtToY(dtVal2026) : -999;
+
+        if (mousePos.active && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
+          // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or orange +0.05°C badge)
+          const isOverKeeling = (
+            (Math.abs(mousePos.x - keelingX) <= 12) ||
+            (mousePos.x >= keelingX && mousePos.x <= keelingX + 26 && mousePos.y >= tGridTop + 30 && mousePos.y <= tGridTop + 140) ||
+            (mousePos.x >= keelingX - 4 && mousePos.x <= keelingX + 65 && Math.abs(mousePos.y - iy1958) <= 14)
+          );
+
+          // Check 2026 Present (dashed line, rotated orange label "2026 Present", or orange +1.26°C badge)
+          const isOver2026 = (
+            (Math.abs(mousePos.x - present2026X) <= 12) ||
+            (mousePos.x >= present2026X && mousePos.x <= present2026X + 26 && mousePos.y >= tGridTop + 30 && mousePos.y <= tGridTop + 140) ||
+            (mousePos.x >= present2026X - 4 && mousePos.x <= present2026X + 65 && Math.abs(mousePos.y - iy2026) <= 14)
+          );
+
+          // Check Active Simulation Year marker / playhead badge
+          const isOverActiveYr = (
+            (Math.abs(mousePos.x - curYrX) <= 10) ||
+            (mousePos.x >= curYrBadgeX && mousePos.x <= curYrBadgeX + curYrBadgeW && mousePos.y >= curYrBadgeY && mousePos.y <= curYrBadgeY + 18)
+          );
+
+          if (isOverKeeling) {
+            isPointerHover = true;
+            activeTip = {
+              text: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.",
+              stroke: "#f59e0b"
+            };
+          } else if (isOver2026) {
+            isPointerHover = true;
+            activeTip = {
+              text: "Present-day observational benchmark (+1.26°C anomaly, 427 ppm CO2), dividing instrumental history from future warming trajectories.",
+              stroke: "#f59e0b"
+            };
+          } else if (isOverActiveYr) {
+            isPointerHover = true;
+            activeTip = {
+              text: `Active Simulation Year: ${Math.round(state.year)} CE · Atmospheric CO2: ${Math.round(state.co2)} ppm · Surface Warming: +${p.deltaTs.toFixed(2)}°C.`,
+              stroke: "#00e5ff"
+            };
+          }
+        }
+
+        if (activeTip) {
+          ctx.font = "10px system-ui, -apple-system, sans-serif";
+          const maxTipW = 280;
+          const words = activeTip.text.split(" ");
+          let lines = [];
+          let curLine = "";
+          words.forEach(w => {
+            const testLine = curLine ? (curLine + " " + w) : w;
+            if (ctx.measureText(testLine).width > maxTipW) {
+              lines.push(curLine);
+              curLine = w;
+            } else {
+              curLine = testLine;
             }
-          }
+          });
+          if (curLine) lines.push(curLine);
 
-          if (activeTip) {
-            ctx.font = "10px system-ui, -apple-system, sans-serif";
-            const maxTipW = 270;
-            const words = activeTip.text.split(" ");
-            let lines = [];
-            let curLine = "";
-            words.forEach(w => {
-              const testLine = curLine ? (curLine + " " + w) : w;
-              if (ctx.measureText(testLine).width > maxTipW) {
-                lines.push(curLine);
-                curLine = w;
-              } else {
-                curLine = testLine;
-              }
-            });
-            if (curLine) lines.push(curLine);
+          const boxW = Math.min(maxTipW + 20, 300);
+          const boxH = lines.length * 14 + 14;
+          let tipBx = mousePos.x + 12;
+          let tipBy = Math.max(tGridTop + 10, mousePos.y - boxH / 2);
+          if (tipBx + boxW > w - 10) tipBx = mousePos.x - boxW - 12;
 
-            const boxW = Math.min(maxTipW + 20, 290);
-            const boxH = lines.length * 14 + 14;
-            let tipBx = mousePos.x + 12;
-            let tipBy = Math.max(tGridTop + 10, mousePos.y - boxH / 2);
-            if (tipBx + boxW > w - 10) tipBx = mousePos.x - boxW - 12;
+          // 100% solid opaque background to prevent graph lines from bleeding through
+          ctx.fillStyle = "#070d17";
+          ctx.strokeStyle = activeTip.stroke;
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.roundRect(tipBx, tipBy, boxW, boxH, 5);
+          ctx.fill();
+          ctx.stroke();
 
-            // 100% solid opaque background to prevent graph lines from bleeding through
-            ctx.fillStyle = "#070d17";
-            ctx.strokeStyle = activeTip.stroke;
-            ctx.lineWidth = 1.4;
-            ctx.beginPath();
-            ctx.roundRect(tipBx, tipBy, boxW, boxH, 5);
-            ctx.fill();
-            ctx.stroke();
+          ctx.fillStyle = "#ffffff";
+          lines.forEach((l, lIdx) => {
+            ctx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
+          });
+        }
 
-            ctx.fillStyle = "#ffffff";
-            lines.forEach((l, lIdx) => {
-              ctx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
-            });
-          }
+        // Update canvas cursor for interactivity feedback
+        if (isPointerHover) {
+          canvas.style.cursor = "pointer";
+        } else if (mousePos.active && !isSimple && mousePos.x >= splitX + 50 && mousePos.y <= atmosH) {
+          canvas.style.cursor = "crosshair";
+        } else {
+          canvas.style.cursor = "default";
         }
 
         ctx.restore();
@@ -2719,8 +2760,12 @@
             cCtx.fillText(mk.label, 0, 0);
             cCtx.restore();
 
-            // Hover tooltip over vertical dashed line in pop-out chart
-            if (paleoMousePos && paleoMousePos.active && Math.abs(paleoMousePos.x - mx) <= 8 && paleoMousePos.y >= padT && paleoMousePos.y <= padT + gh) {
+            // Hover tooltip over vertical dashed line or rotated label in pop-out chart
+            const isOverMarker = paleoMousePos && paleoMousePos.active && (
+              (Math.abs(paleoMousePos.x - mx) <= 12 && paleoMousePos.y >= padT && paleoMousePos.y <= padT + gh) ||
+              (paleoMousePos.x >= mx && paleoMousePos.x <= mx + 26 && paleoMousePos.y >= padT + 80 && paleoMousePos.y <= padT + 180)
+            );
+            if (isOverMarker) {
               const tipText = mk.tooltip;
               cCtx.font = "10px system-ui, -apple-system, sans-serif";
               const maxTipW = 280;
