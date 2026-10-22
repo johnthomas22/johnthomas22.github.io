@@ -426,37 +426,78 @@
       justify-content: space-between;
       align-items: flex-start;
       gap: 8px;
-      margin-bottom: 6px;
-      border-bottom: 1px solid rgba(244, 63, 94, 0.3);
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(244, 63, 94, 0.35);
       padding-bottom: 6px;
     }
+    .tp-tabs-container {
+      background: #0d1829;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      border-radius: 7px;
+      padding: 6px 8px;
+      margin-bottom: 10px;
+    }
+    .tp-tabs-label {
+      font-size: 0.66rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--cyan);
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .tp-tabs-row {
-      display: none;
+      display: flex;
       flex-wrap: wrap;
       gap: 5px;
-      margin-bottom: 8px;
-      padding-bottom: 7px;
-      border-bottom: 1px solid rgba(51, 65, 85, 0.75);
     }
     .tp-tab-btn {
-      background: #111c2d;
-      border: 1px solid var(--border);
-      color: #cbd5e1;
-      padding: 3px 8px;
+      background: #132238;
+      border: 1px solid rgba(0, 229, 255, 0.45);
+      color: #e2e8f0;
+      padding: 4px 9px;
       border-radius: 5px;
-      font-size: 0.71rem;
+      font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.15s ease;
+      flex: 1 1 auto;
+      text-align: center;
     }
     .tp-tab-btn:hover {
-      border-color: var(--rose);
+      border-color: var(--cyan);
+      background: rgba(0, 229, 255, 0.18);
       color: #ffffff;
     }
     .tp-tab-btn.active {
-      background: rgba(244, 63, 94, 0.22);
-      border-color: var(--rose);
-      color: #fecdd3;
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: #000000;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.45);
+    }
+    .tp-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(51, 65, 85, 0.75);
+    }
+    .tp-nav-btn {
+      background: #132238;
+      border: 1px solid rgba(0, 229, 255, 0.45);
+      color: var(--cyan);
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tp-nav-btn:hover {
+      background: var(--cyan);
+      color: #000000;
     }
     .tp-title {
       font-weight: 800;
@@ -1413,10 +1454,16 @@
 
   <!-- INTERACTIVE TIPPING POINT POPOVER CARD (100% Opaque, Clickable Links) -->
   <div class="tipping-point-card" id="tippingPointCard">
-    <div class="tp-tabs-row" id="tpCardTabs"></div>
     <div class="tp-header">
       <div class="tp-title" id="tpCardTitle">🧊 Greenland Ice Sheet Collapse</div>
       <button class="tp-close" id="tpCardCloseBtn" title="Close">&times;</button>
+    </div>
+    <div class="tp-tabs-container" id="tpCardTabsBox">
+      <div class="tp-tabs-label">
+        <span id="tpCardTabsHeading">Select +1.5°C Tipping Point:</span>
+        <span id="tpCardStepCounter">1 of 3</span>
+      </div>
+      <div class="tp-tabs-row" id="tpCardTabs"></div>
     </div>
     <div class="tp-meta">
       <span class="tp-badge-threshold" id="tpCardThreshold">Central Threshold: +1.5°C (Range: 0.8–3.0°C)</span>
@@ -1430,6 +1477,11 @@
     <div class="tp-links-section">
       <div class="tp-links-heading">Peer-Reviewed Scientific Papers</div>
       <div id="tpCardPapers"></div>
+    </div>
+    <div class="tp-footer-nav" id="tpCardFooterNav">
+      <button type="button" class="tp-nav-btn" id="tpPrevBtn">← Prev</button>
+      <span style="font-size: 0.72rem; color: #cbd5e1; font-weight: 700;" id="tpFooterCounter">Tipping Point 1 of 3</span>
+      <button type="button" class="tp-nav-btn" id="tpNextBtn">Next →</button>
     </div>
   </div>
 
@@ -1708,6 +1760,9 @@
       }
 
       const tpCardEl = document.getElementById("tippingPointCard");
+      const tpCardTabsBoxEl = document.getElementById("tpCardTabsBox");
+      const tpCardTabsHeadingEl = document.getElementById("tpCardTabsHeading");
+      const tpCardStepCounterEl = document.getElementById("tpCardStepCounter");
       const tpCardTabsEl = document.getElementById("tpCardTabs");
       const tpCardTitleEl = document.getElementById("tpCardTitle");
       const tpCardThresholdEl = document.getElementById("tpCardThreshold");
@@ -1716,6 +1771,10 @@
       const tpCardArticlesEl = document.getElementById("tpCardArticles");
       const tpCardPapersEl = document.getElementById("tpCardPapers");
       const tpCardCloseBtn = document.getElementById("tpCardCloseBtn");
+      const tpCardFooterNavEl = document.getElementById("tpCardFooterNav");
+      const tpPrevBtn = document.getElementById("tpPrevBtn");
+      const tpNextBtn = document.getElementById("tpNextBtn");
+      const tpFooterCounterEl = document.getElementById("tpFooterCounter");
 
       let activeTpGroupKey = null;
       let activeTpIndexByThreshold = {};
@@ -1734,7 +1793,12 @@
         const tp = grp.items[idx];
 
         if (grp.items.length > 1) {
-          tpCardTabsEl.style.display = "flex";
+          tpCardTabsBoxEl.style.display = "block";
+          tpCardFooterNavEl.style.display = "flex";
+          tpCardTabsHeadingEl.textContent = `Select +${grp.thresholdC.toFixed(1)}°C Tipping Point:`;
+          tpCardStepCounterEl.textContent = `${idx + 1} of ${grp.items.length}`;
+          tpFooterCounterEl.textContent = `Tipping Point ${idx + 1} of ${grp.items.length}`;
+
           tpCardTabsEl.innerHTML = grp.items.map((item, i) =>
             `<button type="button" class="tp-tab-btn ${i === idx ? "active" : ""}" data-tp-idx="${i}">${item.tabLabel || item.title}</button>`
           ).join("");
@@ -1746,7 +1810,8 @@
             });
           });
         } else {
-          tpCardTabsEl.style.display = "none";
+          tpCardTabsBoxEl.style.display = "none";
+          tpCardFooterNavEl.style.display = "none";
           tpCardTabsEl.innerHTML = "";
         }
 
@@ -1761,6 +1826,26 @@
           `<a class="tp-link" href="${p.url}" target="_blank" rel="noopener noreferrer"><span>📄</span><span>${p.label} ↗</span></a>`
         ).join("");
       }
+
+      tpPrevBtn.addEventListener("click", e => {
+        e.stopPropagation();
+        if (!currentTpGroup) return;
+        tpCardPinned = true;
+        const key = currentTpGroup.thresholdC.toFixed(2);
+        const cur = activeTpIndexByThreshold[key] || 0;
+        const nextIdx = (cur + currentTpGroup.items.length - 1) % currentTpGroup.items.length;
+        renderTippingPointCardContent(currentTpGroup, nextIdx);
+      });
+
+      tpNextBtn.addEventListener("click", e => {
+        e.stopPropagation();
+        if (!currentTpGroup) return;
+        tpCardPinned = true;
+        const key = currentTpGroup.thresholdC.toFixed(2);
+        const cur = activeTpIndexByThreshold[key] || 0;
+        const nextIdx = (cur + 1) % currentTpGroup.items.length;
+        renderTippingPointCardContent(currentTpGroup, nextIdx);
+      });
 
       function openTippingPointCard(grp, crossYr, anchorViewportX, anchorViewportY, pinIt, preferredIdx) {
         if (tpHideTimer) {
@@ -2291,6 +2376,23 @@
             const tx = yrToX(crossYr);
             const ty = dtToY(grp.thresholdC);
 
+            // Badge dimensions positioned cleanly above-right of the crossing point (clear of 2026 +1.26°C badge)
+            ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
+            const tw = ctx.measureText(grp.badgeLabel).width;
+            const bw = tw + 14;
+            const bh = 19;
+            let bx = Math.max(tx + 10, present2026X + 24);
+            if (bx + bw > tGridRight - 6) bx = tx - bw - 10;
+            const by = Math.max(tGridTop + 6, ty - bh - 10);
+
+            // Diagonal leader line from crossing dot to badge
+            ctx.strokeStyle = "#f43f5e";
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.moveTo(tx, ty);
+            ctx.lineTo(bx > tx ? bx : bx + bw, by + bh / 2);
+            ctx.stroke();
+
             // Outer glowing halo + target dot at threshold crossing
             ctx.fillStyle = "rgba(244, 63, 94, 0.32)";
             ctx.beginPath();
@@ -2305,65 +2407,27 @@
             ctx.arc(tx, ty, 2.0, 0, Math.PI * 2);
             ctx.fill();
 
-            // Render a stacked clickable pill badge for each tipping point at this threshold
-            ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
-            const bh = 18;
-            const gap = 3;
-            const count = grp.items.length;
-            const totalStackH = count * bh + (count - 1) * gap;
-            const stackTopY = Math.max(tGridTop + 6, ty - totalStackH - 6);
+            // 100% solid opaque clickable badge
+            ctx.fillStyle = "#070d17";
+            ctx.strokeStyle = "#f43f5e";
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.roundRect(bx, by, bw, bh, 4);
+            ctx.fill();
+            ctx.stroke();
 
-            grp.items.forEach((tp, idx) => {
-              const tw = ctx.measureText(tp.shortLabel).width;
-              const bw = tw + 14;
-              let bx = Math.max(tx + 12, present2026X + 24);
-              if (bx + bw > tGridRight - 6) bx = tx - bw - 12;
-              const by = stackTopY + idx * (bh + gap);
+            ctx.fillStyle = "#fda4af";
+            ctx.fillText(grp.badgeLabel, bx + 7, by + 13);
 
-              // Diagonal leader line from crossing dot to this tipping point badge
-              ctx.strokeStyle = "rgba(244, 63, 94, 0.85)";
-              ctx.lineWidth = 1.2;
-              ctx.beginPath();
-              ctx.moveTo(tx, ty);
-              ctx.lineTo(bx > tx ? bx : bx + bw, by + bh / 2);
-              ctx.stroke();
-
-              // 100% solid opaque clickable badge
-              ctx.fillStyle = "#070d17";
-              ctx.strokeStyle = "#f43f5e";
-              ctx.lineWidth = 1.3;
-              ctx.beginPath();
-              ctx.roundRect(bx, by, bw, bh, 4);
-              ctx.fill();
-              ctx.stroke();
-
-              ctx.fillStyle = "#fda4af";
-              ctx.fillText(tp.shortLabel, bx + 7, by + 12.5);
-
-              mainChartTpHitboxes.push({
-                grp,
-                itemIdx: idx,
-                crossYr,
-                x1: bx - 2,
-                x2: bx + bw + 2,
-                y1: by - 1,
-                y2: by + bh + 1,
-                anchorX: bx + bw / 2,
-                anchorY: by
-              });
-            });
-
-            // Also make the crossing dot itself a hitbox (opens first item in group)
             mainChartTpHitboxes.push({
               grp,
-              itemIdx: 0,
               crossYr,
-              x1: tx - 9,
-              x2: tx + 9,
-              y1: ty - 9,
-              y2: ty + 9,
-              anchorX: tx,
-              anchorY: ty - 10
+              x1: Math.min(tx - 9, bx - 2),
+              x2: Math.max(tx + 9, bx + bw + 2),
+              y1: Math.min(ty - 9, by - 2),
+              y2: Math.max(ty + 9, by + bh + 2),
+              anchorX: bx + bw / 2,
+              anchorY: by
             });
           }
         });
@@ -3544,6 +3608,21 @@
               const tx = offsetToX(crossYr - 1750);
               const ty = tempToY(isRel ? (grp.thresholdC - m0.dt) : grp.thresholdC);
 
+              cCtx.font = "bold 10px system-ui, -apple-system, sans-serif";
+              const tw = cCtx.measureText(grp.badgeLabel).width;
+              const bw = tw + 14;
+              const bh = 19;
+              let bx = tx + 10;
+              if (bx + bw > padL + gw - 6) bx = tx - bw - 10;
+              const by = Math.max(padT + 6, ty - bh - 10);
+
+              cCtx.strokeStyle = "#f43f5e";
+              cCtx.lineWidth = 1.3;
+              cCtx.beginPath();
+              cCtx.moveTo(tx, ty);
+              cCtx.lineTo(bx > tx ? bx : bx + bw, by + bh / 2);
+              cCtx.stroke();
+
               cCtx.fillStyle = "rgba(244, 63, 94, 0.32)";
               cCtx.beginPath();
               cCtx.arc(tx, ty, 7.5, 0, Math.PI * 2);
@@ -3557,61 +3636,26 @@
               cCtx.arc(tx, ty, 2.0, 0, Math.PI * 2);
               cCtx.fill();
 
-              cCtx.font = "bold 10px system-ui, -apple-system, sans-serif";
-              const bh = 18;
-              const gap = 3;
-              const count = grp.items.length;
-              const totalStackH = count * bh + (count - 1) * gap;
-              const stackTopY = Math.max(padT + 6, ty - totalStackH - 6);
+              cCtx.fillStyle = "#070d17";
+              cCtx.strokeStyle = "#f43f5e";
+              cCtx.lineWidth = 1.4;
+              cCtx.beginPath();
+              cCtx.roundRect(bx, by, bw, bh, 4);
+              cCtx.fill();
+              cCtx.stroke();
 
-              grp.items.forEach((tp, idx) => {
-                const tw = cCtx.measureText(tp.shortLabel).width;
-                const bw = tw + 14;
-                let bx = tx + 12;
-                if (bx + bw > padL + gw - 6) bx = tx - bw - 12;
-                const by = stackTopY + idx * (bh + gap);
-
-                cCtx.strokeStyle = "rgba(244, 63, 94, 0.85)";
-                cCtx.lineWidth = 1.2;
-                cCtx.beginPath();
-                cCtx.moveTo(tx, ty);
-                cCtx.lineTo(bx > tx ? bx : bx + bw, by + bh / 2);
-                cCtx.stroke();
-
-                cCtx.fillStyle = "#070d17";
-                cCtx.strokeStyle = "#f43f5e";
-                cCtx.lineWidth = 1.3;
-                cCtx.beginPath();
-                cCtx.roundRect(bx, by, bw, bh, 4);
-                cCtx.fill();
-                cCtx.stroke();
-
-                cCtx.fillStyle = "#fda4af";
-                cCtx.fillText(tp.shortLabel, bx + 7, by + 12.5);
-
-                paleoChartTpHitboxes.push({
-                  grp,
-                  itemIdx: idx,
-                  crossYr,
-                  x1: bx - 2,
-                  x2: bx + bw + 2,
-                  y1: by - 1,
-                  y2: by + bh + 1,
-                  anchorX: bx + bw / 2,
-                  anchorY: by
-                });
-              });
+              cCtx.fillStyle = "#fda4af";
+              cCtx.fillText(grp.badgeLabel, bx + 7, by + 13);
 
               paleoChartTpHitboxes.push({
                 grp,
-                itemIdx: 0,
                 crossYr,
-                x1: tx - 9,
-                x2: tx + 9,
-                y1: ty - 9,
-                y2: ty + 9,
-                anchorX: tx,
-                anchorY: ty - 10
+                x1: Math.min(tx - 9, bx - 2),
+                x2: Math.max(tx + 9, bx + bw + 2),
+                y1: Math.min(ty - 9, by - 2),
+                y2: Math.max(ty + 9, by + bh + 2),
+                anchorX: bx + bw / 2,
+                anchorY: by
               });
             }
           });
