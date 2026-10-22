@@ -404,6 +404,109 @@
     }
     .bubble-nav-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 
+    /* Interactive Tipping Point Popover Card (100% Opaque, Clickable Links) */
+    .tipping-point-card {
+      display: none;
+      position: fixed;
+      z-index: 2500;
+      width: 350px;
+      max-width: calc(100vw - 24px);
+      background: #070d17;
+      border: 1.5px solid var(--rose);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.95), 0 0 20px rgba(244, 63, 94, 0.28);
+      pointer-events: auto;
+    }
+    .tp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(244, 63, 94, 0.3);
+      padding-bottom: 6px;
+    }
+    .tp-title {
+      font-weight: 800;
+      color: #fda4af;
+      font-size: 0.88rem;
+      line-height: 1.3;
+    }
+    .tp-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 1.15rem;
+      line-height: 1;
+      padding: 0 2px;
+    }
+    .tp-close:hover { color: #ffffff; }
+    .tp-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-size: 0.72rem;
+      font-family: ui-monospace, monospace;
+    }
+    .tp-badge-threshold {
+      background: rgba(244, 63, 94, 0.18);
+      border: 1px solid var(--rose);
+      color: #fecdd3;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .tp-badge-year {
+      background: rgba(245, 158, 11, 0.16);
+      border: 1px solid var(--amber);
+      color: #fde68a;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .tp-summary {
+      color: #f1f5f9;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      line-height: 1.52;
+    }
+    .tp-links-section {
+      border-top: 1px solid rgba(51, 65, 85, 0.75);
+      padding-top: 8px;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .tp-links-heading {
+      font-size: 0.69rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+    .tp-link {
+      color: var(--cyan);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+      line-height: 1.35;
+      padding: 3px 0;
+    }
+    .tp-link:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
     /* Modal Documentation & Tabs */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88);
@@ -1280,6 +1383,27 @@
     </div>
   </div>
 
+  <!-- INTERACTIVE TIPPING POINT POPOVER CARD (100% Opaque, Clickable Links) -->
+  <div class="tipping-point-card" id="tippingPointCard">
+    <div class="tp-header">
+      <div class="tp-title" id="tpCardTitle">🧊 Greenland Ice Sheet Collapse</div>
+      <button class="tp-close" id="tpCardCloseBtn" title="Close">&times;</button>
+    </div>
+    <div class="tp-meta">
+      <span class="tp-badge-threshold" id="tpCardThreshold">Central Threshold: +1.5°C (Range: 0.8–3.0°C)</span>
+      <span class="tp-badge-year" id="tpCardYear">Reached: ~2039 CE</span>
+    </div>
+    <div class="tp-summary" id="tpCardSummary"></div>
+    <div class="tp-links-section">
+      <div class="tp-links-heading">Layman-Friendly Articles</div>
+      <div id="tpCardArticles"></div>
+    </div>
+    <div class="tp-links-section">
+      <div class="tp-links-heading">Peer-Reviewed Scientific Papers</div>
+      <div id="tpCardPapers"></div>
+    </div>
+  </div>
+
   <script>
     (function () {
       "use strict";
@@ -1411,6 +1535,179 @@
 
         return { currentTs, currentTsK, OLR, EEI, TeffC, zEffM, totalRF: rf };
       }
+
+      // =========================================================================
+      // CLIMATE TIPPING POINTS REGISTRY & INTERACTIVE POPOVER CONTROLLER
+      // =========================================================================
+      const tippingPoints = [
+        {
+          id: "greenland-ice-sheet",
+          thresholdC: 1.5,
+          shortLabel: "🧊 Greenland Ice Sheet (+1.5°C) ↗",
+          title: "🧊 Tipping Point: Greenland Ice Sheet Collapse",
+          rangeText: "Central Estimate: +1.5°C (Range: 0.8–3.0°C)",
+          summary: "As global warming crosses ~1.5°C, summer surface melting exceeds annual snowfall. Because the ice sheet is miles thick, melting lowers its surface into warmer, lower-altitude air — a self-sustaining 'melt-elevation feedback' that commits Earth to up to ~7 meters (23 feet) of sea-level rise over centuries to millennia.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            },
+            {
+              label: "Carbon Brief Explainer: Nine 'tipping points' that could be triggered by climate change",
+              url: "https://www.carbonbrief.org/explainer-nine-tipping-points-that-could-be-triggered-by-climate-change/"
+            }
+          ],
+          papers: [
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            },
+            {
+              label: "Bochow et al. (2023), Nature — Overshooting the critical threshold for the Greenland ice sheet",
+              url: "https://doi.org/10.1038/s41586-023-06503-9"
+            }
+          ]
+        }
+      ];
+
+      function getThresholdCrossingYear(series, thresholdC, fallbackCurrentYr, fallbackCurrentDt) {
+        if (series && series.length > 0) {
+          for (let i = 0; i < series.length; i++) {
+            const pt = series[i];
+            const val = pt.deltaTs !== undefined ? pt.deltaTs : pt.dt;
+            const yr = pt.year !== undefined ? pt.year : pt.calYr;
+            if (val >= thresholdC) {
+              if (i === 0) return yr;
+              const prev = series[i - 1];
+              const prevVal = prev.deltaTs !== undefined ? prev.deltaTs : prev.dt;
+              const prevYr = prev.year !== undefined ? prev.year : prev.calYr;
+              const spanVal = val - prevVal;
+              const frac = spanVal > 0 ? Math.max(0, Math.min(1, (thresholdC - prevVal) / spanVal)) : 0;
+              return prevYr + frac * (yr - prevYr);
+            }
+          }
+        }
+        if (fallbackCurrentDt !== undefined && fallbackCurrentDt >= thresholdC) {
+          return fallbackCurrentYr;
+        }
+        return null;
+      }
+
+      const tpCardEl = document.getElementById("tippingPointCard");
+      const tpCardTitleEl = document.getElementById("tpCardTitle");
+      const tpCardThresholdEl = document.getElementById("tpCardThreshold");
+      const tpCardYearEl = document.getElementById("tpCardYear");
+      const tpCardSummaryEl = document.getElementById("tpCardSummary");
+      const tpCardArticlesEl = document.getElementById("tpCardArticles");
+      const tpCardPapersEl = document.getElementById("tpCardPapers");
+      const tpCardCloseBtn = document.getElementById("tpCardCloseBtn");
+
+      let activeTpId = null;
+      let tpCardPinned = false;
+      let tpHoveringCard = false;
+      let tpHideTimer = null;
+      let mainChartTpHitboxes = [];
+      let paleoChartTpHitboxes = [];
+
+      function openTippingPointCard(tp, crossYr, anchorViewportX, anchorViewportY, pinIt) {
+        if (tpHideTimer) {
+          clearTimeout(tpHideTimer);
+          tpHideTimer = null;
+        }
+        if (pinIt) tpCardPinned = true;
+
+        if (activeTpId !== tp.id || tpCardEl.style.display !== "block") {
+          activeTpId = tp.id;
+          tpCardTitleEl.textContent = tp.title;
+          tpCardThresholdEl.textContent = tp.rangeText;
+          tpCardSummaryEl.textContent = tp.summary;
+
+          tpCardArticlesEl.innerHTML = tp.articles.map(a =>
+            `<a class="tp-link" href="${a.url}" target="_blank" rel="noopener noreferrer"><span>📰</span><span>${a.label} ↗</span></a>`
+          ).join("");
+          tpCardPapersEl.innerHTML = tp.papers.map(p =>
+            `<a class="tp-link" href="${p.url}" target="_blank" rel="noopener noreferrer"><span>📄</span><span>${p.label} ↗</span></a>`
+          ).join("");
+        }
+
+        tpCardYearEl.textContent = `Reached: ~${Math.round(crossYr)} CE`;
+        tpCardEl.style.display = "block";
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const cardW = Math.min(350, vw - 24);
+        const cardH = tpCardEl.offsetHeight || 290;
+
+        let left, top;
+        if (vw < 600) {
+          left = Math.max(12, (vw - cardW) / 2);
+          top = anchorViewportY - cardH - 16;
+          if (top < 12) top = Math.min(vh - cardH - 12, anchorViewportY + 24);
+        } else {
+          left = anchorViewportX - cardW / 2;
+          left = Math.max(12, Math.min(vw - cardW - 12, left));
+          top = anchorViewportY - cardH - 14;
+          if (top < 12) {
+            top = Math.min(vh - cardH - 12, anchorViewportY + 22);
+          }
+        }
+        tpCardEl.style.left = `${Math.round(left)}px`;
+        tpCardEl.style.top = `${Math.round(top)}px`;
+      }
+
+      function scheduleHideTippingPointCard() {
+        if (tpCardPinned || tpHoveringCard) return;
+        if (tpHideTimer) clearTimeout(tpHideTimer);
+        tpHideTimer = setTimeout(() => {
+          if (!tpCardPinned && !tpHoveringCard) {
+            tpCardEl.style.display = "none";
+            activeTpId = null;
+          }
+        }, 240);
+      }
+
+      tpCardEl.addEventListener("mouseenter", () => {
+        tpHoveringCard = true;
+        if (tpHideTimer) {
+          clearTimeout(tpHideTimer);
+          tpHideTimer = null;
+        }
+      });
+      tpCardEl.addEventListener("mouseleave", () => {
+        tpHoveringCard = false;
+        if (!tpCardPinned) scheduleHideTippingPointCard();
+      });
+      tpCardCloseBtn.addEventListener("click", () => {
+        tpCardPinned = false;
+        tpHoveringCard = false;
+        tpCardEl.style.display = "none";
+        activeTpId = null;
+      });
+      document.addEventListener("mousedown", e => {
+        if (tpCardEl.style.display === "block" && !tpCardEl.contains(e.target) && e.target !== canvas && e.target !== paleoCompareCanvas) {
+          tpCardPinned = false;
+          tpHoveringCard = false;
+          tpCardEl.style.display = "none";
+          activeTpId = null;
+        }
+      });
+
+      canvas.addEventListener("click", e => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        for (const hb of mainChartTpHitboxes) {
+          if (mx >= hb.x1 && mx <= hb.x2 && my >= hb.y1 && my <= hb.y2) {
+            openTippingPointCard(hb.tp, hb.crossYr, rect.left + hb.anchorX, rect.top + hb.anchorY, true);
+            return;
+          }
+        }
+        if (tpCardPinned) {
+          tpCardPinned = false;
+          tpCardEl.style.display = "none";
+          activeTpId = null;
+        }
+      });
 
       function draw() {
         const dpr = window.devicePixelRatio || 1;
@@ -1837,6 +2134,70 @@
           }
         });
 
+        // Climate Tipping Point Threshold Markers (Appears dynamically when trajectory reaches threshold)
+        mainChartTpHitboxes = [];
+        tippingPoints.forEach(tp => {
+          const crossYr = getThresholdCrossingYear(state.history, tp.thresholdC, state.year, state.deltaTs);
+          if (crossYr !== null) {
+            const tx = yrToX(crossYr);
+            const ty = dtToY(tp.thresholdC);
+
+            // Badge dimensions positioned cleanly above-right of the crossing point (clear of 2026 +1.26°C badge)
+            ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
+            const tw = ctx.measureText(tp.shortLabel).width;
+            const bw = tw + 14;
+            const bh = 19;
+            let bx = tx + 10;
+            if (bx + bw > tGridRight - 6) bx = tx - bw - 10;
+            const by = Math.max(tGridTop + 6, ty - bh - 10);
+
+            // Diagonal leader line from crossing dot to badge
+            ctx.strokeStyle = "#f43f5e";
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.moveTo(tx, ty);
+            ctx.lineTo(bx > tx ? bx : bx + bw, by + bh / 2);
+            ctx.stroke();
+
+            // Outer glowing halo + target dot at threshold crossing
+            ctx.fillStyle = "rgba(244, 63, 94, 0.32)";
+            ctx.beginPath();
+            ctx.arc(tx, ty, 7.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#f43f5e";
+            ctx.beginPath();
+            ctx.arc(tx, ty, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(tx, ty, 2.0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 100% solid opaque clickable badge
+            ctx.fillStyle = "#070d17";
+            ctx.strokeStyle = "#f43f5e";
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.roundRect(bx, by, bw, bh, 4);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#fda4af";
+            ctx.fillText(tp.shortLabel, bx + 7, by + 13);
+
+            mainChartTpHitboxes.push({
+              tp,
+              crossYr,
+              x1: Math.min(tx - 9, bx - 2),
+              x2: Math.max(tx + 9, bx + bw + 2),
+              y1: Math.min(ty - 9, by - 2),
+              y2: Math.max(ty + 9, by + bh + 2),
+              anchorX: bx + bw / 2,
+              anchorY: by
+            });
+          }
+        });
+
         // Active Simulation Year Playhead Line & Floating Boxed Label (Clear of X-axis)
         const curYrX = yrToX(state.year);
         let curYrBadgeX = -999, curYrBadgeY = -999, curYrBadgeW = 0;
@@ -2074,6 +2435,7 @@
         // 4. INTERACTIVE TOOLTIPS FOR TEMPERATURE CHART MARKERS & LABELS (Runs on top of all panels)
         let activeTip = null;
         let isPointerHover = false;
+        let hoveredMainTp = null;
 
         const dtVal1958 = getHistoricalDeltaAt(1958);
         const dtVal2026 = getHistoricalDeltaAt(2026);
@@ -2081,6 +2443,13 @@
         const iy2026 = dtVal2026 !== null ? dtToY(dtVal2026) : -999;
 
         if (mousePos.active && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
+          for (const hb of mainChartTpHitboxes) {
+            if (mousePos.x >= hb.x1 && mousePos.x <= hb.x2 && mousePos.y >= hb.y1 && mousePos.y <= hb.y2) {
+              hoveredMainTp = hb;
+              break;
+            }
+          }
+
           // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or orange +0.05°C badge)
           const isOverKeeling = (
             (Math.abs(mousePos.x - keelingX) <= 12) ||
@@ -2101,7 +2470,10 @@
             (mousePos.x >= curYrBadgeX && mousePos.x <= curYrBadgeX + curYrBadgeW && mousePos.y >= curYrBadgeY && mousePos.y <= curYrBadgeY + 18)
           );
 
-          if (isOverKeeling) {
+          if (hoveredMainTp) {
+            isPointerHover = true;
+            openTippingPointCard(hoveredMainTp.tp, hoveredMainTp.crossYr, rect.left + hoveredMainTp.anchorX, rect.top + hoveredMainTp.anchorY, false);
+          } else if (isOverKeeling) {
             isPointerHover = true;
             activeTip = {
               text: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.",
@@ -2120,6 +2492,10 @@
               stroke: "#00e5ff"
             };
           }
+        }
+
+        if (!hoveredMainTp && (!paleoModalOverlay || paleoModalOverlay.style.display !== "flex")) {
+          scheduleHideTippingPointCard();
         }
 
         if (activeTip) {
@@ -2702,7 +3078,19 @@
       });
       paleoCompareCanvas.addEventListener("mouseleave", () => {
         paleoMousePos.active = false;
+        scheduleHideTippingPointCard();
         drawPaleoComparator();
+      });
+      paleoCompareCanvas.addEventListener("click", e => {
+        const rect = paleoCompareCanvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        for (const hb of paleoChartTpHitboxes) {
+          if (mx >= hb.x1 && mx <= hb.x2 && my >= hb.y1 && my <= hb.y2) {
+            openTippingPointCard(hb.tp, hb.crossYr, rect.left + hb.anchorX, rect.top + hb.anchorY, true);
+            return;
+          }
+        }
       });
 
       let paleoStartYrBP = -15000; // Default to Fastest Natural Deglaciation (Termination I)
@@ -2978,6 +3366,66 @@
             cCtx.stroke();
           }
 
+          // Climate Tipping Point Threshold Markers on Modern Curve in Pop-Out Chart
+          paleoChartTpHitboxes = [];
+          tippingPoints.forEach(tp => {
+            const crossYr = getThresholdCrossingYear(modernSeries, tp.thresholdC);
+            if (crossYr !== null) {
+              const tx = offsetToX(crossYr - 1750);
+              const ty = tempToY(isRel ? (tp.thresholdC - m0.dt) : tp.thresholdC);
+
+              cCtx.font = "bold 10px system-ui, -apple-system, sans-serif";
+              const tw = cCtx.measureText(tp.shortLabel).width;
+              const bw = tw + 14;
+              const bh = 19;
+              let bx = tx + 10;
+              if (bx + bw > padL + gw - 6) bx = tx - bw - 10;
+              const by = Math.max(padT + 6, ty - bh - 10);
+
+              cCtx.strokeStyle = "#f43f5e";
+              cCtx.lineWidth = 1.3;
+              cCtx.beginPath();
+              cCtx.moveTo(tx, ty);
+              cCtx.lineTo(bx > tx ? bx : bx + bw, by + bh / 2);
+              cCtx.stroke();
+
+              cCtx.fillStyle = "rgba(244, 63, 94, 0.32)";
+              cCtx.beginPath();
+              cCtx.arc(tx, ty, 7.5, 0, Math.PI * 2);
+              cCtx.fill();
+              cCtx.fillStyle = "#f43f5e";
+              cCtx.beginPath();
+              cCtx.arc(tx, ty, 4.5, 0, Math.PI * 2);
+              cCtx.fill();
+              cCtx.fillStyle = "#ffffff";
+              cCtx.beginPath();
+              cCtx.arc(tx, ty, 2.0, 0, Math.PI * 2);
+              cCtx.fill();
+
+              cCtx.fillStyle = "#070d17";
+              cCtx.strokeStyle = "#f43f5e";
+              cCtx.lineWidth = 1.4;
+              cCtx.beginPath();
+              cCtx.roundRect(bx, by, bw, bh, 4);
+              cCtx.fill();
+              cCtx.stroke();
+
+              cCtx.fillStyle = "#fda4af";
+              cCtx.fillText(tp.shortLabel, bx + 7, by + 13);
+
+              paleoChartTpHitboxes.push({
+                tp,
+                crossYr,
+                x1: Math.min(tx - 9, bx - 2),
+                x2: Math.max(tx + 9, bx + bw + 2),
+                y1: Math.min(ty - 9, by - 2),
+                y2: Math.max(ty + 9, by + bh + 2),
+                anchorX: bx + bw / 2,
+                anchorY: by
+              });
+            }
+          });
+
           // --- PLOT 4: Selected Prehistoric 500-Yr Temperature Curve (Bright Emerald) ---
           cCtx.strokeStyle = "#10b981";
           cCtx.lineWidth = 3.0;
@@ -3027,6 +3475,23 @@
           cCtx.font = "9px system-ui, sans-serif";
           cCtx.fillText("Note: Ice core resolution is ~20–100 yr (0–120k BP) & ~200–500 yr (deep ice)", lx + 10, ly + 68);
 
+          // Check Tipping Point Hitboxes on Pop-Out Chart
+          let hoveredPaleoTp = null;
+          if (paleoMousePos && paleoMousePos.active) {
+            for (const hb of paleoChartTpHitboxes) {
+              if (paleoMousePos.x >= hb.x1 && paleoMousePos.x <= hb.x2 && paleoMousePos.y >= hb.y1 && paleoMousePos.y <= hb.y2) {
+                hoveredPaleoTp = hb;
+                break;
+              }
+            }
+          }
+          if (hoveredPaleoTp) {
+            activePaleoTip = null;
+            openTippingPointCard(hoveredPaleoTp.tp, hoveredPaleoTp.crossYr, cmpRect.left + hoveredPaleoTp.anchorX, cmpRect.top + hoveredPaleoTp.anchorY, false);
+          } else {
+            scheduleHideTippingPointCard();
+          }
+
           // Render interactive tooltip ON TOP of all curves and legends with 100% solid opaque background
           if (activePaleoTip) {
             cCtx.font = "10px system-ui, -apple-system, sans-serif";
@@ -3066,7 +3531,7 @@
             });
           }
 
-          paleoCompareCanvas.style.cursor = activePaleoTip ? "pointer" : "default";
+          paleoCompareCanvas.style.cursor = (activePaleoTip || hoveredPaleoTp) ? "pointer" : "default";
 
           cCtx.restore();
 
