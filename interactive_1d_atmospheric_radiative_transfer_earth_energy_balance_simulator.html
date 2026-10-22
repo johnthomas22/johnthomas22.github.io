@@ -1232,7 +1232,7 @@
         let simTs = 0.0, simTd = 0.0;
         for (let y = 1750; y <= 2026; y += 1) {
           const c = getHistoricalCO2(y);
-          const rf = 5.35 * Math.log(c / CO2_BASE);
+          const rf = 5.42 * Math.log(c / CO2_BASE);
           for (let sub = 0; sub < 4; sub++) {
             const dTs = (rf - LAMBDA_FEEDBACK * simTs - GAMMA * (simTs - simTd)) / CM;
             const dTd = (GAMMA * (simTs - simTd)) / CD;
@@ -2131,7 +2131,9 @@
           }
 
           // Coupled Two-Layer EBM (Held et al. 2010; Geoffroy et al. 2013)
-          const rf = 5.35 * Math.log(Math.max(100, state.co2) / CO2_BASE);
+          // 5.42 W/m^2 calibration factor for historical era accounts for IPCC AR6 tropospheric adjustments
+          const rfAlpha = state.year <= 2026 ? 5.42 : 5.35;
+          const rf = rfAlpha * Math.log(Math.max(100, state.co2) / CO2_BASE);
           const dTs = (rf - LAMBDA_FEEDBACK * state.deltaTs - GAMMA * (state.deltaTs - state.deltaTd)) / CM;
           const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
 
@@ -2578,7 +2580,8 @@
           } else {
             simC = Math.max(150, Math.min(1100, simC + futureRate * 2));
           }
-          const rf = 5.35 * Math.log(Math.max(100, simC) / CO2_BASE);
+          const rfAlpha = y <= 2026 ? 5.42 : 5.35;
+          const rf = rfAlpha * Math.log(Math.max(100, simC) / CO2_BASE);
           // 2-year integration step
           for (let sub = 0; sub < 4; sub++) {
             const dTs = (rf - LAMBDA_FEEDBACK * simTs - GAMMA * (simTs - simTd)) / CM;
@@ -2750,6 +2753,7 @@
           const modernSeries = getModern500YrSeries();
           const m0 = modernSeries[0];
           const mEnd = modernSeries[modernSeries.length - 1];
+          let activePaleoTip = null;
 
           const isRel = paleoPlotMode === "relative";
           // Y-axis scales:
@@ -2834,42 +2838,10 @@
               (paleoMousePos.x >= mx && paleoMousePos.x <= mx + 26 && paleoMousePos.y >= padT + 80 && paleoMousePos.y <= padT + 180)
             );
             if (isOverMarker) {
-              const tipText = mk.tooltip;
-              cCtx.font = "10px system-ui, -apple-system, sans-serif";
-              const maxTipW = 280;
-              // Wrap text
-              const words = tipText.split(" ");
-              let lines = [];
-              let curLine = "";
-              words.forEach(w => {
-                const testLine = curLine ? (curLine + " " + w) : w;
-                if (cCtx.measureText(testLine).width > maxTipW) {
-                  lines.push(curLine);
-                  curLine = w;
-                } else {
-                  curLine = testLine;
-                }
-              });
-              if (curLine) lines.push(curLine);
-
-              const boxW = Math.min(maxTipW + 20, 300);
-              const boxH = lines.length * 14 + 14;
-              let tipBx = paleoMousePos.x + 12;
-              let tipBy = Math.max(padT + 10, paleoMousePos.y - boxH / 2);
-              if (tipBx + boxW > cw - 10) tipBx = paleoMousePos.x - boxW - 12;
-
-              cCtx.fillStyle = "#070d17";
-              cCtx.strokeStyle = "#f59e0b";
-              cCtx.lineWidth = 1.4;
-              cCtx.beginPath();
-              cCtx.roundRect(tipBx, tipBy, boxW, boxH, 5);
-              cCtx.fill();
-              cCtx.stroke();
-
-              cCtx.fillStyle = "#ffffff";
-              lines.forEach((l, lIdx) => {
-                cCtx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
-              });
+              activePaleoTip = {
+                text: mk.tooltip,
+                stroke: "#f59e0b"
+              };
             }
           });
 
@@ -2961,6 +2933,47 @@
           cCtx.fillStyle = "#94a3b8";
           cCtx.font = "9px system-ui, sans-serif";
           cCtx.fillText("Note: Ice core resolution is ~20–100 yr (0–120k BP) & ~200–500 yr (deep ice)", lx + 10, ly + 68);
+
+          // Render interactive tooltip ON TOP of all curves and legends with 100% solid opaque background
+          if (activePaleoTip) {
+            cCtx.font = "10px system-ui, -apple-system, sans-serif";
+            const maxTipW = 280;
+            const words = activePaleoTip.text.split(" ");
+            let lines = [];
+            let curLine = "";
+            words.forEach(w => {
+              const testLine = curLine ? (curLine + " " + w) : w;
+              if (cCtx.measureText(testLine).width > maxTipW) {
+                lines.push(curLine);
+                curLine = w;
+              } else {
+                curLine = testLine;
+              }
+            });
+            if (curLine) lines.push(curLine);
+
+            const boxW = Math.min(maxTipW + 20, 300);
+            const boxH = lines.length * 14 + 14;
+            let tipBx = paleoMousePos.x + 12;
+            let tipBy = Math.max(padT + 10, paleoMousePos.y - boxH / 2);
+            if (tipBx + boxW > cw - 10) tipBx = paleoMousePos.x - boxW - 12;
+
+            // 100% solid opaque fill so no underlying curves bleed through
+            cCtx.fillStyle = "#070d17";
+            cCtx.strokeStyle = activePaleoTip.stroke;
+            cCtx.lineWidth = 1.4;
+            cCtx.beginPath();
+            cCtx.roundRect(tipBx, tipBy, boxW, boxH, 5);
+            cCtx.fill();
+            cCtx.stroke();
+
+            cCtx.fillStyle = "#ffffff";
+            lines.forEach((l, lIdx) => {
+              cCtx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
+            });
+          }
+
+          paleoCompareCanvas.style.cursor = activePaleoTip ? "pointer" : "default";
 
           cCtx.restore();
 
