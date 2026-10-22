@@ -339,18 +339,28 @@
     .bubble-popup-card {
       position: absolute;
       display: none;
-      width: 375px;
-      max-width: calc(100% - 40px);
+      width: 360px;
+      max-width: calc(100% - 24px);
+      box-sizing: border-box;
       background: #0b1322;
       border: 1.5px solid var(--cyan);
       border-radius: 10px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       z-index: 1000;
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 229, 255, 0.25);
       pointer-events: auto;
-      font-size: 0.84rem;
-      line-height: 1.55;
+      font-size: 0.82rem;
+      line-height: 1.5;
       color: #cbd5e1;
+    }
+    @media (max-width: 600px) {
+      .bubble-popup-card {
+        width: calc(100% - 24px) !important;
+        max-width: calc(100% - 24px) !important;
+        left: 12px !important;
+        padding: 10px 12px;
+        font-size: 0.8rem;
+      }
     }
     .bubble-header {
       display: flex;
@@ -1193,23 +1203,6 @@
       const CD = 105.0;
       const GAMMA = 0.73;
 
-      let state = {
-        co2: 427.0,
-        rate: 2.5,
-        deltaTs: 1.26,
-        deltaTd: 0.55,
-        year: 2026.0,
-        speed: 1.0,
-        running: true, // Launches running from Present Day (2026) into the future
-        isHistoricalPreset: false,
-        history: [
-          { year: 1750, deltaTs: 0, co2: 278.0 },
-          { year: 1850, deltaTs: 0.05, co2: 285.0 },
-          { year: 1958, deltaTs: 0.30, co2: 315.0 },
-          { year: 2026, deltaTs: 1.26, co2: 427.0 }
-        ]
-      };
-
       // Empirical Historical CO2 Spline (Law Dome Ice Cores 1750-1958 + Mauna Loa Keeling 1958-2026)
       const historicalCO2Spline = [
         { y: 1750, c: 278.0 }, { y: 1800, c: 283.0 }, { y: 1850, c: 285.0 },
@@ -1232,6 +1225,40 @@
         }
         return 427.0;
       }
+
+      // Pre-compute continuous calibrated historical run from 1750 up to Present Day 2026
+      function getCalibratedHistoricalRun() {
+        const pts = [];
+        let simTs = 0.0, simTd = 0.0;
+        for (let y = 1750; y <= 2026; y += 1) {
+          const c = getHistoricalCO2(y);
+          const rf = 5.35 * Math.log(c / CO2_BASE);
+          for (let sub = 0; sub < 4; sub++) {
+            const dTs = (rf - LAMBDA_FEEDBACK * simTs - GAMMA * (simTs - simTd)) / CM;
+            const dTd = (GAMMA * (simTs - simTd)) / CD;
+            simTs += dTs * 0.25;
+            simTd += dTd * 0.25;
+          }
+          pts.push({ year: y, deltaTs: simTs, co2: c });
+        }
+        const last = pts[pts.length - 1];
+        if (last && last.year === 2026) {
+          last.deltaTs = 1.26;
+          last.co2 = 427.0;
+        }
+        return pts;
+      }
+
+      let state = {
+        co2: 427.0,
+        rate: 2.5,
+        deltaTs: 1.26,
+        deltaTd: 0.55,
+        year: 2026.0,
+        speed: 1.0,
+        running: true, // Launches running from Present Day (2026) into the future
+        history: getCalibratedHistoricalRun()
+      };
 
       const canvas = document.getElementById("simCanvas");
       const ctx = canvas.getContext("2d");
@@ -2095,9 +2122,11 @@
           const baseSpeedFactor = isSimple ? 0.04375 : 0.0875;
           const dt = baseSpeedFactor * state.speed;
 
-          if (state.isHistoricalPreset && state.year < 2026) {
+          if (state.year < 2026) {
+            // ALWAYS follow calibrated historical data (Law Dome ice core & Mauna Loa Keeling) up to 2026
             state.co2 = getHistoricalCO2(state.year);
           } else if (state.rate !== 0) {
+            // Beyond 2026, advance based on the chosen future scenario rate
             state.co2 = Math.max(150, Math.min(1000, state.co2 + state.rate * dt));
           }
 
@@ -2197,20 +2226,51 @@
         const pin = document.getElementById(d.pinId);
         pin.classList.add("active");
 
-        // Position card cleanly adjacent to pin (no overlapping text)
+        // Position card cleanly adjacent to pin (no clipping off-screen on mobile or desktop)
         const cRect = document.getElementById("canvasContainer").getBoundingClientRect();
         const pRect = pin.getBoundingClientRect();
         const pinLeft = pRect.left - cRect.left;
         const pinTop = pRect.top - cRect.top;
 
         bubbleCard.style.display = "block";
-        bubbleCard.style.left = Math.min(pinLeft + 28, cRect.width - 390) + "px";
+        const cardW = Math.min(360, cRect.width - 24);
+        const cardH = bubbleCard.offsetHeight || 190;
 
-        if (index === 1) { // Surface Pin 2: anchor upward so it doesn't clip off bottom
-          bubbleCard.style.top = Math.max(10, pinTop - 190) + "px";
+        let targetLeft, targetTop;
+
+        if (cRect.width < 600) {
+          // Mobile Viewport: horizontally center card inside container with guaranteed margins
+          targetLeft = Math.max(12, (cRect.width - cardW) / 2);
+
+          // Vertically position clear of the pin so the user still sees the glowing pin
+          if (pinTop < cRect.height * 0.38) {
+            targetTop = pinTop + 36;
+          } else {
+            targetTop = pinTop - cardH - 12;
+          }
         } else {
-          bubbleCard.style.top = Math.max(10, pinTop - 40) + "px";
+          // Desktop / Tablet: position adjacent to pin with edge bounds
+          targetLeft = pinLeft + 32;
+          if (targetLeft + cardW > cRect.width - 16) {
+            targetLeft = pinLeft - cardW - 14;
+          }
+          if (targetLeft < 12) {
+            targetLeft = Math.max(12, Math.min(cRect.width - cardW - 12, pinLeft - cardW / 2));
+          }
+
+          if (index === 1 || pinTop > cRect.height * 0.55) {
+            targetTop = pinTop - cardH - 12;
+          } else {
+            targetTop = pinTop - 40;
+          }
         }
+
+        // Strictly clamp vertical position within container bounds
+        targetTop = Math.max(10, Math.min(cRect.height - cardH - 10, targetTop));
+
+        bubbleCard.style.left = Math.round(targetLeft) + "px";
+        bubbleCard.style.top = Math.round(targetTop) + "px";
+        bubbleCard.style.width = Math.round(cardW) + "px";
       }
 
       speechDataIntro.forEach((d, i) => {
@@ -2261,18 +2321,12 @@
       function resetToPresentDay(autoRun) {
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("presetPresent").classList.add("active");
-        state.isHistoricalPreset = false;
         state.co2 = 427.0;
         state.rate = 2.5;
         state.deltaTs = 1.26;
         state.deltaTd = 0.55;
         state.year = 2026.0;
-        state.history = [
-          { year: 1750, deltaTs: 0, co2: 278.0 },
-          { year: 1850, deltaTs: 0.05, co2: 285.0 },
-          { year: 1958, deltaTs: 0.30, co2: 315.0 },
-          { year: 2026, deltaTs: 1.26, co2: 427.0 }
-        ];
+        state.history = getCalibratedHistoricalRun();
         if (typeof autoRun === "boolean") {
           state.running = autoRun;
         }
@@ -2291,17 +2345,15 @@
       });
 
       document.getElementById("btnReset").addEventListener("click", () => {
+        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
+        document.getElementById("presetPreInd").classList.add("active");
         state.running = false;
         state.co2 = 278.0;
-        state.rate = 0.0;
+        state.rate = 2.5;
         state.deltaTs = 0.0;
         state.deltaTd = 0.0;
         state.year = 1750.0;
-        state.isHistoricalPreset = true;
         state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
-
-        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
-        document.getElementById("presetPreInd").classList.add("active");
 
         syncUI();
         draw();
@@ -2319,63 +2371,79 @@
       document.getElementById("presetPreInd").addEventListener("click", () => {
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("presetPreInd").classList.add("active");
-        state.isHistoricalPreset = true;
-        state.co2 = 278.0; state.rate = 0.0; state.deltaTs = 0.0; state.deltaTd = 0.0; state.year = 1750.0;
+        state.co2 = 278.0;
+        state.rate = 2.5;
+        state.deltaTs = 0.0;
+        state.deltaTd = 0.0;
+        state.year = 1750.0;
         state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
+        state.running = true;
         syncUI();
         draw();
       });
 
-      document.getElementById("presetPresent").addEventListener("click", () => resetToPresentDay());
+      document.getElementById("presetPresent").addEventListener("click", () => resetToPresentDay(true));
 
       document.getElementById("preset2x").addEventListener("click", () => {
+        resetToPresentDay(true);
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("preset2x").classList.add("active");
-        state.isHistoricalPreset = false;
-        state.co2 = 556.0; state.rate = 0.0;
+        state.co2 = 556.0; // 2x Pre-industrial pulse starting from Present Day
+        state.rate = 0.0;  // stabilized constant
         syncUI();
         draw();
       });
 
       document.getElementById("presetDrawdown").addEventListener("click", () => {
+        resetToPresentDay(true);
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("presetDrawdown").classList.add("active");
-        state.isHistoricalPreset = false;
-        state.rate = -1.5;
+        state.co2 = 427.0;
+        state.rate = -1.5; // active CDR from 2026
         syncUI();
         draw();
       });
 
       document.getElementById("sliderCO2").addEventListener("input", e => {
-        state.isHistoricalPreset = false;
         const frac = e.target.value / 1000;
-        state.co2 = Math.exp(Math.log(150) + frac * (Math.log(1000) - Math.log(150)));
+        const targetCO2 = Math.exp(Math.log(150) + frac * (Math.log(1000) - Math.log(150)));
+        if (state.year < 2026) {
+          // If user adjusts CO2 slider while in pre-2026 historical era, fast-forward cleanly to 2026 Present Day
+          // so history is never rewritten
+          resetToPresentDay(state.running);
+        }
+        state.co2 = targetCO2;
         syncUI();
         draw();
       });
 
       document.getElementById("sliderRate").addEventListener("input", e => {
-        state.isHistoricalPreset = false;
         state.rate = parseFloat(e.target.value);
         syncUI();
         draw();
       });
 
       document.getElementById("ratePresetM1").addEventListener("click", () => {
-        state.isHistoricalPreset = false; state.rate = -1.5;
+        state.rate = -1.5;
         syncUI();
       });
       document.getElementById("ratePreset0").addEventListener("click", () => {
-        state.isHistoricalPreset = false; state.rate = 0.0;
+        state.rate = 0.0;
         syncUI();
       });
       document.getElementById("ratePreset15").addEventListener("click", () => {
-        state.isHistoricalPreset = false; state.rate = 1.5;
+        state.rate = 1.5;
         syncUI();
       });
       document.getElementById("ratePreset25").addEventListener("click", () => {
-        state.isHistoricalPreset = false; state.rate = 2.5;
+        state.rate = 2.5;
         syncUI();
+      });
+
+      window.addEventListener("resize", () => {
+        if (bubbleCard.style.display === "block") {
+          showSpeechBubble(currentStep);
+        }
       });
 
       // Modal Tabs & Navigation Handlers
