@@ -430,6 +430,34 @@
       border-bottom: 1px solid rgba(244, 63, 94, 0.3);
       padding-bottom: 6px;
     }
+    .tp-tabs-row {
+      display: none;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.75);
+    }
+    .tp-tab-btn {
+      background: #111c2d;
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 0.71rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tp-tab-btn:hover {
+      border-color: var(--rose);
+      color: #ffffff;
+    }
+    .tp-tab-btn.active {
+      background: rgba(244, 63, 94, 0.22);
+      border-color: var(--rose);
+      color: #fecdd3;
+    }
     .tp-title {
       font-weight: 800;
       color: #fda4af;
@@ -1385,6 +1413,7 @@
 
   <!-- INTERACTIVE TIPPING POINT POPOVER CARD (100% Opaque, Clickable Links) -->
   <div class="tipping-point-card" id="tippingPointCard">
+    <div class="tp-tabs-row" id="tpCardTabs"></div>
     <div class="tp-header">
       <div class="tp-title" id="tpCardTitle">🧊 Greenland Ice Sheet Collapse</div>
       <button class="tp-close" id="tpCardCloseBtn" title="Close">&times;</button>
@@ -1543,6 +1572,7 @@
         {
           id: "greenland-ice-sheet",
           thresholdC: 1.5,
+          tabLabel: "1. 🧊 Greenland Ice Sheet",
           shortLabel: "🧊 Greenland Ice Sheet (+1.5°C) ↗",
           title: "🧊 Tipping Point: Greenland Ice Sheet Collapse",
           rangeText: "Central Estimate: +1.5°C (Range: 0.8–3.0°C)",
@@ -1567,8 +1597,59 @@
               url: "https://doi.org/10.1038/s41586-023-06503-9"
             }
           ]
+        },
+        {
+          id: "west-antarctic-ice-sheet",
+          thresholdC: 1.5,
+          tabLabel: "2. ❄️ West Antarctic Ice Sheet",
+          shortLabel: "❄️ West Antarctic Ice Sheet (+1.5°C) ↗",
+          title: "❄️ Tipping Point: West Antarctic Ice Sheet Collapse",
+          rangeText: "Central Estimate: +1.5°C (Range: 1.0–3.0°C)",
+          summary: "Much of the West Antarctic Ice Sheet (including the Thwaites and Pine Island glaciers) sits on bedrock below sea level that slopes downward inland. As warming ocean waters melt floating ice shelves from beneath, the grounding line retreats into deeper water where thicker ice cliffs calve even faster — a runaway 'Marine Ice Sheet Instability' committing ~3.3 meters (11 feet) of sea-level rise.",
+          articles: [
+            {
+              label: "Carbon Brief: Meltdown of West Antarctic ice sheet 'unavoidable', study says",
+              url: "https://www.carbonbrief.org/meltdown-of-west-antarctic-ice-sheet-unavoidable-study-says/"
+            },
+            {
+              label: "Carbon Brief Explainer: Nine 'tipping points' that could be triggered by climate change",
+              url: "https://www.carbonbrief.org/explainer-nine-tipping-points-that-could-be-triggered-by-climate-change/"
+            }
+          ],
+          papers: [
+            {
+              label: "Naughten et al. (2023), Nature Climate Change — Unavoidable future increase in West Antarctic ice-shelf melting over the twenty-first century",
+              url: "https://doi.org/10.1038/s41558-023-01818-x"
+            },
+            {
+              label: "Joughin et al. (2014), Science — Marine Ice Sheet Collapse Potentially Under Way for the Thwaites Glacier Basin",
+              url: "https://doi.org/10.1126/science.1249055"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
         }
       ];
+
+      function getTippingPointGroups() {
+        const map = new Map();
+        tippingPoints.forEach(tp => {
+          const key = tp.thresholdC.toFixed(2);
+          if (!map.has(key)) {
+            map.set(key, { thresholdC: tp.thresholdC, items: [] });
+          }
+          map.get(key).items.push(tp);
+        });
+        return Array.from(map.values()).map(grp => ({
+          thresholdC: grp.thresholdC,
+          items: grp.items,
+          badgeLabel: grp.items.length === 1
+            ? grp.items[0].shortLabel
+            : `⚠️ +${grp.thresholdC.toFixed(1)}°C Tipping Points (${grp.items.length}) ↗`
+        }));
+      }
 
       function getThresholdCrossingYear(series, thresholdC, fallbackCurrentYr, fallbackCurrentDt) {
         if (series && series.length > 0) {
@@ -1594,6 +1675,7 @@
       }
 
       const tpCardEl = document.getElementById("tippingPointCard");
+      const tpCardTabsEl = document.getElementById("tpCardTabs");
       const tpCardTitleEl = document.getElementById("tpCardTitle");
       const tpCardThresholdEl = document.getElementById("tpCardThreshold");
       const tpCardYearEl = document.getElementById("tpCardYear");
@@ -1602,32 +1684,66 @@
       const tpCardPapersEl = document.getElementById("tpCardPapers");
       const tpCardCloseBtn = document.getElementById("tpCardCloseBtn");
 
-      let activeTpId = null;
+      let activeTpGroupKey = null;
+      let activeTpIndexByThreshold = {};
+      let currentTpGroup = null;
+      let currentTpCrossYr = 2039;
       let tpCardPinned = false;
       let tpHoveringCard = false;
       let tpHideTimer = null;
       let mainChartTpHitboxes = [];
       let paleoChartTpHitboxes = [];
 
-      function openTippingPointCard(tp, crossYr, anchorViewportX, anchorViewportY, pinIt) {
+      function renderTippingPointCardContent(grp, selectedIdx) {
+        const idx = Math.max(0, Math.min(grp.items.length - 1, selectedIdx || 0));
+        const key = grp.thresholdC.toFixed(2);
+        activeTpIndexByThreshold[key] = idx;
+        const tp = grp.items[idx];
+
+        if (grp.items.length > 1) {
+          tpCardTabsEl.style.display = "flex";
+          tpCardTabsEl.innerHTML = grp.items.map((item, i) =>
+            `<button type="button" class="tp-tab-btn ${i === idx ? "active" : ""}" data-tp-idx="${i}">${item.tabLabel || item.title}</button>`
+          ).join("");
+          tpCardTabsEl.querySelectorAll(".tp-tab-btn").forEach(btn => {
+            btn.addEventListener("click", e => {
+              e.stopPropagation();
+              tpCardPinned = true;
+              renderTippingPointCardContent(grp, parseInt(btn.dataset.tpIdx, 10));
+            });
+          });
+        } else {
+          tpCardTabsEl.style.display = "none";
+          tpCardTabsEl.innerHTML = "";
+        }
+
+        tpCardTitleEl.textContent = tp.title;
+        tpCardThresholdEl.textContent = tp.rangeText;
+        tpCardSummaryEl.textContent = tp.summary;
+
+        tpCardArticlesEl.innerHTML = tp.articles.map(a =>
+          `<a class="tp-link" href="${a.url}" target="_blank" rel="noopener noreferrer"><span>📰</span><span>${a.label} ↗</span></a>`
+        ).join("");
+        tpCardPapersEl.innerHTML = tp.papers.map(p =>
+          `<a class="tp-link" href="${p.url}" target="_blank" rel="noopener noreferrer"><span>📄</span><span>${p.label} ↗</span></a>`
+        ).join("");
+      }
+
+      function openTippingPointCard(grp, crossYr, anchorViewportX, anchorViewportY, pinIt) {
         if (tpHideTimer) {
           clearTimeout(tpHideTimer);
           tpHideTimer = null;
         }
         if (pinIt) tpCardPinned = true;
 
-        if (activeTpId !== tp.id || tpCardEl.style.display !== "block") {
-          activeTpId = tp.id;
-          tpCardTitleEl.textContent = tp.title;
-          tpCardThresholdEl.textContent = tp.rangeText;
-          tpCardSummaryEl.textContent = tp.summary;
+        const key = grp.thresholdC.toFixed(2);
+        currentTpGroup = grp;
+        currentTpCrossYr = crossYr;
 
-          tpCardArticlesEl.innerHTML = tp.articles.map(a =>
-            `<a class="tp-link" href="${a.url}" target="_blank" rel="noopener noreferrer"><span>📰</span><span>${a.label} ↗</span></a>`
-          ).join("");
-          tpCardPapersEl.innerHTML = tp.papers.map(p =>
-            `<a class="tp-link" href="${p.url}" target="_blank" rel="noopener noreferrer"><span>📄</span><span>${p.label} ↗</span></a>`
-          ).join("");
+        if (activeTpGroupKey !== key || tpCardEl.style.display !== "block") {
+          activeTpGroupKey = key;
+          const savedIdx = activeTpIndexByThreshold[key] || 0;
+          renderTippingPointCardContent(grp, savedIdx);
         }
 
         tpCardYearEl.textContent = `Reached: ~${Math.round(crossYr)} CE`;
@@ -1636,7 +1752,7 @@
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const cardW = Math.min(350, vw - 24);
-        const cardH = tpCardEl.offsetHeight || 290;
+        const cardH = tpCardEl.offsetHeight || 310;
 
         let left, top;
         if (vw < 600) {
@@ -1661,7 +1777,7 @@
         tpHideTimer = setTimeout(() => {
           if (!tpCardPinned && !tpHoveringCard) {
             tpCardEl.style.display = "none";
-            activeTpId = null;
+            activeTpGroupKey = null;
           }
         }, 240);
       }
@@ -1681,14 +1797,14 @@
         tpCardPinned = false;
         tpHoveringCard = false;
         tpCardEl.style.display = "none";
-        activeTpId = null;
+        activeTpGroupKey = null;
       });
       document.addEventListener("mousedown", e => {
         if (tpCardEl.style.display === "block" && !tpCardEl.contains(e.target) && e.target !== canvas && e.target !== paleoCompareCanvas) {
           tpCardPinned = false;
           tpHoveringCard = false;
           tpCardEl.style.display = "none";
-          activeTpId = null;
+          activeTpGroupKey = null;
         }
       });
 
@@ -1698,14 +1814,14 @@
         const my = e.clientY - rect.top;
         for (const hb of mainChartTpHitboxes) {
           if (mx >= hb.x1 && mx <= hb.x2 && my >= hb.y1 && my <= hb.y2) {
-            openTippingPointCard(hb.tp, hb.crossYr, rect.left + hb.anchorX, rect.top + hb.anchorY, true);
+            openTippingPointCard(hb.grp, hb.crossYr, rect.left + hb.anchorX, rect.top + hb.anchorY, true);
             return;
           }
         }
         if (tpCardPinned) {
           tpCardPinned = false;
           tpCardEl.style.display = "none";
-          activeTpId = null;
+          activeTpGroupKey = null;
         }
       });
 
@@ -2136,15 +2252,15 @@
 
         // Climate Tipping Point Threshold Markers (Appears dynamically when trajectory reaches threshold)
         mainChartTpHitboxes = [];
-        tippingPoints.forEach(tp => {
-          const crossYr = getThresholdCrossingYear(state.history, tp.thresholdC, state.year, state.deltaTs);
+        getTippingPointGroups().forEach(grp => {
+          const crossYr = getThresholdCrossingYear(state.history, grp.thresholdC, state.year, state.deltaTs);
           if (crossYr !== null) {
             const tx = yrToX(crossYr);
-            const ty = dtToY(tp.thresholdC);
+            const ty = dtToY(grp.thresholdC);
 
             // Badge dimensions positioned cleanly above-right of the crossing point (clear of 2026 +1.26°C badge)
             ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
-            const tw = ctx.measureText(tp.shortLabel).width;
+            const tw = ctx.measureText(grp.badgeLabel).width;
             const bw = tw + 14;
             const bh = 19;
             let bx = tx + 10;
@@ -2183,10 +2299,10 @@
             ctx.stroke();
 
             ctx.fillStyle = "#fda4af";
-            ctx.fillText(tp.shortLabel, bx + 7, by + 13);
+            ctx.fillText(grp.badgeLabel, bx + 7, by + 13);
 
             mainChartTpHitboxes.push({
-              tp,
+              grp,
               crossYr,
               x1: Math.min(tx - 9, bx - 2),
               x2: Math.max(tx + 9, bx + bw + 2),
@@ -2472,7 +2588,7 @@
 
           if (hoveredMainTp) {
             isPointerHover = true;
-            openTippingPointCard(hoveredMainTp.tp, hoveredMainTp.crossYr, rect.left + hoveredMainTp.anchorX, rect.top + hoveredMainTp.anchorY, false);
+            openTippingPointCard(hoveredMainTp.grp, hoveredMainTp.crossYr, rect.left + hoveredMainTp.anchorX, rect.top + hoveredMainTp.anchorY, false);
           } else if (isOverKeeling) {
             isPointerHover = true;
             activeTip = {
@@ -3087,7 +3203,7 @@
         const my = e.clientY - rect.top;
         for (const hb of paleoChartTpHitboxes) {
           if (mx >= hb.x1 && mx <= hb.x2 && my >= hb.y1 && my <= hb.y2) {
-            openTippingPointCard(hb.tp, hb.crossYr, rect.left + hb.anchorX, rect.top + hb.anchorY, true);
+            openTippingPointCard(hb.grp, hb.crossYr, rect.left + hb.anchorX, rect.top + hb.anchorY, true);
             return;
           }
         }
@@ -3368,14 +3484,14 @@
 
           // Climate Tipping Point Threshold Markers on Modern Curve in Pop-Out Chart
           paleoChartTpHitboxes = [];
-          tippingPoints.forEach(tp => {
-            const crossYr = getThresholdCrossingYear(modernSeries, tp.thresholdC);
+          getTippingPointGroups().forEach(grp => {
+            const crossYr = getThresholdCrossingYear(modernSeries, grp.thresholdC);
             if (crossYr !== null) {
               const tx = offsetToX(crossYr - 1750);
-              const ty = tempToY(isRel ? (tp.thresholdC - m0.dt) : tp.thresholdC);
+              const ty = tempToY(isRel ? (grp.thresholdC - m0.dt) : grp.thresholdC);
 
               cCtx.font = "bold 10px system-ui, -apple-system, sans-serif";
-              const tw = cCtx.measureText(tp.shortLabel).width;
+              const tw = cCtx.measureText(grp.badgeLabel).width;
               const bw = tw + 14;
               const bh = 19;
               let bx = tx + 10;
@@ -3411,10 +3527,10 @@
               cCtx.stroke();
 
               cCtx.fillStyle = "#fda4af";
-              cCtx.fillText(tp.shortLabel, bx + 7, by + 13);
+              cCtx.fillText(grp.badgeLabel, bx + 7, by + 13);
 
               paleoChartTpHitboxes.push({
-                tp,
+                grp,
                 crossYr,
                 x1: Math.min(tx - 9, bx - 2),
                 x2: Math.max(tx + 9, bx + bw + 2),
@@ -3487,7 +3603,7 @@
           }
           if (hoveredPaleoTp) {
             activePaleoTip = null;
-            openTippingPointCard(hoveredPaleoTp.tp, hoveredPaleoTp.crossYr, cmpRect.left + hoveredPaleoTp.anchorX, cmpRect.top + hoveredPaleoTp.anchorY, false);
+            openTippingPointCard(hoveredPaleoTp.grp, hoveredPaleoTp.crossYr, cmpRect.left + hoveredPaleoTp.anchorX, cmpRect.top + hoveredPaleoTp.anchorY, false);
           } else {
             scheduleHideTippingPointCard();
           }
