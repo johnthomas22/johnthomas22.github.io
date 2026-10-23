@@ -760,7 +760,7 @@
         <span style="font-size: 1.3rem;">⚡</span>
         <div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <div class="brand-title">Earth Energy Imbalance & Radiative Transfer</div>
+            <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
           </div>
           <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
         </div>
@@ -3003,6 +3003,9 @@
         appWrapper.classList.toggle("simple-mode", isSimple);
         btnModeSimple.classList.toggle("active", isSimple);
         btnModeAdvanced.classList.toggle("active", !isSimple);
+        document.getElementById("headerTitle").textContent = isSimple
+          ? "Earth's Energy Imbalance"
+          : "Earth Energy Imbalance & Radiative Transfer";
         document.getElementById("headerSubtitle").textContent = isSimple
           ? "How greenhouse gases trap heat and warm the planet"
           : "Empirical Radiative Transfer & Two-Layer Ocean Thermal Inertia";
