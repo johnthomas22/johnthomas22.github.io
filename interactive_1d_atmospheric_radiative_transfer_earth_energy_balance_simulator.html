@@ -301,7 +301,7 @@
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 710px;
+      height: 720px;
       background: #05080f;
       border-radius: 8px;
       overflow: hidden;
@@ -679,7 +679,7 @@
     /* Pop-Out Paleoclimate 500-Year Comparator Button & Modal */
     .popout-chart-btn {
       position: absolute;
-      top: 444px;
+      top: 362px;
       right: 32px;
       z-index: 30;
       background: rgba(11, 19, 32, 0.94);
@@ -938,12 +938,12 @@
           <canvas id="simCanvas"></canvas>
 
           <!-- 5 Sequential Physical Explanation Pins + 6th Action Button -->
-          <div class="speech-pin" id="pin1" style="top: 7%; left: 24%;">1</div>
-          <div class="speech-pin" id="pin2" style="top: 55%; left: 24%;">2</div>
-          <div class="speech-pin" id="pin3" style="top: 43%; left: 34%;">3</div>
-          <div class="speech-pin" id="pin4" style="top: 25%; left: 40%;">4</div>
-          <div class="speech-pin" id="pin5" style="top: 34%; left: 22%;">5</div>
-          <div class="speech-pin speech-pin-action" id="pin6" style="top: 12%; left: 50%;">What can I do about it?</div>
+          <div class="speech-pin" id="pin1" style="top: 6%; left: 24%;">1</div>
+          <div class="speech-pin" id="pin2" style="top: 43%; left: 24%;">2</div>
+          <div class="speech-pin" id="pin3" style="top: 34%; left: 34%;">3</div>
+          <div class="speech-pin" id="pin4" style="top: 20%; left: 40%;">4</div>
+          <div class="speech-pin" id="pin5" style="top: 27%; left: 22%;">5</div>
+          <div class="speech-pin speech-pin-action" id="pin6" style="top: 10%; left: 50%;">What can I do about it?</div>
 
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
@@ -2328,9 +2328,9 @@
         const p = computePhysics();
         const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
 
-        // Upper section split: Atmospheric column takes full canvas in Simple mode; 2/3 width & 425px height in Simulator mode
+        // Upper section split: Atmospheric column takes full canvas in Simple mode; equal height with lower temperature chart in Simulator mode
         const splitX = isSimple ? w : w * 0.67;
-        const atmosH = isSimple ? h : 425;
+        const atmosH = isSimple ? h : Math.round((h - 36) / 2);
 
         // 1. TOP PANEL: Atmospheric Column (Reduced oversized space above radiating layer via MAX_ALT = 10,500m)
         ctx.fillStyle = "#0a1322";
@@ -2878,8 +2878,8 @@
           const chartLeft = splitX + 50;
           const chartRight = w - 24;
           const chartW = chartRight - chartLeft;
-          const chartTop = 24;
-          const chartH = atmosH - chartTop - 28; // Room for horizontal X-axis labels at bottom
+          const chartTop = 10;
+          const chartH = atmosH - chartTop - 26; // Room for horizontal X-axis labels at bottom
           const chartBottom = chartTop + chartH;
 
           ctx.strokeStyle = "rgba(51, 65, 85, 0.5)";
