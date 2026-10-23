@@ -335,6 +335,26 @@
       box-shadow: 0 0 20px rgba(0, 229, 255, 0.9);
       border-color: #fff;
     }
+    .speech-pin.speech-pin-action {
+      width: auto;
+      height: auto;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      white-space: nowrap;
+      border-color: var(--emerald);
+      color: var(--emerald);
+      background: #070d17;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+    .speech-pin.speech-pin-action:hover,
+    .speech-pin.speech-pin-action.active {
+      background: var(--emerald);
+      color: #000;
+      border-color: #fff;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.85);
+    }
 
     .bubble-popup-card {
       position: absolute;
@@ -910,12 +930,13 @@
         <div class="canvas-container" id="canvasContainer">
           <canvas id="simCanvas"></canvas>
 
-          <!-- 5 Sequential Physical Explanation Pins -->
+          <!-- 5 Sequential Physical Explanation Pins + 6th Action Button -->
           <div class="speech-pin" id="pin1" style="top: 7%; left: 24%;">1</div>
           <div class="speech-pin" id="pin2" style="top: 55%; left: 24%;">2</div>
           <div class="speech-pin" id="pin3" style="top: 43%; left: 34%;">3</div>
           <div class="speech-pin" id="pin4" style="top: 25%; left: 40%;">4</div>
           <div class="speech-pin" id="pin5" style="top: 34%; left: 22%;">5</div>
+          <div class="speech-pin speech-pin-action" id="pin6" style="top: 12%; left: 50%;">What can I do about it?</div>
 
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
@@ -2888,6 +2909,11 @@
           pinId: "pin5",
           title: "Step 5: More CO₂ Lifts the Escape Level and Heats Earth",
           text: "When we pump more CO₂ into the air, heat is blocked higher up where the air is much colder. Because colder air radiates less heat away, energy builds up below — warming the surface until balance is restored."
+        },
+        {
+          pinId: "pin6",
+          title: "What can I do about it?",
+          html: `<a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'. ↗</a>`
         }
       ];
 
@@ -2916,6 +2942,11 @@
           pinId: "pin5",
           title: "Step 5: Radiative Choking & Surface Warming",
           text: "Adding CO₂ forces this emission level higher into colder air. Because colder air radiates less power (σT⁴), outgoing thermal energy drops below solar inflow. Heat accumulates until surface warming restores equilibrium."
+        },
+        {
+          pinId: "pin6",
+          title: "What can I do about it?",
+          html: `<a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'. ↗</a>`
         }
       ];
 
@@ -2931,8 +2962,12 @@
         const dataset = isSimple ? speechDataIntro : speechDataAdvanced;
         const d = dataset[index];
         bubbleTitle.textContent = d.title;
-        bubbleContent.textContent = d.text;
-        bubbleStepCount.textContent = `Step ${index + 1} of 5`;
+        if (d.html) {
+          bubbleContent.innerHTML = d.html;
+        } else {
+          bubbleContent.textContent = d.text;
+        }
+        bubbleStepCount.textContent = `Step ${index + 1} of ${dataset.length}`;
 
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
         const pin = document.getElementById(d.pinId);
@@ -2956,13 +2991,17 @@
 
           // Vertically position clear of the pin so the user still sees the glowing pin
           if (pinTop < cRect.height * 0.38) {
-            targetTop = pinTop + 36;
+            targetTop = pinTop + pRect.height + 10;
           } else {
             targetTop = pinTop - cardH - 12;
           }
+        } else if (d.pinId === "pin6") {
+          // Position directly below the "What can I do about it?" pill button
+          targetLeft = Math.max(12, Math.min(cRect.width - cardW - 12, pinLeft + pRect.width / 2 - cardW / 2));
+          targetTop = pinTop + pRect.height + 10;
         } else {
           // Desktop / Tablet: position adjacent to pin with edge bounds
-          targetLeft = pinLeft + 32;
+          targetLeft = pinLeft + pRect.width + 8;
           if (targetLeft + cardW > cRect.width - 16) {
             targetLeft = pinLeft - cardW - 14;
           }
@@ -2986,7 +3025,11 @@
       }
 
       speechDataIntro.forEach((d, i) => {
-        document.getElementById(d.pinId).addEventListener("click", () => showSpeechBubble(i));
+        const el = document.getElementById(d.pinId);
+        el.addEventListener("click", () => showSpeechBubble(i));
+        if (d.pinId === "pin6") {
+          el.addEventListener("mouseenter", () => showSpeechBubble(i));
+        }
       });
 
       document.getElementById("bubbleCloseBtn").addEventListener("click", () => {
@@ -2994,10 +3037,10 @@
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
       });
       document.getElementById("bubbleNextBtn").addEventListener("click", () => {
-        showSpeechBubble((currentStep + 1) % 5);
+        showSpeechBubble((currentStep + 1) % speechDataIntro.length);
       });
       document.getElementById("bubblePrevBtn").addEventListener("click", () => {
-        showSpeechBubble((currentStep + 4) % 5);
+        showSpeechBubble((currentStep + speechDataIntro.length - 1) % speechDataIntro.length);
       });
 
       // View Mode Switching (Simple Intro vs Advanced Controls)
