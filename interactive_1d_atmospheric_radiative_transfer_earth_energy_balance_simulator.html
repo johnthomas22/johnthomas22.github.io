@@ -2350,6 +2350,26 @@
           return state.history[state.history.length - 1].deltaTs;
         }
 
+        // Helper to find atmospheric CO2 (ppm) at a given year along the history curve
+        function getHistoricalCO2At(yr) {
+          if (!state.history || state.history.length === 0) return null;
+          if (yr < state.history[0].year) return null;
+          if (yr > state.history[state.history.length - 1].year) return null;
+          for (let i = 0; i < state.history.length - 1; i++) {
+            const p1 = state.history[i];
+            const p2 = state.history[i + 1];
+            if (yr >= p1.year && yr <= p2.year) {
+              const span = p2.year - p1.year;
+              const frac = span === 0 ? 0 : (yr - p1.year) / span;
+              const c1 = p1.co2 || (p1.year <= 2026 ? getHistoricalCO2(p1.year) : 427.0);
+              const c2 = p2.co2 || (p2.year <= 2026 ? getHistoricalCO2(p2.year) : 427.0);
+              return c1 + frac * (c2 - c1);
+            }
+          }
+          const last = state.history[state.history.length - 1];
+          return last.co2 || (last.year <= 2026 ? getHistoricalCO2(last.year) : 427.0);
+        }
+
         // Temperature change callout badges at intersections with the orange dashed marker lines (linked from the LEFT)
         [1958, 2026].forEach(targetYr => {
           const dtVal = getHistoricalDeltaAt(targetYr);
@@ -2704,7 +2724,7 @@
         const iy1958 = dtVal1958 !== null ? dtToY(dtVal1958) : -999;
         const iy2026 = dtVal2026 !== null ? dtToY(dtVal2026) : -999;
 
-        if (mousePos.active && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
+        if (mousePos.active && mousePos.x >= tGridLeft && mousePos.x <= tGridRight && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
           for (const hb of mainChartTpHitboxes) {
             if (mousePos.x >= hb.x1 && mousePos.x <= hb.x2 && mousePos.y >= hb.y1 && mousePos.y <= hb.y2) {
               hoveredMainTp = hb;
@@ -2712,29 +2732,59 @@
             }
           }
 
+          // Check proximity to the Temperature (ΔT) and CO2 (ppm) trajectory lines at the cursor's year
+          const hoverYr = 1750 + ((mousePos.x - tGridLeft) / tGridW) * 500;
+          const hoverDt = getHistoricalDeltaAt(hoverYr);
+          const hoverCo2 = getHistoricalCO2At(hoverYr);
+          const tempLineY = hoverDt !== null ? dtToY(hoverDt) : -999;
+          const co2LineY = hoverCo2 !== null ? co2ToY(hoverCo2) : -999;
+          const distTemp = Math.abs(mousePos.y - tempLineY);
+          const distCo2 = Math.abs(mousePos.y - co2LineY);
+          const isOverTempLine = hoverDt !== null && distTemp <= 10 && distTemp <= distCo2;
+          const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp;
+
           // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or left-side orange +0.15°C badge)
           const isOverKeeling = (
-            (Math.abs(mousePos.x - keelingX) <= 12) ||
+            (Math.abs(mousePos.x - keelingX) <= 10) ||
             (mousePos.x >= keelingX - 24 && mousePos.x <= keelingX + 6 && mousePos.y >= tGridTop + 30 && mousePos.y <= tGridTop + 140) ||
             (mousePos.x >= keelingX - 75 && mousePos.x <= keelingX + 6 && mousePos.y >= iy1958 - 26 && mousePos.y <= iy1958 + 10)
           );
 
           // Check 2026 Present (dashed line, rotated orange label "2026", or left-side orange +1.26°C badge)
           const isOver2026 = (
-            (Math.abs(mousePos.x - present2026X) <= 12) ||
+            (Math.abs(mousePos.x - present2026X) <= 10) ||
             (mousePos.x >= present2026X - 24 && mousePos.x <= present2026X + 6 && mousePos.y >= tGridTop + 30 && mousePos.y <= tGridTop + 140) ||
             (mousePos.x >= present2026X - 75 && mousePos.x <= present2026X + 6 && mousePos.y >= iy2026 - 26 && mousePos.y <= iy2026 + 10)
           );
 
           // Check Active Simulation Year marker / playhead badge
           const isOverActiveYr = (
-            (Math.abs(mousePos.x - curYrX) <= 10) ||
+            (Math.abs(mousePos.x - curYrX) <= 8) ||
             (mousePos.x >= curYrBadgeX && mousePos.x <= curYrBadgeX + curYrBadgeW && mousePos.y >= curYrBadgeY && mousePos.y <= curYrBadgeY + 18)
           );
 
           if (hoveredMainTp) {
             isPointerHover = true;
             openTippingPointCard(hoveredMainTp.grp, hoveredMainTp.crossYr, rect.left + hoveredMainTp.anchorX, rect.top + hoveredMainTp.anchorY, false, hoveredMainTp.itemIdx);
+          } else if (isOverTempLine) {
+            isPointerHover = true;
+            const tempStroke = hoverYr <= 1958 ? "#f59e0b" : "#f43f5e";
+            activeTip = {
+              text: `${Math.round(hoverYr)} CE · ΔT: ${hoverDt >= 0 ? "+" : ""}${hoverDt.toFixed(2)}°C`,
+              stroke: tempStroke,
+              compact: true,
+              pointX: mousePos.x,
+              pointY: tempLineY
+            };
+          } else if (isOverCo2Line) {
+            isPointerHover = true;
+            activeTip = {
+              text: `${Math.round(hoverYr)} CE · CO₂: ${Math.round(hoverCo2)} ppm`,
+              stroke: "#c084fc",
+              compact: true,
+              pointX: mousePos.x,
+              pointY: co2LineY
+            };
           } else if (isOverKeeling) {
             isPointerHover = true;
             activeTip = {
@@ -2761,41 +2811,81 @@
         }
 
         if (activeTip) {
-          ctx.font = "10px system-ui, -apple-system, sans-serif";
-          const maxTipW = 280;
-          const words = activeTip.text.split(" ");
-          let lines = [];
-          let curLine = "";
-          words.forEach(w => {
-            const testLine = curLine ? (curLine + " " + w) : w;
-            if (ctx.measureText(testLine).width > maxTipW) {
-              lines.push(curLine);
-              curLine = w;
-            } else {
-              curLine = testLine;
-            }
-          });
-          if (curLine) lines.push(curLine);
+          if (activeTip.compact) {
+            ctx.font = "bold 11px ui-monospace, monospace";
+            const tw = ctx.measureText(activeTip.text).width;
+            const boxW = tw + 16;
+            const boxH = 22;
+            let tipBx = activeTip.pointX - boxW - 14;
+            if (tipBx < tGridLeft + 4) tipBx = activeTip.pointX + 14;
+            let tipBy = Math.max(tGridTop + 6, Math.min(tGridBottom - boxH - 4, activeTip.pointY - boxH - 8));
 
-          const boxW = Math.min(maxTipW + 20, 300);
-          const boxH = lines.length * 14 + 14;
-          let tipBx = mousePos.x + 12;
-          let tipBy = Math.max(tGridTop + 10, mousePos.y - boxH / 2);
-          if (tipBx + boxW > w - 10) tipBx = mousePos.x - boxW - 12;
+            // Short leader line to the hovered curve point
+            ctx.strokeStyle = activeTip.stroke;
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            const leaderStartX = tipBx < activeTip.pointX ? tipBx + boxW : tipBx;
+            ctx.moveTo(leaderStartX, tipBy + boxH / 2);
+            ctx.lineTo(activeTip.pointX, activeTip.pointY);
+            ctx.stroke();
 
-          // 100% solid opaque background to prevent graph lines from bleeding through
-          ctx.fillStyle = "#070d17";
-          ctx.strokeStyle = activeTip.stroke;
-          ctx.lineWidth = 1.4;
-          ctx.beginPath();
-          ctx.roundRect(tipBx, tipBy, boxW, boxH, 5);
-          ctx.fill();
-          ctx.stroke();
+            // Glowing point on the curve
+            ctx.fillStyle = activeTip.stroke;
+            ctx.beginPath();
+            ctx.arc(activeTip.pointX, activeTip.pointY, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(activeTip.pointX, activeTip.pointY, 2.0, 0, Math.PI * 2);
+            ctx.fill();
 
-          ctx.fillStyle = "#ffffff";
-          lines.forEach((l, lIdx) => {
-            ctx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
-          });
+            ctx.fillStyle = "#070d17";
+            ctx.strokeStyle = activeTip.stroke;
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.roundRect(tipBx, tipBy, boxW, boxH, 4);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(activeTip.text, tipBx + 8, tipBy + 15);
+          } else {
+            ctx.font = "10px system-ui, -apple-system, sans-serif";
+            const maxTipW = 280;
+            const words = activeTip.text.split(" ");
+            let lines = [];
+            let curLine = "";
+            words.forEach(w => {
+              const testLine = curLine ? (curLine + " " + w) : w;
+              if (ctx.measureText(testLine).width > maxTipW) {
+                lines.push(curLine);
+                curLine = w;
+              } else {
+                curLine = testLine;
+              }
+            });
+            if (curLine) lines.push(curLine);
+
+            const boxW = Math.min(maxTipW + 20, 300);
+            const boxH = lines.length * 14 + 14;
+            let tipBx = mousePos.x - boxW - 12;
+            if (tipBx < tGridLeft + 4) tipBx = mousePos.x + 12;
+            let tipBy = Math.max(tGridTop + 10, mousePos.y - boxH / 2);
+
+            // 100% solid opaque background to prevent graph lines from bleeding through
+            ctx.fillStyle = "#070d17";
+            ctx.strokeStyle = activeTip.stroke;
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.roundRect(tipBx, tipBy, boxW, boxH, 5);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#ffffff";
+            lines.forEach((l, lIdx) => {
+              ctx.fillText(l, tipBx + 10, tipBy + 15 + lIdx * 14);
+            });
+          }
         }
 
         // Update canvas cursor for interactivity feedback
