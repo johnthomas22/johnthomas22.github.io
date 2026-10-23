@@ -3465,8 +3465,11 @@
           }
         }
 
-        // Strictly clamp vertical position within container bounds
-        targetTop = Math.max(10, Math.min(cRect.height - cardH - 10, targetTop));
+        // Strictly clamp vertical position within the atmospheric column (never overlapping the lower 500-year chart in Simulator mode)
+        const maxBottom = isSimple
+          ? (cRect.height - cardH - 10)
+          : (Math.round((cRect.height - 36) / 2) - cardH - 6);
+        targetTop = Math.max(8, Math.min(Math.max(8, maxBottom), targetTop));
 
         bubbleCard.style.left = Math.round(targetLeft) + "px";
         bubbleCard.style.top = Math.round(targetTop) + "px";
@@ -3514,9 +3517,8 @@
           tpCardEl.style.display = "none";
           activeTpGroupKey = null;
         }
-        if (bubbleCard.style.display === "block") {
-          requestAnimationFrame(() => showSpeechBubble(currentStep));
-        }
+        bubbleCard.style.display = "none";
+        document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
         draw();
       }
 
