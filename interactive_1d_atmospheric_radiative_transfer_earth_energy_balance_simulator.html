@@ -103,17 +103,24 @@
     }
     .app-wrapper.simple-mode .top-stats-strip,
     .app-wrapper.simple-mode .controls-panel,
-    .app-wrapper.simple-mode .profile-legend {
+    .app-wrapper.simple-mode .profile-legend,
+    .app-wrapper.simple-mode .intro-banner-controls,
+    .app-wrapper.simple-mode #openPaleoModalBtn,
+    .app-wrapper.simple-mode #openPaleoModalTopBtn {
       display: none !important;
     }
     .app-wrapper.simple-mode .main-grid {
       grid-template-columns: 1fr;
     }
-    .app-wrapper.simple-mode #pin1 { left: 36% !important; top: 7% !important; }
-    .app-wrapper.simple-mode #pin2 { left: 36% !important; top: 55% !important; }
-    .app-wrapper.simple-mode #pin3 { left: 50% !important; top: 43% !important; }
-    .app-wrapper.simple-mode #pin4 { left: 58% !important; top: 25% !important; }
-    .app-wrapper.simple-mode #pin5 { left: 32% !important; top: 34% !important; }
+    .app-wrapper.simple-mode .canvas-container {
+      height: 450px;
+    }
+    .app-wrapper.simple-mode #pin1 { left: 36% !important; top: 11% !important; }
+    .app-wrapper.simple-mode #pin2 { left: 36% !important; top: 88% !important; }
+    .app-wrapper.simple-mode #pin3 { left: 50% !important; top: 69% !important; }
+    .app-wrapper.simple-mode #pin4 { left: 58% !important; top: 40% !important; }
+    .app-wrapper.simple-mode #pin5 { left: 32% !important; top: 55% !important; }
+    .app-wrapper.simple-mode #pin6 { left: 50% !important; top: 16% !important; }
 
     /* Custom Tooltip for Legend Items & Terms */
     .has-tooltip {
@@ -788,7 +795,7 @@
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
         <div class="mode-switch-group" role="group" aria-label="View Mode">
           <button class="mode-switch-btn active" id="btnModeSimple">Introduction</button>
-          <button class="mode-switch-btn" id="btnModeAdvanced">Advanced Version</button>
+          <button class="mode-switch-btn" id="btnModeAdvanced">Simulator</button>
         </div>
         <button class="btn-modal" id="openPaleoModalTopBtn" style="border-color: var(--emerald); color: var(--emerald); background: rgba(16, 185, 129, 0.12);">
           🔍 1-Million-Year Comparison
@@ -1736,6 +1743,345 @@
               url: "https://doi.org/10.1126/science.abn7950"
             }
           ]
+        },
+        {
+          id: "boreal-permafrost-abrupt-thaw",
+          thresholdC: 1.5,
+          tabLabel: "4. 🌡️ Permafrost (Abrupt)",
+          shortLabel: "🌡️ Boreal Permafrost Abrupt Thaw (+1.5°C) ↗",
+          title: "🌡️ Tipping Point: Boreal Permafrost Abrupt Thaw",
+          rangeText: "Central Estimate: +1.5°C (Range: 1.0–2.3°C)",
+          summary: "Rapid localized thawing of ice-rich Siberian and Canadian permafrost ('thermokarst collapse') causes the ground to slump into lakes and wetlands, releasing ancient organic carbon as both CO₂ and potent methane (CH₄) and amplifying permafrost carbon emissions by 50–100% beyond gradual surface thaw.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            },
+            {
+              label: "Carbon Brief Guest Post: How abrupt permafrost thaw could accelerate climate change",
+              url: "https://www.carbonbrief.org/explainer-nine-tipping-points-that-could-be-triggered-by-climate-change/"
+            }
+          ],
+          papers: [
+            {
+              label: "Turetsky et al. (2020), Nature Geoscience — Carbon release through abrupt permafrost thaw",
+              url: "https://doi.org/10.1038/s41561-019-0526-0"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "barents-sea-ice",
+          thresholdC: 2.0,
+          groupBadgeLabel: "⚠️ +1.6–2.0°C Tipping Points (3) ↗",
+          groupHeading: "Select +1.6–2.0°C Tipping Point:",
+          tabLabel: "5. 🌊 Barents Ice (+1.6°C)",
+          shortLabel: "🌊 Barents Sea Ice (+1.6°C) ↗",
+          title: "🌊 Tipping Point: Barents Sea Ice Abrupt Loss",
+          rangeText: "Central Estimate: +1.6°C (Range: 1.5–1.7°C)",
+          summary: "As warm Atlantic water inflows intensify and winter sea ice retreats across the Barents Sea north of Scandinavia and Russia, the loss of bright reflective sea ice exposes dark ocean water that absorbs far more heat — locking in a year-round ice-free Barents Sea and perturbing the European jet stream.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            }
+          ],
+          papers: [
+            {
+              label: "Lind et al. (2018), Nature Climate Change — Arctic warming hotspot in the northern Barents Sea linked to declining sea-ice import",
+              url: "https://doi.org/10.1038/s41558-018-0205-y"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "labrador-irminger-convection",
+          thresholdC: 2.0,
+          groupBadgeLabel: "⚠️ +1.6–2.0°C Tipping Points (3) ↗",
+          groupHeading: "Select +1.6–2.0°C Tipping Point:",
+          tabLabel: "6. 🌀 Subpolar Gyre (+1.8°C)",
+          shortLabel: "🌀 Labrador Sea Gyre (+1.8°C) ↗",
+          title: "🌀 Tipping Point: Labrador–Irminger Seas Convection Collapse",
+          rangeText: "Central Estimate: +1.8°C (Range: 1.1–3.8°C)",
+          summary: "Freshwater melt from Greenland dilutes the salty surface waters of the Labrador and Irminger Seas. Because fresher water is less dense, winter deep-water convection can shut down abruptly within a decade — cooling the North Atlantic by 2–3°C, shifting European storm tracks, and disrupting marine ecosystems.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            }
+          ],
+          papers: [
+            {
+              label: "Swingedouw et al. (2021), Environmental Research Letters —On the risk of abrupt changes in the North Atlantic subpolar gyre",
+              url: "https://doi.org/10.1088/1748-9326/abe9ea"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "mountain-glaciers",
+          thresholdC: 2.0,
+          groupBadgeLabel: "⚠️ +1.6–2.0°C Tipping Points (3) ↗",
+          groupHeading: "Select +1.6–2.0°C Tipping Point:",
+          tabLabel: "7. 🏔️ Mountain Glaciers (+2.0°C)",
+          shortLabel: "🏔️ Mountain Glaciers (+2.0°C) ↗",
+          title: "🏔️ Tipping Point: Extra-Polar Mountain Glaciers Loss",
+          rangeText: "Central Estimate: +2.0°C (Range: 1.5–3.0°C)",
+          summary: "At ~2.0°C of global warming, mountain glaciers outside the polar regions (across the Alps, Andes, Rockies, and Himalayas) cross their mass-balance tipping threshold and are committed to near-complete loss, disrupting dry-season meltwater supplies for hundreds of millions of people downstream.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            }
+          ],
+          papers: [
+            {
+              label: "Rounce et al. (2023), Science — Global glacier change in the 21st century: Every increase in temperature matters",
+              url: "https://doi.org/10.1126/science.abo1324"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "west-african-monsoon",
+          thresholdC: 3.0,
+          groupBadgeLabel: "⚠️ +2.8–3.0°C Tipping Points (2) ↗",
+          groupHeading: "Select +2.8–3.0°C Tipping Point:",
+          tabLabel: "8. 🌧️ W. African Monsoon (+2.8°C)",
+          shortLabel: "🌧️ W. African Monsoon (+2.8°C) ↗",
+          title: "🌧️ Tipping Point: West African Monsoon & Sahel Shift",
+          rangeText: "Central Estimate: +2.8°C (Range: 2.0–3.5°C)",
+          summary: "Changing temperature gradients between North Africa and the tropical Atlantic can trigger an abrupt shift in the West African Monsoon system — pushing summer rainfall belts northward into the Sahel while drying out coastal West African agricultural zones.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            }
+          ],
+          papers: [
+            {
+              label: "Pausata et al. (2020), One Earth — The Greening of the Sahara: Past Changes and Future Implications",
+              url: "https://doi.org/10.1016/j.oneear.2020.03.002"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "east-antarctic-subglacial-basins",
+          thresholdC: 3.0,
+          groupBadgeLabel: "⚠️ +2.8–3.0°C Tipping Points (2) ↗",
+          groupHeading: "Select +2.8–3.0°C Tipping Point:",
+          tabLabel: "9. 🧊 E. Antarctic Basins (+3.0°C)",
+          shortLabel: "🧊 E. Antarctic Basins (+3.0°C) ↗",
+          title: "🧊 Tipping Point: East Antarctic Subglacial Basins Collapse",
+          rangeText: "Central Estimate: +3.0°C (Range: 2.0–6.0°C)",
+          summary: "Deep marine-based basins in East Antarctica — notably the Wilkes, Aurora, and Recovery subglacial basins — sit on bedrock below sea level that slopes inland. Around +3.0°C, warm ocean water melting their coastal ice plugs can trigger runaway Marine Ice Sheet Instability, committing 3–5 meters of additional sea-level rise.",
+          articles: [
+            {
+              label: "Carbon Brief Explainer: Nine 'tipping points' that could be triggered by climate change",
+              url: "https://www.carbonbrief.org/explainer-nine-tipping-points-that-could-be-triggered-by-climate-change/"
+            }
+          ],
+          papers: [
+            {
+              label: "Stokes et al. (2022), Nature — Response of the East Antarctic Ice Sheet to past and future climate change",
+              url: "https://doi.org/10.1038/s41586-022-05037-w"
+            },
+            {
+              label: "Mengel & Levermann (2014), Nature Climate Change — Ice plug prevents irreversible discharge from East Antarctica",
+              url: "https://doi.org/10.1038/nclimate2226"
+            }
+          ]
+        },
+        {
+          id: "amazon-rainforest-dieback",
+          thresholdC: 3.5,
+          tabLabel: "10. 🌳 Amazon Dieback",
+          shortLabel: "🌳 Amazon Rainforest (+3.5°C) ↗",
+          title: "🌳 Tipping Point: Amazon Rainforest Dieback",
+          rangeText: "Central Estimate: +3.5°C (Range: 2.0–6.0°C)",
+          summary: "The Amazon recycles up to half of its own rainfall through water vapour transpired by tree canopies. Intensifying droughts, heat stress, and deforestation weaken this moisture-recycling loop until large parts of the rainforest cross a critical threshold and convert irreversibly into degraded savanna, releasing tens of billions of tonnes of carbon.",
+          articles: [
+            {
+              label: "Carbon Brief Explainer: Nine 'tipping points' that could be triggered by climate change",
+              url: "https://www.carbonbrief.org/explainer-nine-tipping-points-that-could-be-triggered-by-climate-change/"
+            }
+          ],
+          papers: [
+            {
+              label: "Flores et al. (2024), Nature — Critical transitions in the Amazon forest system",
+              url: "https://doi.org/10.1038/s41586-023-06970-0"
+            },
+            {
+              label: "Boulton et al. (2022), Nature Climate Change — Pronounced loss of Amazon rainforest resilience since the early 2000s",
+              url: "https://doi.org/10.1038/s41558-022-01287-8"
+            }
+          ]
+        },
+        {
+          id: "boreal-permafrost-collapse",
+          thresholdC: 4.0,
+          tabLabel: "11. ❄️ Permafrost Collapse",
+          shortLabel: "❄️ Boreal Permafrost Collapse (+4.0°C) ↗",
+          title: "❄️ Tipping Point: Large-Scale Boreal Permafrost Collapse",
+          rangeText: "Central Estimate: +4.0°C (Range: 3.0–6.0°C)",
+          summary: "At ~4.0°C of global warming (amplified to 8–12°C across the Arctic), synchronous deep soil warming and internal microbial heat generation ('compost bomb' feedback) can drive widespread collapse across the entire northern permafrost domain, releasing 175–350 Gt of ancient carbon.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            }
+          ],
+          papers: [
+            {
+              label: "Chadburn et al. (2017), Nature Climate Change — An observation-based constraint on permafrost loss as a function of global warming",
+              url: "https://doi.org/10.1038/nclimate3262"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "amoc-collapse",
+          thresholdC: 4.0,
+          tabLabel: "12. 🌊 AMOC Collapse",
+          shortLabel: "🌊 AMOC Collapse (+4.0°C) ↗",
+          title: "🌊 Tipping Point: Atlantic Meridional Overturning Circulation (AMOC) Collapse",
+          rangeText: "Central Estimate: +4.0°C (Range: 1.4–8.0°C)",
+          summary: "The Atlantic conveyor belt of ocean currents that carries warm tropical water northward can cross a salt-advection feedback threshold and shut down. An AMOC collapse would plunge Northwestern Europe into severe winter cold extremes, raise sea levels along the US East Coast, and shift tropical monsoon rainfall belts worldwide.",
+          articles: [
+            {
+              label: "Carbon Brief Explainer: Nine 'tipping points' that could be triggered by climate change",
+              url: "https://www.carbonbrief.org/explainer-nine-tipping-points-that-could-be-triggered-by-climate-change/"
+            }
+          ],
+          papers: [
+            {
+              label: "van Westen et al. (2024), Science Advances — Physics-based early warning signal shows that AMOC is on tipping course",
+              url: "https://doi.org/10.1126/sciadv.adk1189"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "boreal-forest-southern-dieback",
+          thresholdC: 4.0,
+          tabLabel: "13. 🌲 Boreal Dieback",
+          shortLabel: "🌲 Boreal Forest Dieback (+4.0°C) ↗",
+          title: "🌲 Tipping Point: Boreal Forest Southern Boundary Dieback",
+          rangeText: "Central Estimate: +4.0°C (Range: 1.4–5.0°C)",
+          summary: "Along the southern edge of the circumpolar boreal forest (taiga) in Canada and Siberia, heat stress, drought, bark-beetle outbreaks, and frequent megafires overwhelm tree regeneration, converting dense carbon-rich conifer forests into open steppes and grasslands.",
+          articles: [
+            {
+              label: "Carbon Brief Explainer: Nine 'tipping points' that could be triggered by climate change",
+              url: "https://www.carbonbrief.org/explainer-nine-tipping-points-that-could-be-triggered-by-climate-change/"
+            }
+          ],
+          papers: [
+            {
+              label: "Scheffer et al. (2012), Science — Thresholds for Boreal Biome Transitions",
+              url: "https://doi.org/10.1126/science.1225244"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "boreal-forest-northern-expansion",
+          thresholdC: 4.0,
+          tabLabel: "14. 🌲 Tundra Expansion",
+          shortLabel: "🌲 Boreal Northern Expansion (+4.0°C) ↗",
+          title: "🌲 Tipping Point: Boreal Forest Northern Expansion into Tundra",
+          rangeText: "Central Estimate: +4.0°C (Range: 1.5–7.2°C)",
+          summary: "Along the northern timberline, warming enables dark-needled shrubs and conifer trees to abruptly expand into formerly snow-bright Arctic tundra. Because dark forest canopies absorb far more spring and summer sunlight than snow-covered tundra, this lowers regional surface albedo and amplifies Arctic warming.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            }
+          ],
+          papers: [
+            {
+              label: "Berner & Goetz (2022), Phil. Trans. R. Soc. B — Satellite observations document trends consistent with a boreal forest biome shift",
+              url: "https://doi.org/10.1098/rstb.2021.0076"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "arctic-winter-sea-ice",
+          thresholdC: 6.3,
+          tabLabel: "15. 🧊 Arctic Winter Ice",
+          shortLabel: "🧊 Arctic Winter Sea Ice (+6.3°C) ↗",
+          title: "🧊 Tipping Point: Arctic Winter Sea Ice Collapse",
+          rangeText: "Central Estimate: +6.3°C (Range: 4.5–8.7°C)",
+          summary: "Unlike summer Arctic sea ice (which declines roughly linearly with warming), above ~6.3°C of global warming the Arctic Ocean stays too warm even during polar night for winter sea ice to form, triggering an abrupt transition to a year-round ice-free Arctic Ocean.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            }
+          ],
+          papers: [
+            {
+              label: "Bathiany et al. (2016), Scientific Reports — On the mechanism of vanishing Arctic sea ice initel-warmed climates",
+              url: "https://doi.org/10.1038/srep38289"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
+        },
+        {
+          id: "east-antarctic-ice-sheet",
+          thresholdC: 7.5,
+          tabLabel: "16. 🏔️ E. Antarctic Sheet",
+          shortLabel: "🏔️ East Antarctic Ice Sheet (+7.5°C) ↗",
+          title: "🏔️ Tipping Point: East Antarctic Ice Sheet Collapse",
+          rangeText: "Central Estimate: +7.5°C (Range: 5.0–10.0°C)",
+          summary: "The continental East Antarctic Ice Sheet holds enough ice to raise global sea levels by ~52 meters (170 feet). Above ~7.5°C of sustained global warming, surface melt-elevation feedbacks overcome snowfall accumulation across the continent, committing Earth to an ice-free Antarctica over millennia.",
+          articles: [
+            {
+              label: "Carbon Brief: Global warming above 1.5°C could trigger 'multiple' tipping points",
+              url: "https://www.carbonbrief.org/global-warming-above-1-5c-could-trigger-multiple-tipping-points/"
+            }
+          ],
+          papers: [
+            {
+              label: "Garbe et al. (2020), Nature — The hysteresis of the Antarctic Ice Sheet",
+              url: "https://doi.org/10.1038/s41586-020-2727-5"
+            },
+            {
+              label: "Armstrong McKay et al. (2022), Science — Exceeding 1.5°C global warming could trigger multiple climate tipping points",
+              url: "https://doi.org/10.1126/science.abn7950"
+            }
+          ]
         }
       ];
 
@@ -1751,9 +2097,10 @@
         return Array.from(map.values()).map(grp => ({
           thresholdC: grp.thresholdC,
           items: grp.items,
+          headingLabel: grp.items[0].groupHeading || `Select +${grp.thresholdC.toFixed(1)}°C Tipping Point:`,
           badgeLabel: grp.items.length === 1
             ? grp.items[0].shortLabel
-            : `⚠️ +${grp.thresholdC.toFixed(1)}°C Tipping Points (${grp.items.length}) ↗`
+            : (grp.items[0].groupBadgeLabel || `⚠️ +${grp.thresholdC.toFixed(1)}°C Tipping Points (${grp.items.length}) ↗`)
         }));
       }
 
@@ -1816,7 +2163,7 @@
         if (grp.items.length > 1) {
           tpCardTabsBoxEl.style.display = "block";
           tpCardFooterNavEl.style.display = "flex";
-          tpCardTabsHeadingEl.textContent = `Select +${grp.thresholdC.toFixed(1)}°C Tipping Point:`;
+          tpCardTabsHeadingEl.textContent = grp.headingLabel || `Select +${grp.thresholdC.toFixed(1)}°C Tipping Point:`;
           tpCardStepCounterEl.textContent = `${idx + 1} of ${grp.items.length}`;
           tpFooterCounterEl.textContent = `Tipping Point ${idx + 1} of ${grp.items.length}`;
 
@@ -1981,9 +2328,9 @@
         const p = computePhysics();
         const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
 
-        // Upper section split: Atmospheric column takes 2/3 (67%), Right-hand profile takes 1/3 (33%) in Advanced mode
+        // Upper section split: Atmospheric column takes full canvas in Simple mode; 2/3 width & 425px height in Simulator mode
         const splitX = isSimple ? w : w * 0.67;
-        const atmosH = 425;
+        const atmosH = isSimple ? h : 425;
 
         // 1. TOP PANEL: Atmospheric Column (Reduced oversized space above radiating layer via MAX_ALT = 10,500m)
         ctx.fillStyle = "#0a1322";
@@ -2154,7 +2501,15 @@
           }
         });
 
-        // 2. DEDICATED LOWER PANEL: 500-Year ΔT Timeline Curve (No overlap with bubbles!)
+        // In Simple (Introduction) mode, only the atmospheric column is shown
+        if (isSimple) {
+          mainChartTpHitboxes = [];
+          canvas.style.cursor = "default";
+          ctx.restore();
+          return;
+        }
+
+        // 2. DEDICATED LOWER PANEL: 500-Year ΔT Timeline Curve (Simulator Mode Only)
         // Spans across the entire canvas width below the two top charts (in both Simple and Advanced modes)
         const tGridTop = atmosH + 14;           // Starts cleanly below the atmospheric column
         const tGridBottom = h - 22;             // Dedicated clearance at bottom for year labels
@@ -2232,7 +2587,7 @@
         }
 
         // Threshold Reference Lines
-        [0.0, 1.5, 2.0, 3.0].forEach(th => {
+        [0.0, 1.5, 2.0, 3.0, 4.0].forEach(th => {
           const y = dtToY(th);
           ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (th === 1.5 ? "rgba(245,158,11,0.4)" : "rgba(244,63,94,0.4)");
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
@@ -2419,9 +2774,10 @@
 
         // Climate Tipping Point Threshold Markers (Appears dynamically when trajectory reaches threshold, linked from the LEFT)
         mainChartTpHitboxes = [];
+        let lastTpBadgeY = 99999;
         getTippingPointGroups().forEach(grp => {
           const crossYr = getThresholdCrossingYear(state.history, grp.thresholdC, state.year, state.deltaTs);
-          if (crossYr !== null) {
+          if (crossYr !== null && grp.thresholdC <= 5.0) {
             const tx = yrToX(crossYr);
             const ty = dtToY(grp.thresholdC);
 
@@ -2431,7 +2787,11 @@
             const bw = tw + 14;
             const bh = 19;
             let bx = Math.max(tGridLeft + 6, tx - bw - 18);
-            const by = Math.max(tGridTop + 6, ty - bh - 16);
+            let by = Math.max(tGridTop + 4, ty - bh / 2);
+            if (by + bh + 3 > lastTpBadgeY) {
+              by = Math.max(tGridTop + 4, lastTpBadgeY - bh - 3);
+            }
+            lastTpBadgeY = by;
 
             // Diagonal leader line from right edge of badge to crossing dot
             ctx.strokeStyle = "#f43f5e";
@@ -2937,10 +3297,9 @@
       }
 
       function update() {
-        if (state.running) {
-          const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
-          // 50% slower pace in Introduction view for a gentle, easy-to-follow experience
-          const baseSpeedFactor = isSimple ? 0.04375 : 0.0875;
+        const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
+        if (state.running && !isSimple) {
+          const baseSpeedFactor = 0.0875;
           const dt = baseSpeedFactor * state.speed;
 
           if (state.year < 2026) {
@@ -2972,8 +3331,8 @@
         requestAnimationFrame(update);
       }
 
-      // Speech Bubble Sequential Data (1 to 5)
-      // Dynamic content tailored for Reading Age 14 (Simple Intro) vs Scientific Rigor (Advanced Mode)
+      // Speech Bubble Sequential Data (1 to 6)
+      // Dynamic content tailored for Reading Age 14 (Simple Intro) vs Scientific Rigor (Simulator Mode)
       const speechDataIntro = [
         {
           pinId: "pin1",
@@ -3003,7 +3362,7 @@
         {
           pinId: "pin6",
           title: "What can I do about it?",
-          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">nebriefing.org ↗</a></div>`
+          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Look up a screening of a free film introduced by Chris Packham. ↗</a></div>`
         }
       ];
 
@@ -3036,7 +3395,7 @@
         {
           pinId: "pin6",
           title: "What can I do about it?",
-          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">nebriefing.org ↗</a></div>`
+          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Look up a screening of a free film introduced by Chris Packham. ↗</a></div>`
         }
       ];
 
@@ -3149,6 +3508,12 @@
         document.getElementById("headerSubtitle").textContent = isSimple
           ? "How greenhouse gases trap heat and warm the planet"
           : "Empirical Radiative Transfer & Two-Layer Ocean Thermal Inertia";
+        if (isSimple && tpCardEl) {
+          tpCardPinned = false;
+          tpHoveringCard = false;
+          tpCardEl.style.display = "none";
+          activeTpGroupKey = null;
+        }
         if (bubbleCard.style.display === "block") {
           requestAnimationFrame(() => showSpeechBubble(currentStep));
         }
@@ -3745,9 +4110,10 @@
 
           // Climate Tipping Point Threshold Markers on Modern Curve in Pop-Out Chart (linked from the LEFT)
           paleoChartTpHitboxes = [];
+          let lastPaleoTpBadgeY = 99999;
           getTippingPointGroups().forEach(grp => {
             const crossYr = getThresholdCrossingYear(modernSeries, grp.thresholdC);
-            if (crossYr !== null) {
+            if (crossYr !== null && grp.thresholdC <= 5.0) {
               const tx = offsetToX(crossYr - 1750);
               const ty = tempToY(isRel ? (grp.thresholdC - m0.dt) : grp.thresholdC);
 
@@ -3756,7 +4122,11 @@
               const bw = tw + 14;
               const bh = 19;
               const bx = Math.max(padL + 6, tx - bw - 18);
-              const by = Math.max(padT + 6, ty - bh - 16);
+              let by = Math.max(padT + 4, ty - bh / 2);
+              if (by + bh + 3 > lastPaleoTpBadgeY) {
+                by = Math.max(padT + 4, lastPaleoTpBadgeY - bh - 3);
+              }
+              lastPaleoTpBadgeY = by;
 
               cCtx.strokeStyle = "#f43f5e";
               cCtx.lineWidth = 1.3;
