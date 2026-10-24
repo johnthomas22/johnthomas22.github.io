@@ -936,8 +936,8 @@
           </div>
           <div class="presets-grid">
             <button class="preset-card active" id="presetPreInd">
-              <div class="preset-name">1. Historical (1750 → Now)</div>
-              <div class="preset-sub">Law Dome & Keeling spline to 2026</div>
+              <div class="preset-name">1. Historical (1958 Keeling → 2026+)</div>
+              <div class="preset-sub">1750–1958 static baseline · Live run from 1958</div>
             </button>
             <button class="preset-card" id="presetPresent">
               <div class="preset-name">2. Present Day (2026)</div>
@@ -1633,6 +1633,9 @@
         }
         return pts;
       }
+
+      // Static pre-computed baseline for the static historical era (1750 to 1958 Keeling continuous monitoring)
+      const STATIC_HISTORICAL_1750_1958 = getCalibratedHistoricalRun().filter(p => p.year <= 1958);
 
       let state = {
         co2: 427.0,
@@ -2697,59 +2700,68 @@
 
         // Plot Accumulated History: Temperature (Orange up to 1958 Keeling, Rose thereafter)
         // AND Atmospheric CO2 Trajectory in Purple
+        // 1. Static 1750–1958 Historical Baseline (Always instantly displayed on chart without waiting for simulation)
+        ctx.strokeStyle = "#c084fc";
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        STATIC_HISTORICAL_1750_1958.forEach((pt, i) => {
+          const cx = yrToX(pt.year);
+          const cy = co2ToY(pt.co2);
+          if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+        });
+        ctx.stroke();
+
+        ctx.strokeStyle = "#f59e0b";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        STATIC_HISTORICAL_1750_1958.forEach((pt, i) => {
+          const cx = yrToX(pt.year);
+          const cy = dtToY(pt.deltaTs);
+          if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+        });
+        ctx.stroke();
+
+        // 2. Dynamic Simulation Trajectory beyond 1958
         if (state.history.length > 1) {
-          // 1. Purple CO2 Trajectory Line
+          // Purple CO2 trajectory line beyond 1958
           ctx.strokeStyle = "#c084fc";
           ctx.lineWidth = 1.8;
           ctx.beginPath();
+          let co2DynStarted = false;
           for (let i = 0; i < state.history.length; i++) {
             const pt = state.history[i];
-            const cVal = pt.co2 || (pt.year <= 2026 ? getHistoricalCO2(pt.year) : 427.0);
-            const cx = yrToX(pt.year);
-            const cy = co2ToY(cVal);
-            if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
-          }
-          ctx.stroke();
-
-          // 2. Temperature History Line
-          ctx.lineWidth = 2;
-          for (let i = 0; i < state.history.length - 1; i++) {
-            const p1 = state.history[i];
-            const p2 = state.history[i + 1];
-
-            if (p2.year <= 1958) {
-              ctx.strokeStyle = "#f59e0b";
-              ctx.beginPath();
-              ctx.moveTo(yrToX(p1.year), dtToY(p1.deltaTs));
-              ctx.lineTo(yrToX(p2.year), dtToY(p2.deltaTs));
-              ctx.stroke();
-            } else if (p1.year >= 1958) {
-              ctx.strokeStyle = "#f43f5e";
-              ctx.beginPath();
-              ctx.moveTo(yrToX(p1.year), dtToY(p1.deltaTs));
-              ctx.lineTo(yrToX(p2.year), dtToY(p2.deltaTs));
-              ctx.stroke();
-            } else {
-              const frac = (1958 - p1.year) / (p2.year - p1.year);
-              const midDt = p1.deltaTs + frac * (p2.deltaTs - p1.deltaTs);
-
-              ctx.strokeStyle = "#f59e0b";
-              ctx.beginPath();
-              ctx.moveTo(yrToX(p1.year), dtToY(p1.deltaTs));
-              ctx.lineTo(yrToX(1958), dtToY(midDt));
-              ctx.stroke();
-
-              ctx.strokeStyle = "#f43f5e";
-              ctx.beginPath();
-              ctx.moveTo(yrToX(1958), dtToY(midDt));
-              ctx.lineTo(yrToX(p2.year), dtToY(p2.deltaTs));
-              ctx.stroke();
+            if (pt.year >= 1958) {
+              const cVal = pt.co2 || (pt.year <= 2026 ? getHistoricalCO2(pt.year) : 427.0);
+              const cx = yrToX(pt.year);
+              const cy = co2ToY(cVal);
+              if (!co2DynStarted) { ctx.moveTo(cx, cy); co2DynStarted = true; } else { ctx.lineTo(cx, cy); }
             }
           }
+          if (co2DynStarted) ctx.stroke();
+
+          // Temperature history line beyond 1958 (rose #f43f5e)
+          ctx.strokeStyle = "#f43f5e";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          let tDynStarted = false;
+          for (let i = 0; i < state.history.length; i++) {
+            const pt = state.history[i];
+            if (pt.year >= 1958) {
+              const cx = yrToX(pt.year);
+              const cy = dtToY(pt.deltaTs);
+              if (!tDynStarted) { ctx.moveTo(cx, cy); tDynStarted = true; } else { ctx.lineTo(cx, cy); }
+            }
+          }
+          if (tDynStarted) ctx.stroke();
         }
 
         // Helper to find temperature delta at a given year along the history curve
         function getHistoricalDeltaAt(yr) {
+          if (yr === 2026 && state.year >= 2026) return 1.26;
+          if (yr <= 1958) {
+            const pt = STATIC_HISTORICAL_1750_1958.find(p => Math.abs(p.year - yr) < 0.6);
+            if (pt) return pt.deltaTs;
+          }
           if (!state.history || state.history.length === 0) return null;
           if (yr < state.history[0].year) return null;
           if (yr > state.history[state.history.length - 1].year) return null;
@@ -3417,6 +3429,10 @@
           syncUI();
         }
         draw();
+        const pOverlay = document.getElementById("paleoModalOverlay");
+        if (pOverlay && pOverlay.style.display === "flex") {
+          drawPaleoComparator();
+        }
         requestAnimationFrame(update);
       }
 
@@ -3676,12 +3692,12 @@
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("presetPreInd").classList.add("active");
         state.running = false;
-        state.co2 = 278.0;
+        state.co2 = 315.0; // Starts at 1958 Keeling (1750-1958 already static on chart)
         state.rate = 2.5;
-        state.deltaTs = 0.0;
-        state.deltaTd = 0.0;
-        state.year = 1750.0;
-        state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
+        state.deltaTs = 0.38;
+        state.deltaTd = 0.17;
+        state.year = 1958.0;
+        state.history = STATIC_HISTORICAL_1750_1958.slice();
 
         syncUI();
         draw();
@@ -3699,12 +3715,12 @@
       document.getElementById("presetPreInd").addEventListener("click", () => {
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("presetPreInd").classList.add("active");
-        state.co2 = 278.0;
+        state.co2 = 315.0; // 1958 Keeling continuous monitoring start
         state.rate = 2.5;
-        state.deltaTs = 0.0;
-        state.deltaTd = 0.0;
-        state.year = 1750.0;
-        state.history = [{ year: 1750.0, deltaTs: 0.0, co2: 278.0 }];
+        state.deltaTs = 0.38;
+        state.deltaTd = 0.17;
+        state.year = 1958.0;
+        state.history = STATIC_HISTORICAL_1750_1958.slice();
         state.running = true;
         syncUI();
         draw();
@@ -3897,19 +3913,34 @@
       // Directly follows the chart produced in the simulator (state.history), and projects to 2250 if not yet reached
       function getModern500YrSeries() {
         const pts = [];
-        const hist = (state.history && state.history.length > 0) ? state.history : getCalibratedHistoricalRun();
-
-        // 1. Copy all points already produced in the simulator's accumulated history
-        hist.forEach(pt => {
-          pts.push({
+        // 1. Build dictionary starting with static 1750-1958 baseline
+        const baseMap = new Map();
+        STATIC_HISTORICAL_1750_1958.forEach(pt => {
+          baseMap.set(Math.round(pt.year), {
             offsetYr: pt.year - 1750,
             calYr: pt.year,
             dt: pt.deltaTs,
-            co2: pt.co2 !== undefined ? pt.co2 : (pt.year <= 2026 ? getHistoricalCO2(pt.year) : state.co2)
+            co2: pt.co2
           });
         });
 
-        // 2. If the simulation has not yet reached 2250, project forward using the simulator's active state & scenario rate
+        // 2. Overlay any points that were simulated in state.history
+        if (state.history && state.history.length > 0) {
+          state.history.forEach(pt => {
+            const yk = Math.round(pt.year);
+            baseMap.set(yk, {
+              offsetYr: pt.year - 1750,
+              calYr: pt.year,
+              dt: pt.deltaTs,
+              co2: pt.co2 !== undefined ? pt.co2 : (pt.year <= 2026 ? getHistoricalCO2(pt.year) : state.co2)
+            });
+          });
+        }
+
+        const sorted = Array.from(baseMap.values()).sort((a, b) => a.calYr - b.calYr);
+        sorted.forEach(p => pts.push(p));
+
+        // 3. If the simulation has not yet reached 2250, project forward using the simulator's active state & scenario rate
         const lastPt = pts[pts.length - 1];
         if (lastPt && lastPt.calYr < 2250) {
           let simYr = lastPt.calYr;
