@@ -2788,7 +2788,7 @@
         // 1. Prepare temperature change callout badges at intersections with the orange dashed marker lines (linked from the LEFT)
         const markerBadgeBoxes = [];
         [1958, 2026].forEach(targetYr => {
-          const dtVal = getHistoricalDeltaAt(targetYr);
+          const dtVal = (targetYr === 2026 && state.year >= 2026) ? 1.26 : getHistoricalDeltaAt(targetYr);
           if (dtVal !== null) {
             const ix = yrToX(targetYr);
             const iy = dtToY(dtVal);
@@ -2800,7 +2800,10 @@
             const bw = tw + 10;
             const bh = 17;
             const bx = Math.max(tGridLeft + 4, ix - bw - 12);
-            const by = Math.max(tGridTop + 6, iy - bh - 4);
+            // 1958 is above-left, but 2026 is positioned BELOW-LEFT (iy + 6) of the dot so it has massive clearance from all tipping points (which all sit at >= +1.5°C above the curve)
+            const by = (targetYr === 2026)
+              ? Math.min(tGridBottom - 32, iy + 6)
+              : Math.max(tGridTop + 6, iy - bh - 4);
             markerBadgeBoxes.push({ yr: targetYr, ix, iy, bx, by, bw, bh, labelStr });
           }
         });
@@ -2822,18 +2825,18 @@
             let bx = Math.max(tGridLeft + 6, tx - bw - 18);
             let by = Math.max(tGridTop + 4, ty - bh / 2);
 
-            // Prevent obscuring historical marker badges (in particular the current year 2026 +1.26°C label)
+            // Prevent obscuring historical marker badges (e.g. current year 2026 +1.26°C label)
             markerBadgeBoxes.forEach(mb => {
-              const xOverlap = bx < mb.bx + mb.bw + 4 && (bx + bw) > mb.bx - 4;
-              const yOverlap = by < mb.by + mb.bh + 4 && (by + bh) > mb.by - 4;
+              const xOverlap = bx < mb.bx + mb.bw + 8 && (bx + bw) > mb.bx - 8;
+              const yOverlap = by < mb.by + mb.bh + 8 && (by + bh) > mb.by - 8;
               if (xOverlap && yOverlap) {
-                // Shift tipping point badge cleanly above the marker badge
-                by = Math.max(tGridTop + 4, mb.by - bh - 5);
+                // Generous vertical clearance above the marker badge
+                by = Math.max(tGridTop + 4, mb.by - bh - 10);
               }
             });
 
-            if (by + bh + 3 > lastTpBadgeY) {
-              by = Math.max(tGridTop + 4, lastTpBadgeY - bh - 3);
+            if (by + bh + 4 > lastTpBadgeY) {
+              by = Math.max(tGridTop + 4, lastTpBadgeY - bh - 4);
             }
             lastTpBadgeY = by;
 
@@ -3200,7 +3203,7 @@
           const isOver2026 = (
             (Math.abs(mousePos.x - present2026X) <= 10) ||
             (mousePos.x >= present2026X - 24 && mousePos.x <= present2026X + 6 && mousePos.y >= tGridTop + 30 && mousePos.y <= tGridTop + 140) ||
-            (mousePos.x >= present2026X - 75 && mousePos.x <= present2026X + 6 && mousePos.y >= iy2026 - 26 && mousePos.y <= iy2026 + 10)
+            (mousePos.x >= present2026X - 75 && mousePos.x <= present2026X + 6 && mousePos.y >= iy2026 - 10 && mousePos.y <= iy2026 + 30)
           );
 
           // Check Active Simulation Year marker / playhead badge
@@ -4156,17 +4159,29 @@
             }
           });
 
-          // Bottom X-Axis: 0 to 500 Years Elapsed in Window (Responsive step to prevent label collision on mobile)
-          const offStep = gw < 460 ? 100 : 50;
-          for (let off = 0; off <= 500; off += offStep) {
+          // Bottom X-Axis: 0 to 500 Years Elapsed in Window (Two-tier clean labels: Calendar Year + offset)
+          const step = gw < 520 ? 100 : 50;
+          for (let off = 0; off <= 500; off += step) {
             const x = offsetToX(off);
-            cCtx.strokeStyle = "rgba(148, 163, 184, 0.35)";
-            cCtx.beginPath(); cCtx.moveTo(x, padT + gh); cCtx.lineTo(x, padT + gh + 5); cCtx.stroke();
-            cCtx.fillStyle = "#cbd5e1";
-            cCtx.font = gw < 460 ? "9px ui-monospace, monospace" : "10px ui-monospace, monospace";
+            const isCentury = off % 100 === 0 || off === 500;
+            cCtx.strokeStyle = isCentury ? "rgba(148, 163, 184, 0.45)" : "rgba(148, 163, 184, 0.22)";
+            cCtx.beginPath();
+            cCtx.moveTo(x, padT + gh);
+            cCtx.lineTo(x, padT + gh + (isCentury ? 5 : 3));
+            cCtx.stroke();
+
+            // Row 1: Calendar Year (always fits cleanly without horizontal overlap)
+            cCtx.fillStyle = isCentury ? "#cbd5e1" : "#94a3b8";
+            cCtx.font = "bold 9px ui-monospace, monospace";
             cCtx.textAlign = "center";
-            const xLabel = gw < 460 ? `${1750 + off}` : `+${off} yr (${1750 + off})`;
-            cCtx.fillText(xLabel, x, padT + gh + 16);
+            cCtx.fillText(`${1750 + off}`, x, padT + gh + 13);
+
+            // Row 2: Subdued offset year indicator
+            if (gw >= 580 || isCentury) {
+              cCtx.fillStyle = "#64748b";
+              cCtx.font = "8px ui-monospace, monospace";
+              cCtx.fillText(`+${off}y`, x, padT + gh + 22);
+            }
           }
           cCtx.textAlign = "left";
 
