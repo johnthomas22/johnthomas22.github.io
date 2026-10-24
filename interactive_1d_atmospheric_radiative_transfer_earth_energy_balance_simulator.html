@@ -239,7 +239,7 @@
     }
     .card-title { font-size: 0.85rem; font-weight: 700; }
     .sim-controls-row {
-      display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 8px; margin-bottom: 12px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;
     }
     .btn {
       padding: 8px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;
@@ -952,8 +952,13 @@
           </div>
           <div class="sim-controls-row">
             <button class="btn btn-start" id="btnPlayPause">▶ Start Simulation</button>
-            <button class="btn btn-amber" id="btnSnapEquilibrium" title="Fast-forward ocean thermal lag to instant equilibrium">⚡ Instant Eq.</button>
             <button class="btn btn-secondary" id="btnReset">↺ Reset (1750)</button>
+          </div>
+          <button class="btn btn-amber" id="btnSnapEquilibrium" style="width: 100%; margin-bottom: 8px;" title="Instant Ocean Equilibrium: Instantly removes ocean thermal lag to reveal the ultimate committed warming locked in at the current CO₂ level (EEI = 0)">
+            ⚡ Instant Ocean Equilibrium
+          </button>
+          <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px; background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 6px; padding: 6px 10px;">
+            <strong style="color: var(--amber);">⚡ Instant Ocean Equilibrium:</strong> Skips centuries of deep-ocean thermal lag to reveal the full long-term "committed warming" (&Delta;<i>T</i><sub>eq</sub> = &Delta;<i>F</i> / &lambda;) locked in at the current CO₂ level (EEI &rarr; 0 W/m²).
           </div>
           <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted);">
             <span>Simulation Pace:</span>
@@ -1269,8 +1274,12 @@
             Δ<i>T</i><sub>eq</sub> = 3.930 W/m² / 1.310 W/m²/K = <b>3.000 °C</b>
           </div>
           <p>
-            <em>Verification:</em> Clicking <strong>"3. Instant 2× CO₂ Pulse"</strong> and then <strong>"⚡ Instant Eq."</strong> sets Δ<i>T</i> to exactly +3.00 °C and Net Imbalance (EEI) = 0.00 W/m².
+            <em>Verification:</em> Clicking <strong>"3. Instant 2× CO₂ Pulse"</strong> and then <strong>"⚡ Instant Ocean Equilibrium"</strong> sets Δ<i>T</i> to exactly +3.00 °C and Net Imbalance (EEI) = 0.00 W/m².
           </p>
+          <div style="background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 6px; padding: 10px 12px; margin-top: 10px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+            <strong style="color: var(--amber);">What "Instant Ocean Equilibrium" Means Physically:</strong><br>
+            In the real world, surface warming lags behind radiative forcing by decades to centuries because the deep ocean acts as an immense planetary heat sink (absorbing ~90% of excess energy, known as <em>ocean thermal lag</em> or <em>transient warming</em>). The <strong>"⚡ Instant Ocean Equilibrium"</strong> control mathematically fast-forwards this multi-century delay to the asymptotic steady-state (<i>t</i> &rarr; &infin;). It sets both the mixed layer and deep ocean anomalies to the full theoretical equilibrium response (Δ<i>T</i><sub>s</sub> = Δ<i>T</i><sub>d</sub> = Δ<i>F</i> / &lambda;), reducing downward ocean heat uptake to zero (&gamma;·(Δ<i>T</i><sub>s</sub> &minus; Δ<i>T</i><sub>d</sub>) = 0) and zeroing the Earth Energy Imbalance (EEI = 0.00 W/m²). This reveals the full <strong>"committed warming in the pipeline"</strong> for any given atmospheric CO₂ concentration.
+          </div>
 
           <h4>Proof 2: Analytical Derivation of Effective Radiating Altitude (<i>z</i><sub>eff</sub> in Metres)</h4>
           <p>
@@ -1434,6 +1443,19 @@
           <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; color: var(--text-muted);">
             <li><strong>Physical Radiative & Ocean Integration:</strong> Solved forward from the unforced 1750 equilibrium (Δ<i>T</i> = 0, EEI = 0) with zero artificial initialization fudge factors.</li>
             <li><strong>Tipping Points & Chart Reference Lines:</strong> Evaluated relative to the standard <strong>1850–1900 Paris baseline</strong> by accounting for the model's +0.12 °C offset, ensuring all threshold crossing dates (e.g. Greenland Ice Sheet, Coral Reefs) align with published empirical science (Armstrong McKay et al. 2022).</li>
+          </ul>
+
+          <h4 style="margin-top: 20px;">Transient Warming vs. Instant Ocean Equilibrium (Committed Warming)</h4>
+          <p>
+            The two-box ocean energy balance model distinguishes between two fundamental timescales of climate change:
+          </p>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-muted);">
+            <li>
+              <strong>Transient Climate Response (In-Flight Simulation):</strong> While greenhouse gas concentrations are actively changing, the upper ocean mixed layer warms relatively quickly (timescale &tau;<sub>fast</sub> &approx; 3.5 years), but heat is constantly drawn downward into the massive intermediate and deep ocean (&gamma;·(Δ<i>T</i><sub>s</sub> &minus; Δ<i>T</i><sub>d</sub>)). This deep ocean heat uptake creates a persistent planetary energy imbalance (EEI &gt; 0) that acts as a brake, delaying surface warming by decades to centuries.
+            </li>
+            <li>
+              <strong>Instant Ocean Equilibrium (<i>t</i> &rarr; &infin;):</strong> The <strong>"⚡ Instant Ocean Equilibrium"</strong> feature calculates what happens when the entire ocean column has finally caught up to atmospheric CO₂ (Δ<i>T</i><sub>s</sub> = Δ<i>T</i><sub>d</sub> = Δ<i>F</i> / &lambda;). Downward heat transport drops to zero, Top-of-Atmosphere net imbalance ceases (EEI = 0.00 W/m²), and the full <strong>"committed warming in the pipeline"</strong> (Equilibrium Climate Sensitivity, ECS = 3.00 °C per doubling) is revealed.
+            </li>
           </ul>
         </div>
 
