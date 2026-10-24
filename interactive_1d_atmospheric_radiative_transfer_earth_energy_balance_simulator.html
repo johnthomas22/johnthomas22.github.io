@@ -105,6 +105,7 @@
     .app-wrapper.simple-mode .controls-panel,
     .app-wrapper.simple-mode .profile-legend,
     .app-wrapper.simple-mode .intro-banner-controls,
+    .app-wrapper.simple-mode #btnMillionYear,
     .app-wrapper.simple-mode #openPaleoModalBtn,
     .app-wrapper.simple-mode #openPaleoModalTopBtn {
       display: none !important;
@@ -120,7 +121,6 @@
     .app-wrapper.simple-mode #pin3 { left: 50% !important; top: 69% !important; }
     .app-wrapper.simple-mode #pin4 { left: 58% !important; top: 40% !important; }
     .app-wrapper.simple-mode #pin5 { left: 32% !important; top: 55% !important; }
-    .app-wrapper.simple-mode #pin6 { left: 50% !important; top: 16% !important; }
 
     /* Custom Tooltip for Legend Items & Terms */
     .has-tooltip {
@@ -307,6 +307,78 @@
       overflow: hidden;
       border: 1px solid var(--border);
     }
+    @media (max-width: 768px) {
+      .canvas-container {
+        height: 760px;
+        min-height: 760px;
+      }
+      .app-wrapper.simple-mode .canvas-container {
+        height: 460px;
+        min-height: 460px;
+      }
+    }
+
+    /* Dedicated flex toolbar below canvas */
+    .canvas-action-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 2px;
+      width: 100%;
+      box-sizing: border-box;
+      z-index: 10;
+    }
+    .action-toolbar-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    .action-toolbar-what {
+      background: #070d17;
+      border: 1.5px solid var(--emerald);
+      color: var(--emerald);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+    }
+    .action-toolbar-what:hover, .action-toolbar-what.active {
+      background: var(--emerald);
+      color: #000;
+      border-color: #fff;
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.7);
+    }
+    .action-toolbar-paleo {
+      background: rgba(11, 19, 32, 0.94);
+      border: 1.5px solid var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+    .action-toolbar-paleo:hover {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
+    }
+    @media (max-width: 768px) {
+      .canvas-action-toolbar {
+        justify-content: stretch;
+      }
+      .action-toolbar-btn {
+        flex: 1 1 140px;
+        text-align: center;
+        padding: 8px 12px;
+        font-size: 0.76rem;
+      }
+    }
+
     canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 
     /* Interactive Speech Bubble System */
@@ -342,26 +414,6 @@
       box-shadow: 0 0 20px rgba(0, 229, 255, 0.9);
       border-color: #fff;
     }
-    .speech-pin.speech-pin-action {
-      width: auto;
-      height: auto;
-      border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      white-space: nowrap;
-      border-color: var(--emerald);
-      color: var(--emerald);
-      background: #070d17;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-    }
-    .speech-pin.speech-pin-action:hover,
-    .speech-pin.speech-pin-action.active {
-      background: var(--emerald);
-      color: #000;
-      border-color: #fff;
-      box-shadow: 0 0 18px rgba(16, 185, 129, 0.85);
-    }
 
     .bubble-popup-card {
       position: absolute;
@@ -380,11 +432,14 @@
       line-height: 1.5;
       color: #cbd5e1;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       .bubble-popup-card {
         width: calc(100% - 24px) !important;
-        max-width: calc(100% - 24px) !important;
+        max-width: 420px !important;
         left: 12px !important;
+        right: 12px !important;
+        transform: none !important;
+        box-sizing: border-box;
         padding: 10px 12px;
         font-size: 0.8rem;
       }
@@ -937,13 +992,12 @@
         <div class="canvas-container" id="canvasContainer">
           <canvas id="simCanvas"></canvas>
 
-          <!-- 5 Sequential Physical Explanation Pins + 6th Action Button -->
+          <!-- 5 Sequential Physical Explanation Pins -->
           <div class="speech-pin" id="pin1" style="top: 6%; left: 24%;">1</div>
           <div class="speech-pin" id="pin2" style="top: 43%; left: 24%;">2</div>
           <div class="speech-pin" id="pin3" style="top: 34%; left: 34%;">3</div>
           <div class="speech-pin" id="pin4" style="top: 20%; left: 40%;">4</div>
           <div class="speech-pin" id="pin5" style="top: 27%; left: 22%;">5</div>
-          <div class="speech-pin speech-pin-action" id="pin6" style="top: 10%; left: 50%;">What can I do about it?</div>
 
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
@@ -958,9 +1012,14 @@
               <button class="bubble-nav-btn" id="bubbleNextBtn">Next →</button>
             </div>
           </div>
+        </div>
 
-          <!-- Button to Compare 500-Year Window Against 1 Million Years of Paleoclimate Data -->
-          <button class="popout-chart-btn" id="openPaleoModalBtn" title="Compare 500-year slices over the last 1,000,000 years">
+        <!-- Dedicated flex toolbar below the canvas viewport -->
+        <div class="canvas-action-toolbar">
+          <button type="button" class="action-toolbar-btn action-toolbar-what" id="btnWhatCanIDo">
+            What can I do about it?
+          </button>
+          <button type="button" class="action-toolbar-btn action-toolbar-paleo" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
             <span>🔍</span> 1-Million-Year Comparison
           </button>
         </div>
@@ -2329,7 +2388,8 @@
         const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
 
         // Upper section split: Atmospheric column takes full canvas in Simple mode; equal height with lower temperature chart in Simulator mode
-        const splitX = isSimple ? w : w * 0.67;
+        const isMobileNarrow = w < 520;
+        const splitX = isSimple ? w : (isMobileNarrow ? w * 0.72 : w * 0.67);
         const atmosH = isSimple ? h : Math.round((h - 36) / 2);
 
         // 1. TOP PANEL: Atmospheric Column (Reduced oversized space above radiating layer via MAX_ALT = 10,500m)
@@ -2875,8 +2935,8 @@
 
         // 3. RIGHT PANEL: Radiative Profile Chart (Advanced Mode Only, Aligned to MAX_ALT)
         if (!isSimple) {
-          const chartLeft = splitX + 50;
-          const chartRight = w - 24;
+          const chartLeft = splitX + (isMobileNarrow ? 30 : 50);
+          const chartRight = w - (isMobileNarrow ? 10 : 24);
           const chartW = chartRight - chartLeft;
           const chartTop = 10;
           const chartH = atmosH - chartTop - 26; // Room for horizontal X-axis labels at bottom
@@ -2891,12 +2951,16 @@
             ctx.strokeStyle = "rgba(51, 65, 85, 0.25)";
             ctx.beginPath(); ctx.moveTo(chartLeft, y); ctx.lineTo(chartRight, y); ctx.stroke();
             ctx.fillStyle = "#64748b";
-            ctx.font = "9px ui-monospace, monospace";
-            ctx.fillText(`${alt.toLocaleString()} m`, chartLeft - 45, y + 3);
+            ctx.font = isMobileNarrow ? "8px ui-monospace, monospace" : "9px ui-monospace, monospace";
+            const altLabel = isMobileNarrow ? `${alt / 1000}k` : `${alt.toLocaleString()} m`;
+            const labelX = isMobileNarrow ? chartLeft - 24 : chartLeft - 45;
+            ctx.fillText(altLabel, labelX, y + 3);
           });
 
           // Horizontal Scale (Flux & Energy in W/m² along bottom X-axis)
-          const fluxTicks = [200, 250, 300, 350, 400];
+          const fluxTicks = isMobileNarrow
+            ? (chartW < 85 ? [200, 400] : [200, 300, 400])
+            : [200, 250, 300, 350, 400];
           fluxTicks.forEach(flux => {
             const fx = chartLeft + ((flux - 200) / 220) * chartW;
             if (fx >= chartLeft && fx <= chartRight) {
@@ -2907,7 +2971,7 @@
               ctx.stroke();
 
               ctx.fillStyle = "#64748b";
-              ctx.font = "9px ui-monospace, monospace";
+              ctx.font = isMobileNarrow ? "8px ui-monospace, monospace" : "9px ui-monospace, monospace";
               ctx.textAlign = "center";
               ctx.fillText(`${flux}`, fx, chartBottom + 12);
               ctx.textAlign = "left";
@@ -2915,9 +2979,9 @@
           });
           // Centered horizontal axis label beneath tick marks (eliminates collision with 400 tick)
           ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
-          ctx.font = "9px system-ui, -apple-system, sans-serif";
+          ctx.font = isMobileNarrow ? "8px system-ui, sans-serif" : "9px system-ui, -apple-system, sans-serif";
           ctx.textAlign = "center";
-          ctx.fillText("Radiative Flux (W/m²)", chartLeft + chartW / 2, chartBottom + 24);
+          ctx.fillText(isMobileNarrow ? "Flux (W/m²)" : "Radiative Flux (W/m²)", chartLeft + chartW / 2, chartBottom + 24);
           ctx.textAlign = "left";
 
           // Measure 1: Inbound Solar Reference Line (Yellow Dashed)
@@ -2965,62 +3029,67 @@
           ctx.beginPath(); ctx.moveTo(chartLeft, rY); ctx.lineTo(chartRight, rY); ctx.stroke();
           ctx.setLineDash([]);
 
-          const badgeW = Math.min(chartW - 12, 190);
-          const badgeX = chartRight - badgeW - 6;
+          const badgeW = isMobileNarrow ? Math.min(chartW - 6, 130) : Math.min(chartW - 12, 190);
+          const badgeX = chartRight - badgeW - (isMobileNarrow ? 3 : 6);
           ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
           ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
           ctx.lineWidth = 1;
           ctx.beginPath(); ctx.roundRect(badgeX, rY - 10, badgeW, 18, 4); ctx.fill(); ctx.stroke();
           ctx.fillStyle = "#fca5a5";
-          ctx.font = "bold 9px ui-monospace, monospace";
-          ctx.fillText(`Emission: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`, badgeX + 6, rY + 3);
+          ctx.font = isMobileNarrow ? "bold 8px ui-monospace, monospace" : "bold 9px ui-monospace, monospace";
+          const badgeText = isMobileNarrow
+            ? `${Math.round(p.zEffM)}m (${p.TeffC.toFixed(0)}°C)`
+            : `Emission: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`;
+          ctx.fillText(badgeText, badgeX + (isMobileNarrow ? 4 : 6), rY + 3);
 
           // Compact Legend Stacked Neatly Inside Top-Left of the Graph
-          const legX = chartLeft + 10;
-          const legY = chartTop + 10;
-          const legW = 120;
-          const legH = 58;
+          if (chartW >= 75) {
+            const legW = isMobileNarrow ? Math.min(chartW - 8, 92) : 120;
+            const legH = isMobileNarrow ? 46 : 58;
+            const legX = chartLeft + (isMobileNarrow ? 4 : 10);
+            const legY = chartTop + (isMobileNarrow ? 4 : 10);
 
-          ctx.fillStyle = "rgba(11, 19, 32, 0.88)";
-          ctx.strokeStyle = "rgba(51, 65, 85, 0.65)";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.roundRect(legX, legY, legW, legH, 4);
-          ctx.fill();
-          ctx.stroke();
+            ctx.fillStyle = "rgba(11, 19, 32, 0.88)";
+            ctx.strokeStyle = "rgba(51, 65, 85, 0.65)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.roundRect(legX, legY, legW, legH, 4);
+            ctx.fill();
+            ctx.stroke();
 
-          // Legend Item 1: Solar (Dashed Yellow)
-          ctx.strokeStyle = "#eab308";
-          ctx.lineWidth = 2;
-          ctx.setLineDash([3, 3]);
-          ctx.beginPath();
-          ctx.moveTo(legX + 8, legY + 14);
-          ctx.lineTo(legX + 26, legY + 14);
-          ctx.stroke();
-          ctx.setLineDash([]);
-          ctx.fillStyle = "#e2e8f0";
-          ctx.font = "10px system-ui";
-          ctx.fillText("Solar (239 W/m²)", legX + 32, legY + 18);
+            // Legend Item 1: Solar (Dashed Yellow)
+            ctx.strokeStyle = "#eab308";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(legX + 6, legY + (isMobileNarrow ? 11 : 14));
+            ctx.lineTo(legX + (isMobileNarrow ? 18 : 26), legY + (isMobileNarrow ? 11 : 14));
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.fillStyle = "#e2e8f0";
+            ctx.font = isMobileNarrow ? "8px system-ui" : "10px system-ui";
+            ctx.fillText(isMobileNarrow ? "Solar (239)" : "Solar (239 W/m²)", legX + (isMobileNarrow ? 22 : 32), legY + (isMobileNarrow ? 14 : 18));
 
-          // Legend Item 2: Upward Flux F↑ (Cyan Solid)
-          ctx.strokeStyle = "#00e5ff";
-          ctx.lineWidth = 2.5;
-          ctx.beginPath();
-          ctx.moveTo(legX + 8, legY + 30);
-          ctx.lineTo(legX + 26, legY + 30);
-          ctx.stroke();
-          ctx.fillStyle = "#e2e8f0";
-          ctx.fillText("Upward Flux F↑", legX + 32, legY + 34);
+            // Legend Item 2: Upward Flux F↑ (Cyan Solid)
+            ctx.strokeStyle = "#00e5ff";
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(legX + 6, legY + (isMobileNarrow ? 23 : 30));
+            ctx.lineTo(legX + (isMobileNarrow ? 18 : 26), legY + (isMobileNarrow ? 23 : 30));
+            ctx.stroke();
+            ctx.fillStyle = "#e2e8f0";
+            ctx.fillText(isMobileNarrow ? "Flux F↑" : "Upward Flux F↑", legX + (isMobileNarrow ? 22 : 32), legY + (isMobileNarrow ? 26 : 34));
 
-          // Legend Item 3: Temperature T(z) (Amber Solid)
-          ctx.strokeStyle = "#f59e0b";
-          ctx.lineWidth = 2.5;
-          ctx.beginPath();
-          ctx.moveTo(legX + 8, legY + 46);
-          ctx.lineTo(legX + 26, legY + 46);
-          ctx.stroke();
-          ctx.fillStyle = "#e2e8f0";
-          ctx.fillText("Temp T(z)", legX + 32, legY + 50);
+            // Legend Item 3: Temperature T(z) (Amber Solid)
+            ctx.strokeStyle = "#f59e0b";
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(legX + 6, legY + (isMobileNarrow ? 35 : 46));
+            ctx.lineTo(legX + (isMobileNarrow ? 18 : 26), legY + (isMobileNarrow ? 35 : 46));
+            ctx.stroke();
+            ctx.fillStyle = "#e2e8f0";
+            ctx.fillText(isMobileNarrow ? "Temp T(z)" : "Temp T(z)", legX + (isMobileNarrow ? 22 : 32), legY + (isMobileNarrow ? 38 : 50));
+          }
 
           // Interactive Hover Tooltips Over Lines
           if (mousePos.active && mousePos.x >= chartLeft && mousePos.x <= chartRight && mousePos.y >= chartTop && mousePos.y <= chartBottom) {
@@ -3360,7 +3429,7 @@
           text: "When we pump more CO₂ into the air, heat is blocked higher up where the air is much colder. Because colder air radiates less heat away, energy builds up below — warming the surface until balance is restored."
         },
         {
-          pinId: "pin6",
+          pinId: "btnWhatCanIDo",
           title: "What can I do about it?",
           html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Watch People's Emergency Briefing with Chris Packham. ↗</a></div>`
         }
@@ -3393,7 +3462,7 @@
           text: "Adding CO₂ forces this emission level higher into colder air. Because colder air radiates less power (σT⁴), outgoing thermal energy drops below solar inflow. Heat accumulates until surface warming restores equilibrium."
         },
         {
-          pinId: "pin6",
+          pinId: "btnWhatCanIDo",
           title: "What can I do about it?",
           html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Watch People's Emergency Briefing with Chris Packham. ↗</a></div>`
         }
@@ -3419,74 +3488,96 @@
         bubbleStepCount.textContent = `Step ${index + 1} of ${dataset.length}`;
 
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
-        const pin = document.getElementById(d.pinId);
-        pin.classList.add("active");
+        const btnWhat = document.getElementById("btnWhatCanIDo");
+        if (btnWhat) btnWhat.classList.remove("active");
 
-        // Position card cleanly adjacent to pin (no clipping off-screen on mobile or desktop)
-        const cRect = document.getElementById("canvasContainer").getBoundingClientRect();
-        const pRect = pin.getBoundingClientRect();
-        const pinLeft = pRect.left - cRect.left;
-        const pinTop = pRect.top - cRect.top;
+        const pin = document.getElementById(d.pinId);
+        if (pin) pin.classList.add("active");
 
         bubbleCard.style.display = "block";
-        const cardW = Math.min(360, cRect.width - 24);
-        const cardH = bubbleCard.offsetHeight || 190;
+        const cRect = document.getElementById("canvasContainer").getBoundingClientRect();
+        const isMobile = window.innerWidth <= 768;
 
-        let targetLeft, targetTop;
+        if (isMobile) {
+          // Mobile Viewport: style exactly per instructions
+          // width: calc(100% - 24px), left: 12px, right: 12px, transform: none, max-width: 420px.
+          // Position it near the top of the canvas (or dynamically clear of the active pin) so it never clips off screen edges.
+          bubbleCard.style.width = "calc(100% - 24px)";
+          bubbleCard.style.maxWidth = "420px";
+          bubbleCard.style.left = "12px";
+          bubbleCard.style.right = "12px";
+          bubbleCard.style.transform = "none";
 
-        if (cRect.width < 600) {
-          // Mobile Viewport: horizontally center card inside container with guaranteed margins
-          targetLeft = Math.max(12, (cRect.width - cardW) / 2);
-
-          // Vertically position clear of the pin so the user still sees the glowing pin
-          if (pinTop < cRect.height * 0.38) {
-            targetTop = pinTop + pRect.height + 10;
-          } else {
-            targetTop = pinTop - cardH - 12;
+          let targetTop = 10;
+          if (pin && d.pinId !== "btnWhatCanIDo") {
+            const pRect = pin.getBoundingClientRect();
+            const pinTop = pRect.top - cRect.top;
+            if (pinTop < 80) {
+              targetTop = Math.max(10, pinTop + pRect.height + 8);
+            } else {
+              targetTop = 10;
+            }
           }
-        } else if (d.pinId === "pin6") {
-          // Position directly below the "What can I do about it?" pill button
-          targetLeft = Math.max(12, Math.min(cRect.width - cardW - 12, pinLeft + pRect.width / 2 - cardW / 2));
-          targetTop = pinTop + pRect.height + 10;
+          bubbleCard.style.top = Math.round(targetTop) + "px";
         } else {
           // Desktop / Tablet: position adjacent to pin with edge bounds
-          targetLeft = pinLeft + pRect.width + 8;
-          if (targetLeft + cardW > cRect.width - 16) {
-            targetLeft = pinLeft - cardW - 14;
-          }
-          if (targetLeft < 12) {
-            targetLeft = Math.max(12, Math.min(cRect.width - cardW - 12, pinLeft - cardW / 2));
-          }
+          bubbleCard.style.right = "auto";
+          bubbleCard.style.maxWidth = "360px";
+          bubbleCard.style.transform = "none";
 
-          if (index === 1 || pinTop > cRect.height * 0.55) {
-            targetTop = pinTop - cardH - 12;
+          const cardW = Math.min(360, cRect.width - 24);
+          const cardH = bubbleCard.offsetHeight || 190;
+
+          let targetLeft, targetTop;
+          if (d.pinId === "btnWhatCanIDo" || !pin) {
+            targetLeft = Math.max(12, Math.min(cRect.width - cardW - 12, (cRect.width - cardW) / 2));
+            targetTop = isSimple
+              ? Math.max(10, cRect.height - cardH - 20)
+              : Math.max(10, Math.round((cRect.height - 36) / 2) - cardH - 10);
           } else {
-            targetTop = pinTop - 40;
+            const pRect = pin.getBoundingClientRect();
+            const pinLeft = pRect.left - cRect.left;
+            const pinTop = pRect.top - cRect.top;
+
+            targetLeft = pinLeft + pRect.width + 8;
+            if (targetLeft + cardW > cRect.width - 16) {
+              targetLeft = pinLeft - cardW - 14;
+            }
+            if (targetLeft < 12) {
+              targetLeft = Math.max(12, Math.min(cRect.width - cardW - 12, pinLeft - cardW / 2));
+            }
+
+            if (index === 1 || pinTop > cRect.height * 0.55) {
+              targetTop = pinTop - cardH - 12;
+            } else {
+              targetTop = pinTop - 40;
+            }
           }
+
+          // Strictly clamp vertical position within the atmospheric column (never overlapping lower 500-year chart)
+          const maxBottom = isSimple
+            ? (cRect.height - cardH - 10)
+            : (Math.round((cRect.height - 36) / 2) - cardH - 6);
+          targetTop = Math.max(8, Math.min(Math.max(8, maxBottom), targetTop));
+
+          bubbleCard.style.left = Math.round(targetLeft) + "px";
+          bubbleCard.style.top = Math.round(targetTop) + "px";
+          bubbleCard.style.width = Math.round(cardW) + "px";
         }
-
-        // Strictly clamp vertical position within the atmospheric column (never overlapping the lower 500-year chart in Simulator mode)
-        const maxBottom = isSimple
-          ? (cRect.height - cardH - 10)
-          : (Math.round((cRect.height - 36) / 2) - cardH - 6);
-        targetTop = Math.max(8, Math.min(Math.max(8, maxBottom), targetTop));
-
-        bubbleCard.style.left = Math.round(targetLeft) + "px";
-        bubbleCard.style.top = Math.round(targetTop) + "px";
-        bubbleCard.style.width = Math.round(cardW) + "px";
       }
 
       speechDataIntro.forEach((d, i) => {
         const el = document.getElementById(d.pinId);
-        el.addEventListener("click", () => showSpeechBubble(i));
-        if (d.pinId === "pin6") {
-          el.addEventListener("mouseenter", () => showSpeechBubble(i));
+        if (el) {
+          el.addEventListener("click", () => showSpeechBubble(i));
         }
       });
 
       document.getElementById("bubbleCloseBtn").addEventListener("click", () => {
         bubbleCard.style.display = "none";
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
+        const btnWhat = document.getElementById("btnWhatCanIDo");
+        if (btnWhat) btnWhat.classList.remove("active");
       });
       document.getElementById("bubbleNextBtn").addEventListener("click", () => {
         showSpeechBubble((currentStep + 1) % speechDataIntro.length);
@@ -3519,6 +3610,8 @@
         }
         bubbleCard.style.display = "none";
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
+        const btnWhat = document.getElementById("btnWhatCanIDo");
+        if (btnWhat) btnWhat.classList.remove("active");
         draw();
       }
 
@@ -3808,7 +3901,7 @@
       }
 
       const paleoModalOverlay = document.getElementById("paleoModalOverlay");
-      const openPaleoModalBtn = document.getElementById("openPaleoModalBtn");
+      const openPaleoModalBtn = document.getElementById("openPaleoModalBtn") || document.getElementById("btnMillionYear");
       const closePaleoModalBtn = document.getElementById("closePaleoModalBtn");
       const paleoScrollSlider = document.getElementById("paleoScrollSlider");
       const paleoOverviewCanvas = document.getElementById("paleoOverviewCanvas");
@@ -4307,13 +4400,15 @@
         }
       }
 
-      openPaleoModalBtn.addEventListener("click", () => {
-        paleoModalOverlay.style.display = "flex";
-        requestAnimationFrame(() => {
-          drawPaleoComparator();
-          setTimeout(drawPaleoComparator, 50);
+      if (openPaleoModalBtn) {
+        openPaleoModalBtn.addEventListener("click", () => {
+          paleoModalOverlay.style.display = "flex";
+          requestAnimationFrame(() => {
+            drawPaleoComparator();
+            setTimeout(drawPaleoComparator, 50);
+          });
         });
-      });
+      }
       const openPaleoModalTopBtn = document.getElementById("openPaleoModalTopBtn");
       if (openPaleoModalTopBtn) {
         openPaleoModalTopBtn.addEventListener("click", () => {
