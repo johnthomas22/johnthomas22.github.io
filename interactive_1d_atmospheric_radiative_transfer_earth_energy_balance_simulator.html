@@ -2785,7 +2785,8 @@
           return last.co2 || (last.year <= 2026 ? getHistoricalCO2(last.year) : 427.0);
         }
 
-        // Temperature change callout badges at intersections with the orange dashed marker lines (linked from the LEFT)
+        // 1. Prepare temperature change callout badges at intersections with the orange dashed marker lines (linked from the LEFT)
+        const markerBadgeBoxes = [];
         [1958, 2026].forEach(targetYr => {
           const dtVal = getHistoricalDeltaAt(targetYr);
           if (dtVal !== null) {
@@ -2800,39 +2801,11 @@
             const bh = 17;
             const bx = Math.max(tGridLeft + 4, ix - bw - 12);
             const by = Math.max(tGridTop + 6, iy - bh - 4);
-
-            // Short leader line from right edge of badge to intersection dot
-            ctx.strokeStyle = "#f59e0b";
-            ctx.lineWidth = 1.2;
-            ctx.beginPath();
-            ctx.moveTo(bx + bw, by + bh / 2);
-            ctx.lineTo(ix, iy);
-            ctx.stroke();
-
-            // Glowing intersection ring point
-            ctx.fillStyle = "#f59e0b";
-            ctx.beginPath();
-            ctx.arc(ix, iy, 4.5, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "#ffffff";
-            ctx.beginPath();
-            ctx.arc(ix, iy, 2.0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = "#070d17";
-            ctx.strokeStyle = "#f59e0b";
-            ctx.lineWidth = 1.2;
-            ctx.beginPath();
-            ctx.roundRect(bx, by, bw, bh, 3);
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.fillStyle = "#f59e0b";
-            ctx.fillText(labelStr, bx + 5, by + 12);
+            markerBadgeBoxes.push({ yr: targetYr, ix, iy, bx, by, bw, bh, labelStr });
           }
         });
 
-        // Climate Tipping Point Threshold Markers (Appears dynamically when trajectory reaches threshold, linked from the LEFT)
+        // 2. Climate Tipping Point Threshold Markers (Appears dynamically when trajectory reaches threshold, linked from the LEFT)
         mainChartTpHitboxes = [];
         let lastTpBadgeY = 99999;
         getTippingPointGroups().forEach(grp => {
@@ -2848,6 +2821,17 @@
             const bh = 19;
             let bx = Math.max(tGridLeft + 6, tx - bw - 18);
             let by = Math.max(tGridTop + 4, ty - bh / 2);
+
+            // Prevent obscuring historical marker badges (in particular the current year 2026 +1.26°C label)
+            markerBadgeBoxes.forEach(mb => {
+              const xOverlap = bx < mb.bx + mb.bw + 4 && (bx + bw) > mb.bx - 4;
+              const yOverlap = by < mb.by + mb.bh + 4 && (by + bh) > mb.by - 4;
+              if (xOverlap && yOverlap) {
+                // Shift tipping point badge cleanly above the marker badge
+                by = Math.max(tGridTop + 4, mb.by - bh - 5);
+              }
+            });
+
             if (by + bh + 3 > lastTpBadgeY) {
               by = Math.max(tGridTop + 4, lastTpBadgeY - bh - 3);
             }
@@ -2898,6 +2882,39 @@
               anchorY: by
             });
           }
+        });
+
+        // 3. Draw historical marker badges (1958 and 2026) with crisp leader lines and 100% opaque badges
+        markerBadgeBoxes.forEach(mb => {
+          // Short leader line from right edge of badge to intersection dot
+          ctx.strokeStyle = "#f59e0b";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(mb.bx + mb.bw, mb.by + mb.bh / 2);
+          ctx.lineTo(mb.ix, mb.iy);
+          ctx.stroke();
+
+          // Glowing intersection ring point
+          ctx.fillStyle = "#f59e0b";
+          ctx.beginPath();
+          ctx.arc(mb.ix, mb.iy, 4.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.arc(mb.ix, mb.iy, 2.0, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#070d17";
+          ctx.strokeStyle = "#f59e0b";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.roundRect(mb.bx, mb.by, mb.bw, mb.bh, 3);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = "#f59e0b";
+          ctx.font = "bold 10px ui-monospace, monospace";
+          ctx.fillText(mb.labelStr, mb.bx + 5, mb.by + 12);
         });
 
         // Active Simulation Year Playhead Line & Floating Boxed Label (Clear of X-axis)
@@ -4118,15 +4135,17 @@
             }
           });
 
-          // Bottom X-Axis: 0 to 500 Years Elapsed in Window
-          for (let off = 0; off <= 500; off += 50) {
+          // Bottom X-Axis: 0 to 500 Years Elapsed in Window (Responsive step to prevent label collision on mobile)
+          const offStep = gw < 460 ? 100 : 50;
+          for (let off = 0; off <= 500; off += offStep) {
             const x = offsetToX(off);
             cCtx.strokeStyle = "rgba(148, 163, 184, 0.35)";
             cCtx.beginPath(); cCtx.moveTo(x, padT + gh); cCtx.lineTo(x, padT + gh + 5); cCtx.stroke();
             cCtx.fillStyle = "#cbd5e1";
-            cCtx.font = "10px ui-monospace, monospace";
+            cCtx.font = gw < 460 ? "9px ui-monospace, monospace" : "10px ui-monospace, monospace";
             cCtx.textAlign = "center";
-            cCtx.fillText(`+${off} yr (${1750 + off})`, x, padT + gh + 18);
+            const xLabel = gw < 460 ? `${1750 + off}` : `+${off} yr (${1750 + off})`;
+            cCtx.fillText(xLabel, x, padT + gh + 16);
           }
           cCtx.textAlign = "left";
 
@@ -4203,69 +4222,8 @@
             cCtx.stroke();
           }
 
-          // Climate Tipping Point Threshold Markers on Modern Curve in Pop-Out Chart (linked from the LEFT)
+          // Tipping points removed from 1-million year comparison chart to prevent screen crowding
           paleoChartTpHitboxes = [];
-          let lastPaleoTpBadgeY = 99999;
-          getTippingPointGroups().forEach(grp => {
-            const crossYr = getThresholdCrossingYear(modernSeries, grp.thresholdC);
-            if (crossYr !== null && grp.thresholdC <= 5.0) {
-              const tx = offsetToX(crossYr - 1750);
-              const ty = tempToY(isRel ? (grp.thresholdC - m0.dt) : grp.thresholdC);
-
-              cCtx.font = "bold 10px system-ui, -apple-system, sans-serif";
-              const tw = cCtx.measureText(grp.badgeLabel).width;
-              const bw = tw + 14;
-              const bh = 19;
-              const bx = Math.max(padL + 6, tx - bw - 18);
-              let by = Math.max(padT + 4, ty - bh / 2);
-              if (by + bh + 3 > lastPaleoTpBadgeY) {
-                by = Math.max(padT + 4, lastPaleoTpBadgeY - bh - 3);
-              }
-              lastPaleoTpBadgeY = by;
-
-              cCtx.strokeStyle = "#f43f5e";
-              cCtx.lineWidth = 1.3;
-              cCtx.beginPath();
-              cCtx.moveTo(bx + bw, by + bh / 2);
-              cCtx.lineTo(tx, ty);
-              cCtx.stroke();
-
-              cCtx.fillStyle = "rgba(244, 63, 94, 0.32)";
-              cCtx.beginPath();
-              cCtx.arc(tx, ty, 7.5, 0, Math.PI * 2);
-              cCtx.fill();
-              cCtx.fillStyle = "#f43f5e";
-              cCtx.beginPath();
-              cCtx.arc(tx, ty, 4.5, 0, Math.PI * 2);
-              cCtx.fill();
-              cCtx.fillStyle = "#ffffff";
-              cCtx.beginPath();
-              cCtx.arc(tx, ty, 2.0, 0, Math.PI * 2);
-              cCtx.fill();
-
-              cCtx.fillStyle = "#070d17";
-              cCtx.strokeStyle = "#f43f5e";
-              cCtx.lineWidth = 1.4;
-              cCtx.beginPath();
-              cCtx.roundRect(bx, by, bw, bh, 4);
-              cCtx.fill();
-              cCtx.stroke();
-
-              cCtx.fillStyle = "#fda4af";
-              cCtx.fillText(grp.badgeLabel, bx + 7, by + 13);
-
-              paleoChartTpHitboxes.push({
-                grp,
-                crossYr,
-                x1: Math.min(tx - 9, bx - 2),
-                x2: Math.max(tx + 9, bx + bw + 2),
-                y1: Math.min(ty - 9, by - 2),
-                y2: Math.max(ty + 9, by + bh + 2),
-                anchorX: bx + bw / 2,
-                anchorY: by
-              });
-            }
-          });
 
           // --- PLOT 4: Selected Prehistoric 500-Yr Temperature Curve (Bright Emerald) ---
           cCtx.strokeStyle = "#10b981";
@@ -4295,7 +4253,9 @@
           cCtx.fillText(pLabel, padL + gw - ptw - 2, Math.max(padT + 6, Math.min(padT + gh - 24, paleoEndY - 22)) + 13);
 
           // Legend Box Inside Top-Left of Comparison Chart
-          const lx = padL + 12, ly = padT + 10, lw = 285, lh = 76;
+          const lw = Math.min(285, gw - 20);
+          const lx = padL + 10, ly = padT + 8;
+          const lh = gw < 460 ? 58 : 76;
           cCtx.fillStyle = "rgba(11, 19, 32, 0.92)";
           cCtx.strokeStyle = "rgba(51, 65, 85, 0.8)";
           cCtx.lineWidth = 1;
@@ -4304,17 +4264,19 @@
           cCtx.font = "bold 10px system-ui, sans-serif";
           // Row 1
           cCtx.fillStyle = "#f43f5e";
-          cCtx.fillText("━━ Modern Surface ΔT (1750–2250 CE)", lx + 10, ly + 18);
+          cCtx.fillText("━━ Modern Surface ΔT (1750–2250 CE)", lx + 10, ly + 16);
           // Row 2
           cCtx.fillStyle = "#10b981";
-          cCtx.fillText(`━━ Prehistoric 500-Yr ΔT (${formatBP(paleoStartYrBP)})`, lx + 10, ly + 35);
+          cCtx.fillText(`━━ Prehistoric 500-Yr ΔT (${formatBP(paleoStartYrBP)})`, lx + 10, ly + 32);
           // Row 3
           cCtx.fillStyle = "#c084fc";
-          cCtx.fillText("━━ Modern CO₂ (ppm)   ╌╌ Prehistoric CO₂ (ppm)", lx + 10, ly + 52);
-          // Row 4
-          cCtx.fillStyle = "#94a3b8";
-          cCtx.font = "9px system-ui, sans-serif";
-          cCtx.fillText("Note: Ice core resolution is ~20–100 yr (0–120k BP) & ~200–500 yr (deep ice)", lx + 10, ly + 68);
+          cCtx.fillText("━━ Modern CO₂   ╌╌ Prehistoric CO₂", lx + 10, ly + 48);
+          // Row 4 (shown when sufficient height/width)
+          if (gw >= 460) {
+            cCtx.fillStyle = "#94a3b8";
+            cCtx.font = "9px system-ui, sans-serif";
+            cCtx.fillText("Note: Ice core resolution is ~20–100 yr (0–120k BP) & ~200–500 yr (deep ice)", lx + 10, ly + 66);
+          }
 
           // Check Tipping Point Hitboxes on Pop-Out Chart
           let hoveredPaleoTp = null;
