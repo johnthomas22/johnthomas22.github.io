@@ -3890,29 +3890,50 @@
         return { yr: clamped, dt: 0, co2: 278 };
       }
 
-      // Generate complete 500-year modern trajectory (1750 to 2250 CE) using the current scenario or default +2.5 ppm/yr
+      // Generate complete 500-year modern trajectory (1750 to 2250 CE)
+      // Directly follows the chart produced in the simulator (state.history), and projects to 2250 if not yet reached
       function getModern500YrSeries() {
         const pts = [];
-        let simC = 278.0;
-        let simTs = 0.0;
-        let simTd = 0.0;
-        const futureRate = state.rate !== 0 ? state.rate : 2.5;
-        for (let y = 1750; y <= 2250; y += 2) {
-          if (y <= 2026) {
-            simC = getHistoricalCO2(y);
-          } else {
-            simC = Math.max(150, Math.min(1100, simC + futureRate * 2));
+        const hist = (state.history && state.history.length > 0) ? state.history : getCalibratedHistoricalRun();
+
+        // 1. Copy all points already produced in the simulator's accumulated history
+        hist.forEach(pt => {
+          pts.push({
+            offsetYr: pt.year - 1750,
+            calYr: pt.year,
+            dt: pt.deltaTs,
+            co2: pt.co2 !== undefined ? pt.co2 : (pt.year <= 2026 ? getHistoricalCO2(pt.year) : state.co2)
+          });
+        });
+
+        // 2. If the simulation has not yet reached 2250, project forward using the simulator's active state & scenario rate
+        const lastPt = pts[pts.length - 1];
+        if (lastPt && lastPt.calYr < 2250) {
+          let simYr = lastPt.calYr;
+          let simTs = lastPt.dt;
+          let simTd = state.deltaTd !== undefined ? state.deltaTd : (simTs * 0.44);
+          let simC = lastPt.co2;
+          const futureRate = state.rate;
+
+          while (simYr < 2250) {
+            const step = Math.min(2.0, 2250 - simYr);
+            simYr += step;
+            if (simYr <= 2026) {
+              simC = getHistoricalCO2(simYr);
+            } else if (futureRate !== 0) {
+              simC = Math.max(150, Math.min(1000, simC + futureRate * step));
+            }
+            const rfAlpha = simYr <= 2026 ? 5.42 : 5.35;
+            const rf = rfAlpha * Math.log(Math.max(100, simC) / CO2_BASE);
+            const dtSub = step / 4.0;
+            for (let sub = 0; sub < 4; sub++) {
+              const dTs = (rf - LAMBDA_FEEDBACK * simTs - GAMMA * (simTs - simTd)) / CM;
+              const dTd = (GAMMA * (simTs - simTd)) / CD;
+              simTs += dTs * dtSub;
+              simTd += dTd * dtSub;
+            }
+            pts.push({ offsetYr: simYr - 1750, calYr: simYr, dt: simTs, co2: simC });
           }
-          const rfAlpha = y <= 2026 ? 5.42 : 5.35;
-          const rf = rfAlpha * Math.log(Math.max(100, simC) / CO2_BASE);
-          // 2-year integration step
-          for (let sub = 0; sub < 4; sub++) {
-            const dTs = (rf - LAMBDA_FEEDBACK * simTs - GAMMA * (simTs - simTd)) / CM;
-            const dTd = (GAMMA * (simTs - simTd)) / CD;
-            simTs += dTs * 0.5;
-            simTd += dTd * 0.5;
-          }
-          pts.push({ offsetYr: y - 1750, calYr: y, dt: simTs, co2: simC });
         }
         return pts;
       }
