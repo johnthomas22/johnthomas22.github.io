@@ -135,3 +135,4 @@ All commits were recorded locally to both `/home/jayt/climate-sim` and `/home/ja
 6. `f5277a8` / `c2c3c44` — *Adopt published Geoffroy et al. CMIP5 heat capacities and dynamically initialize deep-ocean state from hindcast* (Prompt 6)
 7. `3390252` / `fc79f7a` — *Implement 1850-1900 baseline offset for tipping points and harmonize Addendum baseline definitions* (Prompt 7)
 8. `8c52e6c` / `e6c8ca0` — *Correct analytical derivations in Proof 2 and harmonize Earth Energy Imbalance text in Guide* (Prompt 8)
+
