@@ -281,10 +281,13 @@
       background: rgba(0, 229, 255, 0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.78rem;
     }
     input[type="range"] {
-      -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #1e293b; outline: none; cursor: pointer;
+      -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #1e293b; outline: none; cursor: pointer;
     }
     input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--cyan); cursor: pointer;
+      -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--cyan); cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 16px; height: 16px; border-radius: 50%; background: var(--cyan); cursor: pointer; border: none;
     }
     .slider-ticks-container { position: relative; height: 20px; margin-top: 2px; }
     .slider-tick-anchor { position: absolute; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
