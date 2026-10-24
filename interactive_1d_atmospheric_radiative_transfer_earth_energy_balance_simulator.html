@@ -1070,7 +1070,7 @@
         <div>
           <div class="modal-title" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <span>🔍 500-Year Warming Rate vs. 1,000,000 Years of Paleoclimate History</span>
-            <span class="badge badge-cyan">EPICA Dome C / LR04 / Temp12k Calibrated</span>
+            <span class="badge badge-cyan">Illustrative Reconstruction (Glacial–Interglacial Stages)</span>
             <button id="openPaleoDocsLinkBtn" style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--emerald); color: var(--emerald); padding: 2px 9px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
               📖 Data Sources & Resolution Docs →
             </button>
@@ -1148,6 +1148,7 @@
             <div class="stat-header"><span>Speed / Rate Multiplier</span><span class="badge badge-cyan">Slope Ratio</span></div>
             <div class="stat-value" id="ratioStatValue" style="color: var(--cyan); font-size: 1.25rem;">~31× Faster</div>
             <div class="stat-sub" id="ratioStatSub">Modern century warming rate vs. selected prehistoric 500-yr window</div>
+            <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 4px; line-height: 1.2;">* Note: Paleo proxies are smoothed at 20–500 yr resolution, so the "× faster" figure is a lower-resolution baseline comparison.</div>
           </div>
         </div>
       </div>
@@ -1228,7 +1229,7 @@
                   <span class="badge badge-emerald" style="margin-left: 8px;">EPICA / LR04 / Temp12k</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Primary ice-core and marine sediment datasets powering the 1,000,000-year / 500-year rate comparator (EPICA Dome C, Bereiter et al. 2015, Lisiecki & Raymo LR04, Shakun et al. 2012, Kaufman Temp12k), temporal resolution limits, and glacial termination rates.
+                  Benchmark ice-core and marine sediment datasets synthesized in the illustrative 1,000,000-year / 500-year rate comparator (EPICA Dome C, Bereiter et al. 2015, Lisiecki & Raymo LR04, Shakun et al. 2012, Kaufman Temp12k), temporal resolution limits, and glacial termination rates.
                 </div>
               </li>
               <li>
@@ -1401,21 +1402,21 @@
           </table>
         </div>
 
-        <!-- PAGE 4: 1-MILLION-YEAR PALEOCLIMATE DATA SOURCES & RESOLUTION -->
+        <!-- PAGE 4: 1-MILLION-YEAR PALEOCLIMATE SOURCES & RESOLUTION -->
         <div class="doc-page" id="page-paleo">
-          <h3>Page 4: 1-Million-Year Paleoclimate Reconstructions & Data Sources</h3>
+          <h3>Page 4: 1-Million-Year Paleoclimate Sources & Resolution</h3>
           <p>
-            The pop-out <strong>1-Million-Year / 500-Year Rate-of-Change Comparator</strong> synthesizes primary peer-reviewed paleoclimate datasets spanning the Pleistocene glacial-interglacial cycles, the Last Deglaciation, and the Holocene. Because no single physical archive spans 1,000,000 years at decadal resolution, paleoclimatology combines high-resolution polar ice cores with global marine sediment stacks.
+            The pop-out <strong>1-Million-Year / 500-Year Rate-of-Change Comparator</strong> provides an <strong>illustrative reconstruction</strong> parameterized from published benchmark glacial–interglacial stages, terminations, and Holocene syntheses, rather than loading continuous raw observational datasets. Because no single physical archive spans 1,000,000 years at decadal resolution, paleoclimatology synthesizes polar ice cores with global marine sediment stacks.
           </p>
 
-          <h4>1. Primary Scientific Datasets & Peer-Reviewed Sources</h4>
+          <h4>1. Primary Scientific Syntheses & Benchmark Proxy Sources</h4>
           <table class="data-table">
             <thead>
               <tr>
                 <th>Time Span (Years BP)</th>
-                <th>Archive & Dataset</th>
+                <th>Archive & Dataset Type</th>
                 <th>Primary Reference</th>
-                <th>Temporal Resolution</th>
+                <th>Temporal Resolution & Nature of Proxy</th>
               </tr>
             </thead>
             <tbody>
@@ -1425,31 +1426,31 @@
                 <td>
                   Kaufman et al. (2020), <em>Scientific Data</em>; Marcott et al. (2013), <em>Science</em>; Rubino et al. (2019)
                 </td>
-                <td><strong>10 – 50 years</strong></td>
+                <td><strong>10 – 50 years</strong> (multi-proxy surface temperature stack & high-resolution firn/ice CO₂)</td>
               </tr>
               <tr>
                 <td><strong>11,000 – 22,000 BP</strong><br>(Termination I / Last Deglaciation)</td>
                 <td>Global multi-proxy deglaciation stack (80 globally distributed records) + WAIS Divide & NGRIP ice cores</td>
                 <td>
-                  Shakun et al. (2012), <em>Nature</em>;Tierney et al. (2020), <em>Nature</em> (LGM Δ<i>T</i> = -6.0 °C)
+                  Shakun et al. (2012), <em>Nature</em>; Tierney et al. (2020), <em>Nature</em> (LGM Δ<i>T</i> = -6.0 °C)
                 </td>
-                <td><strong>20 – 100 years</strong></td>
+                <td><strong>20 – 100 years</strong> (globally distributed marine/terrestrial surface proxies & polar ice)</td>
               </tr>
               <tr>
                 <td><strong>0 – 800,000 BP</strong><br>(8 Glacial Cycles)</td>
-                <td><strong>EPICA Dome C</strong> Antarctic Ice Core deuterium (δD) temperature & composite trapped-gas CO₂ record</td>
+                <td><strong>EPICA Dome C</strong> Antarctic Ice Core deuterium (δD) local temperature & composite trapped-gas atmospheric CO₂ record</td>
                 <td>
                   Jouzel et al. (2007), <em>Science</em>; Bereiter et al. (2015), <em>Geophysical Research Letters</em> (NOAA/NCEI)
                 </td>
-                <td><strong>50 – 200 yrs</strong> (upper ice)<br><strong>200 – 500 yrs</strong> (deep abyssal ice)</td>
+                <td><strong>50 – 500 yrs</strong>. Records local East Antarctic site temperature (scaled to GMST) and direct continuous trapped-gas CO₂ back to 800,000 BP (the oldest continuous ice core CO₂).</td>
               </tr>
               <tr>
-                <td><strong>0 – 1,000,000+ BP</strong><br>(Mid-Pleistocene to Present)</td>
-                <td><strong>LR04 Global Benthic Stack</strong> (57 globally distributed marine sediment δ¹⁸O cores) & continuous surface temperature synthesis</td>
+                <td><strong>800,000 – 1,000,000+ BP</strong><br>(Mid-Pleistocene Transition)</td>
+                <td><strong>LR04 Global Benthic Stack</strong> (57 globally distributed deep-sea cores) & derived surface temperature reconstructions</td>
                 <td>
                   Lisiecki & Raymo (2005), <em>Paleoceanography</em>; Snyder (2016), <em>Nature</em>; Hansen et al. (2013)
                 </td>
-                <td><strong>500 – 1,000 years</strong></td>
+                <td><strong>500 – 1,000 years</strong>. LR04 records benthic foraminiferal δ¹⁸O (reflecting deep-ocean temperature and continental ice volume, not direct surface temperature or CO₂); surface ΔT is indirectly derived, and pre-800 kyr CO₂ values are proxy/orbital estimates.</td>
               </tr>
             </tbody>
           </table>
@@ -3940,23 +3941,15 @@
           if (clamped >= k1.yr && clamped <= k2.yr) {
             const span = k2.yr - k1.yr;
             const u = span === 0 ? 0 : (clamped - k1.yr) / span;
-            // Smooth cosine-blended interpolation + realistic millennial/centennial orbital & D-O variability
+            // Smooth cosine-blended interpolation between benchmark keyframes
             const smoothU = 0.5 - 0.5 * Math.cos(u * Math.PI);
-            let baseDt = k1.dt + (0.65 * u + 0.35 * smoothU) * (k2.dt - k1.dt);
-            let baseCo2 = k1.co2 + (0.65 * u + 0.35 * smoothU) * (k2.co2 - k1.co2);
+            const baseDt = k1.dt + (0.65 * u + 0.35 * smoothU) * (k2.dt - k1.dt);
+            const baseCo2 = k1.co2 + (0.65 * u + 0.35 * smoothU) * (k2.co2 - k1.co2);
 
-            // Add subtle empirical centennial/millennial variability calibrated to ice-core variance
-            // (Larger variance during glacial MIS 3/4, quiet variance during Holocene)
-            const isHolocene = clamped > -11500;
-            const amp = isHolocene ? 0.04 : 0.14;
-            const osc = amp * (
-              0.6 * Math.sin(clamped * 2 * Math.PI / 1470) + // 1,470-yr Bond / Dansgaard-Oeschger cycle
-              0.4 * Math.cos(clamped * 2 * Math.PI / 2400)   // 2,400-yr Hallstatt solar/ocean cycle
-            );
             return {
               yr: clamped,
-              dt: baseDt + osc,
-              co2: baseCo2 + osc * 5.5
+              dt: baseDt,
+              co2: baseCo2
             };
           }
         }
