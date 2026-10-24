@@ -878,7 +878,7 @@
           <span style="color: var(--text-muted);">Warming:</span>
           <strong style="color: var(--rose);" id="introDeltaTDisplay">+1.26 °C</strong>
         </div>
-        <button class="btn btn-pause" id="btnIntroPlayPause" style="padding: 6px 12px;">⏸ Pause</button>
+        <button class="btn btn-start" id="btnIntroPlayPause" style="padding: 6px 12px;">▶ Start</button>
         <button class="btn btn-secondary" id="btnIntroReset2026" style="padding: 6px 10px;">↺ Restart (2026)</button>
       </div>
     </div>
@@ -1644,7 +1644,8 @@
         deltaTd: 0.55,
         year: 2026.0,
         speed: 1.0,
-        running: true, // Launches running from Present Day (2026) into the future
+        running: false, // Initial state: does not start automatically
+        hasStarted: false,
         history: getCalibratedHistoricalRun()
       };
 
@@ -3389,10 +3390,15 @@
           btnPlayPause.className = "btn btn-pause";
           btnIntroPlayPause.textContent = "⏸ Pause";
           btnIntroPlayPause.className = "btn btn-pause";
-        } else {
+        } else if (state.hasStarted) {
           btnPlayPause.textContent = "▶ Resume Simulation";
           btnPlayPause.className = "btn btn-start";
           btnIntroPlayPause.textContent = "▶ Resume";
+          btnIntroPlayPause.className = "btn btn-start";
+        } else {
+          btnPlayPause.textContent = "▶ Start Simulation";
+          btnPlayPause.className = "btn btn-start";
+          btnIntroPlayPause.textContent = "▶ Start";
           btnIntroPlayPause.className = "btn btn-start";
         }
       }
@@ -3657,6 +3663,9 @@
       // Simulation Controls
       function togglePlayPause() {
         state.running = !state.running;
+        if (state.running) {
+          state.hasStarted = true;
+        }
         syncUI();
       }
       btnPlayPause.addEventListener("click", togglePlayPause);
@@ -3673,12 +3682,13 @@
         state.history = getCalibratedHistoricalRun();
         if (typeof autoRun === "boolean") {
           state.running = autoRun;
+          state.hasStarted = autoRun;
         }
         syncUI();
         draw();
       }
 
-      document.getElementById("btnIntroReset2026").addEventListener("click", () => resetToPresentDay(true));
+      document.getElementById("btnIntroReset2026").addEventListener("click", () => resetToPresentDay(false));
 
       document.getElementById("btnSnapEquilibrium").addEventListener("click", () => {
         const rf = 5.35 * Math.log(Math.max(100, state.co2) / CO2_BASE);
@@ -3692,6 +3702,7 @@
         document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
         document.getElementById("presetPreInd").classList.add("active");
         state.running = false;
+        state.hasStarted = false;
         state.co2 = 315.0; // Starts at 1958 Keeling (1750-1958 already static on chart)
         state.rate = 2.5;
         state.deltaTs = 0.38;
@@ -3722,6 +3733,7 @@
         state.year = 1958.0;
         state.history = STATIC_HISTORICAL_1750_1958.slice();
         state.running = true;
+        state.hasStarted = true;
         syncUI();
         draw();
       });
@@ -4514,8 +4526,8 @@
         if (paleoModalOverlay.style.display === "flex") drawPaleoComparator();
       });
 
-      // Launch initialized to Present Day (2026) running into future
-      resetToPresentDay(true);
+      // Launch initialized to Present Day (2026) in paused state waiting for user to click Start
+      resetToPresentDay(false);
       requestAnimationFrame(update);
     })();
   </script>
