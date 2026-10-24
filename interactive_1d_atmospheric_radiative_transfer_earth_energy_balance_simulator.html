@@ -1526,12 +1526,13 @@
             Under the <strong>Paris Agreement</strong>, the <strong>World Meteorological Organization (WMO)</strong>, and <strong>IPCC AR6</strong>, a long-term climate threshold is not considered "breached" by a single unusually warm year or month. Climate is scientifically defined as the <strong>20-year to 30-year running average</strong> of global temperatures, which filters out short-term ENSO noise:
           </p>
           <div class="code-box">
-            • <b>Single-Year Weather Spikes (e.g., 2023–2024 El Niño Peak):</b> <b>+1.48 °C to +1.55 °C</b> (Temporary record)<br>
-            • <b>Underlying Human-Induced Forced Trend (2024–2026):</b>       <b>+1.26 °C to +1.31 °C</b> (IPCC AR6 / WMO standard)<br>
-            • <b>Projected Permanent Crossing of the 20-Year Mean:</b>         <b>Early-to-mid 2030s</b> (under continued emissions)
+            • <b>Single-Year Observational Spikes (2023–2024 El Niño Peak):</b> <b>+1.48 °C to +1.55 °C</b> (relative to 1850–1900; temporary weather record)<br>
+            • <b>Human-Induced Forced Warming (Forster et al. 2024, ESSD):</b>  <b>+1.31 °C [1.1 to 1.7 °C] in 2023, ~1.36 °C in 2024</b> (relative to 1850–1900)<br>
+            • <b>Simulator Model State (2026 Forced Anomaly):</b>                 <b>+1.26 °C rel. to 1750 (+1.14 °C rel. to 1850–1900)</b><br>
+            • <b>Projected Permanent Crossing of the 20-Year Mean (+1.5 °C):</b> <b>Early-to-mid 2030s</b> (under continued emissions)
           </div>
           <p>
-            The <strong>IPCC Sixth Assessment Report (AR6 Working Group I, Chapter 7)</strong> defines human-induced warming as the forced response of the climate system to greenhouse gases and aerosols alone. As of 2026, the underlying forced climate warming sits at <strong>~+1.26 °C</strong>.
+            The <strong>IPCC Sixth Assessment Report (AR6 Working Group I)</strong> and the authoritative <em>Indicators of Global Climate Change 2023</em> (<strong>Forster et al. 2024, ESSD</strong>) define human-induced warming as the multi-decadal forced response to greenhouse gases and aerosols relative to the <strong>1850–1900 reference period</strong>, estimated at <strong>+1.31 °C [1.1 to 1.7 °C] in 2023 and reaching approximately +1.36 °C in 2024</strong>. Relative to the unforced pre-industrial <strong>1750 baseline</strong> (which includes ~0.12 °C of early warming between 1750 and 1900), the simulator's deterministic forced response reaches <strong>+1.26 °C in 2026</strong> (equivalent to <strong>+1.14 °C</strong> above the 1850–1900 mean).
           </p>
 
           <h4>3. Pre-Industrial Baseline Differences: 1750 vs. 1850–1900</h4>
@@ -1547,7 +1548,7 @@
             </li>
           </ul>
           <p>
-            Between 1750 and 1880, early industrial coal burning and land-clearing had already elevated CO₂ from 278 ppm to ~290 ppm, producing approximately <strong>+0.10 °C to +0.15 °C</strong> of early warming before global thermometer networks were established.
+            Between 1750 and 1880, early industrial coal burning and land-clearing had already elevated CO₂ from 278 ppm to ~290 ppm, producing approximately <strong>+0.12 °C</strong> of early warming before global thermometer networks were established. Consequently, tipping-point thresholds (Armstrong McKay et al. 2022) and Paris Agreement targets are referenced to 1850–1900, while physical radiative balance simulations are referenced to the 1750 unforced baseline. The simulator accounts for this by computing the model's 1850–1900 hindcast offset (mean <strong>+0.12 °C</strong>) and adjusting threshold crossings accordingly.
           </p>
 
           <h4>4. Why the Two-Layer Ocean EBM Models the Forced Signal</h4>
@@ -1593,8 +1594,11 @@
       <div class="tp-tabs-row" id="tpCardTabs"></div>
     </div>
     <div class="tp-meta">
-      <span class="tp-badge-threshold" id="tpCardThreshold">Central Threshold: +1.5°C (Range: 0.8–3.0°C)</span>
+      <span class="tp-badge-threshold" id="tpCardThreshold">Central Threshold: +1.5°C (1850–1900 baseline)</span>
       <span class="tp-badge-year" id="tpCardYear">Reached: ~2039 CE</span>
+    </div>
+    <div style="font-size: 0.68rem; color: var(--text-muted); margin: 2px 0 6px 0; font-family: ui-monospace, monospace;">
+      * Thresholds are relative to 1850–1900 baseline (offset from 1750 curve by +0.12°C).
     </div>
     <div class="tp-summary" id="tpCardSummary"></div>
     <div class="tp-links-section">
@@ -1681,6 +1685,10 @@
       const STATIC_HISTORICAL_1750_1958 = STATIC_HISTORICAL_RUN.filter(p => p.year <= 1958);
       const PRESENT_2026_PT = STATIC_HISTORICAL_RUN[STATIC_HISTORICAL_RUN.length - 1];
       const BASELINE_1958_PT = STATIC_HISTORICAL_1750_1958[STATIC_HISTORICAL_1750_1958.length - 1];
+
+      // Standard meteorological baseline offset: mean 1850–1900 warming above 1750 (≈ +0.12 °C)
+      const pts1850_1900 = STATIC_HISTORICAL_RUN.filter(p => p.year >= 1850 && p.year <= 1900);
+      const OFFSET_1850_1900 = pts1850_1900.reduce((acc, p) => acc + p.deltaTs, 0) / pts1850_1900.length;
 
       let state = {
         co2: PRESENT_2026_PT.co2,
@@ -2216,12 +2224,14 @@
         if (series && series.length > 0) {
           for (let i = 0; i < series.length; i++) {
             const pt = series[i];
-            const val = pt.deltaTs !== undefined ? pt.deltaTs : pt.dt;
+            const rawVal = pt.deltaTs !== undefined ? pt.deltaTs : pt.dt;
+            const val = rawVal - OFFSET_1850_1900; // Evaluated relative to standard 1850–1900 baseline
             const yr = pt.year !== undefined ? pt.year : pt.calYr;
             if (val >= thresholdC) {
               if (i === 0) return yr;
               const prev = series[i - 1];
-              const prevVal = prev.deltaTs !== undefined ? prev.deltaTs : prev.dt;
+              const prevRaw = prev.deltaTs !== undefined ? prev.deltaTs : prev.dt;
+              const prevVal = prevRaw - OFFSET_1850_1900;
               const prevYr = prev.year !== undefined ? prev.year : prev.calYr;
               const spanVal = val - prevVal;
               const frac = spanVal > 0 ? Math.max(0, Math.min(1, (thresholdC - prevVal) / spanVal)) : 0;
@@ -2229,7 +2239,7 @@
             }
           }
         }
-        if (fallbackCurrentDt !== undefined && fallbackCurrentDt >= thresholdC) {
+        if (fallbackCurrentDt !== undefined && (fallbackCurrentDt - OFFSET_1850_1900) >= thresholdC) {
           return fallbackCurrentYr;
         }
         return null;
@@ -2292,7 +2302,7 @@
         }
 
         tpCardTitleEl.textContent = tp.title;
-        tpCardThresholdEl.textContent = tp.rangeText;
+        tpCardThresholdEl.textContent = `${tp.rangeText} (1850–1900 baseline; +${(grp.thresholdC + OFFSET_1850_1900).toFixed(2)}°C rel. to 1750)`;
         tpCardSummaryEl.textContent = tp.summary;
 
         tpCardArticlesEl.innerHTML = tp.articles.map(a =>
@@ -2644,9 +2654,12 @@
         const line1Y = tGridTop + titleFontSize + 18;
         const line2Y = tGridTop + titleFontSize + 31;
         ctx.fillStyle = "#f43f5e";
-        ctx.fillText("■ Surface ΔT (°C)", legLeft, line1Y);
+        ctx.fillText("■ Surface ΔT (°C rel. to 1750)", legLeft, line1Y);
         ctx.fillStyle = "#c084fc";
         ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, line2Y);
+        ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
+        ctx.font = "italic 9px system-ui, sans-serif";
+        ctx.fillText("Thresholds & +1.5°C line relative to 1850–1900 (offset: +0.12°C)", legLeft, line2Y + 12);
 
         function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
         // Scaled to 5.2°C span so +2.5 ppm/yr trajectory comfortably sits in upper chart with head room
@@ -2695,14 +2708,16 @@
           }
         }
 
-        // Threshold Reference Lines
+        // Threshold Reference Lines (1850–1900 targets mapped onto 1750 chart axis)
         [0.0, 1.5, 2.0, 3.0, 4.0].forEach(th => {
-          const y = dtToY(th);
+          const yVal = th === 0.0 ? 0.0 : (th + OFFSET_1850_1900);
+          const y = dtToY(yVal);
           ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (th === 1.5 ? "rgba(245,158,11,0.4)" : "rgba(244,63,94,0.4)");
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
           ctx.fillStyle = th === 0.0 ? "#94a3b8" : (th === 1.5 ? "#f59e0b" : "#f43f5e");
           ctx.font = "bold 9px ui-monospace, monospace";
-          ctx.fillText(`+${th.toFixed(1)}°C`, tGridLeft + 3, y - 2);
+          const label = th === 0.0 ? "0.0°C (1750 Baseline)" : `+${th.toFixed(1)}°C (1850–1900)`;
+          ctx.fillText(label, tGridLeft + 3, y - 2);
         });
 
         // 1958 Keeling Boundary Marker (Vertical dashed line)
@@ -2873,7 +2888,7 @@
           const crossYr = getThresholdCrossingYear(state.history, grp.thresholdC, state.year, state.deltaTs);
           if (crossYr !== null && grp.thresholdC <= 5.0) {
             const tx = yrToX(crossYr);
-            const ty = dtToY(grp.thresholdC);
+            const ty = dtToY(grp.thresholdC + OFFSET_1850_1900);
 
             // Badge dimensions positioned cleanly above-LEFT of the crossing point so it never obscures the rising curve
             ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
