@@ -374,20 +374,20 @@
       }
     }
 
-    /* Action Button on 500-Year Temperature Chart (placed cleanly below legend height to prevent overlap) */
+    /* Action Button on 500-Year Temperature Chart (aligned on the same line as the 500-year heading) */
     .chart-action-btn-paleo {
       position: absolute;
-      top: calc((100% - 36px) / 2 + 54px);
+      top: calc((100% - 36px) / 2 + 12px);
       left: calc(24px + (100% - 48px) * 0.60);
       right: auto;
       z-index: 25;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      padding: 5px 13px;
-      border-radius: 6px;
-      font-size: 0.76rem;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 5px;
+      font-size: 0.74rem;
       font-weight: 700;
       cursor: pointer;
       background: rgba(11, 19, 32, 0.94);
@@ -408,10 +408,10 @@
     }
     @media (max-width: 600px) {
       .chart-action-btn-paleo {
-        top: calc((100% - 36px) / 2 + 48px);
-        left: calc(24px + (100% - 48px) * 0.55);
-        font-size: 0.70rem;
-        padding: 4px 8px;
+        top: calc((100% - 36px) / 2 + 10px);
+        left: calc(24px + (100% - 48px) * 0.52);
+        font-size: 0.68rem;
+        padding: 3px 7px;
       }
     }
 
@@ -2742,7 +2742,7 @@
         // Subtitle legend for Temperature vs CO2: Single-row horizontal layout below headline (zero overlap with threshold lines or curves)
         ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
         const legLeft = tGridLeft + 8;
-        const legY = tGridTop + titleFontSize + 16;
+        const legY = tGridTop + titleFontSize + 19;
         ctx.fillStyle = "#f43f5e";
         ctx.fillText("■ Surface ΔT (°C rel. to 1750)", legLeft, legY);
         const dtLegendW = ctx.measureText("■ Surface ΔT (°C rel. to 1750)").width;
@@ -2752,7 +2752,7 @@
         ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
         const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
 
-        if (tGridW > 640) {
+        if (tGridW > 850) {
           ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
           ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
           ctx.fillText("(Thresholds: 1850–1900 baseline, +0.12°C offset)", co2LegendX + co2LegendW + 16, legY);
