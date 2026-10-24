@@ -983,7 +983,7 @@
             </button>
             <button class="preset-card" id="presetDrawdown">
               <div class="preset-name">4. Carbon Drawdown (CDR)</div>
-              <div class="preset-sub">350 ppm · -1.5 ppm/yr CDR</div>
+              <div class="preset-sub">278 ppm (1750) · -1.5 ppm/yr CDR</div>
             </button>
           </div>
         </div>
@@ -3509,7 +3509,19 @@
             state.co2 = getHistoricalCO2(state.year);
           } else if (state.rate !== 0) {
             // Beyond 2026, advance based on the chosen future scenario rate
-            state.co2 = Math.max(150, Math.min(1000, state.co2 + state.rate * dt));
+            if (state.rate < 0) {
+              // Carbon drawdown stops when returning to the 1750 pre-industrial baseline (zero increase since 1750)
+              const nextCO2 = state.co2 + state.rate * dt;
+              if (nextCO2 <= CO2_BASE) {
+                state.co2 = CO2_BASE;
+                state.rate = 0.0;
+                state.running = false;
+              } else {
+                state.co2 = nextCO2;
+              }
+            } else {
+              state.co2 = Math.min(1000, state.co2 + state.rate * dt);
+            }
           }
 
           // Coupled Two-Layer EBM (Held et al. 2010; Geoffroy et al. 2013)
@@ -3520,6 +3532,13 @@
 
           state.deltaTs += dTs * dt;
           state.deltaTd += dTd * dt;
+
+          // Prevent drawdown from plunging below zero increase since 1750
+          if (state.deltaTs <= 0.0 && state.rate <= 0 && state.year >= 2026) {
+            state.deltaTs = 0.0;
+            state.rate = 0.0;
+            state.running = false;
+          }
           state.year = Math.min(2250, state.year + dt);
 
           if (state.history.length === 0 || state.year - state.history[state.history.length - 1].year >= 1.0) {
@@ -4060,8 +4079,10 @@
             simYr += step;
             if (simYr <= 2026) {
               simC = getHistoricalCO2(simYr);
-            } else if (futureRate !== 0) {
-              simC = Math.max(150, Math.min(1000, simC + futureRate * step));
+            } else if (futureRate < 0) {
+              simC = Math.max(CO2_BASE, simC + futureRate * step);
+            } else if (futureRate > 0) {
+              simC = Math.min(1000, simC + futureRate * step);
             }
             const rf = ALPHA_RF * Math.log(Math.max(100, simC) / CO2_BASE);
             const dtSub = step / 4.0;
@@ -4071,6 +4092,7 @@
               simTs += dTs * dtSub;
               simTd += dTd * dtSub;
             }
+            if (simTs < 0.0 && futureRate <= 0) simTs = 0.0;
             pts.push({ offsetYr: simYr - 1750, calYr: simYr, dt: simTs, co2: simC });
           }
         }
