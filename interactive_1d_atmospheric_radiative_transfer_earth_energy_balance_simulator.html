@@ -1136,17 +1136,17 @@
         <div class="paleo-metrics-strip">
           <div class="stat-card" style="padding: 10px 14px;">
             <div class="stat-header"><span>Selected Prehistoric 500-Yr Window</span><span class="badge badge-emerald">Paleoclimate Record</span></div>
-            <div class="stat-value" id="paleoStatChange" style="color: var(--emerald); font-size: 1.25rem;">+0.34 °C <span style="font-size: 0.78rem; color: var(--text-muted);">per 500 yrs</span></div>
-            <div class="stat-sub" id="paleoStatSub">Rate: +0.068 °C/century · CO₂ shift: +6.5 ppm</div>
+            <div class="stat-value" id="paleoStatChange" style="color: var(--emerald); font-size: 1.25rem;">-- <span style="font-size: 0.78rem; color: var(--text-muted);">per 500 yrs</span></div>
+            <div class="stat-sub" id="paleoStatSub">Computing...</div>
           </div>
           <div class="stat-card" style="padding: 10px 14px;">
             <div class="stat-header"><span>Modern Simulated Trajectory (1750–2250 CE)</span><span class="badge badge-rose">Anthropogenic</span></div>
-            <div class="stat-value" id="modernStatChange" style="color: var(--rose); font-size: 1.25rem;">+3.95 °C <span style="font-size: 0.78rem; color: var(--text-muted);">over 500 yrs</span></div>
-            <div class="stat-sub" id="modernStatSub">Peak rate (1958–2100): +2.15 °C/century · CO₂ shift: +709 ppm</div>
+            <div class="stat-value" id="modernStatChange" style="color: var(--rose); font-size: 1.25rem;">-- <span style="font-size: 0.78rem; color: var(--text-muted);">over 500 yrs</span></div>
+            <div class="stat-sub" id="modernStatSub">Computing...</div>
           </div>
           <div class="stat-card" style="padding: 10px 14px; border-color: rgba(0, 229, 255, 0.4);">
             <div class="stat-header"><span>Speed / Rate Multiplier</span><span class="badge badge-cyan">Slope Ratio</span></div>
-            <div class="stat-value" id="ratioStatValue" style="color: var(--cyan); font-size: 1.25rem;">~31× Faster</div>
+            <div class="stat-value" id="ratioStatValue" style="color: var(--cyan); font-size: 1.25rem;">--</div>
             <div class="stat-sub" id="ratioStatSub">Modern century warming rate vs. selected prehistoric 500-yr window</div>
             <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 4px; line-height: 1.2;">* Note: Paleo proxies are smoothed at 20–500 yr resolution, so the "× faster" figure is a lower-resolution baseline comparison.</div>
           </div>
@@ -1462,12 +1462,12 @@
 
           <h4>3. Resolution Limits & Why the 500-Year Window Comparison Is Robust</h4>
           <div class="code-box">
-            • Fastest Prehistoric Global Warming (Termination I, ~15,000–14,500 BP):  <b>+0.34 °C per 500 yrs</b>  (+0.068 °C / century)<br>
-            • Typical Holocene Natural Variability (6,000 BP):                        <b>±0.03 °C per 500 yrs</b>  (±0.006 °C / century)<br>
-            • Observed & Projected Modern Trajectory (1958–2058 CE at +2.5 ppm/yr):   <b>+2.15 °C per 100 yrs</b>  (>30× faster than Termination I)
+            • Fastest Prehistoric Global Warming (Termination I, ~15,000–14,500 BP):  <b>+0.35 °C per 500 yrs</b>  (+0.070 °C / century)<br>
+            • Typical Holocene Natural Variability (6,000 BP):                        <b>±0.04 °C per 500 yrs</b>  (±0.008 °C / century)<br>
+            • Observed & Projected Modern Trajectory (1958–2058 CE at +2.5 ppm/yr):   <b>+2.15 °C per 100 yrs</b>  (~31× faster than Termination I)
           </div>
           <p>
-            In deep ice cores (400,000 to 800,000 BP) and marine sediment cores (800,000 to 1,000,000 BP), molecular diffusion and core compression smooth out sub-centennial fluctuations. However, in the younger record (0 to 50,000 BP)—where WAIS Divide, NGRIP, and global deglacial stacks preserve <strong>20-to-100-year resolution</strong>—we can directly resolve the fastest natural global warming events in Earth's recent history (Orbital Glacial Terminations). Even during the steepest 500-year phase of Termination I (15,000 to 14,500 BP), global temperature rose by ~0.34 °C over five centuries, driven by orbital Milankovitch insolation shifts and a ~15 ppm natural CO₂ outgassing from warming oceans. By contrast, human industrial emissions have added <strong>+149 ppm of CO₂ since 1750</strong> (and over +110 ppm since 1958 alone), driving a warming slope more than <strong>30 times steeper</strong> than peak natural deglaciation.
+            In deep ice cores (400,000 to 800,000 BP) and marine sediment cores (800,000 to 1,000,000 BP), molecular diffusion and core compression smooth out sub-centennial fluctuations. However, in the younger record (0 to 50,000 BP)—where WAIS Divide, NGRIP, and global deglacial stacks preserve <strong>20-to-100-year resolution</strong>—we can directly resolve the fastest natural global warming events in Earth's recent history (Orbital Glacial Terminations). Even during the steepest 500-year phase of Termination I (15,000 to 14,500 BP), global temperature rose by ~0.35 °C over five centuries, driven by orbital Milankovitch insolation shifts and an ~8 ppm natural CO₂ outgassing from warming oceans. By contrast, human industrial emissions have added <strong>+149 ppm of CO₂ since 1750</strong> (and over +110 ppm since 1958 alone), driving a warming slope approximately <strong>31 times steeper</strong> than peak natural deglaciation.
           </p>
 
           <h4>4. Direct Links to Public Archival Repositories</h4>
@@ -3921,11 +3921,11 @@
         { yr: -30000,   dt: -5.2, co2: 190 },
         { yr: -21000,   dt: -6.0, co2: 182 }, // Last Glacial Maximum (LGM)
         { yr: -18000,   dt: -5.6, co2: 188 },
-        { yr: -15500,   dt: -4.2, co2: 212 }, // Termination I (Bølling-Allerød onset)
-        { yr: -14500,   dt: -2.6, co2: 232 }, // Fastest Natural Deglaciation Pulse (~0.34°C / 500 yr)
-        { yr: -12900,   dt: -3.4, co2: 238 }, // Younger Dryas cold reversal
-        { yr: -11700,   dt: -1.2, co2: 262 }, // Younger Dryas exit / Holocene onset
-        { yr: -9000,    dt: -0.2, co2: 266 },
+        { yr: -15500,   dt: -4.4, co2: 212 }, // Termination I (Bølling-Allerød onset)
+        { yr: -14500,   dt: -3.7, co2: 228 }, // Termination I Bølling Warming Pulse (~0.35°C / 500 yr)
+        { yr: -12900,   dt: -3.9, co2: 236 }, // Younger Dryas (global mean cooling ~0.2°C)
+        { yr: -11700,   dt: -3.1, co2: 250 }, // Younger Dryas exit / Holocene transition
+        { yr: -9000,    dt: -1.2, co2: 262 },
         { yr: -6000,    dt: +0.4, co2: 268 }, // Holocene Thermal Maximum
         { yr: -3000,    dt: +0.1, co2: 274 },
         { yr: -1000,    dt: +0.05, co2: 279 }, // Medieval Warm Period
