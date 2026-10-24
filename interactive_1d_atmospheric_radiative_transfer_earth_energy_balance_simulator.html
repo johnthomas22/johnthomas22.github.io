@@ -2464,10 +2464,18 @@
         tpCardEl.style.top = `${Math.round(top)}px`;
       }
 
-      function scheduleHideTippingPointCard(delay = 180) {
-        if (tpHoveringCard) return;
-        if (tpHideTimer) clearTimeout(tpHideTimer);
+      function cancelHideTippingPointCard() {
+        if (tpHideTimer) {
+          clearTimeout(tpHideTimer);
+          tpHideTimer = null;
+        }
+      }
+
+      function scheduleHideTippingPointCard(delay = 140) {
+        if (tpHoveringCard || isHoveringMainTpBadge || isHoveringPaleoTpBadge) return;
+        if (tpHideTimer) return;
         tpHideTimer = setTimeout(() => {
+          tpHideTimer = null;
           if (!tpHoveringCard && !isHoveringMainTpBadge && !isHoveringPaleoTpBadge) {
             tpCardPinned = false;
             tpCardEl.style.display = "none";
@@ -2478,19 +2486,17 @@
 
       tpCardEl.addEventListener("mouseenter", () => {
         tpHoveringCard = true;
-        if (tpHideTimer) {
-          clearTimeout(tpHideTimer);
-          tpHideTimer = null;
-        }
+        cancelHideTippingPointCard();
       });
       tpCardEl.addEventListener("mouseleave", () => {
         tpHoveringCard = false;
         tpCardPinned = false;
-        scheduleHideTippingPointCard(150);
+        scheduleHideTippingPointCard(120);
       });
       tpCardCloseBtn.addEventListener("click", () => {
         tpCardPinned = false;
         tpHoveringCard = false;
+        cancelHideTippingPointCard();
         tpCardEl.style.display = "none";
         activeTpGroupKey = null;
       });
@@ -2498,8 +2504,18 @@
         if (tpCardEl.style.display === "block" && !tpCardEl.contains(e.target) && e.target !== canvas && e.target !== paleoCompareCanvas) {
           tpCardPinned = false;
           tpHoveringCard = false;
+          cancelHideTippingPointCard();
           tpCardEl.style.display = "none";
           activeTpGroupKey = null;
+        }
+        if (bubbleCard && bubbleCard.style.display === "block" && !bubbleCard.contains(e.target) && (!e.target.closest || (!e.target.closest(".speech-pin") && e.target.id !== "btnWhatCanIDo"))) {
+          bubbleHoveringCard = false;
+          isHoveringSpeechPin = false;
+          cancelHideBubbleCard();
+          bubbleCard.style.display = "none";
+          document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
+          const btnWhat = document.getElementById("btnWhatCanIDo");
+          if (btnWhat) btnWhat.classList.remove("active");
         }
       });
 
@@ -3793,11 +3809,94 @@
         }
       }
 
+      let isHoveringSpeechPin = false;
+      let bubbleHoveringCard = false;
+      let bubbleHideTimer = null;
+
+      function cancelHideBubbleCard() {
+        if (bubbleHideTimer) {
+          clearTimeout(bubbleHideTimer);
+          bubbleHideTimer = null;
+        }
+      }
+
+      function scheduleHideBubbleCard(delay = 140) {
+        if (bubbleHoveringCard || isHoveringSpeechPin) return;
+        if (bubbleHideTimer) return;
+        bubbleHideTimer = setTimeout(() => {
+          bubbleHideTimer = null;
+          if (!bubbleHoveringCard && !isHoveringSpeechPin) {
+            bubbleCard.style.display = "none";
+            document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
+            const btnWhat = document.getElementById("btnWhatCanIDo");
+            if (btnWhat) btnWhat.classList.remove("active");
+          }
+        }, delay);
+      }
+
+      bubbleCard.addEventListener("mouseenter", () => {
+        bubbleHoveringCard = true;
+        cancelHideBubbleCard();
+      });
+      bubbleCard.addEventListener("mouseleave", () => {
+        bubbleHoveringCard = false;
+        scheduleHideBubbleCard(120);
+      });
+
       speechDataIntro.forEach((d, i) => {
         const el = document.getElementById(d.pinId);
         if (el) {
-          el.addEventListener("click", () => showSpeechBubble(i));
+          el.addEventListener("mouseenter", () => {
+            isHoveringSpeechPin = true;
+            cancelHideBubbleCard();
+            showSpeechBubble(i);
+          });
+          el.addEventListener("mouseleave", () => {
+            isHoveringSpeechPin = false;
+            scheduleHideBubbleCard(120);
+          });
+          el.addEventListener("click", () => {
+            cancelHideBubbleCard();
+            showSpeechBubble(i);
+          });
         }
+      });
+
+      document.addEventListener("mousemove", e => {
+        if (tpCardEl && tpCardEl.style.display === "block") {
+          const rect = tpCardEl.getBoundingClientRect();
+          const inTp = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+          if (inTp) {
+            tpHoveringCard = true;
+            cancelHideTippingPointCard();
+          } else if (!isHoveringMainTpBadge && !isHoveringPaleoTpBadge) {
+            tpHoveringCard = false;
+            scheduleHideTippingPointCard(120);
+          }
+        }
+
+        if (bubbleCard && bubbleCard.style.display === "block") {
+          const bRect = bubbleCard.getBoundingClientRect();
+          const inBubble = e.clientX >= bRect.left && e.clientX <= bRect.right && e.clientY >= bRect.top && e.clientY <= bRect.bottom;
+          const onPin = !!(e.target && ((e.target.closest && e.target.closest(".speech-pin")) || e.target.id === "btnWhatCanIDo"));
+          if (inBubble) {
+            bubbleHoveringCard = true;
+            cancelHideBubbleCard();
+          } else if (!onPin) {
+            bubbleHoveringCard = false;
+            scheduleHideBubbleCard(140);
+          }
+        }
+      });
+
+      document.addEventListener("mouseleave", () => {
+        tpHoveringCard = false;
+        bubbleHoveringCard = false;
+        isHoveringSpeechPin = false;
+        isHoveringMainTpBadge = false;
+        isHoveringPaleoTpBadge = false;
+        scheduleHideTippingPointCard(120);
+        scheduleHideBubbleCard(120);
       });
 
       document.getElementById("bubbleCloseBtn").addEventListener("click", () => {
