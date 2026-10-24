@@ -107,6 +107,7 @@
     .app-wrapper.simple-mode .controls-panel,
     .app-wrapper.simple-mode .profile-legend,
     .app-wrapper.simple-mode .intro-banner-controls,
+    .app-wrapper.simple-mode .canvas-action-toolbar,
     .app-wrapper.simple-mode #btnMillionYear,
     .app-wrapper.simple-mode #openPaleoModalBtn,
     .app-wrapper.simple-mode #openPaleoModalTopBtn {
@@ -336,6 +337,45 @@
       box-sizing: border-box;
       z-index: 10;
     }
+    /* Top-right Action Button on First Chart */
+    .chart-action-btn-what {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 25;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: rgba(7, 13, 23, 0.94);
+      border: 1.5px solid var(--emerald);
+      color: var(--emerald);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65), 0 0 10px rgba(16, 185, 129, 0.3);
+      transition: all 0.15s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .chart-action-btn-what:hover,
+    .chart-action-btn-what.active {
+      background: var(--emerald);
+      color: #000;
+      border-color: #fff;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.85);
+    }
+    @media (max-width: 768px) {
+      .chart-action-btn-what {
+        top: 10px;
+        right: 10px;
+        font-size: 0.72rem;
+        padding: 5px 10px;
+      }
+    }
+
     .action-toolbar-btn {
       display: inline-flex;
       align-items: center;
@@ -349,18 +389,6 @@
       transition: all 0.15s ease;
       user-select: none;
       box-sizing: border-box;
-    }
-    .action-toolbar-what {
-      background: #070d17;
-      border: 1.5px solid var(--emerald);
-      color: var(--emerald);
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
-    }
-    .action-toolbar-what:hover, .action-toolbar-what.active {
-      background: var(--emerald);
-      color: #000;
-      border-color: #fff;
-      box-shadow: 0 0 16px rgba(16, 185, 129, 0.7);
     }
     .action-toolbar-paleo {
       background: rgba(11, 19, 32, 0.94);
@@ -1007,6 +1035,11 @@
           <div class="speech-pin" id="pin4" style="top: 20%; left: 40%;">4</div>
           <div class="speech-pin" id="pin5" style="top: 27%; left: 22%;">5</div>
 
+          <!-- Top-Right Action Button on First Chart -->
+          <button type="button" class="chart-action-btn-what" id="btnWhatCanIDo">
+            What can I do about it?
+          </button>
+
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
             <div class="bubble-header">
@@ -1024,9 +1057,6 @@
 
         <!-- Dedicated flex toolbar below the canvas viewport -->
         <div class="canvas-action-toolbar">
-          <button type="button" class="action-toolbar-btn action-toolbar-what" id="btnWhatCanIDo">
-            What can I do about it?
-          </button>
           <button type="button" class="action-toolbar-btn action-toolbar-paleo" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
             <span>🔍</span> 1-Million-Year Comparison
           </button>
@@ -3559,7 +3589,11 @@
           bubbleCard.style.transform = "none";
 
           let targetTop = 10;
-          if (pin && d.pinId !== "btnWhatCanIDo") {
+          if (pin && d.pinId === "btnWhatCanIDo") {
+            const pRect = pin.getBoundingClientRect();
+            const pinTop = pRect.top - cRect.top;
+            targetTop = pinTop + pRect.height + 8;
+          } else if (pin) {
             const pRect = pin.getBoundingClientRect();
             const pinTop = pRect.top - cRect.top;
             if (pinTop < 80) {
@@ -3579,11 +3613,15 @@
           const cardH = bubbleCard.offsetHeight || 190;
 
           let targetLeft, targetTop;
-          if (d.pinId === "btnWhatCanIDo" || !pin) {
+          if (d.pinId === "btnWhatCanIDo" && pin) {
+            const pRect = pin.getBoundingClientRect();
+            const pinLeft = pRect.left - cRect.left;
+            const pinTop = pRect.top - cRect.top;
+            targetLeft = Math.max(12, pinLeft + pRect.width - cardW);
+            targetTop = pinTop + pRect.height + 8;
+          } else if (!pin) {
             targetLeft = Math.max(12, Math.min(cRect.width - cardW - 12, (cRect.width - cardW) / 2));
-            targetTop = isSimple
-              ? Math.max(10, cRect.height - cardH - 20)
-              : Math.max(10, Math.round((cRect.height - 36) / 2) - cardH - 10);
+            targetTop = 50;
           } else {
             const pRect = pin.getBoundingClientRect();
             const pinLeft = pRect.left - cRect.left;
