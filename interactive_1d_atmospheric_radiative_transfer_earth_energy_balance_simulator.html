@@ -324,24 +324,11 @@
       }
     }
 
-    /* Dedicated flex toolbar below canvas */
-    .canvas-action-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
-      padding-top: 6px;
-      margin-bottom: 12px;
-      width: 100%;
-      box-sizing: border-box;
-      z-index: 10;
-    }
-    /* Top-right Action Button on First Chart */
-    .chart-action-btn-what {
+    /* Top-right Action Button on IR Percolation Chart (where pins 1-5 are) */
+    .speech-pin-action {
       position: absolute;
       top: 14px;
-      right: 14px;
+      right: calc(33% + 14px);
       z-index: 25;
       display: inline-flex;
       align-items: center;
@@ -360,56 +347,66 @@
       user-select: none;
       white-space: nowrap;
     }
-    .chart-action-btn-what:hover,
-    .chart-action-btn-what.active {
+    .speech-pin-action:hover,
+    .speech-pin-action.active {
       background: var(--emerald);
       color: #000;
       border-color: #fff;
       box-shadow: 0 0 18px rgba(16, 185, 129, 0.85);
     }
-    @media (max-width: 768px) {
-      .chart-action-btn-what {
+    .app-wrapper.simple-mode .speech-pin-action {
+      right: 14px;
+      top: 14px;
+    }
+    @media (max-width: 520px) {
+      .speech-pin-action {
         top: 10px;
-        right: 10px;
+        right: calc(28% + 10px);
         font-size: 0.72rem;
         padding: 5px 10px;
       }
+      .app-wrapper.simple-mode .speech-pin-action {
+        right: 10px;
+        top: 10px;
+      }
     }
 
-    .action-toolbar-btn {
+    /* Top-right Action Button on 500-Year Temperature Chart (level with legends, inset from right) */
+    .chart-action-btn-paleo {
+      position: absolute;
+      top: calc((100% - 36px) / 2 + 18px);
+      right: clamp(140px, 22%, 260px);
+      z-index: 25;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 6px 14px;
+      padding: 5px 13px;
       border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s ease;
-      user-select: none;
-      box-sizing: border-box;
-    }
-    .action-toolbar-paleo {
       background: rgba(11, 19, 32, 0.94);
       border: 1.5px solid var(--cyan);
       color: var(--cyan);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      transition: all 0.15s ease;
+      user-select: none;
+      white-space: nowrap;
     }
-    .action-toolbar-paleo:hover {
+    .chart-action-btn-paleo:hover {
       background: var(--cyan);
       color: #000;
       box-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
     }
-    @media (max-width: 768px) {
-      .canvas-action-toolbar {
-        justify-content: stretch;
-      }
-      .action-toolbar-btn {
-        flex: 1 1 140px;
-        text-align: center;
-        padding: 8px 12px;
-        font-size: 0.76rem;
+    .app-wrapper.simple-mode .chart-action-btn-paleo {
+      display: none !important;
+    }
+    @media (max-width: 600px) {
+      .chart-action-btn-paleo {
+        right: 36px;
+        font-size: 0.70rem;
+        padding: 4px 8px;
       }
     }
 
@@ -1035,9 +1032,14 @@
           <div class="speech-pin" id="pin4" style="top: 20%; left: 40%;">4</div>
           <div class="speech-pin" id="pin5" style="top: 27%; left: 22%;">5</div>
 
-          <!-- Top-Right Action Button on First Chart -->
-          <button type="button" class="chart-action-btn-what" id="btnWhatCanIDo">
+          <!-- Top-Right Action Button on IR Percolation Chart -->
+          <button type="button" class="speech-pin-action" id="btnWhatCanIDo">
             What can I do about it?
+          </button>
+
+          <!-- Top-Right Action Button on 500-Year Temperature Chart -->
+          <button type="button" class="chart-action-btn-paleo" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
+            <span>🔍</span> 1-Million-Year Comparison
           </button>
 
           <!-- Dynamic Speech Bubble Card -->
@@ -1053,13 +1055,6 @@
               <button class="bubble-nav-btn" id="bubbleNextBtn">Next →</button>
             </div>
           </div>
-        </div>
-
-        <!-- Dedicated flex toolbar below the canvas viewport -->
-        <div class="canvas-action-toolbar">
-          <button type="button" class="action-toolbar-btn action-toolbar-paleo" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
-            <span>🔍</span> 1-Million-Year Comparison
-          </button>
         </div>
       </div>
 
