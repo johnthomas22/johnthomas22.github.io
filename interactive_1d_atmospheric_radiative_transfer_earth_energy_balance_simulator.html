@@ -239,7 +239,10 @@
     }
     .card-title { font-size: 0.85rem; font-weight: 700; }
     .sim-controls-row {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;
+      display: grid; grid-template-columns: 1fr 1.35fr 0.85fr; gap: 6px; margin-bottom: 0;
+    }
+    .sim-controls-row .btn {
+      padding: 8px 4px; font-size: 0.74rem; white-space: nowrap;
     }
     .btn {
       padding: 8px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;
@@ -960,13 +963,8 @@
           </div>
           <div class="sim-controls-row">
             <button class="btn btn-start" id="btnPlayPause">▶ Start Simulation</button>
+            <button class="btn btn-amber" id="btnSnapEquilibrium" title="Instant Ocean Equilibrium: Instantly removes ocean thermal lag to reveal the ultimate committed warming locked in at the current CO₂ level (EEI = 0)">⚡ Instant Ocean Equilibrium</button>
             <button class="btn btn-secondary" id="btnReset">↺ Reset (1750)</button>
-          </div>
-          <button class="btn btn-amber" id="btnSnapEquilibrium" style="width: 100%; margin-bottom: 8px;" title="Instant Ocean Equilibrium: Instantly removes ocean thermal lag to reveal the ultimate committed warming locked in at the current CO₂ level (EEI = 0)">
-            ⚡ Instant Ocean Equilibrium
-          </button>
-          <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 6px; padding: 6px 10px;">
-            <strong style="color: var(--amber);">⚡ Instant Ocean Equilibrium:</strong> Skips centuries of deep-ocean thermal lag to reveal the full long-term "committed warming" (&Delta;<i>T</i><sub>eq</sub> = &Delta;<i>F</i> / &lambda;) locked in at the current CO₂ level (EEI &rarr; 0 W/m²).
           </div>
         </div>
 
