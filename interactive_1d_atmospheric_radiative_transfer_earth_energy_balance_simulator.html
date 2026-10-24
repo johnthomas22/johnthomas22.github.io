@@ -1797,6 +1797,8 @@
       });
       canvas.addEventListener("mouseleave", () => {
         mousePos.active = false;
+        isHoveringMainTpBadge = false;
+        scheduleHideTippingPointCard(150);
       });
 
       // Stationary Greenhouse Gas Molecules (Density decreases exponentially with altitude, +100% density)
@@ -2353,6 +2355,8 @@
       let currentTpCrossYr = 2039;
       let tpCardPinned = false;
       let tpHoveringCard = false;
+      let isHoveringMainTpBadge = false;
+      let isHoveringPaleoTpBadge = false;
       let tpHideTimer = null;
       let mainChartTpHitboxes = [];
       let paleoChartTpHitboxes = [];
@@ -2460,15 +2464,16 @@
         tpCardEl.style.top = `${Math.round(top)}px`;
       }
 
-      function scheduleHideTippingPointCard() {
-        if (tpCardPinned || tpHoveringCard) return;
+      function scheduleHideTippingPointCard(delay = 180) {
+        if (tpHoveringCard) return;
         if (tpHideTimer) clearTimeout(tpHideTimer);
         tpHideTimer = setTimeout(() => {
-          if (!tpCardPinned && !tpHoveringCard) {
+          if (!tpHoveringCard && !isHoveringMainTpBadge && !isHoveringPaleoTpBadge) {
+            tpCardPinned = false;
             tpCardEl.style.display = "none";
             activeTpGroupKey = null;
           }
-        }, 240);
+        }, delay);
       }
 
       tpCardEl.addEventListener("mouseenter", () => {
@@ -2480,7 +2485,8 @@
       });
       tpCardEl.addEventListener("mouseleave", () => {
         tpHoveringCard = false;
-        if (!tpCardPinned) scheduleHideTippingPointCard();
+        tpCardPinned = false;
+        scheduleHideTippingPointCard(150);
       });
       tpCardCloseBtn.addEventListener("click", () => {
         tpCardPinned = false;
@@ -3376,6 +3382,7 @@
             (mousePos.x >= curYrBadgeX && mousePos.x <= curYrBadgeX + curYrBadgeW && mousePos.y >= curYrBadgeY && mousePos.y <= curYrBadgeY + 18)
           );
 
+          isHoveringMainTpBadge = !!hoveredMainTp;
           if (hoveredMainTp) {
             isPointerHover = true;
             openTippingPointCard(hoveredMainTp.grp, hoveredMainTp.crossYr, rect.left + hoveredMainTp.anchorX, rect.top + hoveredMainTp.anchorY, false, hoveredMainTp.itemIdx);
@@ -3420,7 +3427,8 @@
         }
 
         if (!hoveredMainTp && (!paleoModalOverlay || paleoModalOverlay.style.display !== "flex")) {
-          scheduleHideTippingPointCard();
+          isHoveringMainTpBadge = false;
+          scheduleHideTippingPointCard(180);
         }
 
         if (activeTip) {
@@ -4170,7 +4178,8 @@
       });
       paleoCompareCanvas.addEventListener("mouseleave", () => {
         paleoMousePos.active = false;
-        scheduleHideTippingPointCard();
+        isHoveringPaleoTpBadge = false;
+        scheduleHideTippingPointCard(150);
         drawPaleoComparator();
       });
       paleoCompareCanvas.addEventListener("click", e => {
@@ -4539,10 +4548,12 @@
             }
           }
           if (hoveredPaleoTp) {
+            isHoveringPaleoTpBadge = true;
             activePaleoTip = null;
             openTippingPointCard(hoveredPaleoTp.grp, hoveredPaleoTp.crossYr, cmpRect.left + hoveredPaleoTp.anchorX, cmpRect.top + hoveredPaleoTp.anchorY, false, hoveredPaleoTp.itemIdx);
           } else {
-            scheduleHideTippingPointCard();
+            isHoveringPaleoTpBadge = false;
+            scheduleHideTippingPointCard(180);
           }
 
           // Render interactive tooltip ON TOP of all curves and legends with 100% solid opaque background
