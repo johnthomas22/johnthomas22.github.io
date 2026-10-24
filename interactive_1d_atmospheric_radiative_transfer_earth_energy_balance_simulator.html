@@ -1262,10 +1262,10 @@
             Δ<i>F</i> - λ·Δ<i>T</i><sub>eq</sub> = 0  ⟹  <b>Δ<i>T</i><sub>eq</sub> = Δ<i>F</i> / λ</b>
           </div>
           <p>
-            For a doubling of atmospheric CO₂ (<i>C</i> / <i>C</i><sub>0</sub> = 2), the direct radiative forcing is Δ<i>F</i> = 5.35 · ln(2) ≈ 3.708 W/m². Using the IPCC AR6 net climate feedback parameter λ = 1.236 W/m²/K:
+            For a doubling of atmospheric CO₂ (<i>C</i> / <i>C</i><sub>0</sub> = 2), the effective radiative forcing (IPCC AR6 Working Group I, Chapter 7) is Δ<i>F</i><sub>2×</sub> = 3.93 W/m² (giving α = 3.93 / ln(2) ≈ 5.670 W/m²). With Equilibrium Climate Sensitivity ECS = 3.00 °C, the climate feedback parameter is derived from <i>F</i><sub>2×</sub> / ECS as λ = 3.93 / 3.00 = 1.310 W/m²/K:
           </p>
           <div class="code-box">
-            Δ<i>T</i><sub>eq</sub> = 3.708 W/m² / 1.236 W/m²/K = <b>3.000 °C</b>
+            Δ<i>T</i><sub>eq</sub> = 3.930 W/m² / 1.310 W/m²/K = <b>3.000 °C</b>
           </div>
           <p>
             <em>Verification:</em> Clicking <strong>"3. Instant 2× CO₂ Pulse"</strong> and then <strong>"⚡ Instant Eq."</strong> sets Δ<i>T</i> to exactly +3.00 °C and Net Imbalance (EEI) = 0.00 W/m².
@@ -1395,8 +1395,8 @@
               <tr>
                 <td>Net Climate Feedback</td>
                 <td>λ</td>
-                <td>1.236 W/m²/K</td>
-                <td>Net Planck, water vapor, lapse rate, and albedo response (<i>F</i><sub>2×</sub> / ECS)</td>
+                <td>1.310 W/m²/K</td>
+                <td>Derived net feedback parameter (<i>F</i><sub>2×</sub> / ECS = 3.93 / 3.00)</td>
               </tr>
             </tbody>
           </table>
@@ -1616,9 +1616,10 @@
       const TS_BASE = 13.85;
       const SIGMA = 5.670374e-8;
       const LAPSE_RATE = 0.0065;
-      const F2X = 3.70818;
-      const ECS = 3.00;
-      const LAMBDA_FEEDBACK = F2X / ECS; // 1.23606 W/m^2/K
+      const F2X = 3.93; // IPCC AR6 effective radiative forcing for 2xCO2 (W/m^2)
+      const ALPHA_RF = F2X / Math.LN2; // 3.93 / ln(2) ≈ 5.67006 W/m^2
+      const ECS = 3.00; // Equilibrium Climate Sensitivity (°C)
+      const LAMBDA_FEEDBACK = F2X / ECS; // Net climate feedback parameter = 3.93 / 3.00 = 1.310 W/m^2/K
       const CM = 8.2;
       const CD = 105.0;
       const GAMMA = 0.73;
@@ -1652,7 +1653,7 @@
         let simTs = 0.0, simTd = 0.0;
         for (let y = 1750; y <= 2026; y += 1) {
           const c = getHistoricalCO2(y);
-          const rf = 5.42 * Math.log(c / CO2_BASE);
+          const rf = ALPHA_RF * Math.log(c / CO2_BASE);
           for (let sub = 0; sub < 4; sub++) {
             const dTs = (rf - LAMBDA_FEEDBACK * simTs - GAMMA * (simTs - simTd)) / CM;
             const dTd = (GAMMA * (simTs - simTd)) / CD;
@@ -1730,7 +1731,7 @@
       }
 
       function computePhysics() {
-        const rf = 5.35 * Math.log(Math.max(100, state.co2) / CO2_BASE);
+        const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
         const currentTs = TS_BASE + state.deltaTs;
         const currentTsK = currentTs + 273.15;
         const OLR = ASR + (LAMBDA_FEEDBACK * state.deltaTs) - rf;
@@ -3453,9 +3454,8 @@
           }
 
           // Coupled Two-Layer EBM (Held et al. 2010; Geoffroy et al. 2013)
-          // 5.42 W/m^2 calibration factor for historical era accounts for IPCC AR6 tropospheric adjustments
-          const rfAlpha = state.year <= 2026 ? 5.42 : 5.35;
-          const rf = rfAlpha * Math.log(Math.max(100, state.co2) / CO2_BASE);
+          // Standard IPCC AR6 effective radiative forcing: F2x = 3.93 W/m^2 (ALPHA_RF = 3.93 / ln(2))
+          const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
           const dTs = (rf - LAMBDA_FEEDBACK * state.deltaTs - GAMMA * (state.deltaTs - state.deltaTd)) / CM;
           const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
 
@@ -3734,7 +3734,7 @@
       document.getElementById("btnIntroReset2026").addEventListener("click", () => resetToPresentDay(false));
 
       document.getElementById("btnSnapEquilibrium").addEventListener("click", () => {
-        const rf = 5.35 * Math.log(Math.max(100, state.co2) / CO2_BASE);
+        const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
         state.deltaTs = rf / LAMBDA_FEEDBACK;
         state.deltaTd = state.deltaTs;
         syncUI();
@@ -4004,8 +4004,7 @@
             } else if (futureRate !== 0) {
               simC = Math.max(150, Math.min(1000, simC + futureRate * step));
             }
-            const rfAlpha = simYr <= 2026 ? 5.42 : 5.35;
-            const rf = rfAlpha * Math.log(Math.max(100, simC) / CO2_BASE);
+            const rf = ALPHA_RF * Math.log(Math.max(100, simC) / CO2_BASE);
             const dtSub = step / 4.0;
             for (let sub = 0; sub < 4; sub++) {
               const dTs = (rf - LAMBDA_FEEDBACK * simTs - GAMMA * (simTs - simTd)) / CM;
