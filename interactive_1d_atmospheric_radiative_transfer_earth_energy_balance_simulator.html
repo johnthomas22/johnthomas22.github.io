@@ -2677,18 +2677,24 @@
         ctx.font = `bold ${titleFontSize}px system-ui, -apple-system, sans-serif`;
         ctx.fillText("500-YEAR WARMING TRAJECTORY (1750–2250 CE)", tGridLeft + 8, tGridTop + (titleFontSize + 4));
 
-        // Subtitle legend for Temperature vs CO2: Stacked neatly in top-left below headline (zero overlap with right-hand buttons)
-        ctx.font = "bold 10px system-ui, sans-serif";
+        // Subtitle legend for Temperature vs CO2: Single-row horizontal layout below headline (zero overlap with threshold lines or curves)
+        ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
         const legLeft = tGridLeft + 8;
-        const line1Y = tGridTop + titleFontSize + 18;
-        const line2Y = tGridTop + titleFontSize + 31;
+        const legY = tGridTop + titleFontSize + 16;
         ctx.fillStyle = "#f43f5e";
-        ctx.fillText("■ Surface ΔT (°C rel. to 1750)", legLeft, line1Y);
+        ctx.fillText("■ Surface ΔT (°C rel. to 1750)", legLeft, legY);
+        const dtLegendW = ctx.measureText("■ Surface ΔT (°C rel. to 1750)").width;
+
         ctx.fillStyle = "#c084fc";
-        ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, line2Y);
-        ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
-        ctx.font = "italic 9px system-ui, sans-serif";
-        ctx.fillText("Thresholds & +1.5°C line relative to 1850–1900 (offset: +0.12°C)", legLeft, line2Y + 12);
+        const co2LegendX = legLeft + dtLegendW + 16;
+        ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
+        const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+
+        if (tGridW > 640) {
+          ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
+          ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
+          ctx.fillText("(Thresholds: 1850–1900 baseline, +0.12°C offset)", co2LegendX + co2LegendW + 16, legY);
+        }
 
         function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
         // Scaled to 5.2°C span so +2.5 ppm/yr trajectory comfortably sits in upper chart with head room
