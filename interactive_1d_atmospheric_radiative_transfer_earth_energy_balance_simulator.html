@@ -371,11 +371,12 @@
       }
     }
 
-    /* Top-right Action Button on 500-Year Temperature Chart (level with legends, inset from right) */
+    /* Top Action Button on 500-Year Temperature Chart (level with legends, starting near 2050 CE) */
     .chart-action-btn-paleo {
       position: absolute;
       top: calc((100% - 36px) / 2 + 18px);
-      right: clamp(140px, 22%, 260px);
+      left: calc(24px + (100% - 48px) * 0.60);
+      right: auto;
       z-index: 25;
       display: inline-flex;
       align-items: center;
@@ -404,7 +405,7 @@
     }
     @media (max-width: 600px) {
       .chart-action-btn-paleo {
-        right: 36px;
+        left: calc(24px + (100% - 48px) * 0.55);
         font-size: 0.70rem;
         padding: 4px 8px;
       }
