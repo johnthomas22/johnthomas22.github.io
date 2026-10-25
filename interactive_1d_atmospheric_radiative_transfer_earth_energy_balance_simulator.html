@@ -1744,7 +1744,7 @@
               <span class="badge badge-cyan" id="srcBadgeActiveFilter">All GHGs (54.6 Gt)</span>
             </div>
             <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4;">
-              Based on empirical synthesis from Climate Watch, WRI & the Global Carbon Project (Ritchie & Roser, Our World in Data). Click any sector to expand subsector activities and mitigation levers.
+              Based on empirical synthesis from Climate Watch, WRI & the Global Carbon Project (Ritchie & Roser, Our World in Data). Click any sector to expand or collapse subsector activities and mitigation levers.
             </div>
           </div>
 
@@ -6410,6 +6410,9 @@
         ]
       };
 
+      // Track expanded sector accordions (initially all collapsed)
+      const expandedSectorIds = new Set();
+
       function updateSourcesView() {
         const isCo2Only = OWID_EMISSIONS.filterMode === "co2";
         const badgeFilter = document.getElementById("srcBadgeActiveFilter");
@@ -6441,11 +6444,12 @@
             const val = isCo2Only ? sec.co2Gt : sec.ghgGt;
             const totalBase = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
             const pct = isCo2Only ? ((val / totalBase) * 100).toFixed(1) : sec.ghgPct.toFixed(1);
+            const isExpanded = expandedSectorIds.has(sec.id);
 
             const card = document.createElement("div");
             card.className = "sector-card";
             card.innerHTML = `
-              <div class="sector-header" data-idx="${idx}">
+              <div class="sector-header" data-idx="${idx}" title="Click to ${isExpanded ? 'collapse' : 'expand'} ${sec.name}">
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <span style="font-size: 1.1rem;">${sec.icon}</span>
                   <strong style="color: ${sec.color};">${sec.name}</strong>
@@ -6453,10 +6457,10 @@
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <span style="font-family: ui-monospace, monospace; font-weight: 700; color: #fff;">${pct}%</span>
                   <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-muted);">${val} Gt</span>
-                  <span style="color: var(--cyan); font-size: 0.8rem;">▼</span>
+                  <span class="sector-toggle-arrow" style="color: var(--cyan); font-size: 0.8rem;">${isExpanded ? '▼' : '▶'}</span>
                 </div>
               </div>
-              <div class="sector-body" id="sectorBody${idx}">
+              <div class="sector-body" id="sectorBody${idx}" style="display: ${isExpanded ? 'flex' : 'none'};">
                 <div style="color: var(--text-muted);">${sec.desc}</div>
                 <div style="display: flex; flex-direction: column; gap: 6px; margin: 4px 0;">
                   ${sec.subsectors.map(sub => `
@@ -6490,14 +6494,20 @@
           // Header toggle accordions
           container.querySelectorAll(".sector-header").forEach(header => {
             header.addEventListener("click", () => {
+              const idx = parseInt(header.getAttribute("data-idx"), 10);
+              const sec = OWID_EMISSIONS.sectors[idx];
               const body = header.nextElementSibling;
-              const arrow = header.querySelector("span:last-child");
-              if (body.style.display === "none") {
-                body.style.display = "flex";
-                arrow.textContent = "▼";
-              } else {
+              const arrow = header.querySelector(".sector-toggle-arrow");
+              if (expandedSectorIds.has(sec.id)) {
+                expandedSectorIds.delete(sec.id);
                 body.style.display = "none";
-                arrow.textContent = "▶";
+                if (arrow) arrow.textContent = "▶";
+                header.title = `Click to expand ${sec.name}`;
+              } else {
+                expandedSectorIds.add(sec.id);
+                body.style.display = "flex";
+                if (arrow) arrow.textContent = "▼";
+                header.title = `Click to collapse ${sec.name}`;
               }
             });
           });
