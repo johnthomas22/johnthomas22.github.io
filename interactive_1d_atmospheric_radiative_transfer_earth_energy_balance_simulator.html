@@ -99,6 +99,137 @@
       color: #000;
     }
 
+    /* Carbon Budgets & Extraction Mode Layout Overrides */
+    .app-wrapper.budgets-mode {
+      max-width: 1420px;
+    }
+    .app-wrapper.budgets-mode .top-stats-strip,
+    .app-wrapper.budgets-mode .intro-banner,
+    .app-wrapper.budgets-mode .main-grid {
+      display: none !important;
+    }
+    .budgets-view {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+    .app-wrapper.budgets-mode .budgets-view {
+      display: flex;
+    }
+    .budgets-grid {
+      display: grid;
+      grid-template-columns: minmax(360px, 480px) 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .budgets-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .budget-slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .budget-slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+    }
+    .budget-slider-header strong {
+      color: #fff;
+    }
+    .budget-slider-header span {
+      font-family: ui-monospace, monospace;
+      color: var(--cyan);
+      font-weight: 700;
+    }
+    .budget-slider-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: ui-monospace, monospace;
+    }
+    .budget-slider-row input[type=range] {
+      width: 100%;
+      accent-color: var(--cyan);
+      margin: 4px 0;
+      cursor: pointer;
+    }
+    .budget-preset-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .budget-preset-btn {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 11px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .budget-preset-btn:hover {
+      color: #fff;
+      border-color: var(--text-muted);
+    }
+    .budget-preset-btn.active {
+      background: rgba(0, 229, 255, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .budget-flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .budget-flow-step {
+      background: #0b1320;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      position: relative;
+    }
+    .budget-flow-arrow {
+      text-align: center;
+      color: var(--cyan);
+      font-size: 0.85rem;
+      margin: -4px 0;
+      font-weight: 700;
+    }
+    .unburnable-bar-wrap {
+      margin-bottom: 12px;
+    }
+    .unburnable-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      margin-bottom: 4px;
+    }
+    .unburnable-bar-bg {
+      height: 20px;
+      background: #080d18;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .unburnable-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
     /* Simple Intro Mode Layout Overrides */
     .app-wrapper.simple-mode {
       max-width: 860px;
@@ -889,6 +1020,7 @@
         <div class="mode-switch-group" role="group" aria-label="View Mode">
           <button class="mode-switch-btn active" id="btnModeSimple">Introduction</button>
           <button class="mode-switch-btn" id="btnModeAdvanced">Simulator</button>
+          <button class="mode-switch-btn" id="btnModeBudgets">🛢️ Carbon Budgets & Extraction</button>
         </div>
         <button class="btn-modal" id="openPaleoModalTopBtn" style="border-color: var(--emerald); color: var(--emerald); background: rgba(16, 185, 129, 0.12);">
           🔍 1-Million-Year Comparison
@@ -990,6 +1122,9 @@
               <div class="preset-sub">278 ppm (1750) · -1.5 ppm/yr CDR</div>
             </button>
           </div>
+          <button class="btn btn-secondary" id="btnJumpToBudgets" style="margin-top: 10px; width: 100%; border-color: rgba(0, 229, 255, 0.4); color: var(--cyan); background: rgba(0, 229, 255, 0.08); font-size: 0.78rem; font-weight: 700; padding: 7px 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            🛢️ Explore Fossil Extraction & Carbon Budgets Page →
+          </button>
         </div>
 
         <div class="card">
@@ -1061,6 +1196,262 @@
             </div>
           </div>
         </div>
+      </div>
+
+    </div>
+
+    <!-- DEDICATED INTERACTIVE PAGE: CARBON BUDGETS & FOSSIL FUEL EXTRACTION -->
+    <div class="budgets-view" id="budgetsView">
+      
+      <!-- Top Real-Time Metrics Strip -->
+      <div class="top-stats-strip" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 0;">
+        <div class="stat-card">
+          <div class="stat-header"><span>Annual Fossil Extraction</span><span class="badge badge-amber" id="budgetsBadgeExtraction">Active Burn</span></div>
+          <div class="stat-value" id="statExtractionGt" style="color: var(--amber);">38.9 <span style="font-size: 0.8rem; color: var(--text-muted);">Gt CO₂/yr</span></div>
+          <div class="stat-sub" id="statExtractionSub">Oil: 102 mbpd · Gas: 140 Tcf · Coal: 8.5 Gt</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Net Atmospheric Addition</span><span class="badge badge-cyan">Keeling Trend</span></div>
+          <div class="stat-value" id="statPpmRate" style="color: var(--cyan);">+2.29 <span style="font-size: 0.8rem; color: var(--text-muted);">ppm/yr</span></div>
+          <div class="stat-sub">After 54% ocean & biosphere sinks (AF = 46%)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Committed Warming Rate</span><span class="badge badge-rose">Equilibrium</span></div>
+          <div class="stat-value" id="statWarmingRate" style="color: var(--rose);">+0.023 <span style="font-size: 0.8rem; color: var(--text-muted);">°C / yr</span></div>
+          <div class="stat-sub">+0.23 °C / decade (+0.010 °C per ppm locked in)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>1.5°C Budget Countdown</span><span class="badge badge-emerald" id="budgetsBadge15">Guardrail</span></div>
+          <div class="stat-value" id="statDepletionClock" style="color: var(--emerald);">~5.1 Years <span style="font-size: 0.8rem; color: var(--text-muted);">left</span></div>
+          <div class="stat-sub" id="statDepletionSub">Budget of ~200 Gt CO₂ exhausted by ~2031</div>
+        </div>
+      </div>
+
+      <!-- Main Interactive Budgets Grid -->
+      <div class="budgets-grid">
+
+        <!-- Left Column: Controls, Infographic Flow & Converter -->
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+
+          <!-- Card 1: Extraction Scenario Presets & Sliders -->
+          <div class="card">
+            <div class="card-title-row">
+              <div class="card-title">Fossil Fuel Extraction Scenarios & Sliders</div>
+            </div>
+            
+            <div class="budget-preset-group">
+              <button class="budget-preset-btn active" id="btnPresetCurrent">🔴 Current Trajectory (38.9 Gt/yr)</button>
+              <button class="budget-preset-btn" id="btnPresetStated">🟠 Stated Policies (-1%/yr)</button>
+              <button class="budget-preset-btn" id="btnPresetCut50">🟡 50% Managed Cut (-5%/yr)</button>
+              <button class="budget-preset-btn" id="btnPresetParis">🟢 Paris 1.5°C (-7%/yr)</button>
+              <button class="budget-preset-btn" id="btnPresetZero">🔵 Zero Extraction (Halt)</button>
+            </div>
+
+            <!-- Crude Oil Slider -->
+            <div class="budget-slider-row">
+              <div class="budget-slider-header">
+                <strong>🛢️ Crude Oil Extraction</strong>
+                <span id="lblOilMbpd">102 mbpd</span>
+              </div>
+              <input type="range" id="sliderOilMbpd" min="0" max="150" step="1" value="102">
+              <div class="budget-slider-sub" id="lblOilDetail">37.2 billion bbl/yr · 16.0 Gt CO₂/yr · +0.94 ppm/yr</div>
+            </div>
+
+            <!-- Natural Gas Slider -->
+            <div class="budget-slider-row">
+              <div class="budget-slider-header">
+                <strong>🔥 Fossil Natural Gas</strong>
+                <span id="lblGasTcf">140 Tcf/yr</span>
+              </div>
+              <input type="range" id="sliderGasTcf" min="0" max="250" step="5" value="140">
+              <div class="budget-slider-sub" id="lblGasDetail">~4,000 billion m³ · 7.6 Gt CO₂/yr · +0.45 ppm/yr</div>
+            </div>
+
+            <!-- Thermal Coal Slider -->
+            <div class="budget-slider-row">
+              <div class="budget-slider-header">
+                <strong>⛏️ Thermal Coal</strong>
+                <span id="lblCoalGt">8.5 Gt/yr</span>
+              </div>
+              <input type="range" id="sliderCoalGt" min="0" max="15" step="0.5" value="8.5">
+              <div class="budget-slider-sub" id="lblCoalDetail">15.3 Gt CO₂/yr · +0.90 ppm/yr</div>
+            </div>
+
+            <!-- Annual Trend Slider -->
+            <div class="budget-slider-row" style="margin-bottom: 4px;">
+              <div class="budget-slider-header">
+                <strong>📈 Annual Extraction Trend (%/year)</strong>
+                <span id="lblTrendPct">0.0 % / yr</span>
+              </div>
+              <input type="range" id="sliderTrendPct" min="-10" max="5" step="0.5" value="0">
+              <div class="budget-slider-sub" id="lblTrendDetail">Constant annual extraction pace (cumulative emissions grow linearly)</div>
+            </div>
+          </div>
+
+          <!-- Card 2: 3-Step Physical Chain Flow -->
+          <div class="card">
+            <div class="card-title-row">
+              <div class="card-title">Physical Pipeline: From Extraction to Planetary Heating</div>
+            </div>
+            <div class="budget-flow-container">
+              <div class="budget-flow-step">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <strong style="color: var(--amber); font-size: 0.82rem;">1. Extraction & Combustion</strong>
+                  <span class="badge badge-amber" id="flowBadgeGross">38.9 Gt CO₂/yr</span>
+                </div>
+                <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.45;">
+                  Physical oxidation of extracted hydrocarbons: <strong>0.430 t CO₂ / bbl crude oil</strong> · <strong>0.0545 t CO₂ / Mcf gas</strong> · <strong>1.80 t CO₂ / t coal</strong>.
+                </div>
+              </div>
+
+              <div class="budget-flow-arrow">▼ 54% Absorbed by Natural Sinks (Oceans & Biosphere) · 46% Airborne Retention</div>
+
+              <div class="budget-flow-step">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <strong style="color: var(--cyan); font-size: 0.82rem;">2. Atmospheric Accumulation (ppm)</strong>
+                  <span class="badge badge-cyan" id="flowBadgePpm">+2.29 ppm / yr</span>
+                </div>
+                <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.45;">
+                  Earth's atmospheric mass = 5.15 × 10⁶ Gt. <strong>7.82 Gt CO₂ = 1.0 ppm</strong>. Accounting for sink uptake (<i>AF</i> = 0.46), every <strong>~17.0 Gt of gross emissions adds +1.0 ppm</strong>.
+                </div>
+              </div>
+
+              <div class="budget-flow-arrow">▼ Radiative Forcing (ΔF = 5.35 · ln(C/278) W/m²) & Climate Feedback (λ = 1.25 W/m²/K)</div>
+
+              <div class="budget-flow-step">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <strong style="color: var(--rose); font-size: 0.82rem;">3. Planetary Warming (°C)</strong>
+                  <span class="badge badge-rose" id="flowBadgeWarming">+0.23 °C / decade</span>
+                </div>
+                <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.45;">
+                  Each +1.0 ppm commits Earth to <strong>+0.010 °C of equilibrium heating</strong> (Δ<i>T</i><sub>eq</sub>). Ocean thermal inertia delays surface realization, creating transient warming of <strong>+0.45 °C per 1,000 Gt CO₂ (TCRE)</strong>.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Interactive Oil Commodity Converter -->
+          <div class="card">
+            <div class="card-title-row">
+              <div class="card-title">Interactive Fuel Volume Converter</div>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">
+              Select a physical quantity of crude oil to calculate its exact planetary impact:
+            </div>
+            <div class="budget-preset-group" style="margin-bottom: 12px;">
+              <button class="budget-preset-btn active" id="btnConv100m">100 Million bbl (1 Day Burn)</button>
+              <button class="budget-preset-btn" id="btnConv1b">1 Billion bbl</button>
+              <button class="budget-preset-btn" id="btnConv10b">10 Billion bbl</button>
+              <button class="budget-preset-btn" id="btnConvAnnual">37.2 Gbbl (1 Year Burn)</button>
+              <button class="budget-preset-btn" id="btnConvReserves">1,750 Gbbl (All Reserves)</button>
+            </div>
+            <div style="background: #080d18; border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; font-size: 0.78rem; display: flex; flex-direction: column; gap: 6px;" id="convResultBox">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Trajectory Chart & Reserves Comparison -->
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+
+          <!-- Card 4: 2025–2100 Trajectory Simulation Chart -->
+          <div class="card" style="padding: 14px 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div>
+                <div class="card-title" style="margin-bottom: 2px;">2025–2100 Trajectory Projection: CO₂ & Global Warming</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                  Live simulation integration driven by selected fossil extraction rates and annual trend
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 0.74rem;">
+                <span class="badge badge-amber" id="chartCross15Badge">1.5°C: Calculating...</span>
+                <span class="badge badge-rose" id="chartCross20Badge">2.0°C: Calculating...</span>
+              </div>
+            </div>
+
+            <!-- Interactive Canvas -->
+            <div style="position: relative; width: 100%; height: 380px; background: #070c16; border-radius: 8px; border: 1px solid var(--border); overflow: hidden;">
+              <canvas id="budgetsChart" style="width: 100%; height: 100%; display: block;"></canvas>
+            </div>
+
+            <!-- Chart Legends -->
+            <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 10px; font-size: 0.75rem; color: var(--text-muted);">
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <span style="display: inline-block; width: 14px; height: 3px; background: #f43f5e; border-radius: 2px;"></span>
+                <strong style="color: #fff;">Surface Warming ΔT</strong> (°C rel. to 1850–1900)
+              </div>
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <span style="display: inline-block; width: 14px; height: 2px; border-top: 2px dashed #f59e0b;"></span>
+                <strong style="color: #f59e0b;">Committed Equilibrium ΔT<sub>eq</sub></strong>
+              </div>
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <span style="display: inline-block; width: 14px; height: 3px; background: #00e5ff; border-radius: 2px;"></span>
+                <strong style="color: #00e5ff;">Atmospheric CO₂</strong> (ppm, right axis)
+              </div>
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <span style="display: inline-block; width: 12px; height: 1px; border-top: 1px dashed rgba(245, 158, 11, 0.6);"></span>
+                <span>+1.5°C / +2.0°C Limits</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: Unburnable Carbon vs Reserves -->
+          <div class="card">
+            <div class="card-title-row">
+              <div class="card-title">The "Unburnable Carbon" Paradox: Proven Reserves vs. Atmospheric Limits</div>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5;">
+              Known commercially reported fossil reserves contain approximately <strong>~3,400 Gt of potential CO₂</strong>. Comparing this against the finite absorptive capacity of Earth's atmosphere demonstrates that the vast majority of existing fossil reserves cannot be extracted:
+            </div>
+
+            <!-- Bar 1: 1.5°C Budget -->
+            <div class="unburnable-bar-wrap">
+              <div class="unburnable-bar-header">
+                <span><strong>Remaining 1.5°C Budget (50% prob.):</strong> ~200 Gt CO₂ (~465 billion barrels oil equiv.)</span>
+                <span style="color: var(--emerald); font-weight: 700;" id="unburnablePct15">5.9% of reserves</span>
+              </div>
+              <div class="unburnable-bar-bg">
+                <div class="unburnable-bar-fill" style="width: 5.9%; background: var(--emerald);"></div>
+                <span style="position: absolute; left: calc(5.9% + 8px); font-size: 0.7rem; color: var(--emerald); font-weight: 700;">200 Gt</span>
+              </div>
+            </div>
+
+            <!-- Bar 2: 2.0°C Budget -->
+            <div class="unburnable-bar-wrap">
+              <div class="unburnable-bar-header">
+                <span><strong>Remaining 2.0°C Budget (50% prob.):</strong> ~1,150 Gt CO₂ (~2,674 billion barrels oil equiv.)</span>
+                <span style="color: var(--amber); font-weight: 700;" id="unburnablePct20">33.8% of reserves</span>
+              </div>
+              <div class="unburnable-bar-bg">
+                <div class="unburnable-bar-fill" style="width: 33.8%; background: var(--amber);"></div>
+                <span style="position: absolute; left: calc(33.8% + 8px); font-size: 0.7rem; color: var(--amber); font-weight: 700;">1,150 Gt</span>
+              </div>
+            </div>
+
+            <!-- Bar 3: Proven Reserves -->
+            <div class="unburnable-bar-wrap">
+              <div class="unburnable-bar-header">
+                <span><strong>Total Proven Commercial Reserves:</strong> ~3,400 Gt CO₂ (~1,750 Gbbl oil + 7,300 Tcf gas + 1,074 Gt coal)</span>
+                <span style="color: var(--rose); font-weight: 700;">100% (Full Fossil Assets)</span>
+              </div>
+              <div class="unburnable-bar-bg">
+                <div class="unburnable-bar-fill" style="width: 100%; background: linear-gradient(90deg, var(--rose) 0%, #b91c1c 100%);"></div>
+              </div>
+            </div>
+
+            <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 6px; padding: 12px 14px; margin-top: 10px; font-size: 0.8rem; color: #cbd5e1; line-height: 1.55;">
+              <strong style="color: var(--rose);">Key Physical Takeaway:</strong> To keep warming below +1.5°C, <strong>>94% of proven global fossil reserves are completely unburnable</strong>. Burning all known commercial reserves would add +200 ppm of CO₂ (taking the atmosphere to 627 ppm), driving equilibrium warming past <strong>+3.5°C to +4.0°C</strong> and triggering catastrophic planetary tipping points worldwide.
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
+              <button class="btn btn-secondary" id="btnBackToSim" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Atmospheric Simulator</button>
+              <button class="btn btn-modal" id="btnOpenGuideFromBudgets" style="font-size: 0.78rem; padding: 6px 14px;">📖 Read Proofs & Derivations in Guide →</button>
+            </div>
+          </div>
+
+        </div>
+
       </div>
 
     </div>
@@ -4461,22 +4852,37 @@
         showSpeechBubble((currentStep + speechDataIntro.length - 1) % speechDataIntro.length);
       });
 
-      // View Mode Switching (Simple Intro vs Advanced Controls)
+      // View Mode Switching (Simple Intro vs Advanced Controls vs Carbon Budgets)
       const appWrapper = document.getElementById("appWrapper");
       const btnModeSimple = document.getElementById("btnModeSimple");
       const btnModeAdvanced = document.getElementById("btnModeAdvanced");
+      const btnModeBudgets = document.getElementById("btnModeBudgets");
 
       function setViewMode(mode) {
         const isSimple = mode === "simple";
+        const isAdvanced = mode === "advanced";
+        const isBudgets = mode === "budgets";
+
         appWrapper.classList.toggle("simple-mode", isSimple);
+        appWrapper.classList.toggle("advanced-mode", isAdvanced);
+        appWrapper.classList.toggle("budgets-mode", isBudgets);
+
         btnModeSimple.classList.toggle("active", isSimple);
-        btnModeAdvanced.classList.toggle("active", !isSimple);
-        document.getElementById("headerTitle").textContent = isSimple
-          ? "Earth's Energy Imbalance"
-          : "Earth Energy Imbalance & Radiative Transfer";
-        document.getElementById("headerSubtitle").textContent = isSimple
-          ? "How greenhouse gases trap heat and warm the planet"
-          : "Empirical Radiative Transfer & Two-Layer Ocean Thermal Inertia";
+        btnModeAdvanced.classList.toggle("active", isAdvanced);
+        if (btnModeBudgets) btnModeBudgets.classList.toggle("active", isBudgets);
+
+        if (isSimple) {
+          document.getElementById("headerTitle").textContent = "Earth's Energy Imbalance";
+          document.getElementById("headerSubtitle").textContent = "How greenhouse gases trap heat and warm the planet";
+        } else if (isAdvanced) {
+          document.getElementById("headerTitle").textContent = "Earth Energy Imbalance & Radiative Transfer";
+          document.getElementById("headerSubtitle").textContent = "Empirical Radiative Transfer & Two-Layer Ocean Thermal Inertia";
+        } else if (isBudgets) {
+          document.getElementById("headerTitle").textContent = "Fossil Fuel Extraction, Carbon Budgets & Warming";
+          document.getElementById("headerSubtitle").textContent = "Relating oil and gas extraction (Gt/yr & million barrels/day) to atmospheric CO₂ and global warming";
+          updateBudgetsCalculations();
+        }
+
         if (isSimple && tpCardEl) {
           tpCardPinned = false;
           tpHoveringCard = false;
@@ -4487,11 +4893,530 @@
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
         const btnWhat = document.getElementById("btnWhatCanIDo");
         if (btnWhat) btnWhat.classList.remove("active");
-        draw();
+
+        if (!isBudgets) {
+          draw();
+        }
       }
 
       btnModeSimple.addEventListener("click", () => setViewMode("simple"));
       btnModeAdvanced.addEventListener("click", () => setViewMode("advanced"));
+      if (btnModeBudgets) btnModeBudgets.addEventListener("click", () => setViewMode("budgets"));
+      const btnBackToSim = document.getElementById("btnBackToSim");
+      if (btnBackToSim) btnBackToSim.addEventListener("click", () => setViewMode("advanced"));
+      const btnJumpToBudgets = document.getElementById("btnJumpToBudgets");
+      if (btnJumpToBudgets) btnJumpToBudgets.addEventListener("click", () => setViewMode("budgets"));
+      const btnOpenGuideFromBudgets = document.getElementById("btnOpenGuideFromBudgets");
+      if (btnOpenGuideFromBudgets) {
+        btnOpenGuideFromBudgets.addEventListener("click", () => {
+          modalOverlay.style.display = "flex";
+          setDocPage("page-fossil-metrics");
+        });
+      }
+
+      // ==========================================
+      // CARBON BUDGETS & FOSSIL EXTRACTION ENGINE
+      // ==========================================
+      const budgetsChart = document.getElementById("budgetsChart");
+      const bCtx = budgetsChart ? budgetsChart.getContext("2d") : null;
+
+      const sliderOilMbpd = document.getElementById("sliderOilMbpd");
+      const sliderGasTcf = document.getElementById("sliderGasTcf");
+      const sliderCoalGt = document.getElementById("sliderCoalGt");
+      const sliderTrendPct = document.getElementById("sliderTrendPct");
+
+      let budgetsHoverX = -1;
+      let budgetsHoverActive = false;
+
+      function updateBudgetsCalculations() {
+        if (!sliderOilMbpd || !sliderGasTcf || !sliderCoalGt || !sliderTrendPct) return;
+
+        const oilMbpd = parseFloat(sliderOilMbpd.value);
+        const gasTcf = parseFloat(sliderGasTcf.value);
+        const coalGt = parseFloat(sliderCoalGt.value);
+        const trendPct = parseFloat(sliderTrendPct.value);
+
+        // Stoichiometric emissions:
+        // Oil: 0.430 metric tons CO2 / barrel; 365.25 days / year
+        const annualOilGbbl = (oilMbpd * 365.25) / 1000.0;
+        const oilGtCo2 = annualOilGbbl * 0.430;
+
+        // Gas: 0.0545 Gt CO2 per Tcf
+        const gasGtCo2 = gasTcf * 0.0545;
+
+        // Coal: 1.80 Gt CO2 per Gt thermal coal
+        const coalGtCo2 = coalGt * 1.80;
+
+        // Non-fossil background emissions (cement, flaring, land-use)
+        const backgroundGtCo2 = 2.0;
+
+        const totalGrossGt = oilGtCo2 + gasGtCo2 + coalGtCo2 + backgroundGtCo2;
+
+        // Airborne fraction (AF = 0.46) and atmospheric mass factor (7.824 Gt / ppm)
+        const netPpmRate = (totalGrossGt * 0.46) / 7.824;
+
+        // Equilibrium committed warming: +0.01002 °C per ppm
+        const committedRate = netPpmRate * 0.01002;
+
+        // Remaining carbon budgets from 2026:
+        const budget15 = 200.0; // Gt CO2
+        const budget20 = 1150.0; // Gt CO2
+        const yearsTo15 = totalGrossGt > 0.01 ? (budget15 / totalGrossGt) : Infinity;
+        const yearsTo20 = totalGrossGt > 0.01 ? (budget20 / totalGrossGt) : Infinity;
+
+        // Update Slider Labels
+        document.getElementById("lblOilMbpd").textContent = `${oilMbpd.toFixed(0)} mbpd`;
+        document.getElementById("lblOilDetail").textContent = `${annualOilGbbl.toFixed(1)} billion bbl/yr · ${oilGtCo2.toFixed(1)} Gt CO₂/yr · +${((oilGtCo2 * 0.46) / 7.824).toFixed(2)} ppm/yr`;
+
+        document.getElementById("lblGasTcf").textContent = `${gasTcf.toFixed(0)} Tcf/yr`;
+        document.getElementById("lblGasDetail").textContent = `~${Math.round(gasTcf * 28.3)} billion m³ · ${gasGtCo2.toFixed(1)} Gt CO₂/yr · +${((gasGtCo2 * 0.46) / 7.824).toFixed(2)} ppm/yr`;
+
+        document.getElementById("lblCoalGt").textContent = `${coalGt.toFixed(1)} Gt/yr`;
+        document.getElementById("lblCoalDetail").textContent = `${coalGtCo2.toFixed(1)} Gt CO₂/yr · +${((coalGtCo2 * 0.46) / 7.824).toFixed(2)} ppm/yr`;
+
+        document.getElementById("lblTrendPct").textContent = `${trendPct >= 0 ? "+" : ""}${trendPct.toFixed(1)} % / yr`;
+        const trendDesc = trendPct === 0 ? "Constant annual extraction pace (emissions linear)" : (trendPct < 0 ? `Managed phase-down (${Math.abs(trendPct).toFixed(1)}% annual reduction)` : `Growing extraction pace (+${trendPct.toFixed(1)}% annual expansion)`);
+        document.getElementById("lblTrendDetail").textContent = trendDesc;
+
+        // Update Top KPI Cards
+        document.getElementById("statExtractionGt").innerHTML = `${totalGrossGt.toFixed(1)} <span style="font-size: 0.8rem; color: var(--text-muted);">Gt CO₂/yr</span>`;
+        document.getElementById("statExtractionSub").textContent = `Oil: ${oilMbpd.toFixed(0)} mbpd · Gas: ${gasTcf.toFixed(0)} Tcf · Coal: ${coalGt.toFixed(1)} Gt`;
+
+        document.getElementById("statPpmRate").innerHTML = `+${netPpmRate.toFixed(2)} <span style="font-size: 0.8rem; color: var(--text-muted);">ppm/yr</span>`;
+
+        document.getElementById("statWarmingRate").innerHTML = `+${committedRate.toFixed(3)} <span style="font-size: 0.8rem; color: var(--text-muted);">°C / yr</span>`;
+        document.getElementById("statWarmingRate").nextElementSibling.textContent = `+${(committedRate * 10).toFixed(2)} °C / decade (+0.010 °C per ppm locked in)`;
+
+        const badge15 = document.getElementById("budgetsBadge15");
+        const stat15Val = document.getElementById("statDepletionClock");
+        const stat15Sub = document.getElementById("statDepletionSub");
+
+        if (yearsTo15 === Infinity || totalGrossGt <= 0.1) {
+          badge15.className = "badge badge-emerald";
+          badge15.textContent = "Net Zero";
+          stat15Val.style.color = "var(--emerald)";
+          stat15Val.innerHTML = `Zero Burn <span style="font-size: 0.8rem; color: var(--text-muted);">rate</span>`;
+          stat15Sub.textContent = "1.5°C Budget Protected";
+        } else if (yearsTo15 <= 3.0) {
+          badge15.className = "badge badge-rose";
+          badge15.textContent = "Critical";
+          stat15Val.style.color = "var(--rose)";
+          stat15Val.innerHTML = `~${yearsTo15.toFixed(1)} Years <span style="font-size: 0.8rem; color: var(--text-muted);">left</span>`;
+          stat15Sub.textContent = `Depleted in ~${Math.round(2026 + yearsTo15)} CE (2.0°C in ~${Math.round(yearsTo20)} yrs)`;
+        } else {
+          badge15.className = "badge badge-amber";
+          badge15.textContent = "Guardrail";
+          stat15Val.style.color = "var(--amber)";
+          stat15Val.innerHTML = `~${yearsTo15.toFixed(1)} Years <span style="font-size: 0.8rem; color: var(--text-muted);">left</span>`;
+          stat15Sub.textContent = `Depleted in ~${Math.round(2026 + yearsTo15)} CE (2.0°C in ~${Math.round(yearsTo20)} yrs)`;
+        }
+
+        // Flow badges
+        document.getElementById("flowBadgeGross").textContent = `${totalGrossGt.toFixed(1)} Gt CO₂/yr`;
+        document.getElementById("flowBadgePpm").textContent = `+${netPpmRate.toFixed(2)} ppm / yr`;
+        document.getElementById("flowBadgeWarming").textContent = `+${(committedRate * 10).toFixed(2)} °C / decade`;
+
+        drawBudgetsChart();
+      }
+
+      function drawBudgetsChart() {
+        if (!budgetsChart || !bCtx) return;
+        const appW = document.getElementById("appWrapper");
+        if (!appW.classList.contains("budgets-mode")) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        const rect = budgetsChart.getBoundingClientRect();
+        if (budgetsChart.width !== rect.width * dpr || budgetsChart.height !== rect.height * dpr) {
+          budgetsChart.width = rect.width * dpr;
+          budgetsChart.height = rect.height * dpr;
+        }
+
+        const w = rect.width;
+        const h = rect.height;
+        bCtx.save();
+        bCtx.scale(dpr, dpr);
+        bCtx.clearRect(0, 0, w, h);
+
+        const oilMbpd = parseFloat(sliderOilMbpd.value);
+        const gasTcf = parseFloat(sliderGasTcf.value);
+        const coalGt = parseFloat(sliderCoalGt.value);
+        const trendPct = parseFloat(sliderTrendPct.value);
+
+        const annualOilGbbl = (oilMbpd * 365.25) / 1000.0;
+        const oilGtCo2 = annualOilGbbl * 0.430;
+        const gasGtCo2 = gasTcf * 0.0545;
+        const coalGtCo2 = coalGt * 1.80;
+        const backgroundGtCo2 = 2.0;
+        const startGrossGt = oilGtCo2 + gasGtCo2 + coalGtCo2 + backgroundGtCo2;
+
+        // Multi-year integration: 2026 to 2100 (75 years)
+        const trajectory = [];
+        let curCo2 = 427.0;
+        let curTs = 1.26; // rel to 1750
+        let curTd = 0.55;
+        let cross15Yr = null;
+        let cross20Yr = null;
+
+        const trendMult = 1.0 + (trendPct / 100.0);
+
+        for (let y = 2026; y <= 2100; y++) {
+          const stepYr = y - 2026;
+          let annualGross = startGrossGt * Math.pow(trendMult, stepYr);
+          if (annualGross < 0) annualGross = 0;
+
+          const netPpm = (annualGross * 0.46) / 7.824;
+          curCo2 += netPpm;
+
+          const dF = 5.35 * Math.log(curCo2 / 278.0);
+          const dTeq = dF / 1.25;
+
+          const dTs_dt = (dF - 1.25 * curTs - 0.73 * (curTs - curTd)) / 8.2;
+          const dTd_dt = (0.73 * (curTs - curTd)) / 105.0;
+          curTs += dTs_dt * 1.0;
+          curTd += dTd_dt * 1.0;
+
+          const tempObs = curTs - 0.121; // rel to 1850-1900
+          const tempEqObs = dTeq - 0.121;
+
+          if (cross15Yr === null && tempObs >= 1.5) cross15Yr = y;
+          if (cross20Yr === null && tempObs >= 2.0) cross20Yr = y;
+
+          trajectory.push({
+            year: y,
+            annualGross,
+            co2: curCo2,
+            tempObs,
+            tempEqObs
+          });
+        }
+
+        // Update Crossing Badges in Header
+        const badge15El = document.getElementById("chartCross15Badge");
+        const badge20El = document.getElementById("chartCross20Badge");
+        if (cross15Yr) {
+          badge15El.className = "badge badge-amber";
+          badge15El.textContent = `+1.5°C Breached: ~${cross15Yr} CE (in ${cross15Yr - 2026} yrs)`;
+        } else {
+          badge15El.className = "badge badge-emerald";
+          badge15El.textContent = `+1.5°C: Not Breached (Protected)`;
+        }
+
+        if (cross20Yr) {
+          badge20El.className = "badge badge-rose";
+          badge20El.textContent = `+2.0°C Breached: ~${cross20Yr} CE (in ${cross20Yr - 2026} yrs)`;
+        } else {
+          badge20El.className = "badge badge-emerald";
+          badge20El.textContent = `+2.0°C: Not Breached`;
+        }
+
+        // Layout bounds
+        const padL = 52;
+        const padR = 56;
+        const padT = 24;
+        const padB = 34;
+        const plotW = w - padL - padR;
+        const plotH = h - padT - padB;
+
+        const maxTemp = Math.max(3.5, Math.ceil(Math.max(...trajectory.map(p => Math.max(p.tempObs, p.tempEqObs))) * 1.15));
+        const minTemp = 0.5;
+
+        const minCo2 = 350;
+        const maxCo2 = Math.max(650, Math.ceil(Math.max(...trajectory.map(p => p.co2)) / 50) * 50);
+
+        function xFromYear(yr) {
+          return padL + ((yr - 2026) / (2100 - 2026)) * plotW;
+        }
+        function yFromTemp(t) {
+          return padT + plotH - ((t - minTemp) / (maxTemp - minTemp)) * plotH;
+        }
+        function yFromCo2(c) {
+          return padT + plotH - ((c - minCo2) / (maxCo2 - minCo2)) * plotH;
+        }
+
+        // Draw Background Grid
+        bCtx.lineWidth = 1;
+        bCtx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+        bCtx.fillStyle = "#64748b";
+        bCtx.font = "10px ui-monospace, monospace";
+
+        // Vertical year grid lines
+        [2026, 2040, 2060, 2080, 2100].forEach(yr => {
+          const gx = xFromYear(yr);
+          bCtx.beginPath();
+          bCtx.moveTo(gx, padT);
+          bCtx.lineTo(gx, padT + plotH);
+          bCtx.stroke();
+          bCtx.textAlign = "center";
+          bCtx.fillText(`${yr}`, gx, padT + plotH + 18);
+        });
+
+        // Horizontal temperature grid lines (Left Axis)
+        for (let t = 1.0; t <= maxTemp; t += 0.5) {
+          const gy = yFromTemp(t);
+          if (gy < padT || gy > padT + plotH) continue;
+          bCtx.beginPath();
+          bCtx.moveTo(padL, gy);
+          bCtx.lineTo(padL + plotW, gy);
+          bCtx.stroke();
+          bCtx.textAlign = "right";
+          bCtx.fillText(`+${t.toFixed(1)}°C`, padL - 8, gy + 3);
+        }
+
+        // Right axis ticks (CO2 ppm)
+        bCtx.fillStyle = "#00e5ff";
+        for (let c = 400; c <= maxCo2; c += 100) {
+          const cy = yFromCo2(c);
+          if (cy < padT || cy > padT + plotH) continue;
+          bCtx.textAlign = "left";
+          bCtx.fillText(`${c} ppm`, padL + plotW + 8, cy + 3);
+        }
+
+        // Draw Reference Thresholds (+1.5°C and +2.0°C and +3.0°C)
+        const y15 = yFromTemp(1.5);
+        if (y15 >= padT && y15 <= padT + plotH) {
+          bCtx.save();
+          bCtx.strokeStyle = "rgba(245, 158, 11, 0.75)";
+          bCtx.setLineDash([4, 4]);
+          bCtx.beginPath();
+          bCtx.moveTo(padL, y15);
+          bCtx.lineTo(padL + plotW, y15);
+          bCtx.stroke();
+          bCtx.fillStyle = "#f59e0b";
+          bCtx.textAlign = "left";
+          bCtx.fillText("+1.5°C Paris Threshold", padL + 8, y15 - 5);
+          bCtx.restore();
+        }
+
+        const y20 = yFromTemp(2.0);
+        if (y20 >= padT && y20 <= padT + plotH) {
+          bCtx.save();
+          bCtx.strokeStyle = "rgba(244, 63, 94, 0.75)";
+          bCtx.setLineDash([4, 4]);
+          bCtx.beginPath();
+          bCtx.moveTo(padL, y20);
+          bCtx.lineTo(padL + plotW, y20);
+          bCtx.stroke();
+          bCtx.fillStyle = "#f43f5e";
+          bCtx.textAlign = "left";
+          bCtx.fillText("+2.0°C Upper Guardrail", padL + 8, y20 - 5);
+          bCtx.restore();
+        }
+
+        // 1. Draw Cyan Curve: Atmospheric CO2
+        bCtx.save();
+        bCtx.strokeStyle = "#00e5ff";
+        bCtx.lineWidth = 2.4;
+        bCtx.beginPath();
+        trajectory.forEach((pt, i) => {
+          const px = xFromYear(pt.year);
+          const py = yFromCo2(pt.co2);
+          if (i === 0) bCtx.moveTo(px, py);
+          else bCtx.lineTo(px, py);
+        });
+        bCtx.stroke();
+        bCtx.restore();
+
+        // 2. Draw Amber Dotted Curve: Committed Equilibrium Warming
+        bCtx.save();
+        bCtx.strokeStyle = "#f59e0b";
+        bCtx.lineWidth = 2;
+        bCtx.setLineDash([3, 3]);
+        bCtx.beginPath();
+        trajectory.forEach((pt, i) => {
+          const px = xFromYear(pt.year);
+          const py = yFromTemp(pt.tempEqObs);
+          if (i === 0) bCtx.moveTo(px, py);
+          else bCtx.lineTo(px, py);
+        });
+        bCtx.stroke();
+        bCtx.restore();
+
+        // 3. Draw Rose Solid Curve: Realized Surface Warming
+        bCtx.save();
+        bCtx.strokeStyle = "#f43f5e";
+        bCtx.lineWidth = 3.2;
+        bCtx.shadowColor = "rgba(244, 63, 94, 0.6)";
+        bCtx.shadowBlur = 8;
+        bCtx.beginPath();
+        trajectory.forEach((pt, i) => {
+          const px = xFromYear(pt.year);
+          const py = yFromTemp(pt.tempObs);
+          if (i === 0) bCtx.moveTo(px, py);
+          else bCtx.lineTo(px, py);
+        });
+        bCtx.stroke();
+        bCtx.restore();
+
+        // Draw Crossing Intersection Badges
+        if (cross15Yr && cross15Yr <= 2100) {
+          const cx = xFromYear(cross15Yr);
+          bCtx.fillStyle = "#f59e0b";
+          bCtx.beginPath();
+          bCtx.arc(cx, y15, 5, 0, Math.PI * 2);
+          bCtx.fill();
+        }
+        if (cross20Yr && cross20Yr <= 2100) {
+          const cx = xFromYear(cross20Yr);
+          bCtx.fillStyle = "#f43f5e";
+          bCtx.beginPath();
+          bCtx.arc(cx, y20, 5, 0, Math.PI * 2);
+          bCtx.fill();
+        }
+
+        // Draw Mouse Hover Crosshair & Tooltip
+        if (budgetsHoverActive && budgetsHoverX >= padL && budgetsHoverX <= padL + plotW) {
+          const hoverYrFrac = 2026 + ((budgetsHoverX - padL) / plotW) * (2100 - 2026);
+          const hoverYr = Math.max(2026, Math.min(2100, Math.round(hoverYrFrac)));
+          const pt = trajectory.find(p => p.year === hoverYr) || trajectory[trajectory.length - 1];
+
+          const hx = xFromYear(hoverYr);
+          bCtx.save();
+          bCtx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+          bCtx.lineWidth = 1;
+          bCtx.setLineDash([2, 2]);
+          bCtx.beginPath();
+          bCtx.moveTo(hx, padT);
+          bCtx.lineTo(hx, padT + plotH);
+          bCtx.stroke();
+
+          // Tooltip Box
+          const tipText1 = `${hoverYr} CE · Gross Extraction: ${pt.annualGross.toFixed(1)} Gt/yr`;
+          const tipText2 = `CO₂: ${Math.round(pt.co2)} ppm · ΔT: +${pt.tempObs.toFixed(2)} °C (Committed: +${pt.tempEqObs.toFixed(2)} °C)`;
+          bCtx.font = "bold 11px ui-monospace, monospace";
+          const tw = Math.max(bCtx.measureText(tipText1).width, bCtx.measureText(tipText2).width) + 20;
+          let bx = hx - tw / 2;
+          if (bx < padL + 4) bx = padL + 4;
+          if (bx + tw > padL + plotW - 4) bx = padL + plotW - tw - 4;
+          const by = padT + 8;
+
+          bCtx.fillStyle = "#0c1526";
+          bCtx.strokeStyle = "var(--border)";
+          bCtx.lineWidth = 1;
+          bCtx.setLineDash([]);
+          bCtx.beginPath();
+          bCtx.roundRect(bx, by, tw, 42, 6);
+          bCtx.fill();
+          bCtx.stroke();
+
+          bCtx.fillStyle = "#fff";
+          bCtx.textAlign = "left";
+          bCtx.fillText(tipText1, bx + 10, by + 16);
+          bCtx.fillStyle = "#00e5ff";
+          bCtx.fillText(tipText2, bx + 10, by + 32);
+          bCtx.restore();
+        }
+
+        bCtx.restore();
+      }
+
+      function initBudgetsView() {
+        if (!sliderOilMbpd) return;
+
+        [sliderOilMbpd, sliderGasTcf, sliderCoalGt, sliderTrendPct].forEach(s => {
+          if (s) {
+            s.addEventListener("input", () => {
+              document.querySelectorAll(".budget-preset-btn").forEach(b => b.classList.remove("active"));
+              updateBudgetsCalculations();
+            });
+          }
+        });
+
+        // Preset buttons
+        const presets = {
+          btnPresetCurrent: { oil: 102, gas: 140, coal: 8.5, trend: 0.0 },
+          btnPresetStated: { oil: 105, gas: 150, coal: 7.5, trend: -1.0 },
+          btnPresetCut50: { oil: 51, gas: 70, coal: 4.25, trend: -5.0 },
+          btnPresetParis: { oil: 102, gas: 140, coal: 8.5, trend: -7.0 },
+          btnPresetZero: { oil: 0, gas: 0, coal: 0, trend: 0.0 }
+        };
+
+        Object.keys(presets).forEach(btnId => {
+          const btn = document.getElementById(btnId);
+          if (btn) {
+            btn.addEventListener("click", () => {
+              document.querySelectorAll(".budget-preset-btn").forEach(b => b.classList.remove("active"));
+              btn.classList.add("active");
+              const p = presets[btnId];
+              sliderOilMbpd.value = p.oil;
+              sliderGasTcf.value = p.gas;
+              sliderCoalGt.value = p.coal;
+              sliderTrendPct.value = p.trend;
+              updateBudgetsCalculations();
+            });
+          }
+        });
+
+        // Converter logic
+        const convResultBox = document.getElementById("convResultBox");
+        const convChoices = {
+          btnConv100m: { bbl: 0.1, label: "100 Million Barrels (1 Day Global Burn)" },
+          btnConv1b: { bbl: 1.0, label: "1 Billion Barrels" },
+          btnConv10b: { bbl: 10.0, label: "10 Billion Barrels" },
+          btnConvAnnual: { bbl: 37.2, label: "37.2 Billion Barrels (1 Year Global Burn)" },
+          btnConvReserves: { bbl: 1750.0, label: "1,750 Billion Barrels (All Proven Global Oil Reserves)" }
+        };
+
+        function renderConverterResult(choiceKey) {
+          const item = convChoices[choiceKey];
+          if (!item || !convResultBox) return;
+
+          const grossGt = item.bbl * 0.430;
+          const netPpm = (grossGt * 0.46) / 7.824;
+          const rf = (5.35 / 427.0) * netPpm;
+          const committedC = netPpm * 0.01002;
+          const pctOf15Budget = (grossGt / 200.0) * 100.0;
+
+          convResultBox.innerHTML = `
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 4px;">
+              <strong style="color: var(--amber);">${item.label}:</strong>
+              <span style="color: #fff; font-family: ui-monospace, monospace; font-weight: 700;">${grossGt.toFixed(grossGt < 1 ? 3 : 1)} Gt CO₂</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 4px;">
+              <div>Atmospheric CO₂ Added: <b style="color: var(--cyan);">+${netPpm.toFixed(netPpm < 0.01 ? 5 : 3)} ppm</b></div>
+              <div>Incremental Forcing: <b style="color: var(--cyan);">+${rf.toFixed(rf < 0.001 ? 6 : 4)} W/m²</b></div>
+              <div>Committed Warming: <b style="color: var(--rose);">+${committedC.toFixed(committedC < 0.001 ? 6 : 4)} °C</b></div>
+              <div>1.5°C Budget Consumed: <b style="color: ${pctOf15Budget > 100 ? 'var(--rose)' : 'var(--amber)'};">${pctOf15Budget.toFixed(pctOf15Budget < 1 ? 2 : 1)}%</b></div>
+            </div>
+          `;
+        }
+
+        Object.keys(convChoices).forEach(btnId => {
+          const btn = document.getElementById(btnId);
+          if (btn) {
+            btn.addEventListener("click", () => {
+              ["btnConv100m", "btnConv1b", "btnConv10b", "btnConvAnnual", "btnConvReserves"].forEach(id => {
+                const b = document.getElementById(id);
+                if (b) b.classList.toggle("active", id === btnId);
+              });
+              renderConverterResult(btnId);
+            });
+          }
+        });
+        renderConverterResult("btnConv100m");
+
+        // Canvas hover listeners
+        if (budgetsChart) {
+          budgetsChart.addEventListener("mousemove", e => {
+            const rect = budgetsChart.getBoundingClientRect();
+            budgetsHoverX = e.clientX - rect.left;
+            budgetsHoverActive = true;
+            drawBudgetsChart();
+          });
+          budgetsChart.addEventListener("mouseleave", () => {
+            budgetsHoverActive = false;
+            drawBudgetsChart();
+          });
+        }
+
+        window.addEventListener("resize", () => {
+          if (appWrapper.classList.contains("budgets-mode")) {
+            drawBudgetsChart();
+          }
+        });
+
+        updateBudgetsCalculations();
+      }
+      initBudgetsView();
 
       // Simulation Controls
       function togglePlayPause() {
