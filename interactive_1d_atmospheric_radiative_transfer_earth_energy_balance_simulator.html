@@ -5046,6 +5046,7 @@
 
         const w = rect.width;
         const h = rect.height;
+        if (!w || !h || w <= 0 || h <= 0) return;
         bCtx.save();
         bCtx.scale(dpr, dpr);
         bCtx.clearRect(0, 0, w, h);
