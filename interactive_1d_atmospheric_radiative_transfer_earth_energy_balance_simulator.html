@@ -1032,8 +1032,8 @@
     <!-- Gentle Intro Banner (Visible in Simple Mode) -->
     <div class="intro-banner" id="introBanner">
       <div class="intro-banner-text">
-        <strong style="color: var(--cyan);">Present Day (2026) → Future Projection:</strong>
-        Rising CO₂ (<span class="has-tooltip" data-tooltip="ppm means 'parts per million'. Adding 2.5 ppm per year is equal to adding just 0.0000025% of CO₂ to the air each year — yet because CO₂ is such a potent greenhouse gas, this tiny percentage drives global warming.">+2.5 ppm/yr or 0.0000025%/yr</span>) pushes the altitude where heat escapes to space higher into colder air. Because colder air radiates less heat, Earth retains energy and the surface warms. Click numbered pins <strong>①–⑤</strong> on the chart to explore each physical step.
+        <strong style="color: var(--cyan);">How the Greenhouse Effect Works:</strong>
+        Incoming sunlight is high-energy <em>shortwave light</em>, which passes freely through greenhouse gases without heating them. When it hits Earth, the surface converts that light into <em>longwave thermal infrared heat</em>—a wavelength that CO₂ molecules trap on the way out. As CO₂ rises (<span class="has-tooltip" data-tooltip="ppm means 'parts per million'. Adding 2.5 ppm per year is equal to adding just 0.0000025% of CO₂ to the air each year — yet because CO₂ is such a potent greenhouse gas, this tiny percentage drives global warming.">+2.5 ppm/yr or 0.0000025%/yr</span>), it pushes the escape altitude into colder air, trapping excess energy below. Click numbered pins <strong>①–⑤</strong> to explore each physical stage.
       </div>
       <div class="intro-banner-controls">
         <div class="intro-metric-pill">
@@ -1185,10 +1185,10 @@
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
             <div class="bubble-header">
-              <span class="bubble-title" id="bubbleTitle">Step 1: Solar Inflow</span>
+              <span class="bubble-title" id="bubbleTitle">Step 1: Solar Inflow (Shortwave Visible Light)</span>
               <button class="bubble-close" id="bubbleCloseBtn">&times;</button>
             </div>
-            <div id="bubbleContent">Solar radiation arrives in all parts of the spectrum.</div>
+            <div id="bubbleContent">Incoming solar shortwave passes freely through atmospheric greenhouse gases without heating them.</div>
             <div class="bubble-footer">
               <button class="bubble-nav-btn" id="bubblePrevBtn">← Prev</button>
               <span style="font-size: 0.7rem; color: var(--text-muted);" id="bubbleStepCount">Step 1 of 5</span>
@@ -1753,12 +1753,12 @@
               <tr>
                 <td><strong>1</strong></td>
                 <td>Top of Atmosphere (13,000 m)</td>
-                <td>Solar shortwave enters freely; greenhouse gases are largely transparent to visible wavelengths.</td>
+                <td><strong>Solar Shortwave Transparency:</strong> The Sun's intense temperature (~5,778 K) concentrates solar radiation in short, high-energy wavelengths (0.4–0.7 µm visible light). Greenhouse molecules like CO₂ lack vibrational resonance modes at these high frequencies, so incoming solar energy passes straight through the atmospheric column unimpeded (~239 W/m² post-albedo).</td>
               </tr>
               <tr>
                 <td><strong>2</strong></td>
                 <td>Earth Surface (0 m)</td>
-                <td>Solar energy hitting dark surfaces is absorbed and re-emitted as longwave thermal infrared (~15 µm). Solar radiation hitting reflective white surfaces, like ice, is reflected back to space.</td>
+                <td><strong>Surface Wavelength Conversion (Longwave IR):</strong> Dark ground and oceans absorb incoming shortwave light and warm to ~288 K (~15 °C). In accordance with Wien's law, a 288 K planetary surface re-emits in the longwave thermal infrared (peaking at 10–15 µm). Because this ~15 µm wavelength matches the exact molecular bending resonance of CO₂, greenhouse gases trap energy on the way <em>out</em>, not on the way <em>in</em>. (Bright ice reflects shortwave light back to space unchanged).</td>
               </tr>
               <tr>
                 <td><strong>3</strong></td>
@@ -1777,6 +1777,17 @@
               </tr>
             </tbody>
           </table>
+
+          <div style="background: rgba(0, 229, 255, 0.06); border: 1px solid rgba(0, 229, 255, 0.25); border-radius: 8px; padding: 14px 16px; margin-top: 16px; font-size: 0.86rem; line-height: 1.55;">
+            <strong style="color: var(--cyan); font-size: 0.92rem;">☀️ Fundamental Physics: Why CO₂ Traps Outgoing Heat but Ignores Incoming Sunlight</strong><br>
+            A common point of confusion is why greenhouse gases do not simply absorb heat from the Sun as sunlight travels down through the atmosphere. The reason is the profound difference in wavelength between solar radiation and terrestrial heat (governed by <strong>Planck's Law and Wien's Displacement Law</strong>, λ<sub>peak</sub> &prop; 1 / <i>T</i>):
+            <ul style="margin: 8px 0 6px 18px; padding-left: 0; display: flex; flex-direction: column; gap: 6px;">
+              <li><strong>Inbound Solar Radiation (Shortwave, ~0.5 µm):</strong> The Sun's surface is blisteringly hot (~5,778 K / ~5,500 °C). High temperature compresses radiation into short, energetic wavelengths, primarily in the <strong>visible spectrum (0.4 to 0.7 µm)</strong>. The linear carbon dioxide molecule (O=C=O) has electronic transitions only in the far ultraviolet and vibrational modes in the infrared; it has zero absorption bands in the visible spectrum. Thus, incoming sunlight passes through CO₂ as if the gas were not even there.</li>
+              <li><strong>Surface Energy Transformation:</strong> Sunlight strikes Earth's oceans and continents. Absorbed shortwave energy warms the planet to an average surface temperature of ~288 K (~15 °C).</li>
+              <li><strong>Outbound Terrestrial Radiation (Longwave Thermal Infrared, ~15 µm):</strong> Because Earth is ~20 times cooler than the Sun, it radiates at wavelengths roughly ~20 to ~30 times longer—in the <strong>thermal infrared band (4 to 50 µm)</strong>.</li>
+              <li><strong>The 15 µm Molecular Resonance:</strong> The fundamental bending vibration (ν₂ vibrational mode) of the CO₂ molecule resonates at an optical wavenumber of 667 cm⁻¹, which corresponds to a wavelength of exactly <strong>14.99 µm (~15 µm)</strong>. This aligns precisely with the peak of Earth's thermal emission curve. Therefore, while incoming visible sunlight slipped through without interaction, outgoing thermal infrared is vigorously absorbed by CO₂ and thermalized into the atmosphere.</li>
+            </ul>
+          </div>
         </div>
 
         <!-- PAGE 3: TWO-LAYER OCEAN EBM FORMULATION -->
@@ -4580,13 +4591,13 @@
       const speechDataIntro = [
         {
           pinId: "pin1",
-          title: "Step 1: Sunlight Arrives",
-          text: "Sunlight streams down from space. The atmosphere is clear to visible light, so most of the Sun's energy passes straight through the air without heating it, heading straight down to warm Earth's surface."
+          title: "Step 1: Sunlight Arrives (Shortwave Light)",
+          html: "Sunlight streams down from space. Because the Sun is blisteringly hot (~5,500°C), its energy travels as <strong>high-energy shortwave light (visible rays)</strong>.<br><br>Greenhouse gases like CO₂ cannot absorb these short wavelengths—their molecular shape only responds to much longer heat wavelengths. As a result, incoming sunlight passes straight through the atmosphere without heating it, travelling unimpeded down to Earth's surface."
         },
         {
           pinId: "pin2",
-          title: "Step 2: Earth Absorbs and Glows with Heat",
-          text: "Bright white surfaces like ice bounce sunlight straight back into space. But dark ground and oceans absorb the sunlight, warm up, and glow with invisible heat energy called thermal infrared."
+          title: "Step 2: Earth Absorbs and Glows with Heat (Longwave Infrared)",
+          html: "Bright white surfaces like ice reflect sunlight straight back to space. But dark ground and oceans absorb the incoming shortwave light, warm up to ~15°C, and glow with invisible <strong>longwave thermal infrared heat (~15 µm)</strong>.<br><br>Because this heat wavelength is ~30× longer than sunlight, it matches the exact vibration of CO₂ molecules—meaning heat is trapped on the way <em>out</em>, not on the way <em>in</em>."
         },
         {
           pinId: "pin3",
@@ -4613,13 +4624,13 @@
       const speechDataAdvanced = [
         {
           pinId: "pin1",
-          title: "Step 1: Solar Inflow (Visible / Shortwave)",
-          text: "Solar radiation arrives across the spectrum. The atmosphere is largely transparent to incoming visible solar energy, allowing ~239 W/m² to reach Earth's planetary surface unimpeded."
+          title: "Step 1: Solar Inflow (Shortwave Visible Light)",
+          html: "Because the Sun's photosphere is ~5,778 K, Wien's displacement law concentrates incoming solar radiation into the high-energy <strong>shortwave spectrum (0.4–0.7 µm visible)</strong>.<br><br>Triatomic greenhouse molecules like CO₂ have vibrational resonance modes only in the infrared, leaving the atmospheric column transparent to incoming sunlight and allowing ~239 W/m² (post-albedo) to reach Earth's planetary surface unimpeded."
         },
         {
           pinId: "pin2",
-          title: "Step 2: Surface Absorption & Infrared Re-emission",
-          text: "Sunlight reaching the surface is not always absorbed: bright ice reflects it back to space. Absorbed shortwave energy warms soil and oceans, which re-emit as longwave thermal infrared (~15 µm), matching the molecular bending resonance of CO₂."
+          title: "Step 2: Surface Absorption & Infrared Re-emission (Longwave)",
+          html: "Bright ice reflects ~30% of incoming shortwave photons back to space (planetary albedo). The remaining ~70% warms the planetary surface (~288 K), which re-emits as <strong>longwave thermal infrared (peaking at 10–15 µm)</strong>.<br><br>This ~15 µm wavelength precisely matches the fundamental bending vibration frequency of CO₂ molecules (O=C=O), so outgoing terrestrial radiation is strongly absorbed even though incoming shortwave sunlight passed freely."
         },
         {
           pinId: "pin3",
