@@ -1891,11 +1891,11 @@
           <!-- Presets Bar -->
           <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Transition Scenarios:</div>
           <div class="budget-preset-group" style="margin-bottom: 14px;">
-            <button class="budget-preset-btn active" id="presetSolBaseline">Current 2026 Fleet</button>
-            <button class="budget-preset-btn" id="presetSolNZE">IEA Net Zero 2050</button>
-            <button class="budget-preset-btn" id="presetSol100Ren">100% Renewables</button>
-            <button class="budget-preset-btn" id="presetSolNuclear">High Nuclear Baseload</button>
-            <button class="budget-preset-btn" id="presetSolBalanced">Diversified Firm Grid</button>
+            <button class="budget-preset-btn active" id="presetSolBaseline" title="Current operational clean generation (~11,650 TWh/yr) and ~10.6 TWh grid storage fleet">Current 2026 Fleet</button>
+            <button class="budget-preset-btn" id="presetSolNZE" title="IEA Net Zero 2050 pathway: rapid wind & solar expansion backed by nuclear, hydro and grid storage">IEA Net Zero 2050</button>
+            <button class="budget-preset-btn" id="presetSol100Ren" title="100% wind, solar and hydro with massive multi-week storage (91 TWh) to manage weather lulls">100% Renewables</button>
+            <button class="budget-preset-btn" id="presetSolNuclear" title="Heavy 24/7 firm nuclear baseload (20,000 TWh), drastically cutting land use and storage needs">High Nuclear Baseload</button>
+            <button class="budget-preset-btn" id="presetSolBalanced" title="Combines cheap wind & solar with 24/7 firm clean baseload (nuclear, hydro, geothermal) to cut required storage in half.">Balanced (Solar/Wind + Baseload)</button>
           </div>
 
           <!-- Section A: Generation Sliders -->
@@ -3406,6 +3406,18 @@
               </tr>
             </tbody>
           </table>
+
+          <h4>4. Transition Pathways & Grid Balancing Trade-Offs</h4>
+          <p>
+            The Clean Energy Solutions view models five characteristic global transition pathways illustrating the trade-offs between generation diversity, land footprint, and required energy storage:
+          </p>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-muted);">
+            <li><strong>Current 2026 Fleet:</strong> Reflects today's installed operational baseline (~11,650 TWh/yr clean power: hydro 4,300, nuclear 2,650, wind 2,300, solar 1,600, bio/geo 800 TWh; backed by ~10.6 TWh of storage, primarily pumped hydro).</li>
+            <li><strong>IEA Net Zero 2050:</strong> The international consensus pathway aligning with Paris Agreement targets: aggressive wind (18,000 TWh) and solar (24,000 TWh) deployment supported by expanded nuclear (5,500 TWh), hydro (7,000 TWh), geothermal/biomass (3,500 TWh), and ~40 TWh of diversified storage.</li>
+            <li><strong>100% Renewables:</strong> Relying purely on wind (26,000 TWh) and solar (38,000 TWh) alongside existing hydro (6,500 TWh). Because wind and solar output fluctuate with daylight and multi-week weather systems (<em>Dunkelflaute</em>), this scenario requires massive overbuilding of generation and ~91 TWh of long-duration and seasonal grid storage (hydrogen, pumped hydro, CAES) to eliminate outage risks.</li>
+            <li><strong>High Nuclear Baseload:</strong> Heavy buildout of firm, weather-independent nuclear fission (20,000 TWh / ~2,500 GW) paired with moderate renewables. Because continuous 24/7 firm baseload matches the bulk of baseline industrial and residential demand, required grid storage drops to ~30 TWh and land surface footprint is minimized.</li>
+            <li><strong>Balanced (Solar/Wind + Baseload):</strong> Combines ultra-low-cost variable wind (16,000 TWh) and solar (22,000 TWh) for bulk energy with dispatchable 24/7 firm clean baseload (10,000 TWh nuclear, 6,000 TWh hydro, 3,000 TWh geothermal/biomass). By supplying the "last 15% to 20%" of inflexible demand from firm baseload, the system cuts required long-duration storage by ~50% compared to a pure variable renewable architecture while avoiding over-reliance on any single technology.</li>
+          </ul>
         </div>
 
         <!-- ADDENDUM: 2026 FORCED WARMING VS 1.5°C BREACH -->
