@@ -230,6 +230,150 @@
       transition: width 0.3s ease;
     }
 
+
+    /* Sources & Solutions Mode Layout Overrides */
+    .app-wrapper.sources-mode,
+    .app-wrapper.solutions-mode {
+      max-width: 1420px;
+    }
+    .app-wrapper.sources-mode .top-stats-strip,
+    .app-wrapper.sources-mode .intro-banner,
+    .app-wrapper.sources-mode .main-grid,
+    .app-wrapper.sources-mode .budgets-view,
+    .app-wrapper.sources-mode .solutions-view {
+      display: none !important;
+    }
+    .app-wrapper.solutions-mode .top-stats-strip,
+    .app-wrapper.solutions-mode .intro-banner,
+    .app-wrapper.solutions-mode .main-grid,
+    .app-wrapper.solutions-mode .budgets-view,
+    .app-wrapper.solutions-mode .sources-view {
+      display: none !important;
+    }
+    .sources-view,
+    .solutions-view {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+    .app-wrapper.sources-mode .sources-view {
+      display: flex;
+    }
+    .app-wrapper.solutions-mode .solutions-view {
+      display: flex;
+    }
+    .app-wrapper.budgets-mode .sources-view,
+    .app-wrapper.budgets-mode .solutions-view {
+      display: none !important;
+    }
+    .app-wrapper.simple-mode .sources-view,
+    .app-wrapper.simple-mode .solutions-view,
+    .app-wrapper.advanced-mode .sources-view,
+    .app-wrapper.advanced-mode .solutions-view {
+      display: none !important;
+    }
+
+    /* Sector Explorer Styles (OWID) */
+    .sector-card {
+      background: #0b1322;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .sector-card:hover {
+      border-color: rgba(0, 229, 255, 0.4);
+    }
+    .sector-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      cursor: pointer;
+      user-select: none;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .sector-body {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.82rem;
+    }
+    .subsector-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .proportions-bar-wrap {
+      display: flex;
+      height: 28px;
+      width: 100%;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 10px 0 16px 0;
+      border: 1px solid var(--border);
+      background: #080d18;
+    }
+    .proportions-bar-seg {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #000;
+      cursor: pointer;
+      transition: opacity 0.2s, filter 0.2s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 4px;
+    }
+    .proportions-bar-seg:hover {
+      filter: brightness(1.25);
+    }
+
+    /* Solutions Grid Styles */
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: minmax(360px, 480px) 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .solutions-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .storage-tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .storage-tech-card {
+      background: #0b1320;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 10px 12px;
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .storage-tech-card strong {
+      color: #fff;
+    }
+
     /* Simple Intro Mode Layout Overrides */
     .app-wrapper.simple-mode {
       max-width: 860px;
@@ -1021,6 +1165,8 @@
           <button class="mode-switch-btn active" id="btnModeSimple">Introduction</button>
           <button class="mode-switch-btn" id="btnModeAdvanced">Simulator</button>
           <button class="mode-switch-btn" id="btnModeBudgets">🛢️ Carbon Budgets & Extraction</button>
+          <button class="mode-switch-btn" id="btnModeSources">🏭 Sources of Carbon (OWID)</button>
+          <button class="mode-switch-btn" id="btnModeSolutions">💡 Clean Solutions & Storage</button>
         </div>
         <button class="btn-modal" id="openPaleoModalTopBtn" style="border-color: var(--emerald); color: var(--emerald); background: rgba(16, 185, 129, 0.12);">
           🔍 1-Million-Year Comparison
@@ -1456,6 +1602,397 @@
 
     </div>
 
+
+    <!-- DEDICATED INTERACTIVE PAGE: SOURCES OF CARBON & EMISSIONS BREAKDOWN (OUR WORLD IN DATA) -->
+    <div class="sources-view" id="sourcesView">
+      
+      <!-- Top Real-Time Metrics Strip -->
+      <div class="top-stats-strip" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 0;">
+        <div class="stat-card">
+          <div class="stat-header"><span>Global Greenhouse Gases</span><span class="badge badge-rose">All GHGs</span></div>
+          <div class="stat-value" id="srcStatTotalGhg" style="color: var(--rose);">54.6 <span style="font-size: 0.8rem; color: var(--text-muted);">Gt CO₂e/yr</span></div>
+          <div class="stat-sub">100% of human global warming footprint (AR6)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Fossil & Industrial CO₂</span><span class="badge badge-amber">Combustion + Calcination</span></div>
+          <div class="stat-value" id="srcStatFossilCo2" style="color: var(--amber);">37.4 <span style="font-size: 0.8rem; color: var(--text-muted);">Gt CO₂/yr</span></div>
+          <div class="stat-sub">Coal (41%), Oil (33%), Gas (21%), Cement (5%)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Land Use & Deforestation</span><span class="badge badge-emerald">AFOLU CO₂</span></div>
+          <div class="stat-value" id="srcStatLucCo2" style="color: var(--emerald);">3.5 <span style="font-size: 0.8rem; color: var(--text-muted);">Gt CO₂/yr</span></div>
+          <div class="stat-sub">Tropical forest clearing & peat oxidation</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Non-CO₂ Warming Gases</span><span class="badge badge-cyan">CH₄, N₂O, F-gases</span></div>
+          <div class="stat-value" id="srcStatNonCo2" style="color: var(--cyan);">13.7 <span style="font-size: 0.8rem; color: var(--text-muted);">Gt CO₂e/yr</span></div>
+          <div class="stat-sub">Methane: 8.8 Gt · N₂O: 3.3 Gt · F-gases: 1.6 Gt</div>
+        </div>
+      </div>
+
+      <!-- Main Sources Layout Grid -->
+      <div class="budgets-grid">
+
+        <!-- Left Column: Interactive Sector Breakdown & Accordions -->
+        <div class="card" style="margin-bottom: 0;">
+          <div class="card-title-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
+                <span>🏭</span> Global Emissions by Economic Sector (Our World in Data)
+              </div>
+              <span class="badge badge-cyan" id="srcBadgeActiveFilter">All GHGs (54.6 Gt)</span>
+            </div>
+            <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4;">
+              Based on empirical synthesis from Climate Watch, WRI & the Global Carbon Project (Ritchie & Roser, Our World in Data). Click any sector to expand subsector activities and mitigation levers.
+            </div>
+          </div>
+
+          <!-- Filter Toggle: All GHGs vs CO2 Only -->
+          <div class="budget-preset-group" style="margin: 10px 0 12px 0;">
+            <button class="budget-preset-btn active" id="btnFilterAllGhg">All Greenhouse Gases (54.6 Gt CO₂e)</button>
+            <button class="budget-preset-btn" id="btnFilterCo2Only">CO₂ Only (40.9 Gt CO₂)</button>
+          </div>
+
+          <!-- Proportional Visual Bar -->
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Global Sector Proportions:</div>
+          <div class="proportions-bar-wrap" id="sourcesProportionsBar">
+            <div class="proportions-bar-seg" style="width: 73.2%; background: #00e5ff;" title="Energy: 73.2% (40.0 Gt CO₂e)">⚡ Energy 73.2%</div>
+            <div class="proportions-bar-seg" style="width: 18.4%; background: #10b981;" title="AFOLU: 18.4% (10.0 Gt CO₂e)">🌾 AFOLU 18.4%</div>
+            <div class="proportions-bar-seg" style="width: 5.2%; background: #f59e0b;" title="Direct Industrial Processes: 5.2% (2.8 Gt CO₂e)">🏭 5.2%</div>
+            <div class="proportions-bar-seg" style="width: 3.2%; background: #ec4899;" title="Waste: 3.2% (1.7 Gt CO₂e)">🗑️ 3.2%</div>
+          </div>
+
+          <!-- Sector Accordions Container -->
+          <div id="sourcesSectorContainer">
+            <!-- Rendered dynamically by updateSourcesView() -->
+          </div>
+
+          <div style="margin-top: 10px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; border-top: 1px solid var(--border); padding-top: 8px;">
+            <em>Source:</em> Climate Watch, World Resources Institute (2023) and Global Carbon Project (Friedlingstein et al. 2023), visualized by Our World in Data.
+          </div>
+        </div>
+
+        <!-- Right Column: Fossil Commodities & Abatement Playbook -->
+        <div class="card" style="margin-bottom: 0;">
+          <div class="card-title-row">
+            <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
+              <span>🛢️</span> Fossil Fuel Breakdown & What Replaces It
+            </div>
+            <span class="badge badge-amber">40.9 Gt Baseline</span>
+          </div>
+
+          <!-- Fossil Commodity Shares -->
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 8px;">Fossil CO₂ by Primary Source (~37.4 Gt Combustion + 3.5 Gt LUC):</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div class="subsector-item">
+                <div>
+                  <strong style="color: #94a3b8;">1. Coal Combustion (41.0%)</strong>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Electricity generation & metallurgical coke for blast furnaces</div>
+                </div>
+                <div style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan); font-weight: 700;">15.3 Gt CO₂/yr</div>
+              </div>
+              <div class="subsector-item">
+                <div>
+                  <strong style="color: #eab308;">2. Crude Oil / Petroleum (32.6%)</strong>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Road gasoline & diesel (24%), aviation jet fuel (4%), marine fuel (3%), heating oil</div>
+                </div>
+                <div style="text-align: right; font-family: ui-monospace, monospace; color: var(--amber); font-weight: 700;">12.2 Gt CO₂/yr</div>
+              </div>
+              <div class="subsector-item">
+                <div>
+                  <strong style="color: #00e5ff;">3. Natural Gas / Methane (21.1%)</strong>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Gas turbine electricity, residential/commercial heating, industrial process heat</div>
+                </div>
+                <div style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan); font-weight: 700;">7.9 Gt CO₂/yr</div>
+              </div>
+              <div class="subsector-item">
+                <div>
+                  <strong style="color: #f43f5e;">4. Cement Calcination & Flaring (5.3%)</strong>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Chemical limestone decarbonation (CaCO₃ → CaO + CO₂) and gas flaring</div>
+                </div>
+                <div style="text-align: right; font-family: ui-monospace, monospace; color: var(--rose); font-weight: 700;">2.0 Gt CO₂/yr</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- What Directly Replaces Each Emission Source? -->
+          <div style="background: rgba(0, 229, 255, 0.04); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--cyan); margin-bottom: 6px;">💡 The Electrification & Abatement Playbook</div>
+            <div style="font-size: 0.77rem; color: #cbd5e1; line-height: 1.5; display: flex; flex-direction: column; gap: 6px;">
+              <div>• <strong>Road Transport (11.9% of GHG):</strong> Battery Electric Vehicles (BEVs), electric buses, rail freight. High electric motor efficiency (85–90% vs 25% for ICE) cuts primary energy demand by ~3×.</div>
+              <div>• <strong>Building Heating (17.5% of GHG):</strong> Heat pumps (Air-to-water, Ground-source). Delivers 3 to 4 kWh of heat per 1 kWh electricity (COP 3.0–4.0), replacing gas boilers.</div>
+              <div>• <strong>Electricity Generation (Coal & Gas):</strong> Solar PV, Wind, Nuclear baseload, and Hydro, backed by multi-duration grid storage (batteries, pumped hydro, CAES).</div>
+              <div>• <strong>Iron & Steel (7.2% of GHG):</strong> Green hydrogen direct reduced iron (H₂-DRI) feeding Electric Arc Furnaces (EAF), replacing metallurgical coal.</div>
+              <div>• <strong>Cement (3.0% of GHG):</strong> Clinker substitution with calcined clays (LC3 cement), geopolymer binders, and point-source carbon capture (CCUS).</div>
+            </div>
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-secondary" id="btnBackToSimFromSources" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
+              <button class="btn btn-secondary" id="btnJumpToBudgetsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">🛢️ View Carbon Budgets</button>
+            </div>
+            <button class="btn btn-start" id="btnJumpToSolutionsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">💡 How to Replace 41 Gt/yr (Solutions) →</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- DEDICATED INTERACTIVE PAGE: POSSIBLE SOLUTIONS & GRID STORAGE (REPLACING 41 GT/YR FOSSIL ENERGY) -->
+    <div class="solutions-view" id="solutionsView">
+      
+      <!-- Top Real-Time Metrics Strip -->
+      <div class="top-stats-strip" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 0;">
+        <div class="stat-card">
+          <div class="stat-header"><span>Clean Useful Energy Generated</span><span class="badge badge-cyan" id="solBadgeGoal">Goal: 75,000 TWh</span></div>
+          <div class="stat-value" id="solStatGenVal" style="color: var(--cyan);">11,650 <span style="font-size: 0.8rem; color: var(--text-muted);">TWh/yr</span></div>
+          <div class="stat-sub" id="solStatGenSub">15.5% of fossil energy replaced (2026 fleet)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Fossil CO₂ Displaced</span><span class="badge badge-emerald" id="solBadgeDisplaced">Abatement</span></div>
+          <div class="stat-value" id="solStatDisplacedVal" style="color: var(--emerald);">6.4 <span style="font-size: 0.8rem; color: var(--text-muted);">Gt CO₂/yr</span></div>
+          <div class="stat-sub" id="solStatDisplacedSub">34.6 Gt CO₂/yr remaining emissions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Atmospheric Growth Rate</span><span class="badge badge-amber" id="solBadgeGrowth">Forced Rate</span></div>
+          <div class="stat-value" id="solStatGrowthVal" style="color: var(--amber);">+2.03 <span style="font-size: 0.8rem; color: var(--text-muted);">ppm/yr</span></div>
+          <div class="stat-sub" id="solStatGrowthSub">+0.20 °C/decade warming pace</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Grid Firming & Storage Metric</span><span class="badge badge-cyan" id="solBadgeReliability">Firming Score</span></div>
+          <div class="stat-value" id="solStatFirmingVal" style="color: var(--cyan);">84% <span style="font-size: 0.8rem; color: var(--text-muted);">Reliability</span></div>
+          <div class="stat-sub" id="solStatFirmingSub">Storage Buffer: ~0.1 days of global load</div>
+        </div>
+      </div>
+
+      <!-- Main Solutions Layout Grid -->
+      <div class="solutions-grid">
+
+        <!-- Left Column: Interactive Clean Generation & Storage Sliders -->
+        <div class="card" style="margin-bottom: 0;">
+          <div class="card-title-row">
+            <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
+              <span>⚡</span> Clean Energy Generation Mix
+            </div>
+            <span class="badge badge-cyan">Useful TWh Goal: 75,000</span>
+          </div>
+
+          <p style="font-size: 0.77rem; color: var(--text-muted); line-height: 1.4; margin-top: 2px; margin-bottom: 12px;">
+            Due to the <strong>Electrification Efficiency Dividend</strong> (electric motors & heat pumps are 3×–4× more efficient than combustion), replacing 135,000 TWh of fossil primary energy only requires <strong>~75,000 TWh/yr</strong> of clean electricity and clean fuels.
+          </p>
+
+          <!-- Presets Bar -->
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Transition Scenarios:</div>
+          <div class="budget-preset-group" style="margin-bottom: 14px;">
+            <button class="budget-preset-btn active" id="presetSolBaseline">Current 2026 Fleet</button>
+            <button class="budget-preset-btn" id="presetSolNZE">IEA Net Zero 2050</button>
+            <button class="budget-preset-btn" id="presetSol100Ren">100% Renewables</button>
+            <button class="budget-preset-btn" id="presetSolNuclear">High Nuclear Baseload</button>
+            <button class="budget-preset-btn" id="presetSolBalanced">Diversified Firm Grid</button>
+          </div>
+
+          <!-- Section A: Generation Sliders -->
+          <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 4px;">
+            1. Clean Electricity Generation (TWh / yr):
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>☀️ Solar Photovoltaics (Utility & Rooftop)</strong>
+              <span id="lblSolSolar">1,600 TWh/yr</span>
+            </div>
+            <div class="budget-slider-sub">Capacity factor ~20% · Lowest levelized cost ($0.03–0.05/kWh)</div>
+            <input type="range" id="sliderSolSolar" min="0" max="50000" step="500" value="1600">
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>💨 Wind Power (Onshore & Offshore)</strong>
+              <span id="lblSolWind">2,300 TWh/yr</span>
+            </div>
+            <div class="budget-slider-sub">Capacity factor ~35–50% · High winter output · High capacity value</div>
+            <input type="range" id="sliderSolWind" min="0" max="40000" step="500" value="2300">
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>⚛️ Nuclear Fission (Fleet & Advanced SMRs)</strong>
+              <span id="lblSolNuclear">2,650 TWh/yr</span>
+            </div>
+            <div class="budget-slider-sub">Capacity factor ~90% · 24/7 firm zero-carbon baseload · Tiny land footprint</div>
+            <input type="range" id="sliderSolNuclear" min="0" max="20000" step="250" value="2650">
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>🌊 Hydroelectric (Reservoir & Run-of-River)</strong>
+              <span id="lblSolHydro">4,300 TWh/yr</span>
+            </div>
+            <div class="budget-slider-sub">Capacity factor ~42% · Dispatchable renewable generation · Seasonal water storage</div>
+            <input type="range" id="sliderSolHydro" min="0" max="10000" step="200" value="4300">
+          </div>
+
+          <div class="budget-slider-row" style="margin-bottom: 16px;">
+            <div class="budget-slider-header">
+              <strong>🌿 Geothermal, Sustainable Biomass & Marine</strong>
+              <span id="lblSolBioGeo">800 TWh/yr</span>
+            </div>
+            <div class="budget-slider-sub">Capacity factor ~70–85% · High-temperature industrial heat & dispatchable firm power</div>
+            <input type="range" id="sliderSolBioGeo" min="0" max="10000" step="100" value="800">
+          </div>
+
+          <!-- Section B: Storage Sliders -->
+          <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 4px;">
+            2. Energy Storage & Grid Balancing Capacity (TWh Energy Storage):
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>🔋 Battery Storage (Li-ion, Sodium-ion, LFP, Flow)</strong>
+              <span id="lblSolBattery">0.8 TWh</span>
+            </div>
+            <div class="budget-slider-sub">RTE ~88% · 2–8 hr duration · Sub-second response · Peak shaving & solar firming</div>
+            <input type="range" id="sliderSolBattery" min="0" max="50" step="0.5" value="0.8">
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>🏔️ Pumped Hydroelectric Storage (PHS)</strong>
+              <span id="lblSolPumped">9.0 TWh</span>
+            </div>
+            <div class="budget-slider-sub">RTE ~80% · 8–24+ hr duration · >90% of current global grid storage · Gravitational MWh</div>
+            <input type="range" id="sliderSolPumped" min="0" max="40" step="0.5" value="9.0">
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>💨 Compressed Air Energy Storage (CAES)</strong>
+              <span id="lblSolCaes">0.2 TWh</span>
+            </div>
+            <div class="budget-slider-sub">RTE ~62% · 6–20 hr duration · Salt cavern pneumatic storage · Zero mineral degradation</div>
+            <input type="range" id="sliderSolCaes" min="0" max="20" step="0.2" value="0.2">
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>🏗️ Gravity Storage (Weights & Mine Shafts)</strong>
+              <span id="lblSolGravity">0.05 TWh</span>
+            </div>
+            <div class="budget-slider-sub">RTE ~80% · 4–12 hr duration · Solid mass potential energy (m·g·h) · 40+ yr lifespan</div>
+            <input type="range" id="sliderSolGravity" min="0" max="15" step="0.2" value="0.05">
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>🔄 Flywheels (High-Speed Rotors)</strong>
+              <span id="lblSolFlywheel">0.02 TWh</span>
+            </div>
+            <div class="budget-slider-sub">RTE ~88% · Minutes to 1 hr · Kinetic energy (½·I·ω²) · Synthetic grid inertia & frequency support</div>
+            <input type="range" id="sliderSolFlywheel" min="0" max="5" step="0.1" value="0.02">
+          </div>
+
+          <div class="budget-slider-row">
+            <div class="budget-slider-header">
+              <strong>🧪 Hydrogen & Power-to-Gas (Seasonal Multi-Week)</strong>
+              <span id="lblSolH2">0.5 TWh</span>
+            </div>
+            <div class="budget-slider-sub">RTE ~42% · Multi-week seasonal storage · Electrolysis into salt caverns · Heavy industry fuel</div>
+            <input type="range" id="sliderSolH2" min="0" max="50" step="0.5" value="0.5">
+          </div>
+
+        </div>
+
+        <!-- Right Column: Trajectory Chart & Storage Comparison -->
+        <div class="card" style="margin-bottom: 0;">
+          <div class="card-title-row">
+            <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
+              <span>📈</span> 2026–2100 Warming Trajectory Under Clean Solutions
+            </div>
+            <span class="badge badge-emerald" id="solChartBadgeWarming">2100: +2.68°C</span>
+          </div>
+
+          <!-- Canvas Trajectory Chart -->
+          <div style="position: relative; width: 100%; height: 350px; background: #070c16; border-radius: 8px; border: 1px solid var(--border); overflow: hidden;">
+            <canvas id="solutionsChart" style="width: 100%; height: 100%; display: block;"></canvas>
+          </div>
+
+          <!-- Chart Legends -->
+          <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 10px; font-size: 0.75rem; color: var(--text-muted);">
+            <div style="display: flex; align-items: center; gap: 5px;">
+              <span style="display: inline-block; width: 14px; height: 3px; background: #f43f5e; border-radius: 2px;"></span>
+              <span>Business-As-Usual (41 Gt/yr)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 5px;">
+              <span style="display: inline-block; width: 14px; height: 3px; background: #10b981; border-radius: 2px;"></span>
+              <span>Selected Clean Transition</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 5px;">
+              <span style="display: inline-block; width: 14px; height: 2px; border-top: 2px dashed #f59e0b;"></span>
+              <span>+1.5°C Paris Threshold</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 5px;">
+              <span style="display: inline-block; width: 14px; height: 2px; border-top: 2px dashed #f43f5e;"></span>
+              <span>+2.0°C Guardrail</span>
+            </div>
+          </div>
+
+          <!-- Energy Storage Technology Comparison Matrix -->
+          <div style="margin-top: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 8px;">Storage Technology Physics & Operational Roles:</div>
+            <div class="storage-tech-grid">
+              <div class="storage-tech-card">
+                <div><strong style="color: var(--cyan);">🔋 Chemical Batteries</strong> (Li/Na/LFP)</div>
+                <div>RTE: <strong>85–92%</strong> · Duration: <strong>2–8 hrs</strong></div>
+                <div style="font-size: 0.72rem; color: var(--text-muted);">Rapid response (<20 ms). Solves daily solar ramp and evening peak. Moderate degradation over 10–15 yrs.</div>
+              </div>
+              <div class="storage-tech-card">
+                <div><strong style="color: var(--emerald);">🏔️ Pumped Hydro (PHS)</strong></div>
+                <div>RTE: <strong>75–82%</strong> · Duration: <strong>8–24+ hrs</strong></div>
+                <div style="font-size: 0.72rem; color: var(--text-muted);">Gravitational water elevation (m·g·h). Zero capacity fade over 50–100 yrs. Lowest levelized storage cost for large volumes.</div>
+              </div>
+              <div class="storage-tech-card">
+                <div><strong style="color: var(--amber);">💨 Compressed Air (CAES)</strong></div>
+                <div>RTE: <strong>55–70%</strong> · Duration: <strong>6–24 hrs</strong></div>
+                <div style="font-size: 0.72rem; color: var(--text-muted);">Air compressed in underground salt caverns. Recapturing heat of compression (adiabatic) boosts efficiency. No rare metals.</div>
+              </div>
+              <div class="storage-tech-card">
+                <div><strong style="color: #cbd5e1;">🏗️ Gravity Storage</strong></div>
+                <div>RTE: <strong>75–85%</strong> · Duration: <strong>4–12 hrs</strong></div>
+                <div style="font-size: 0.72rem; color: var(--text-muted);">Mechanical lifting of composite weights in shafts or towers. Zero standby loss and indefinite cycle life.</div>
+              </div>
+              <div class="storage-tech-card">
+                <div><strong style="color: #a855f7;">🔄 Flywheels</strong></div>
+                <div>RTE: <strong>85–90%</strong> · Duration: <strong>Seconds–1 hr</strong></div>
+                <div style="font-size: 0.72rem; color: var(--text-muted);">Vacuum magnetic levitation rotors (½·I·ω²). Invaluable for synthetic inertia and sub-cycle frequency stability (>100k cycles).</div>
+              </div>
+              <div class="storage-tech-card">
+                <div><strong style="color: #38bdf8;">🧪 Hydrogen / Thermal</strong></div>
+                <div>RTE: <strong>35–48%</strong> · Duration: <strong>Weeks–Months</strong></div>
+                <div style="font-size: 0.72rem; color: var(--text-muted);">Electrolysis into cavern gas storage. Solves multi-week winter "Dunkelflaute" when wind and solar output both lag.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-secondary" id="btnBackToSimFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
+              <button class="btn btn-secondary" id="btnJumpToSourcesFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">🏭 Review Sources of Carbon</button>
+            </div>
+            <button class="btn btn-modal" id="btnOpenGuideFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">📖 Open Solutions & Storage Guide →</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
   <!-- POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR MODAL -->
@@ -1566,6 +2103,8 @@
         <button class="modal-tab-btn" data-page="page-paleo">Page 4: 1-Million-Year Paleoclimate Sources</button>
         <button class="modal-tab-btn" data-page="page-fossil-metrics">Page 5: Barrels of Oil & Gas to ppm & °C</button>
         <button class="modal-tab-btn" data-page="page-carbon-budgets">Page 6: Carbon Budgets & Reserves</button>
+        <button class="modal-tab-btn" data-page="page-sources-owid">Page 7: Emissions Sources (OWID)</button>
+        <button class="modal-tab-btn" data-page="page-solutions-storage">Page 8: Solutions & Grid Storage</button>
         <button class="modal-tab-btn" data-page="page-addendum">Addendum: 2026 Warming vs. +1.5°C Breach</button>
       </div>
 
@@ -1645,6 +2184,24 @@
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
                   The Transient Climate Response to Cumulative Emissions (TCRE ≈ 0.45 °C per 1,000 Gt CO₂), remaining carbon budgets for +1.5 °C (~200 Gt CO₂) and +2.0 °C (~1,150 Gt CO₂), translating budgets into remaining years of current extraction, and comparing finite atmospheric absorptive capacity against the ~3,400 Gt CO₂ of proven fossil reserves (the "Unburnable Carbon" paradox where >90% of reserves must stay unextracted).
+                </div>
+              </li>
+                            <li>
+                <a class="toc-link" data-target="page-sources-owid">
+                  <span>🏭</span> <strong>Page 7: Global Emissions Anatomy — Sectors, Fuels & Non-CO₂ Warming Gases (Our World in Data)</strong>
+                  <span class="badge badge-cyan" style="margin-left: 8px;">OWID / Climate Watch / GCP</span>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  Complete quantitative breakdown of global annual emissions (54.6 Gt CO₂e total, ~40.9 Gt CO₂). Analyzes the 4 primary economic sectors: Energy (73.2% — Industry 24.2%, Transport 16.2%, Buildings 17.5%, Fugitive 5.8%), Agriculture & Land Use (AFOLU, 18.4% — livestock methane, fertilizer N₂O, deforestation), Direct Industrial Processes (5.2% — cement calcination, chemicals), and Waste (3.2%). Maps fossil fuels by source (Coal 41%, Oil 33%, Gas 21%) and pairs each emission category with its direct technological replacement.
+                </div>
+              </li>
+              <li>
+                <a class="toc-link" data-target="page-solutions-storage">
+                  <span>💡</span> <strong>Page 8: The Clean Energy & Storage Transition — Replacing 41 Gt/yr of Fossil Energy</strong>
+                  <span class="badge badge-emerald" style="margin-left: 8px;">Electrification Factor & Storage Physics</span>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  The physical mathematics of replacing 41 Gt/yr of fossil energy. Explains the "Electrification Efficiency Dividend": why 135,000 TWh of fossil primary energy (combustion loss >60%) only requires ~75,000 TWh/yr of clean useful electricity. Examines the generation mix (Solar, Wind, Nuclear baseload, Hydro, Geothermal) and evaluates six grid storage technologies across their governing physical laws: Chemical Batteries (Li/Na/Flow), Pumped Hydro (m·g·h), Compressed Air (P·dV), Gravity Storage, Flywheels (½·I·ω²), and Hydrogen seasonal storage.
                 </div>
               </li>
               <li>
@@ -2526,6 +3083,202 @@
               <a href="https://www.nature.com/articles/nature14016" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.nature.com/articles/nature14016 ↗</a>
             </li>
           </ul>
+        </div>
+
+
+        <!-- PAGE 7: SOURCES OF CARBON & EMISSIONS BREAKDOWN (OUR WORLD IN DATA) -->
+        <div class="doc-page" id="page-sources-owid">
+          <h3>Page 7: Global Emissions Anatomy (Our World in Data & Climate Watch)</h3>
+          <p>
+            To eliminate the ~41 Gt/yr of global CO₂ emissions driving planetary energy imbalance, we must understand precisely where greenhouse gas emissions originate across the global economy. This synthesis integrates data from the <strong>Global Carbon Project (Friedlingstein et al. 2023)</strong> and <strong>Climate Watch / World Resources Institute (2023)</strong>, as standardized by <strong>Our World in Data (Ritchie, Roser & Rosado 2020)</strong>.
+          </p>
+
+          <h4>1. The Distinction Between Total Greenhouse Gases and Carbon Dioxide</h4>
+          <p>
+            Climate discussions frequently conflate total greenhouse gas emissions (measured in <em>CO₂-equivalents</em>, Gt CO₂e) with pure carbon dioxide emissions (Gt CO₂):
+          </p>
+          <div class="code-box">
+            • <b>Total Anthropogenic Greenhouse Gases:</b> <b>~54.6 Gt CO₂e / yr</b> (100%)<br>
+            • <b>Carbon Dioxide (CO₂):</b>                   <b>~40.9 Gt CO₂ / yr</b>   (74.9% of total GWP₁₀₀)<br>
+            &nbsp;&nbsp;— <i>Fossil Fuel Combustion & Industry:</i>        <b>37.4 Gt CO₂ / yr</b><br>
+            &nbsp;&nbsp;— <i>Land Use Change & Deforestation:</i>         <b>~3.5 Gt CO₂ / yr</b><br>
+            • <b>Methane (CH₄, GWP₁₀₀ = 28):</b>              <b>~8.8 Gt CO₂e / yr</b>  (16.1% — fugitive gas, cattle, rice)<br>
+            • <b>Nitrous Oxide (N₂O, GWP₁₀₀ = 265):</b>        <b>~3.3 Gt CO₂e / yr</b>  (6.0% — agricultural soils, fertilizers)<br>
+            • <b>Fluorinated Gases (HFCs, PFCs, SF₆):</b>      <b>~1.6 Gt CO₂e / yr</b>  (2.9% — refrigeration, switchgear)
+          </div>
+
+          <h4>2. The Four Macro-Economic Sectors (Our World in Data)</h4>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Sector</th>
+                <th>Share of GHG</th>
+                <th>Annual Volume</th>
+                <th>Key Activities & Emission Sources</th>
+                <th>Primary Clean Abatement Pathways</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Energy</strong></td>
+                <td><strong>73.2%</strong></td>
+                <td>40.0 Gt CO₂e</td>
+                <td>
+                  <strong>Industry Energy (24.2%):</strong> Steel blast furnaces, chemical heat, paper/pulp.<br>
+                  <strong>Energy in Buildings (17.5%):</strong> Residential & commercial space heating, boilers, cooking.<br>
+                  <strong>Transport (16.2%):</strong> Road cars & trucks (11.9%), aviation (1.9%), shipping (1.7%).<br>
+                  <strong>Fugitive Energy (5.8%):</strong> Oil/gas venting & flaring (3.9%), coal mine methane (1.9%).<br>
+                  <strong>Other Combustion (9.5%):</strong> Tractors, fishing, unallocated.
+                </td>
+                <td>
+                  Clean electricity generation (Solar, Wind, Nuclear, Hydro); grid storage; heat pumps for buildings; battery electric vehicles (BEVs) for road; green hydrogen for steelmaking (H₂-DRI).
+                </td>
+              </tr>
+              <tr>
+                <td><strong>2. Agriculture, Forestry & Land Use (AFOLU)</strong></td>
+                <td><strong>18.4%</strong></td>
+                <td>10.0 Gt CO₂e</td>
+                <td>
+                  <strong>Livestock & Manure (5.8%):</strong> Methane from ruminant enteric fermentation.<br>
+                  <strong>Agricultural Soils (4.1%):</strong> Nitrous oxide from synthetic nitrogen fertilizers.<br>
+                  <strong>Deforestation (2.2%):</strong> Tropical forest clearing for pastures & soy.<br>
+                  <strong>Crop Residues & Savanna (3.5%):</strong> Biomass burning.<br>
+                  <strong>Rice Paddies (1.3%):</strong> Anaerobic soil methanogenesis.
+                </td>
+                <td>
+                  Halting tropical deforestation; precision fertilizer application; dietary shifts toward plant-rich protein; alternate wetting & drying (AWD) in rice paddies; methane-inhibiting cattle feed additives.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>3. Direct Industrial Processes</strong></td>
+                <td><strong>5.2%</strong></td>
+                <td>2.8 Gt CO₂e</td>
+                <td>
+                  <strong>Cement Calcination (3.0%):</strong> Chemical limestone decarbonation (CaCO₃ → CaO + CO₂), separate from kiln fuel.<br>
+                  <strong>Chemical Processes (2.2%):</strong> Non-combustion emissions from ammonia synthesis, ethylene steam cracking, solvents.
+                </td>
+                <td>
+                  Limestone clinker substitution with calcined clay and pozzolans (LC3 cement); alternative geopolymer binders; point-source Carbon Capture & Storage (CCUS).
+                </td>
+              </tr>
+              <tr>
+                <td><strong>4. Waste</strong></td>
+                <td><strong>3.2%</strong></td>
+                <td>1.7 Gt CO₂e</td>
+                <td>
+                  <strong>Landfills (1.9%):</strong> Anaerobic digestion of organic municipal waste.<br>
+                  <strong>Wastewater (1.3%):</strong> Industrial & domestic sewage treatment methane.
+                </td>
+                <td>
+                  Landfill methane gas capture for power generation; municipal organic composting; anaerobic digestion with biomethane upgrade; modern aerobic sewage aeration.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>3. Fossil Fuel CO₂ by Fuel Type</h4>
+          <p>
+            Looking exclusively at the combustion of fossil fuels (~37.4 Gt CO₂):
+          </p>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; color: var(--text-muted);">
+            <li><strong>Coal (41.0% · 15.3 Gt CO₂/yr):</strong> Emits the highest carbon per unit of energy (~94 kg CO₂/GJ). Predominantly consumed in power plants (~65%) and metallurgical coke for ironmaking (~30%).</li>
+            <li><strong>Crude Oil (32.6% · 12.2 Gt CO₂/yr):</strong> Emits ~73 kg CO₂/GJ. Dominates transport fuels (gasoline, diesel, kerosene jet A-1, heavy bunker fuel) with ~15% for petrochemical feedstocks.</li>
+            <li><strong>Natural Gas (21.1% · 7.9 Gt CO₂/yr):</strong> Emits ~56 kg CO₂/GJ. Powers combined-cycle gas turbines (CCGT), residential/commercial building heating, and industrial steam.</li>
+            <li><strong>Cement Process & Flaring (5.3% · 2.0 Gt CO₂/yr):</strong> Direct limestone chemical calcination and upstream oilfield safety flaring.</li>
+          </ul>
+        </div>
+
+
+        <!-- PAGE 8: THE CLEAN ENERGY & STORAGE TRANSITION -->
+        <div class="doc-page" id="page-solutions-storage">
+          <h3>Page 8: The Clean Energy & Storage Transition: Replacing 41 Gt/yr Fossil Energy</h3>
+          <p>
+            Eliminating ~41 Gt/yr of global fossil CO₂ emissions requires deploying a clean energy system capable of delivering reliable power, heat, transport, and industrial feedstocks 24/7/365.
+          </p>
+
+          <h4>1. The Electrification Efficiency Dividend</h4>
+          <p>
+            A common misconception is that the world must replace all <strong>135,000 TWh</strong> of fossil primary energy with 135,000 TWh of clean power. This overlooks the massive thermodynamic waste inherent to combustion engines and thermal power generation:
+          </p>
+          <div class="code-box">
+            • <b>Internal Combustion Engine (ICE) Vehicles:</b> Convert only <b>20% to 30%</b> of fuel energy into forward motion; ~75% is rejected as heat through radiators and exhaust pipes.<br>
+            • <b>Battery Electric Vehicles (BEVs):</b> Convert <b>85% to 90%</b> of electrical energy into wheel motion (~3× to 4× less energy needed per kilometre).<br>
+            • <b>Gas & Oil Boilers:</b> Deliver 80% to 90% thermal efficiency.<br>
+            • <b>Electric Heat Pumps:</b> Draw ambient environmental heat with a Coefficient of Performance (COP) of <b>3.0 to 4.0</b> (delivering 300% to 400% heat per unit of power consumed, cutting energy demand by ~65% to 75%).<br>
+            • <b>Thermal Power Plants (Coal/Gas):</b> Reject 50% to 65% of chemical energy into cooling towers and rivers.
+          </div>
+          <p>
+            <strong>The Bottom Line:</strong> Because electrified devices waste far less energy, fully replacing 135,000 TWh of fossil primary energy requires only <strong>~70,000 to ~80,000 TWh/yr of clean useful electricity</strong> (we adopt <strong>75,000 TWh/yr</strong> as the central planetary benchmark).
+          </p>
+
+          <h4>2. Clean Generation Technologies</h4>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-muted);">
+            <li><strong>Solar Photovoltaics (PV):</strong> Current global output ~1,600 TWh/yr. Levelized cost of electricity (LCOE) has dropped >85% since 2010 ($0.03–$0.05/kWh). Capacity factor is typically 18% to 25%, producing large daytime generation surpluses that require storage.</li>
+            <li><strong>Wind Power (Onshore & Offshore):</strong> Current output ~2,300 TWh/yr. Capacity factors reach 35% onshore and 45%–55% for offshore turbines. Produces higher output in winter and night, offering strong seasonal complementarity to solar PV.</li>
+            <li><strong>Nuclear Fission (Baseload & SMRs):</strong> Current output ~2,650 TWh/yr. Operates at a ~90% capacity factor, providing 24/7 firm, weather-independent clean power with the lowest land-use footprint of any clean energy source (~0.1 m²/MWh).</li>
+            <li><strong>Hydroelectric (Conventional & Run-of-River):</strong> Current output ~4,300 TWh/yr. Operates at ~42% capacity factor. Provides essential dispatchable baseload and black-start capabilities.</li>
+            <li><strong>Geothermal & Biomass:</strong> Provides continuous high-temperature industrial steam and dispatchable firm electricity (~800 TWh/yr currently).</li>
+          </ul>
+
+          <h4>3. Physics & Mechanics of the Six Grid Storage Technologies</h4>
+          <p>
+            Because solar and wind generation vary with weather and daylight, energy storage and grid firming are required to prevent outages (such as during multi-day winter wind/solar lulls, or <em>Dunkelflaute</em>):
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Technology</th>
+                <th>Governing Physical Law</th>
+                <th>Round-Trip Efficiency (RTE)</th>
+                <th>Discharge Duration</th>
+                <th>Optimal Grid Application</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Chemical Batteries</strong><br>(Li-ion, Na-ion, LFP, Flow)</td>
+                <td>Electrochemical intercalation / redox reactions: Δ<i>G</i> = -<i>nFE</i></td>
+                <td><strong>85% – 92%</strong></td>
+                <td>2 – 8 hours</td>
+                <td>Sub-second frequency regulation; evening solar peak shaving; distribution substation firming. Moderate degradation over 3,000–8,000 cycles.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Pumped Hydro Storage (PHS)</strong></td>
+                <td>Gravitational potential energy:<br><i>E</i> = ρ · <i>V</i> · <i>g</i> · <i>h</i></td>
+                <td><strong>75% – 82%</strong></td>
+                <td>8 – 24+ hours</td>
+                <td>Bulk daily and multi-day dispatch. Currently represents >90% of all worldwide grid energy storage capacity (~9,000 GWh). Zero capacity degradation over 50–100 years.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Compressed Air (CAES)</strong></td>
+                <td>Pneumatic gas expansion:<br><i>W</i> = ∫ <i>P</i> <i>dV</i> (in underground salt caverns)</td>
+                <td><strong>55% – 70%</strong><br>(higher with adiabatic thermal recovery)</td>
+                <td>6 – 24 hours</td>
+                <td>Large-scale intraday bulk storage without rare battery metals. High cycling endurance with deep depth of discharge.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Gravity Energy Storage</strong></td>
+                <td>Mechanical potential energy:<br><i>E</i> = <i>m</i> · <i>g</i> · <i>h</i> (lifting heavy solid masses in shafts)</td>
+                <td><strong>75% – 85%</strong></td>
+                <td>4 – 12 hours</td>
+                <td>Medium-duration storage utilizing abandoned mine shafts or vertical towers. Zero standby self-discharge; 40+ year mechanical design life.</td>
+              </tr>
+              <tr>
+                <td><strong>5. Flywheels</strong></td>
+                <td>Rotational kinetic energy:<br><i>E</i> = ½ · <i>I</i> · ω²</td>
+                <td><strong>85% – 90%</strong></td>
+                <td>Seconds to 1 hour</td>
+                <td>Instantaneous sub-cycle grid frequency regulation (<10 ms); synchronous inertia to stabilize transmission grids lacking spinning steam turbines; >100,000 cycle lifespan.</td>
+              </tr>
+              <tr>
+                <td><strong>6. Hydrogen & Power-to-Gas</strong></td>
+                <td>Thermochemical water splitting:<br>2H₂O + energy → 2H₂ + O₂</td>
+                <td><strong>35% – 48%</strong><br>(power-to-gas-to-power)</td>
+                <td>Weeks to Months</td>
+                <td>Multi-week seasonal energy storage; storing summer solar surplus in salt caverns for winter heating; zero-carbon fuel for green steel and long-haul transport.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <!-- ADDENDUM: 2026 FORCED WARMING VS 1.5°C BREACH -->
@@ -4868,19 +5621,27 @@
       const btnModeSimple = document.getElementById("btnModeSimple");
       const btnModeAdvanced = document.getElementById("btnModeAdvanced");
       const btnModeBudgets = document.getElementById("btnModeBudgets");
+      const btnModeSources = document.getElementById("btnModeSources");
+      const btnModeSolutions = document.getElementById("btnModeSolutions");
 
       function setViewMode(mode) {
         const isSimple = mode === "simple";
         const isAdvanced = mode === "advanced";
         const isBudgets = mode === "budgets";
+        const isSources = mode === "sources";
+        const isSolutions = mode === "solutions";
 
         appWrapper.classList.toggle("simple-mode", isSimple);
         appWrapper.classList.toggle("advanced-mode", isAdvanced);
         appWrapper.classList.toggle("budgets-mode", isBudgets);
+        appWrapper.classList.toggle("sources-mode", isSources);
+        appWrapper.classList.toggle("solutions-mode", isSolutions);
 
         btnModeSimple.classList.toggle("active", isSimple);
         btnModeAdvanced.classList.toggle("active", isAdvanced);
         if (btnModeBudgets) btnModeBudgets.classList.toggle("active", isBudgets);
+        if (btnModeSources) btnModeSources.classList.toggle("active", isSources);
+        if (btnModeSolutions) btnModeSolutions.classList.toggle("active", isSolutions);
 
         if (isSimple) {
           document.getElementById("headerTitle").textContent = "Earth's Energy Imbalance";
@@ -4892,6 +5653,14 @@
           document.getElementById("headerTitle").textContent = "Fossil Fuel Extraction, Carbon Budgets & Warming";
           document.getElementById("headerSubtitle").textContent = "Relating oil and gas extraction (Gt/yr & million barrels/day) to atmospheric CO₂ and global warming";
           updateBudgetsCalculations();
+        } else if (isSources) {
+          document.getElementById("headerTitle").textContent = "Global Sources of Carbon & Emissions Breakdown";
+          document.getElementById("headerSubtitle").textContent = "Where greenhouse gases originate by sector, fuel type and human activity (Our World in Data & WRI)";
+          updateSourcesView();
+        } else if (isSolutions) {
+          document.getElementById("headerTitle").textContent = "Clean Energy Solutions & Grid Storage";
+          document.getElementById("headerSubtitle").textContent = "What does it take to replace 41 Gt/yr of fossil energy? Generation mix & storage balancing";
+          updateSolutionsCalculations();
         }
 
         if (isSimple && tpCardEl) {
@@ -4905,7 +5674,7 @@
         const btnWhat = document.getElementById("btnWhatCanIDo");
         if (btnWhat) btnWhat.classList.remove("active");
 
-        if (!isBudgets) {
+        if (!isBudgets && !isSources && !isSolutions) {
           draw();
         }
       }
@@ -4913,6 +5682,8 @@
       btnModeSimple.addEventListener("click", () => setViewMode("simple"));
       btnModeAdvanced.addEventListener("click", () => setViewMode("advanced"));
       if (btnModeBudgets) btnModeBudgets.addEventListener("click", () => setViewMode("budgets"));
+      if (btnModeSources) btnModeSources.addEventListener("click", () => setViewMode("sources"));
+      if (btnModeSolutions) btnModeSolutions.addEventListener("click", () => setViewMode("solutions"));
       const btnBackToSim = document.getElementById("btnBackToSim");
       if (btnBackToSim) btnBackToSim.addEventListener("click", () => setViewMode("advanced"));
       const btnJumpToBudgets = document.getElementById("btnJumpToBudgets");
@@ -5442,6 +6213,625 @@
         updateBudgetsCalculations();
       }
       initBudgetsView();
+
+      // ==========================================
+      // SOURCES OF CARBON & EMISSIONS ENGINE (OWID)
+      // ==========================================
+      const OWID_EMISSIONS = {
+        totalGhgGt: 54.6,
+        totalCo2Gt: 40.9,
+        fossilCo2Gt: 37.4,
+        lucCo2Gt: 3.5,
+        nonCo2Gt: 13.7,
+        filterMode: "all", // "all" or "co2"
+        sectors: [
+          {
+            id: "energy",
+            name: "Energy (Electricity, Heat, Transport & Fuel Combustion)",
+            icon: "⚡",
+            color: "#00e5ff",
+            ghgPct: 73.2,
+            ghgGt: 40.0,
+            co2Gt: 37.0,
+            desc: "Burning coal, oil, and natural gas for power, heating, mobility, and industrial processing.",
+            subsectors: [
+              { name: "Energy in Industry", pct: 24.2, gt: 13.2, detail: "Iron & steel (7.2%), chemicals & petrochemicals (3.6%), non-ferrous metals (0.7%), machinery, paper/pulp." },
+              { name: "Transport", pct: 16.2, gt: 8.8, detail: "Road vehicles (11.9% — cars & vans 7.2%, trucks & buses 4.7%), aviation (1.9%), shipping (1.7%), rail (0.4%), pipelines (0.3%)." },
+              { name: "Energy in Buildings", pct: 17.5, gt: 9.6, detail: "Residential space heating, cooking & lighting (10.9%); commercial buildings, offices, schools & hospitals (6.6%)." },
+              { name: "Fugitive Emissions from Fuel Extraction", pct: 5.8, gt: 3.2, detail: "Oil & gas flaring, venting, and pipeline methane leaks (3.9%); coal mine methane venting (1.9%)." },
+              { name: "Other Energy & Agriculture Machinery", pct: 9.5, gt: 5.2, detail: "Tractors, harvesters, fishing trawlers, diesel generators, unallocated fuel combustion." }
+            ],
+            cleanSolution: "Electrify with Solar, Wind, Nuclear & Hydro; replace gas boilers with Heat Pumps (COP 3–4); replace petrol/diesel vehicles with Battery EVs; deploy Grid Storage."
+          },
+          {
+            id: "afolu",
+            name: "Agriculture, Forestry & Land Use (AFOLU)",
+            icon: "🌾",
+            color: "#10b981",
+            ghgPct: 18.4,
+            ghgGt: 10.0,
+            co2Gt: 3.5,
+            desc: "Biogenic methane from livestock, nitrous oxide from nitrogen fertilizers, and CO₂ from land clearance.",
+            subsectors: [
+              { name: "Livestock & Manure Management (CH₄)", pct: 5.8, gt: 3.2, detail: "Enteric fermentation in ruminant digestion (cattle, sheep, goats) and manure decomposition." },
+              { name: "Agricultural Soils (N₂O)", pct: 4.1, gt: 2.2, detail: "Microbial production of nitrous oxide from synthetic nitrogen fertilizers and animal manure spread on fields." },
+              { name: "Deforestation & Forest Clearcutting", pct: 2.2, gt: 1.2, detail: "Loss of above-ground biomass carbon from tropical and temperate forest clearing for cattle pastures and soy." },
+              { name: "Crop Residues & Savanna Burning", pct: 3.5, gt: 1.9, detail: "Post-harvest field burning, agricultural fires, and seasonal savanna burning." },
+              { name: "Flooded Rice Cultivation (CH₄)", pct: 1.3, gt: 0.7, detail: "Methanogenic bacteria producing methane in permanently inundated paddy fields." },
+              { name: "Cultivated Organic Soils / Peatlands", pct: 1.5, gt: 0.8, detail: "Draining carbon-dense peatlands for agriculture, causing accelerated microbial oxidation." }
+            ],
+            cleanSolution: "Halt tropical deforestation; adopt precision fertilizer application; shift diets toward plant-rich proteins; implement alternate wetting and drying in rice; use methane-reducing feed additives."
+          },
+          {
+            id: "industry",
+            name: "Direct Industrial Processes (Chemical / Non-Energy)",
+            icon: "🏭",
+            color: "#f59e0b",
+            ghgPct: 5.2,
+            ghgGt: 2.8,
+            co2Gt: 2.2,
+            desc: "Non-combustion chemical reactions directly releasing CO₂ during mineral decarbonation and chemical synthesis.",
+            subsectors: [
+              { name: "Cement Clinker Calcination", pct: 3.0, gt: 1.6, detail: "Chemical limestone decarbonation (CaCO₃ → CaO + CO₂), entirely independent of kiln heating fuel." },
+              { name: "Chemical & Petrochemical Processes", pct: 2.2, gt: 1.2, detail: "Hydrogen production for ammonia fertilizer (steam methane reforming), petrochemical cracking, industrial solvents." }
+            ],
+            cleanSolution: "Substitute limestone clinker with calcined clay and pozzolans (LC3 cement); deploy green hydrogen direct reduced iron (H₂-DRI); point-source Carbon Capture & Storage (CCUS)."
+          },
+          {
+            id: "waste",
+            name: "Waste & Wastewater",
+            icon: "🗑️",
+            color: "#ec4899",
+            ghgPct: 3.2,
+            ghgGt: 1.7,
+            co2Gt: 0.2,
+            desc: "Methane and nitrous oxide from decaying organic matter in municipal landfills and sewage treatment plants.",
+            subsectors: [
+              { name: "Landfills & Solid Waste (CH₄)", pct: 1.9, gt: 1.0, detail: "Anaerobic bacterial digestion of food scraps, paper, and organic municipal waste in landfills." },
+              { name: "Wastewater Treatment (CH₄ & N₂O)", pct: 1.3, gt: 0.7, detail: "Microbial breakdown of domestic and industrial sewage in anaerobic lagoons and wastewater facilities." }
+            ],
+            cleanSolution: "Mandatory landfill methane gas capture and flaring/power generation; organic composting; anaerobic digestion with biomethane upgrading; aerobic sewage aeration."
+          }
+        ]
+      };
+
+      function updateSourcesView() {
+        const isCo2Only = OWID_EMISSIONS.filterMode === "co2";
+        const badgeFilter = document.getElementById("srcBadgeActiveFilter");
+        if (badgeFilter) {
+          badgeFilter.textContent = isCo2Only ? "CO₂ Only (40.9 Gt)" : "All GHGs (54.6 Gt CO₂e)";
+        }
+
+        const barWrap = document.getElementById("sourcesProportionsBar");
+        if (barWrap) {
+          barWrap.innerHTML = "";
+          let totalBase = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
+          OWID_EMISSIONS.sectors.forEach(sec => {
+            const val = isCo2Only ? sec.co2Gt : sec.ghgGt;
+            const pct = ((val / totalBase) * 100).toFixed(1);
+            const seg = document.createElement("div");
+            seg.className = "proportions-bar-seg";
+            seg.style.width = `${pct}%`;
+            seg.style.background = sec.color;
+            seg.title = `${sec.name}: ${pct}% (${val} Gt)`;
+            seg.textContent = `${sec.icon} ${pct}%`;
+            barWrap.appendChild(seg);
+          });
+        }
+
+        const container = document.getElementById("sourcesSectorContainer");
+        if (container) {
+          container.innerHTML = "";
+          OWID_EMISSIONS.sectors.forEach((sec, idx) => {
+            const val = isCo2Only ? sec.co2Gt : sec.ghgGt;
+            const totalBase = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
+            const pct = ((val / totalBase) * 100).toFixed(1);
+
+            const card = document.createElement("div");
+            card.className = "sector-card";
+            card.innerHTML = `
+              <div class="sector-header" data-idx="${idx}">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.1rem;">${sec.icon}</span>
+                  <strong style="color: ${sec.color};">${sec.name}</strong>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-family: ui-monospace, monospace; font-weight: 700; color: #fff;">${pct}%</span>
+                  <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-muted);">${val} Gt</span>
+                  <span style="color: var(--cyan); font-size: 0.8rem;">▼</span>
+                </div>
+              </div>
+              <div class="sector-body" id="sectorBody${idx}">
+                <div style="color: var(--text-muted);">${sec.desc}</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; margin: 4px 0;">
+                  ${sec.subsectors.map(sub => `
+                    <div class="subsector-item">
+                      <div>
+                        <strong style="color: #cbd5e1;">${sub.name} (${sub.pct}%)</strong>
+                        <div style="font-size: 0.72rem; color: var(--text-muted);">${sub.detail}</div>
+                      </div>
+                      <div style="font-family: ui-monospace, monospace; color: var(--cyan); font-weight: 700; white-space: nowrap;">
+                        ${sub.gt} Gt
+                      </div>
+                    </div>
+                  `).join("")}
+                </div>
+                <div style="background: rgba(0, 229, 255, 0.04); border-left: 3px solid ${sec.color}; padding: 8px 12px; border-radius: 4px; font-size: 0.78rem; line-height: 1.4; color: #cbd5e1;">
+                  <strong style="color: ${sec.color};">Clean Abatement Solutions:</strong> ${sec.cleanSolution}
+                </div>
+              </div>
+            `;
+            container.appendChild(card);
+          });
+
+          // Header toggle accordions
+          container.querySelectorAll(".sector-header").forEach(header => {
+            header.addEventListener("click", () => {
+              const body = header.nextElementSibling;
+              const arrow = header.querySelector("span:last-child");
+              if (body.style.display === "none") {
+                body.style.display = "flex";
+                arrow.textContent = "▼";
+              } else {
+                body.style.display = "none";
+                arrow.textContent = "▶";
+              }
+            });
+          });
+        }
+      }
+
+      function initSourcesView() {
+        const btnAll = document.getElementById("btnFilterAllGhg");
+        const btnCo2 = document.getElementById("btnFilterCo2Only");
+        if (btnAll && btnCo2) {
+          btnAll.addEventListener("click", () => {
+            btnAll.classList.add("active");
+            btnCo2.classList.remove("active");
+            OWID_EMISSIONS.filterMode = "all";
+            updateSourcesView();
+          });
+          btnCo2.addEventListener("click", () => {
+            btnCo2.classList.add("active");
+            btnAll.classList.remove("active");
+            OWID_EMISSIONS.filterMode = "co2";
+            updateSourcesView();
+          });
+        }
+
+        const btnBackSim = document.getElementById("btnBackToSimFromSources");
+        if (btnBackSim) btnBackSim.addEventListener("click", () => setViewMode("advanced"));
+        const btnJumpBudgets = document.getElementById("btnJumpToBudgetsFromSources");
+        if (btnJumpBudgets) btnJumpBudgets.addEventListener("click", () => setViewMode("budgets"));
+        const btnJumpSolutions = document.getElementById("btnJumpToSolutionsFromSources");
+        if (btnJumpSolutions) btnJumpSolutions.addEventListener("click", () => setViewMode("solutions"));
+
+        updateSourcesView();
+      }
+
+      // ==========================================
+      // CLEAN ENERGY SOLUTIONS & STORAGE ENGINE
+      // ==========================================
+      const solutionsChart = document.getElementById("solutionsChart");
+      const solCtx = solutionsChart ? solutionsChart.getContext("2d") : null;
+
+      const sliderSolSolar = document.getElementById("sliderSolSolar");
+      const sliderSolWind = document.getElementById("sliderSolWind");
+      const sliderSolNuclear = document.getElementById("sliderSolNuclear");
+      const sliderSolHydro = document.getElementById("sliderSolHydro");
+      const sliderSolBioGeo = document.getElementById("sliderSolBioGeo");
+
+      const sliderSolBattery = document.getElementById("sliderSolBattery");
+      const sliderSolPumped = document.getElementById("sliderSolPumped");
+      const sliderSolCaes = document.getElementById("sliderSolCaes");
+      const sliderSolGravity = document.getElementById("sliderSolGravity");
+      const sliderSolFlywheel = document.getElementById("sliderSolFlywheel");
+      const sliderSolH2 = document.getElementById("sliderSolH2");
+
+      let solHoverX = -1;
+      let solHoverActive = false;
+
+      function updateSolutionsCalculations() {
+        if (!sliderSolSolar) return;
+
+        const genSolar = parseFloat(sliderSolSolar.value);
+        const genWind = parseFloat(sliderSolWind.value);
+        const genNuclear = parseFloat(sliderSolNuclear.value);
+        const genHydro = parseFloat(sliderSolHydro.value);
+        const genBioGeo = parseFloat(sliderSolBioGeo.value);
+
+        const storBattery = parseFloat(sliderSolBattery.value);
+        const storPumped = parseFloat(sliderSolPumped.value);
+        const storCaes = parseFloat(sliderSolCaes.value);
+        const storGravity = parseFloat(sliderSolGravity.value);
+        const storFlywheel = parseFloat(sliderSolFlywheel.value);
+        const storH2 = parseFloat(sliderSolH2.value);
+
+        // Update Slider Numerical Badges
+        document.getElementById("lblSolSolar").textContent = `${genSolar.toLocaleString()} TWh/yr`;
+        document.getElementById("lblSolWind").textContent = `${genWind.toLocaleString()} TWh/yr`;
+        document.getElementById("lblSolNuclear").textContent = `${genNuclear.toLocaleString()} TWh/yr`;
+        document.getElementById("lblSolHydro").textContent = `${genHydro.toLocaleString()} TWh/yr`;
+        document.getElementById("lblSolBioGeo").textContent = `${genBioGeo.toLocaleString()} TWh/yr`;
+
+        document.getElementById("lblSolBattery").textContent = `${storBattery.toFixed(1)} TWh`;
+        document.getElementById("lblSolPumped").textContent = `${storPumped.toFixed(1)} TWh`;
+        document.getElementById("lblSolCaes").textContent = `${storCaes.toFixed(1)} TWh`;
+        document.getElementById("lblSolGravity").textContent = `${storGravity.toFixed(2)} TWh`;
+        document.getElementById("lblSolFlywheel").textContent = `${storFlywheel.toFixed(2)} TWh`;
+        document.getElementById("lblSolH2").textContent = `${storH2.toFixed(1)} TWh`;
+
+        const totalCleanGen = genSolar + genWind + genNuclear + genHydro + genBioGeo;
+        const usefulGoalTwh = 75000.0;
+        const totalStorageTwh = storBattery + storPumped + storCaes + storGravity + storFlywheel + storH2;
+
+        const variableGen = genSolar + genWind;
+        const firmGen = genNuclear + genHydro + genBioGeo;
+        const varFrac = totalCleanGen > 0 ? (variableGen / totalCleanGen) : 0;
+
+        // Storage firming adequacy
+        const dailyUsefulDemand = usefulGoalTwh / 365.25; // ~205.3 TWh/day
+        const storageBufferDays = totalStorageTwh / dailyUsefulDemand;
+        const reqStorageBuffer = varFrac * 30.0; // Needs up to ~30 TWh if 100% variable
+        const storageAdequacy = Math.min(1.0, totalStorageTwh / Math.max(1.0, reqStorageBuffer));
+        const gridFirmingScore = Math.round(((1.0 - varFrac) * 1.0 + varFrac * (0.65 + 0.35 * storageAdequacy)) * 100);
+
+        const effectiveCleanUseful = totalCleanGen * (gridFirmingScore / 100.0);
+        const fossilDisplacedGt = Math.min(41.0, (effectiveCleanUseful / usefulGoalTwh) * 41.0);
+        const remainingFossilGt = Math.max(0, 41.0 - fossilDisplacedGt);
+
+        const netPpmRate = (remainingFossilGt * 0.46) / 7.824;
+        const warmingRateDecade = netPpmRate * (ALPHA_RF / (427.0 * LAMBDA_FEEDBACK)) * 10;
+
+        // Update Top Stat Badges
+        const pctGoal = ((totalCleanGen / usefulGoalTwh) * 100).toFixed(1);
+        document.getElementById("solStatGenVal").innerHTML = `${totalCleanGen.toLocaleString()} <span style="font-size: 0.8rem; color: var(--text-muted);">TWh/yr</span>`;
+        document.getElementById("solStatGenSub").textContent = `${pctGoal}% of fossil energy replaced (${totalCleanGen < 12000 ? '2026 fleet' : 'Clean Grid'})`;
+
+        document.getElementById("solStatDisplacedVal").innerHTML = `${fossilDisplacedGt.toFixed(1)} <span style="font-size: 0.8rem; color: var(--text-muted);">Gt CO₂/yr</span>`;
+        document.getElementById("solStatDisplacedSub").textContent = `${remainingFossilGt.toFixed(1)} Gt CO₂/yr remaining emissions`;
+
+        document.getElementById("solStatGrowthVal").innerHTML = `${netPpmRate >= 0 ? '+' : ''}${netPpmRate.toFixed(2)} <span style="font-size: 0.8rem; color: var(--text-muted);">ppm/yr</span>`;
+        document.getElementById("solStatGrowthSub").textContent = `${netPpmRate >= 0 ? '+' : ''}${warmingRateDecade.toFixed(2)} °C/decade warming pace`;
+
+        document.getElementById("solStatFirmingVal").innerHTML = `${gridFirmingScore}% <span style="font-size: 0.8rem; color: var(--text-muted);">Reliability</span>`;
+        document.getElementById("solStatFirmingSub").textContent = `Storage Buffer: ~${storageBufferDays.toFixed(1)} days (${totalStorageTwh.toFixed(1)} TWh)`;
+
+        drawSolutionsChart();
+      }
+
+      function drawSolutionsChart() {
+        if (!solutionsChart || !solCtx) return;
+        const appW = document.getElementById("appWrapper");
+        if (!appW.classList.contains("solutions-mode")) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        const rect = solutionsChart.getBoundingClientRect();
+        if (solutionsChart.width !== rect.width * dpr || solutionsChart.height !== rect.height * dpr) {
+          solutionsChart.width = rect.width * dpr;
+          solutionsChart.height = rect.height * dpr;
+        }
+
+        const w = rect.width;
+        const h = rect.height;
+        if (!w || !h || w <= 0 || h <= 0) return;
+
+        solCtx.save();
+        solCtx.scale(dpr, dpr);
+        solCtx.clearRect(0, 0, w, h);
+
+        const genSolar = parseFloat(sliderSolSolar.value);
+        const genWind = parseFloat(sliderSolWind.value);
+        const genNuclear = parseFloat(sliderSolNuclear.value);
+        const genHydro = parseFloat(sliderSolHydro.value);
+        const genBioGeo = parseFloat(sliderSolBioGeo.value);
+
+        const storBattery = parseFloat(sliderSolBattery.value);
+        const storPumped = parseFloat(sliderSolPumped.value);
+        const storCaes = parseFloat(sliderSolCaes.value);
+        const storGravity = parseFloat(sliderSolGravity.value);
+        const storFlywheel = parseFloat(sliderSolFlywheel.value);
+        const storH2 = parseFloat(sliderSolH2.value);
+
+        const totalCleanGen = genSolar + genWind + genNuclear + genHydro + genBioGeo;
+        const usefulGoalTwh = 75000.0;
+        const totalStorageTwh = storBattery + storPumped + storCaes + storGravity + storFlywheel + storH2;
+        const variableGen = genSolar + genWind;
+        const varFrac = totalCleanGen > 0 ? (variableGen / totalCleanGen) : 0;
+        const reqStorageBuffer = varFrac * 30.0;
+        const storageAdequacy = Math.min(1.0, totalStorageTwh / Math.max(1.0, reqStorageBuffer));
+        const gridFirmingScore = (1.0 - varFrac) * 1.0 + varFrac * (0.65 + 0.35 * storageAdequacy);
+
+        const effectiveCleanUseful = totalCleanGen * gridFirmingScore;
+        const fossilDisplacedGt = Math.min(41.0, (effectiveCleanUseful / usefulGoalTwh) * 41.0);
+        const finalRemainingGt = Math.max(0, 41.0 - fossilDisplacedGt);
+
+        // Multi-year integration: 2026 to 2100 (75 years)
+        const bauTrajectory = [];
+        const cleanTrajectory = [];
+
+        // BAU: 41 Gt/yr constant
+        let bauCo2 = 427.0;
+        let bauTs = 1.26;
+        let bauTd = 0.55;
+
+        // Clean: linearly ramps to user selected mix over 15 years (2026 to 2041)
+        let clCo2 = 427.0;
+        let clTs = 1.26;
+        let clTd = 0.55;
+
+        for (let y = 2026; y <= 2100; y++) {
+          const stepYr = y - 2026;
+          // Ramp factor 0 to 1 over 15 years
+          const ramp = Math.min(1.0, stepYr / 15.0);
+          const currentCleanRemainingGt = 41.0 - (fossilDisplacedGt * ramp);
+
+          // BAU step
+          const bauNetPpm = (41.0 * 0.46) / 7.824;
+          bauCo2 += bauNetPpm;
+          const bauDf = ALPHA_RF * Math.log(bauCo2 / CO2_BASE);
+          const bauDts_dt = (bauDf - LAMBDA_FEEDBACK * bauTs - GAMMA * (bauTs - bauTd)) / CM;
+          const bauDtd_dt = (GAMMA * (bauTs - bauTd)) / CD;
+          bauTs += bauDts_dt;
+          bauTd += bauDtd_dt;
+          bauTrajectory.push({ year: y, tempObs: bauTs - 0.121, co2: bauCo2 });
+
+          // Clean transition step
+          const clNetPpm = (currentCleanRemainingGt * 0.46) / 7.824;
+          clCo2 += clNetPpm;
+          const clDf = ALPHA_RF * Math.log(clCo2 / CO2_BASE);
+          const clDts_dt = (clDf - LAMBDA_FEEDBACK * clTs - GAMMA * (clTs - clTd)) / CM;
+          const clDtd_dt = (GAMMA * (clTs - clTd)) / CD;
+          clTs += clDts_dt;
+          clTd += clDtd_dt;
+          cleanTrajectory.push({ year: y, tempObs: clTs - 0.121, co2: clCo2 });
+        }
+
+        const final2100Temp = cleanTrajectory[cleanTrajectory.length - 1].tempObs;
+        const finalBadge = document.getElementById("solChartBadgeWarming");
+        if (finalBadge) {
+          finalBadge.textContent = `2100: +${final2100Temp.toFixed(2)}°C`;
+          finalBadge.className = final2100Temp <= 1.5 ? "badge badge-emerald" : (final2100Temp <= 2.0 ? "badge badge-amber" : "badge badge-rose");
+        }
+
+        // Layout bounds
+        const padL = 50;
+        const padR = 40;
+        const padT = 24;
+        const padB = 32;
+        const plotW = w - padL - padR;
+        const plotH = h - padT - padB;
+
+        const maxTemp = 3.5;
+        const minTemp = 0.5;
+
+        function xFromYear(yr) {
+          return padL + ((yr - 2026) / (2100 - 2026)) * plotW;
+        }
+        function yFromTemp(t) {
+          return padT + plotH - ((t - minTemp) / (maxTemp - minTemp)) * plotH;
+        }
+
+        // Background grid
+        solCtx.lineWidth = 1;
+        solCtx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+        solCtx.fillStyle = "#64748b";
+        solCtx.font = "10px ui-monospace, monospace";
+
+        // Vertical year lines
+        [2026, 2040, 2060, 2080, 2100].forEach(yr => {
+          const gx = xFromYear(yr);
+          solCtx.beginPath();
+          solCtx.moveTo(gx, padT);
+          solCtx.lineTo(gx, padT + plotH);
+          solCtx.stroke();
+          solCtx.textAlign = "center";
+          solCtx.fillText(`${yr}`, gx, padT + plotH + 18);
+        });
+
+        // Horizontal temperature lines
+        for (let t = 1.0; t <= maxTemp; t += 0.5) {
+          const gy = yFromTemp(t);
+          if (gy < padT || gy > padT + plotH) continue;
+          solCtx.beginPath();
+          solCtx.moveTo(padL, gy);
+          solCtx.lineTo(padL + plotW, gy);
+          solCtx.stroke();
+          solCtx.textAlign = "right";
+          solCtx.fillText(`+${t.toFixed(1)}°C`, padL - 8, gy + 3);
+        }
+
+        // Threshold Reference Lines (+1.5°C and +2.0°C)
+        const y15 = yFromTemp(1.5);
+        if (y15 >= padT && y15 <= padT + plotH) {
+          solCtx.save();
+          solCtx.strokeStyle = "rgba(245, 158, 11, 0.75)";
+          solCtx.setLineDash([4, 4]);
+          solCtx.beginPath();
+          solCtx.moveTo(padL, y15);
+          solCtx.lineTo(padL + plotW, y15);
+          solCtx.stroke();
+          solCtx.fillStyle = "#f59e0b";
+          solCtx.textAlign = "left";
+          solCtx.fillText("+1.5°C Paris Threshold", padL + 8, y15 - 5);
+          solCtx.restore();
+        }
+
+        const y20 = yFromTemp(2.0);
+        if (y20 >= padT && y20 <= padT + plotH) {
+          solCtx.save();
+          solCtx.strokeStyle = "rgba(244, 63, 94, 0.75)";
+          solCtx.setLineDash([4, 4]);
+          solCtx.beginPath();
+          solCtx.moveTo(padL, y20);
+          solCtx.lineTo(padL + plotW, y20);
+          solCtx.stroke();
+          solCtx.fillStyle = "#f43f5e";
+          solCtx.textAlign = "left";
+          solCtx.fillText("+2.0°C Guardrail", padL + 8, y20 - 5);
+          solCtx.restore();
+        }
+
+        // 1. Draw Rose Curve: Business As Usual (41 Gt/yr)
+        solCtx.save();
+        solCtx.strokeStyle = "#f43f5e";
+        solCtx.lineWidth = 2.4;
+        solCtx.beginPath();
+        bauTrajectory.forEach((pt, i) => {
+          const px = xFromYear(pt.year);
+          const py = yFromTemp(pt.tempObs);
+          if (i === 0) solCtx.moveTo(px, py); else solCtx.lineTo(px, py);
+        });
+        solCtx.stroke();
+        solCtx.restore();
+
+        // 2. Draw Emerald Curve: Selected Clean Transition
+        solCtx.save();
+        solCtx.strokeStyle = "#10b981";
+        solCtx.lineWidth = 3.2;
+        solCtx.shadowColor = "rgba(16, 185, 129, 0.5)";
+        solCtx.shadowBlur = 8;
+        solCtx.beginPath();
+        cleanTrajectory.forEach((pt, i) => {
+          const px = xFromYear(pt.year);
+          const py = yFromTemp(pt.tempObs);
+          if (i === 0) solCtx.moveTo(px, py); else solCtx.lineTo(px, py);
+        });
+        solCtx.stroke();
+        solCtx.restore();
+
+        // Mouse crosshair & tooltip
+        if (solHoverActive && solHoverX >= padL && solHoverX <= padL + plotW) {
+          const hoverYrFrac = 2026 + ((solHoverX - padL) / plotW) * (2100 - 2026);
+          const hoverYr = Math.max(2026, Math.min(2100, Math.round(hoverYrFrac)));
+          const bauPt = bauTrajectory.find(p => p.year === hoverYr) || bauTrajectory[bauTrajectory.length - 1];
+          const clPt = cleanTrajectory.find(p => p.year === hoverYr) || cleanTrajectory[cleanTrajectory.length - 1];
+
+          const hx = xFromYear(hoverYr);
+          solCtx.save();
+          solCtx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+          solCtx.lineWidth = 1;
+          solCtx.setLineDash([2, 2]);
+          solCtx.beginPath();
+          solCtx.moveTo(hx, padT);
+          solCtx.lineTo(hx, padT + plotH);
+          solCtx.stroke();
+
+          // Tooltip
+          const tipText1 = `${hoverYr} CE · BAU: +${bauPt.tempObs.toFixed(2)} °C (${Math.round(bauPt.co2)} ppm)`;
+          const tipText2 = `Clean Transition: +${clPt.tempObs.toFixed(2)} °C (${Math.round(clPt.co2)} ppm)`;
+          solCtx.font = "bold 11px ui-monospace, monospace";
+          const tw = Math.max(solCtx.measureText(tipText1).width, solCtx.measureText(tipText2).width) + 20;
+          let bx = hx - tw / 2;
+          if (bx < padL + 4) bx = padL + 4;
+          if (bx + tw > padL + plotW - 4) bx = padL + plotW - tw - 4;
+          const by = padT + 8;
+
+          solCtx.fillStyle = "#0c1526";
+          solCtx.strokeStyle = "var(--border)";
+          solCtx.lineWidth = 1;
+          solCtx.setLineDash([]);
+          solCtx.beginPath();
+          solCtx.roundRect(bx, by, tw, 42, 6);
+          solCtx.fill();
+          solCtx.stroke();
+
+          solCtx.fillStyle = "#f43f5e";
+          solCtx.textAlign = "left";
+          solCtx.fillText(tipText1, bx + 10, by + 16);
+          solCtx.fillStyle = "#10b981";
+          solCtx.fillText(tipText2, bx + 10, by + 32);
+          solCtx.restore();
+        }
+
+        solCtx.restore();
+      }
+
+      function initSolutionsView() {
+        if (!sliderSolSolar) return;
+
+        const allSliders = [
+          sliderSolSolar, sliderSolWind, sliderSolNuclear, sliderSolHydro, sliderSolBioGeo,
+          sliderSolBattery, sliderSolPumped, sliderSolCaes, sliderSolGravity, sliderSolFlywheel, sliderSolH2
+        ];
+
+        allSliders.forEach(s => {
+          if (s) {
+            s.addEventListener("input", () => {
+              document.querySelectorAll("#solutionsView .budget-preset-btn").forEach(b => b.classList.remove("active"));
+              updateSolutionsCalculations();
+            });
+          }
+        });
+
+        // Presets
+        const presets = {
+          presetSolBaseline: { solar: 1600, wind: 2300, nuclear: 2650, hydro: 4300, biogeo: 800, batt: 0.8, pumped: 9.0, caes: 0.2, grav: 0.05, fly: 0.02, h2: 0.5 },
+          presetSolNZE: { solar: 24000, wind: 18000, nuclear: 5500, hydro: 7000, biogeo: 3500, batt: 16.0, pumped: 18.0, caes: 4.0, grav: 2.0, fly: 0.5, h2: 12.0 },
+          presetSol100Ren: { solar: 38000, wind: 26000, nuclear: 1500, hydro: 6500, biogeo: 3000, batt: 28.0, pumped: 24.0, caes: 8.0, grav: 5.0, fly: 1.0, h2: 25.0 },
+          presetSolNuclear: { solar: 14000, wind: 10000, nuclear: 20000, hydro: 6000, biogeo: 2500, batt: 8.0, pumped: 12.0, caes: 2.0, grav: 1.5, fly: 0.8, h2: 6.0 },
+          presetSolBalanced: { solar: 22000, wind: 16000, nuclear: 10000, hydro: 6000, biogeo: 3000, batt: 14.0, pumped: 16.0, caes: 4.0, grav: 3.0, fly: 0.6, h2: 10.0 }
+        };
+
+        Object.keys(presets).forEach(btnId => {
+          const btn = document.getElementById(btnId);
+          if (btn) {
+            btn.addEventListener("click", () => {
+              document.querySelectorAll("#solutionsView .budget-preset-btn").forEach(b => b.classList.remove("active"));
+              btn.classList.add("active");
+              const p = presets[btnId];
+              sliderSolSolar.value = p.solar;
+              sliderSolWind.value = p.wind;
+              sliderSolNuclear.value = p.nuclear;
+              sliderSolHydro.value = p.hydro;
+              sliderSolBioGeo.value = p.biogeo;
+              sliderSolBattery.value = p.batt;
+              sliderSolPumped.value = p.pumped;
+              sliderSolCaes.value = p.caes;
+              sliderSolGravity.value = p.grav;
+              sliderSolFlywheel.value = p.fly;
+              sliderSolH2.value = p.h2;
+              updateSolutionsCalculations();
+            });
+          }
+        });
+
+        if (solutionsChart) {
+          solutionsChart.addEventListener("mousemove", e => {
+            const rect = solutionsChart.getBoundingClientRect();
+            solHoverX = e.clientX - rect.left;
+            solHoverActive = true;
+            drawSolutionsChart();
+          });
+          solutionsChart.addEventListener("mouseleave", () => {
+            solHoverActive = false;
+            drawSolutionsChart();
+          });
+        }
+
+        window.addEventListener("resize", () => {
+          if (appWrapper.classList.contains("solutions-mode")) {
+            drawSolutionsChart();
+          }
+        });
+
+        const btnBackSim = document.getElementById("btnBackToSimFromSolutions");
+        if (btnBackSim) btnBackSim.addEventListener("click", () => setViewMode("advanced"));
+        const btnJumpSources = document.getElementById("btnJumpToSourcesFromSolutions");
+        if (btnJumpSources) btnJumpSources.addEventListener("click", () => setViewMode("sources"));
+        const btnOpenGuide = document.getElementById("btnOpenGuideFromSolutions");
+        if (btnOpenGuide) {
+          btnOpenGuide.addEventListener("click", () => {
+            modalOverlay.style.display = "flex";
+            setDocPage("page-solutions-storage");
+          });
+        }
+
+        updateSolutionsCalculations();
+      }
+
+      initSourcesView();
+      initSolutionsView();
 
       // Simulation Controls
       function togglePlayPause() {
