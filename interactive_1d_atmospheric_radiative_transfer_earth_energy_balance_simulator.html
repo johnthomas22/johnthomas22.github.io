@@ -1826,6 +1826,7 @@
               <div>• <strong>Electricity Generation (Coal & Gas):</strong> Solar PV, Wind, Nuclear baseload, and Hydro, backed by multi-duration grid storage (batteries, pumped hydro, CAES).</div>
               <div>• <strong>Iron & Steel (7.2% of GHG):</strong> Green hydrogen direct reduced iron (H₂-DRI) feeding Electric Arc Furnaces (EAF), replacing metallurgical coal.</div>
               <div>• <strong>Cement (3.0% of GHG):</strong> Clinker substitution with calcined clays (LC3 cement), geopolymer binders, and point-source carbon capture (CCUS).</div>
+              <div>• <strong>Agriculture & Land Use (18.4% of GHG):</strong> Shifting to plant-rich protein eliminates the 10:1 animal calorie penalty, freeing up to 75% of global farmland (~30 million km²) for massive natural carbon sequestration (~300–500 Gt CO₂).</div>
             </div>
           </div>
 
@@ -3278,7 +3279,18 @@
             </tbody>
           </table>
 
-          <h4>3. Fossil Fuel CO₂ by Fuel Type</h4>
+          <h4>3. The 10:1 Trophic Calorie Inefficiency & Carbon Opportunity Cost of Livestock</h4>
+          <p>
+            While biogenic methane (CH₄) from enteric fermentation is an acute short-term warming driver, an even larger systemic climate impact of livestock agriculture is its <strong>thermodynamic calorie loss and disproportionate land-use footprint</strong>:
+          </p>
+          <div class="code-box">
+            • <b>Thermodynamic Calorie Loss (Lindeman's Trophic Rule):</b> Animals lose ~90% of ingested plant calories to basal metabolism, body heat, and inedible tissue. Converting plant feed into animal meat requires <b>10 to 25 kg of plant feed per 1 kg of beef</b> (~3 to 4 kg for pork and poultry).<br>
+            • <b>The 80% / 18% Land Disparity:</b> According to Poore & Nemecek (2018, <i>Science</i>), livestock rearing (grazing land plus animal feed croplands) monopolizes <b>~80% of all agricultural land on Earth (~40 million km²)</b>, yet delivers <b>only ~18% of global human calories</b> and <b>37% of global protein</b>. The remaining 82% of human calories are grown on just ~20% of farmland.<br>
+            • <b>75% Land Reduction Potential:</b> If human calories were consumed directly from plants, global agricultural land demand would shrink by up to <b>75%</b>, freeing approximately <b>30 million km²</b> (an area the size of the entire African continent).<br>
+            • <b>Carbon Opportunity Cost:</b> Monopolizing 40 million km² in pasture and feed crops actively prevents natural forest and grassland regeneration. Allowing this land to naturally rewild would sequester an estimated <b>300 to 500+ Gt CO₂</b> in vegetative and soil biomass over several decades (Searchinger et al. 2018, <i>Nature</i>; Hayek et al. 2021, <i>Nature Sustainability</i>)—equivalent to nearly a decade of all global fossil fuel emissions combined.
+          </div>
+
+          <h4>4. Fossil Fuel CO₂ by Fuel Type</h4>
           <p>
             Looking exclusively at the combustion of fossil fuels (~37.4 Gt CO₂):
           </p>
@@ -6362,7 +6374,8 @@
               { name: "Flooded Rice Cultivation (CH₄)", pct: 1.3, gt: 0.7, detail: "Methanogenic bacteria producing methane in permanently inundated paddy fields." },
               { name: "Cultivated Organic Soils / Peatlands", pct: 1.5, gt: 0.8, detail: "Draining carbon-dense peatlands for agriculture, causing accelerated microbial oxidation." }
             ],
-            cleanSolution: "Halt tropical deforestation; adopt precision fertilizer application; shift diets toward plant-rich proteins; implement alternate wetting and drying in rice; use methane-reducing feed additives."
+            cleanSolution: "Halt tropical deforestation; adopt precision fertilizer application; shift diets toward plant-rich proteins; implement alternate wetting and drying in rice; use methane-reducing feed additives.",
+            specialNote: "Beyond direct biogenic methane, livestock rearing imposes a massive <strong>10:1 trophic calorie penalty</strong>. Because ruminants lose ~90% of ingested plant calories to basal metabolism and heat, livestock occupies <strong>~80% of all global agricultural land (~40M km²)</strong> while providing only <strong>18% of human calories and 37% of protein</strong> (Poore & Nemecek 2018, <em>Science</em>). If human calories were consumed directly from plants, global agricultural land needs would shrink by up to <strong>75% (freeing ~30M km²—the size of Africa)</strong>. Allowing that land to naturally rewild into native forests and grasslands would draw down an estimated <strong>300–500+ Gt CO₂</strong> in carbon opportunity cost (Searchinger et al. 2018, <em>Nature</em>; Hayek et al. 2021, <em>Nature Sustainability</em>)."
           },
           {
             id: "industry",
@@ -6461,6 +6474,14 @@
                 <div style="background: rgba(0, 229, 255, 0.04); border-left: 3px solid ${sec.color}; padding: 8px 12px; border-radius: 4px; font-size: 0.78rem; line-height: 1.4; color: #cbd5e1;">
                   <strong style="color: ${sec.color};">Clean Abatement Solutions:</strong> ${sec.cleanSolution}
                 </div>
+                ${sec.specialNote ? `
+                  <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 3px solid var(--emerald); border-radius: 6px; padding: 10px 12px; font-size: 0.77rem; line-height: 1.45; color: #cbd5e1; margin-top: 6px;">
+                    <div style="font-weight: 700; color: var(--emerald); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                      <span>💡</span> <span>The 10:1 Trophic Calorie Inefficiency & Carbon Opportunity Cost</span>
+                    </div>
+                    ${sec.specialNote}
+                  </div>
+                ` : ""}
               </div>
             `;
             container.appendChild(card);
