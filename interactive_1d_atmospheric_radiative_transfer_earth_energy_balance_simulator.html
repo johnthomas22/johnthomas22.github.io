@@ -1185,10 +1185,10 @@
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
             <div class="bubble-header">
-              <span class="bubble-title" id="bubbleTitle">Step 1: Solar Inflow (Shortwave Visible Light)</span>
+              <span class="bubble-title" id="bubbleTitle">Step 1: Solar Inflow (Shortwave Solar Radiation)</span>
               <button class="bubble-close" id="bubbleCloseBtn">&times;</button>
             </div>
-            <div id="bubbleContent">Incoming solar shortwave passes freely through atmospheric greenhouse gases without heating them.</div>
+            <div id="bubbleContent">The atmosphere is transparent to incoming solar radiation across its spectrum (ultraviolet, visible, and near-infrared), allowing it to reach Earth's surface unimpeded.</div>
             <div class="bubble-footer">
               <button class="bubble-nav-btn" id="bubblePrevBtn">← Prev</button>
               <span style="font-size: 0.7rem; color: var(--text-muted);" id="bubbleStepCount">Step 1 of 5</span>
@@ -1753,7 +1753,7 @@
               <tr>
                 <td><strong>1</strong></td>
                 <td>Top of Atmosphere (13,000 m)</td>
-                <td><strong>Solar Shortwave Transparency:</strong> The Sun's intense temperature (~5,778 K) concentrates solar radiation in short, high-energy wavelengths (0.4–0.7 µm visible light). Greenhouse molecules like CO₂ lack vibrational resonance modes at these high frequencies, so incoming solar energy passes straight through the atmospheric column unimpeded (~239 W/m² post-albedo).</td>
+                <td><strong>Solar Shortwave Transparency:</strong> The Sun's intense temperature (~5,778 K) concentrates solar radiation into the shortwave spectrum (spanning ultraviolet, visible light, and near-infrared). The atmosphere is broadly transparent to incoming solar radiation across this spectrum because greenhouse gases like CO₂ lack vibrational resonance modes at these high frequencies, allowing incoming solar energy to reach the planetary surface unimpeded (~239 W/m² post-albedo).</td>
               </tr>
               <tr>
                 <td><strong>2</strong></td>
@@ -1782,10 +1782,10 @@
             <strong style="color: var(--cyan); font-size: 0.92rem;">☀️ Fundamental Physics: Why CO₂ Traps Outgoing Heat but Ignores Incoming Sunlight</strong><br>
             A common point of confusion is why greenhouse gases do not simply absorb heat from the Sun as sunlight travels down through the atmosphere. The reason is the profound difference in wavelength between solar radiation and terrestrial heat (governed by <strong>Planck's Law and Wien's Displacement Law</strong>, λ<sub>peak</sub> &prop; 1 / <i>T</i>):
             <ul style="margin: 8px 0 6px 18px; padding-left: 0; display: flex; flex-direction: column; gap: 6px;">
-              <li><strong>Inbound Solar Radiation (Shortwave, ~0.5 µm):</strong> The Sun's surface is blisteringly hot (~5,778 K / ~5,500 °C). High temperature compresses radiation into short, energetic wavelengths, primarily in the <strong>visible spectrum (0.4 to 0.7 µm)</strong>. The linear carbon dioxide molecule (O=C=O) has electronic transitions only in the far ultraviolet and vibrational modes in the infrared; it has zero absorption bands in the visible spectrum. Thus, incoming sunlight passes through CO₂ as if the gas were not even there.</li>
+              <li><strong>Inbound Solar Radiation (Shortwave Spectrum, ~0.2 to 4 µm):</strong> The Sun's surface is blisteringly hot (~5,778 K / ~5,500 °C). High temperature compresses radiation into short, energetic wavelengths spanning ultraviolet, visible light (0.4 to 0.7 µm), and near-infrared. The atmosphere is transparent to incoming solar radiation across this entire spectrum because the linear carbon dioxide molecule (O=C=O) has electronic transitions only in the far ultraviolet and vibrational modes in the thermal infrared; it has zero absorption bands across the solar shortwave spectrum. Thus, incoming solar radiation passes through the atmospheric column unimpeded.</li>
               <li><strong>Surface Energy Transformation:</strong> Sunlight strikes Earth's oceans and continents. Absorbed shortwave energy warms the planet to an average surface temperature of ~288 K (~15 °C).</li>
               <li><strong>Outbound Terrestrial Radiation (Longwave Thermal Infrared, ~15 µm):</strong> Because Earth is ~20 times cooler than the Sun, it radiates at wavelengths roughly ~20 to ~30 times longer—in the <strong>thermal infrared band (4 to 50 µm)</strong>.</li>
-              <li><strong>The 15 µm Molecular Resonance:</strong> The fundamental bending vibration (ν₂ vibrational mode) of the CO₂ molecule resonates at an optical wavenumber of 667 cm⁻¹, which corresponds to a wavelength of exactly <strong>14.99 µm (~15 µm)</strong>. This aligns precisely with the peak of Earth's thermal emission curve. Therefore, while incoming visible sunlight slipped through without interaction, outgoing thermal infrared is vigorously absorbed by CO₂ and thermalized into the atmosphere.</li>
+              <li><strong>The 15 µm Molecular Resonance:</strong> The fundamental bending vibration (ν₂ vibrational mode) of the CO₂ molecule resonates at an optical wavenumber of 667 cm⁻¹, which corresponds to a wavelength of exactly <strong>14.99 µm (~15 µm)</strong>. This aligns precisely with the peak of Earth's thermal emission curve. Therefore, while incoming solar radiation slipped through without interaction, outgoing thermal infrared is vigorously absorbed by CO₂ and thermalized into the atmosphere.</li>
             </ul>
           </div>
         </div>
@@ -4591,8 +4591,8 @@
       const speechDataIntro = [
         {
           pinId: "pin1",
-          title: "Step 1: Sunlight Arrives (Shortwave Light)",
-          html: "Sunlight streams down from space. Because the Sun is blisteringly hot (~5,500°C), its energy travels as <strong>high-energy shortwave light (visible rays)</strong>.<br><br>Greenhouse gases like CO₂ cannot absorb these short wavelengths—their molecular shape only responds to much longer heat wavelengths. As a result, incoming sunlight passes straight through the atmosphere without heating it, travelling unimpeded down to Earth's surface."
+          title: "Step 1: Sunlight Arrives (Shortwave Solar Radiation)",
+          html: "Sunlight streams down from space. Because the Sun is blisteringly hot (~5,500°C), its energy arrives as <strong>shortwave solar radiation</strong>—spanning ultraviolet, visible light, and near-infrared.<br><br>The atmosphere is broadly transparent to incoming solar radiation because greenhouse gases like CO₂ cannot absorb these short solar wavelengths (their molecular shape only responds to much longer heat wavelengths). As a result, incoming solar radiation passes straight through the atmosphere without heating it, travelling unimpeded down to warm Earth's surface."
         },
         {
           pinId: "pin2",
@@ -4624,8 +4624,8 @@
       const speechDataAdvanced = [
         {
           pinId: "pin1",
-          title: "Step 1: Solar Inflow (Shortwave Visible Light)",
-          html: "Because the Sun's photosphere is ~5,778 K, Wien's displacement law concentrates incoming solar radiation into the high-energy <strong>shortwave spectrum (0.4–0.7 µm visible)</strong>.<br><br>Triatomic greenhouse molecules like CO₂ have vibrational resonance modes only in the infrared, leaving the atmospheric column transparent to incoming sunlight and allowing ~239 W/m² (post-albedo) to reach Earth's planetary surface unimpeded."
+          title: "Step 1: Solar Inflow (Shortwave Solar Radiation)",
+          html: "Because the Sun's photosphere is ~5,778 K, Wien's displacement law concentrates incoming solar emission into the high-energy <strong>shortwave spectrum</strong> (ultraviolet, visible light at 0.4–0.7 µm, and near-infrared).<br><br>The atmosphere is broadly transparent to incoming solar radiation across this entire spectrum—not just visible light—because triatomic greenhouse gases like CO₂ lack vibrational resonance modes at these high frequencies. This allows ~239 W/m² (post-albedo) of solar irradiance to reach Earth's planetary surface unimpeded."
         },
         {
           pinId: "pin2",
