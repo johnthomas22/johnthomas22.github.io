@@ -6410,7 +6410,7 @@
           let totalBase = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
           OWID_EMISSIONS.sectors.forEach(sec => {
             const val = isCo2Only ? sec.co2Gt : sec.ghgGt;
-            const pct = ((val / totalBase) * 100).toFixed(1);
+            const pct = isCo2Only ? ((val / totalBase) * 100).toFixed(1) : sec.ghgPct.toFixed(1);
             const seg = document.createElement("div");
             seg.className = "proportions-bar-seg";
             seg.style.width = `${pct}%`;
@@ -6427,7 +6427,7 @@
           OWID_EMISSIONS.sectors.forEach((sec, idx) => {
             const val = isCo2Only ? sec.co2Gt : sec.ghgGt;
             const totalBase = isCo2Only ? OWID_EMISSIONS.totalCo2Gt : OWID_EMISSIONS.totalGhgGt;
-            const pct = ((val / totalBase) * 100).toFixed(1);
+            const pct = isCo2Only ? ((val / totalBase) * 100).toFixed(1) : sec.ghgPct.toFixed(1);
 
             const card = document.createElement("div");
             card.className = "sector-card";
