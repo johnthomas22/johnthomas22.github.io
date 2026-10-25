@@ -1173,6 +1173,8 @@
         <button class="modal-tab-btn" data-page="page-transfer">Page 2: Radiative Transfer & Saturation Refuted</button>
         <button class="modal-tab-btn" data-page="page-ebm">Page 3: Two-Layer Ocean EBM Formulation</button>
         <button class="modal-tab-btn" data-page="page-paleo">Page 4: 1-Million-Year Paleoclimate Sources</button>
+        <button class="modal-tab-btn" data-page="page-fossil-metrics">Page 5: Barrels of Oil & Gas to ppm & °C</button>
+        <button class="modal-tab-btn" data-page="page-carbon-budgets">Page 6: Carbon Budgets & Reserves</button>
         <button class="modal-tab-btn" data-page="page-addendum">Addendum: 2026 Warming vs. +1.5°C Breach</button>
       </div>
 
@@ -1234,6 +1236,24 @@
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
                   Benchmark ice-core and marine sediment datasets synthesized in the illustrative 1,000,000-year / 500-year rate comparator (EPICA Dome C, Bereiter et al. 2015, Lisiecki & Raymo LR04, Shakun et al. 2012, Kaufman Temp12k), temporal resolution limits, and glacial termination rates.
+                </div>
+              </li>
+              <li>
+                <a class="toc-link" data-target="page-fossil-metrics">
+                  <span>🛢️</span> <strong>Page 5: Fossil Fuel Metrics — Barrels of Oil & Gas to Atmospheric CO₂ (ppm) & Temperature Rise</strong>
+                  <span class="badge badge-amber" style="margin-left: 8px;">Combustion Stoichiometry & ppm Mapping</span>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  The direct physical and mathematical chain linking physical fuel commodities (million/billion barrels of crude oil, trillion cubic feet of gas, tonnes of coal) to atmospheric concentration (ppm) and warming. Explains atmospheric mass (5.15 × 10⁶ Gt), the universal 7.82 Gt CO₂ / ppm factor, airborne fraction (<i>AF</i> ≈ 46%), why it takes ~39.5 billion barrels of oil to add +1.0 ppm, and how each +10 ppm commits Earth to +0.10 °C of long-term equilibrium warming.
+                </div>
+              </li>
+              <li>
+                <a class="toc-link" data-target="page-carbon-budgets">
+                  <span>📉</span> <strong>Page 6: Global Carbon Budgets & The "Unburnable Carbon" Reality</strong>
+                  <span class="badge badge-rose" style="margin-left: 8px;">IPCC AR6 / TCRE / Paris Limits</span>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  The Transient Climate Response to Cumulative Emissions (TCRE ≈ 0.45 °C per 1,000 Gt CO₂), remaining carbon budgets for +1.5 °C (~200 Gt CO₂) and +2.0 °C (~1,150 Gt CO₂), translating budgets into remaining years of current extraction, and comparing finite atmospheric absorptive capacity against the ~3,400 Gt CO₂ of proven fossil reserves (the "Unburnable Carbon" paradox where >90% of reserves must stay unextracted).
                 </div>
               </li>
               <li>
@@ -1573,6 +1593,535 @@
             <li>
               <strong>Lisiecki & Raymo (2005) LR04 57-Core Marine Benthic Stack:</strong><br>
               <a href="https://lorraine-lisiecki.com/stack.html" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://lorraine-lisiecki.com/stack.html ↗</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- PAGE 5: FOSSIL FUEL METRICS — BARRELS OF OIL & GAS TO PPM & TEMPERATURE RISE -->
+        <div class="doc-page" id="page-fossil-metrics">
+          <h3>Page 5: Fossil Fuel Metrics — Barrels of Oil & Gas to Atmospheric CO₂ (ppm) & Temperature Rise</h3>
+          <p>
+            While international climate negotiations and scientific syntheses frame planetary heating in abstract metrics—such as gigatonnes of carbon dioxide (Gt CO₂) or radiative forcing in watts per square metre (W/m²)—the industrial economy operates in physical commodities: <strong>barrels of crude oil</strong>, <strong>cubic feet of natural gas</strong>, and <strong>tonnes of coal</strong>.
+          </p>
+          <p>
+            This chapter details the exact physical, chemical, and atmospheric formulas that map physical units of extracted fossil fuels directly to atmospheric concentration in parts per million (ppm), top-of-atmosphere radiative forcing (W/m²), and eventual global surface warming (°C).
+          </p>
+
+          <h4>1. Combustion Stoichiometry: From Hydrocarbons to Mass of CO₂</h4>
+          <p>
+            When fossil fuels are burned for power, heat, or transport, atmospheric oxygen combines with the fuel's carbon atoms in exothermic oxidation reactions. Because every molecule of CO₂ contains one carbon atom (atomic mass 12.011 u) and two oxygen atoms (15.999 u each), the molecular mass of CO₂ is 44.010 u. Consequently, burning 1.0 kg of elemental carbon produces:
+          </p>
+          <div class="code-box">
+            44.010 g/mol CO₂ / 12.011 g/mol C = <b>3.664 kg of CO₂ per 1.0 kg of Carbon burned</b>
+          </div>
+          <p>
+            Applying this stoichiometric principle across the primary fossil commodities yields precise emission factors (calibrated against US EPA, US Energy Information Administration, and IPCC Guidelines for National Greenhouse Gas Inventories):
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fossil Commodity</th>
+                <th>Standard Physical Unit</th>
+                <th>Carbon Content by Mass</th>
+                <th>Direct CO₂ Emitted per Unit</th>
+                <th>Emissions per 1 Billion Units</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Crude Oil (Petroleum)</strong></td>
+                <td>1 barrel (bbl = 42 US gal = 158.99 L)</td>
+                <td>~84% – 86% Carbon (~117 kg C / bbl)</td>
+                <td><strong>0.430 metric tonnes CO₂</strong> (430 kg)</td>
+                <td><strong>0.430 Gt CO₂</strong> per billion barrels (Gbbl)</td>
+              </tr>
+              <tr>
+                <td><strong>Fossil Natural Gas</strong></td>
+                <td>1,000 cubic feet (1 Mcf at STP)</td>
+                <td>~75% Carbon (predominantly CH₄)</td>
+                <td><strong>0.0545 metric tonnes CO₂</strong> (54.5 kg)</td>
+                <td><strong>0.0545 Gt CO₂</strong> per Trillion Cubic Feet (Tcf)</td>
+              </tr>
+              <tr>
+                <td><strong>Natural Gas (Energy Equiv.)</strong></td>
+                <td>1 barrel of oil equivalent (boe ≈ 5,800 cu ft)</td>
+                <td>Equivalent thermal energy to 1 bbl crude</td>
+                <td><strong>0.235 metric tonnes CO₂</strong> (235 kg)</td>
+                <td><strong>0.235 Gt CO₂</strong> per billion boe</td>
+              </tr>
+              <tr>
+                <td><strong>Thermal Coal (Bituminous)</strong></td>
+                <td>1 metric tonne of hard coal (1,000 kg)</td>
+                <td>~65% – 75% Carbon (~660 kg C / t)</td>
+                <td><strong>2.420 metric tonnes CO₂</strong> (2,420 kg)</td>
+                <td><strong>2.420 Gt CO₂</strong> per billion tonnes (Gt coal)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>2. The Mass of Earth's Atmosphere & The Universal ppm Factor</h4>
+          <p>
+            Atmospheric concentration of greenhouse gases is measured in <strong>parts per million by volume or mole fraction (ppmv)</strong>. To calculate how much physical mass corresponds to 1.0 ppm, we compute the total mass of Earth's atmosphere:
+          </p>
+          <div class="code-box">
+            Mean global surface atmospheric pressure: <i>P</i><sub>0</sub> = 985.5 hPa (accounting for land topography above sea level)<br>
+            Earth surface area: <i>A</i> = 4π<i>R</i>² = 5.101 × 10¹⁴ m²<br>
+            Mean acceleration of gravity: <i>g</i> = 9.80665 m/s²<br>
+            <b>Total atmospheric mass: <i>M</i><sub>atm</sub> = (<i>P</i><sub>0</sub> · <i>A</i>) / <i>g</i> = 5.148 × 10¹⁸ kg = 5.148 × 10⁶ Gt</b>
+          </div>
+          <p>
+            With the mean molar mass of dry air at <i>M</i><sub>air</sub> = 28.964 g/mol and carbon dioxide at <i>M</i><sub>CO₂</sub> = 44.010 g/mol, the mass ratio is 44.010 / 28.964 ≈ 1.5194. Evaluating 1 part in 10⁶ of total atmospheric moles:
+          </p>
+          <div class="code-box">
+            <b>1.0 ppm atmospheric CO₂ ≡ 7.824 Gt CO₂</b>  (or <b>2.134 Gt of pure Carbon</b>)
+          </div>
+          <p>
+            In a sealed, non-absorbing container the size of Earth's atmosphere, injecting 7.824 gigatonnes of CO₂ would raise concentration by exactly 1.0 ppm.
+          </p>
+
+          <h4>3. The Airborne Fraction (<i>AF</i> ≈ 46%) & Earth's Carbon Sinks</h4>
+          <p>
+            In the real Earth system, the atmosphere is not an isolated glass flask. When human industry emits CO₂, Earth's dynamic biological and geochemical sinks immediately absorb a significant portion of the gas:
+          </p>
+          <ul style="margin: 8px 0 10px 22px; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              <strong>The Ocean Carbon Sink (~26% absorbed):</strong> Atmospheric CO₂ dissolves across the air-sea boundary, reacting with water molecules to form carbonic acid, bicarbonate, and carbonate ions (H₂O + CO₂ ⇌ H₂CO₃ ⇌ HCO₃⁻ + H⁺). This geochemical dissolution drives progressive ocean acidification while buffering atmospheric accumulation.
+            </li>
+            <li>
+              <strong>The Terrestrial Biosphere Sink (~28% absorbed):</strong> Elevated ambient CO₂ concentrations stimulate photosynthetic carboxylation in land plants (CO₂ fertilization effect) and enhance soil organic matter storage, sequestering roughly a quarter of annual anthropogenic emissions in forests and soils.
+            </li>
+            <li>
+              <strong>The Atmospheric Retention (~46% remains airborne):</strong> Over the multi-decadal instrumental era (1958–2026), the empirical <strong>Airborne Fraction (<i>AF</i>)</strong> has remained remarkably steady at <strong><i>AF</i> ≈ 0.46 ± 0.04</strong>.
+            </li>
+          </ul>
+          <p>
+            Because only ~46% of every emitted tonne accumulates in the atmosphere, the effective emission mass required to produce a net 1.0 ppm rise is scaled by 1 / <i>AF</i>:
+          </p>
+          <div class="code-box">
+            Effective Mass per ppm = 7.824 Gt CO₂ / 0.46 ≈ <b>17.01 Gt of gross CO₂ emitted per +1.0 ppm atmospheric increase</b>
+          </div>
+          <div style="background: rgba(0, 229, 255, 0.06); border: 1px solid rgba(0, 229, 255, 0.25); border-radius: 6px; padding: 12px 14px; margin: 10px 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.55;">
+            <strong style="color: var(--cyan); font-size: 0.9rem;">The 17-Gigaton Principle:</strong><br>
+            As a robust rule of thumb across contemporary climate science: <strong>Every ~17 gigatonnes of gross CO₂ humanity emits from fossil fuel combustion and industrial processes produces a net +1.0 ppm permanent rise on the atmospheric Keeling Curve.</strong>
+          </div>
+
+          <h4>4. Direct Equivalence: How Many Barrels of Oil & Gas Make 1.0 ppm?</h4>
+          <p>
+            With combustion stoichiometry and the airborne fraction established, we can directly solve for the physical commodity quantities that drive atmospheric concentration changes:
+          </p>
+
+          <p style="margin-top: 10px;"><strong>A. Crude Oil (Petroleum):</strong></p>
+          <p>
+            Each 1 billion barrels (1 Gbbl) of crude oil produces 0.430 Gt CO₂ upon combustion. Factoring in the 46% airborne fraction:
+          </p>
+          <div class="code-box">
+            Δ<i>C</i> per billion barrels = (0.430 Gt × 0.46) / 7.824 Gt/ppm = <b>+0.02528 ppm per billion barrels of oil</b><br>
+            Barrels required for +1.0 ppm = 1.0 / 0.02528 ≈ <b>39.55 billion barrels of crude oil</b>
+          </div>
+          <p>
+            <strong>Global Reality:</strong> Global oil consumption currently stands at <strong>~102 million barrels per day (mbpd)</strong>, or <strong>~37.2 billion barrels per year</strong>. Thus, burning oil alone adds:
+          </p>
+          <div class="code-box">
+            Annual oil contribution = 37.2 Gbbl/yr × 0.02528 ppm/Gbbl ≈ <b>+0.94 ppm / year from crude oil alone</b>
+          </div>
+
+          <p style="margin-top: 10px;"><strong>B. Fossil Natural Gas:</strong></p>
+          <p>
+            Each 1 trillion cubic feet (1 Tcf) of natural gas emits 0.0545 Gt CO₂. With the 46% airborne fraction:
+          </p>
+          <div class="code-box">
+            Δ<i>C</i> per Tcf = (0.0545 Gt × 0.46) / 7.824 Gt/ppm = <b>+0.003204 ppm per Trillion Cubic Feet</b><br>
+            Gas volume required for +1.0 ppm = 1.0 / 0.003204 ≈ <b>312.1 Tcf of natural gas (or 72.4 billion boe)</b>
+          </div>
+          <p>
+            <strong>Global Reality:</strong> World natural gas consumption is currently <strong>~140 Tcf per year</strong> (~4,000 billion m³), emitting ~7.63 Gt CO₂/year. Natural gas combustion adds:
+          </p>
+          <div class="code-box">
+            Annual gas contribution = 140 Tcf/yr × 0.003204 ppm/Tcf ≈ <b>+0.45 ppm / year from natural gas alone</b>
+          </div>
+
+          <p style="margin-top: 10px;"><strong>C. Synthesis of Global Atmospheric Growth (+2.50 ppm/yr):</strong></p>
+          <p>
+            Summing across all human fossil extraction and land-use activities matches the observational Keeling Curve growth rate at NOAA's Mauna Loa Observatory:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Emissions Source</th>
+                <th>Annual Extraction / Activity</th>
+                <th>Gross Emissions (Gt CO₂/yr)</th>
+                <th>Net Airborne CO₂ (Gt/yr)</th>
+                <th>Annual Growth Added</th>
+                <th>Share</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Crude Oil Combustion</strong></td>
+                <td>~37.2 billion barrels / yr (~102 mbpd)</td>
+                <td>~16.00 Gt</td>
+                <td>~7.36 Gt</td>
+                <td><strong>+0.94 ppm / yr</strong></td>
+                <td>37.6%</td>
+              </tr>
+              <tr>
+                <td><strong>Coal Combustion</strong></td>
+                <td>~8.5 billion metric tonnes / yr</td>
+                <td>~15.30 Gt</td>
+                <td>~7.04 Gt</td>
+                <td><strong>+0.90 ppm / yr</strong></td>
+                <td>36.0%</td>
+              </tr>
+              <tr>
+                <td><strong>Fossil Natural Gas</strong></td>
+                <td>~140 trillion cu ft / yr (~4,000 bcm)</td>
+                <td>~7.63 Gt</td>
+                <td>~3.51 Gt</td>
+                <td><strong>+0.45 ppm / yr</strong></td>
+                <td>18.0%</td>
+              </tr>
+              <tr>
+                <td><strong>Cement & Industrial Flaring</strong></td>
+                <td>Clinker production & upstream flaring</td>
+                <td>~1.80 Gt</td>
+                <td>~0.83 Gt</td>
+                <td><strong>+0.11 ppm / yr</strong></td>
+                <td>4.4%</td>
+              </tr>
+              <tr>
+                <td><strong>Land-Use Change & Deforestation</strong></td>
+                <td>Tropical clearing & peat degradation</td>
+                <td>~3.80 Gt</td>
+                <td>~1.75 Gt</td>
+                <td><strong>+0.22 ppm / yr</strong></td>
+                <td>8.8%</td>
+              </tr>
+              <tr style="font-weight: 700; background: #16243b;">
+                <td>TOTAL ANTHROPOGENIC FORCING</td>
+                <td>All Global Industrial Activity</td>
+                <td>~44.53 Gt (gross) / ~41 Gt (net)</td>
+                <td>~19.5 Gt</td>
+                <td><strong>+2.50 ppm / year</strong></td>
+                <td>100.0%</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>5. The Final Temperature Link: From Barrels of Fuel to °C of Warming</h4>
+          <p>
+            To connect physical fuel extraction to actual surface warming, we evaluate the simulator's core radiative forcing formula (Myhre et al. 1998; IPCC AR6 Chapter 7):
+          </p>
+          <div class="code-box">
+            Δ<i>F</i> = α · ln(<i>C</i> / <i>C</i><sub>0</sub>) = 5.35 · ln(<i>C</i> / 278) W/m²
+          </div>
+          <p>
+            Taking the marginal derivative with respect to CO₂ concentration (<i>dF</i> / <i>dC</i>) evaluated at present-day background levels (<i>C</i> ≈ 427 ppm):
+          </p>
+          <div class="code-box">
+            <i>dF</i> / <i>dC</i> = 5.35 / 427 ≈ <b>0.01253 W/m² of radiative forcing per 1.0 ppm</b>
+          </div>
+          <p>
+            Under the IPCC AR6 calibrated net climate feedback parameter λ = 1.25 W/m²/K (corresponding to Equilibrium Climate Sensitivity ECS = 3.00 °C per CO₂ doubling), the <strong>eventual equilibrium warming</strong> committed by a 1.0 ppm increase is:
+          </p>
+          <div class="code-box">
+            <i>d</i>(Δ<i>T</i><sub>eq</sub>) = (<i>dF</i> / λ) = 0.01253 W/m² / 1.250 W/m²/K ≈ <b>0.01002 °C of equilibrium warming per 1.0 ppm</b>
+          </div>
+          <div style="background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 6px; padding: 12px 14px; margin: 10px 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.55;">
+            <strong style="color: var(--amber); font-size: 0.9rem;">The "One-Hundredth of a Degree" Golden Rule:</strong><br>
+            At current atmospheric concentrations, <strong>every +1.0 ppm increase in atmospheric CO₂ commits the planet to exactly 0.010 °C (1/100th of a degree Celsius) of long-term equilibrium warming.</strong><br>
+            • An increase of <strong>+10 ppm</strong> commits Earth to <strong>+0.10 °C</strong> of eventual heating.<br>
+            • An increase of <strong>+100 ppm</strong> commits Earth to <strong>+1.00 °C</strong> of eventual heating.
+          </div>
+
+          <h4>6. Master Fuel-to-Warming Conversion Matrix</h4>
+          <p>
+            The table below synthesizes the complete chain: physical fuel volume &rarr; gross emissions &rarr; airborne ppm added &rarr; top-of-atmosphere radiative forcing &rarr; transient surface warming (realized within decades) &rarr; long-term committed equilibrium warming:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fuel Volume / Quantity</th>
+                <th>Gross CO₂ Emitted</th>
+                <th>Atmospheric ppm Added</th>
+                <th>Incremental Forcing (ΔF)</th>
+                <th>Transient Warming (Decadal)</th>
+                <th>Committed Equilibrium Warming (ΔT<sub>eq</sub>)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1 Million Barrels of Oil (1 mmbbl)</strong></td>
+                <td>0.00043 Gt</td>
+                <td>+0.0000253 ppm</td>
+                <td>+0.00000032 W/m²</td>
+                <td>+0.00000019 °C</td>
+                <td><strong>+0.00000025 °C</strong></td>
+              </tr>
+              <tr>
+                <td><strong>100 Million Barrels of Oil (~1 Day Global Oil Burn)</strong></td>
+                <td>0.0430 Gt</td>
+                <td>+0.00253 ppm</td>
+                <td>+0.0000317 W/m²</td>
+                <td>+0.000019 °C</td>
+                <td><strong>+0.000025 °C</strong></td>
+              </tr>
+              <tr>
+                <td><strong>1 Billion Barrels of Oil (1 Gbbl)</strong></td>
+                <td>0.430 Gt</td>
+                <td>+0.0253 ppm</td>
+                <td>+0.000317 W/m²</td>
+                <td>+0.000194 °C</td>
+                <td><strong>+0.000253 °C</strong></td>
+              </tr>
+              <tr>
+                <td><strong>3.95 Billion Barrels of Oil</strong></td>
+                <td>1.70 Gt</td>
+                <td>+0.100 ppm</td>
+                <td>+0.00125 W/m²</td>
+                <td>+0.00076 °C</td>
+                <td><strong>+0.00100 °C</strong> (1/1000th °C)</td>
+              </tr>
+              <tr>
+                <td><strong>37.2 Billion Barrels of Oil (~1 Year Global Oil Burn)</strong></td>
+                <td>16.00 Gt</td>
+                <td>+0.941 ppm</td>
+                <td>+0.0118 W/m²</td>
+                <td>+0.0072 °C</td>
+                <td><strong>+0.00943 °C</strong> (~0.01 °C / yr)</td>
+              </tr>
+              <tr>
+                <td><strong>1 Trillion Cubic Feet of Gas (1 Tcf)</strong></td>
+                <td>0.0545 Gt</td>
+                <td>+0.00320 ppm</td>
+                <td>+0.000040 W/m²</td>
+                <td>+0.000025 °C</td>
+                <td><strong>+0.000032 °C</strong></td>
+              </tr>
+              <tr>
+                <td><strong>140 Trillion Cubic Feet of Gas (~1 Year Global Gas Burn)</strong></td>
+                <td>7.63 Gt</td>
+                <td>+0.449 ppm</td>
+                <td>+0.00563 W/m²</td>
+                <td>+0.0034 °C</td>
+                <td><strong>+0.00450 °C</strong></td>
+              </tr>
+              <tr>
+                <td><strong>1 Billion Tonnes of Hard Coal (1 Gt coal)</strong></td>
+                <td>2.42 Gt</td>
+                <td>+0.142 ppm</td>
+                <td>+0.00178 W/m²</td>
+                <td>+0.00109 °C</td>
+                <td><strong>+0.00142 °C</strong></td>
+              </tr>
+              <tr>
+                <td><strong>8.5 Billion Tonnes of Coal (~1 Year Global Coal Burn)</strong></td>
+                <td>15.30 Gt</td>
+                <td>+0.899 ppm</td>
+                <td>+0.0113 W/m²</td>
+                <td>+0.0069 °C</td>
+                <td><strong>+0.00901 °C</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGE 6: GLOBAL CARBON BUDGETS & THE UNBURNABLE CARBON PARADOX -->
+        <div class="doc-page" id="page-carbon-budgets">
+          <h3>Page 6: Global Carbon Budgets & The "Unburnable Carbon" Reality</h3>
+          <p>
+            Because carbon dioxide persists in the planetary atmosphere and surface ocean for millennia, global warming is not governed by the <em>rate of annual emissions in any single year</em>, but by the <strong>cumulative total mass of carbon ever emitted since the pre-industrial era</strong>. This immutable physical reality gives rise to the scientific framework of the <strong>Planetary Carbon Budget</strong>.
+          </p>
+
+          <h4>1. The Physical Foundation: Why Temperature Scales Linearly with Cumulative Emissions (TCRE)</h4>
+          <p>
+            In complex Earth System Models and observational records alike, global mean surface temperature rise exhibits a near-perfect linear proportionality to cumulative CO₂ emissions. This linearity is the result of a remarkable physical compensation between two opposing non-linear geophysical processes:
+          </p>
+          <ul style="margin: 8px 0 10px 22px; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              <strong>Logarithmic Radiative Saturation (Decelerating Heating):</strong> As CO₂ concentration rises, greenhouse absorption bands become increasingly opaque, so each additional ton of CO₂ exerts slightly less marginal radiative forcing (Δ<i>F</i> ∝ ln(<i>C</i>/<i>C</i>₀)).
+            </li>
+            <li>
+              <strong>Ocean Heat & Carbon Uptake Saturation (Accelerating Heating):</strong> As the upper ocean warms and acidifies, the seawater Revelle chemical buffer factor increases, reducing the ocean's ability to absorb further carbon. Simultaneously, upper-ocean stratification reduces downward heat diffusion into the deep abyss, leaving a larger fraction of trapped energy at the surface.
+            </li>
+          </ul>
+          <p>
+            Over century timescales, the decelerating radiative effect is almost exactly counterbalanced by the accelerating ocean saturation effect. This relationship is quantified by the <strong>Transient Climate Response to Cumulative Carbon Emissions (TCRE)</strong>, established in IPCC AR6 Working Group I (Chapter 5):
+          </p>
+          <div class="code-box">
+            <b>TCRE ≈ 0.45 °C of surface warming per 1,000 Gt CO₂</b>  (likely range: 0.27 °C to 0.63 °C per 1,000 Gt CO₂)<br>
+            Equivalently: <b>1.0 °C of global warming requires ~2,220 Gt of cumulative CO₂ emissions</b>
+          </div>
+
+          <h4>2. Remaining Global Carbon Budgets for Paris Agreement Limits</h4>
+          <p>
+            From the onset of the Industrial Revolution (1750) through the end of 2024, human activity emitted approximately <strong>2,600 Gt of CO₂</strong> (roughly 1,800 Gt from fossil fuel combustion and cement manufacturing, plus ~800 Gt from deforestation and land-use change). This historical burn has pushed forced surface temperatures to <strong>+1.26 °C above 1750 (+1.14 °C above 1850–1900)</strong>.
+          </p>
+          <p>
+            With global emissions continuing at approximately <strong>41.0 Gt CO₂ per year</strong> (37.4 Gt fossil + 3.6 Gt land use), the remaining allowable emissions quotas (carbon budgets) from January 2025/2026 forward are vanishingly small (synthesized from IPCC AR6 WGI Chapter 5, Forster et al. 2024 <em>Earth System Science Data</em>, and the Global Carbon Project 2024):
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Warming Target</th>
+                <th>Probability of Staying Below</th>
+                <th>Remaining Carbon Budget (from 2025/2026)</th>
+                <th>Time Remaining at Current Burn Rate (~41 Gt/yr)</th>
+                <th>Equivalent Oil Combustion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>+1.5 °C (Paris Target)</strong></td>
+                <td><strong>50% (Even Odds)</strong></td>
+                <td><strong>~200 Gt CO₂</strong></td>
+                <td><strong>~4.9 years</strong> (Depleted ~2030)</td>
+                <td>~465 billion barrels</td>
+              </tr>
+              <tr>
+                <td><strong>+1.5 °C (Paris Target)</strong></td>
+                <td><strong>67% (Two-Thirds Chance)</strong></td>
+                <td><strong>~130 Gt CO₂</strong></td>
+                <td><strong>~3.2 years</strong> (Depleted ~2028)</td>
+                <td>~302 billion barrels</td>
+              </tr>
+              <tr>
+                <td><strong>+1.7 °C (Intermediate)</strong></td>
+                <td><strong>50% (Even Odds)</strong></td>
+                <td><strong>~650 Gt CO₂</strong></td>
+                <td><strong>~15.9 years</strong> (Depleted ~2041)</td>
+                <td>~1,510 billion barrels</td>
+              </tr>
+              <tr>
+                <td><strong>+2.0 °C (Upper Guardrail)</strong></td>
+                <td><strong>50% (Even Odds)</strong></td>
+                <td><strong>~1,150 Gt CO₂</strong></td>
+                <td><strong>~28.0 years</strong> (Depleted ~2053)</td>
+                <td>~2,674 billion barrels</td>
+              </tr>
+              <tr>
+                <td><strong>+2.0 °C (Upper Guardrail)</strong></td>
+                <td><strong>67% (Two-Thirds Chance)</strong></td>
+                <td><strong>~950 Gt CO₂</strong></td>
+                <td><strong>~23.2 years</strong> (Depleted ~2048)</td>
+                <td>~2,209 billion barrels</td>
+              </tr>
+              <tr>
+                <td><strong>+2.0 °C (Upper Guardrail)</strong></td>
+                <td><strong>83% (High Confidence)</strong></td>
+                <td><strong>~750 Gt CO₂</strong></td>
+                <td><strong>~18.3 years</strong> (Depleted ~2043)</td>
+                <td>~1,744 billion barrels</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>3. The "Unburnable Carbon" Paradox: Known Reserves vs. Planetary Sink</h4>
+          <p>
+            The central tension of modern climate economics lies in the severe arithmetic mismatch between the <strong>physical carbon budget of the atmosphere</strong> and the <strong>proven fossil fuel reserves currently claimed as commercial assets</strong> on the balance sheets of energy corporations and sovereign nation-states.
+          </p>
+          <p>
+            According to the <em>BP Statistical Review of World Energy</em>, the International Energy Agency (IEA <em>World Energy Outlook</em>), and IPCC AR6 Working Group III (Chapter 2), total global proven extractable fossil fuel reserves consist of:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fossil Resource</th>
+                <th>Global Proven Reserves</th>
+                <th>Emission Factor</th>
+                <th>Potential CO₂ Embedded in Reserves</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Proven Crude Oil Reserves</strong></td>
+                <td><strong>~1,750 billion barrels (Gbbl)</strong></td>
+                <td>0.430 Gt CO₂ / Gbbl</td>
+                <td><strong>~752 Gt CO₂</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Proven Natural Gas Reserves</strong></td>
+                <td><strong>~7,300 trillion cubic feet (Tcf)</strong> (~207 trillion m³)</td>
+                <td>0.0545 Gt CO₂ / Tcf</td>
+                <td><strong>~398 Gt CO₂</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Proven Thermal Coal Reserves</strong></td>
+                <td><strong>~1,074 billion metric tonnes (Gt coal)</strong></td>
+                <td>2.00 – 2.42 Gt CO₂ / Gt</td>
+                <td><strong>~2,250 Gt CO₂</strong></td>
+              </tr>
+              <tr style="font-weight: 700; background: #16243b;">
+                <td>TOTAL PROVEN RESERVES</td>
+                <td>Economically extractable with existing tech</td>
+                <td>Combined fossil fuels</td>
+                <td><strong>~3,400 Gt CO₂</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 6px; padding: 14px 16px; margin: 12px 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6;">
+            <strong style="color: var(--rose); font-size: 0.95rem;">The Mathematical Paradox of Unburnable Carbon:</strong><br>
+            • The remaining budget to hold warming to <strong>+1.5 °C (50% probability) is ~200 Gt CO₂</strong>.<br>
+            • Total proven fossil reserves hold <strong>~3,400 Gt CO₂</strong>.<br>
+            • <strong>Conclusion:</strong> To achieve the +1.5 °C Paris target, <strong>over 94% of proven coal, oil, and gas reserves must remain permanently unextracted in the ground.</strong><br>
+            • Even for the upper +2.0 °C guardrail (budget ~1,150 Gt CO₂), <strong>roughly two-thirds (~66%) of all existing proven fossil fuel reserves are completely "unburnable".</strong>
+          </div>
+
+          <h4>4. What Happens if All Proven Reserves Are Combusted?</h4>
+          <p>
+            If human industry extracts and burns the ~3,400 Gt CO₂ of known fossil reserves, we can compute the resulting climate state directly using the physical equations in this simulator:
+          </p>
+          <div class="code-box">
+            Emissions pulse: Δ<i>E</i> = 3,400 Gt CO₂<br>
+            Net airborne retention (<i>AF</i> = 0.46): Δ<i>C</i> = (3,400 × 0.46) / 7.824 ≈ <b>+200 ppm of CO₂</b><br>
+            New atmospheric concentration: <i>C</i> = 427 ppm + 200 ppm = <b>627 ppm</b><br>
+            Top-of-Atmosphere Radiative Forcing: Δ<i>F</i> = 5.35 · ln(627 / 278) = <b>+4.35 W/m²</b><br>
+            Committed Equilibrium Warming: Δ<i>T</i><sub>eq</sub> = 4.35 W/m² / 1.25 W/m²/K = <b>+3.48 °C above 1750 (+3.36 °C above 1850–1900)</b>
+          </div>
+          <p>
+            Warming of +3.5 °C to +4.0 °C would cross multiple catastrophic planetary tipping points identified by Armstrong McKay et al. (2022) in <em>Science</em>: the total collapse of the Greenland and West Antarctic Ice Sheets (committing 10+ metres of sea-level rise), the complete dieback of the Amazon rainforest, collapse of low-latitude coral reef ecosystems, and possible cessation of the Atlantic Meridional Overturning Circulation (AMOC).
+          </p>
+
+          <h4>5. Net Zero, The Zero Emissions Commitment (ZEC), & Drawdown Rebound</h4>
+          <p>
+            A common misconception in climate discussions is: <em>"If emissions drop to zero, will temperatures continue to rise for centuries?"</em>
+          </p>
+          <p>
+            The physical answer, verified by the IPCC AR6 and the international Zero Emissions Commitment Model Intercomparison Project (ZECMIP, MacDougall et al. 2020), is <strong>no</strong>:
+          </p>
+          <ul style="margin: 8px 0 10px 22px; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              <strong>The Zero Emissions Commitment (ZEC ≈ 0.0 °C):</strong> When anthropogenic CO₂ emissions cease entirely (Net Zero), ocean heat uptake continues absorbing excess energy from the lower atmosphere. At the same time, the ocean and terrestrial biosphere continue drawing down atmospheric CO₂, causing atmospheric radiative forcing to decline. In physical climate models, these two opposing curves almost exactly offset: <strong>global surface warming essentially halts within a few years of reaching true zero emissions.</strong>
+            </li>
+            <li>
+              <strong>The Carbon Drawdown "Sink Rebound" Effect:</strong> While stopping emissions halts further warming, restoring atmospheric CO₂ back down to pre-industrial (278 ppm) or safe historic levels (350 ppm) requires active Carbon Dioxide Removal (CDR).
+            </li>
+            <li>
+              However, as atmospheric CO₂ partial pressure drops, the oceans and land biosphere begin outgassing a fraction of the carbon they previously absorbed. Consequently, <strong>removing 1.0 ppm from the atmosphere requires scrubbing not just 7.82 Gt CO₂, but approximately ~17 Gt of CO₂ from the active Earth system</strong> to overcome the outgassing rebound.
+            </li>
+          </ul>
+
+          <h4>6. Key References & Authoritative Scientific Sources</h4>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              <strong>IPCC AR6 Working Group I, Chapter 5 (Global Carbon and Other Biogeochemical Cycles and Feedbacks):</strong><br>
+              <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-5/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-5/ ↗</a>
+            </li>
+            <li>
+              <strong>Forster et al. (2024), <em>Earth System Science Data</em> — Indicators of Global Climate Change 2023: Annual update of key indicators of the state of the climate system and human influence:</strong><br>
+              <a href="https://essd.copernicus.org/articles/16/2625/2024/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://essd.copernicus.org/articles/16/2625/2024/ ↗</a>
+            </li>
+            <li>
+              <strong>Global Carbon Project (2024) — Global Carbon Budget:</strong><br>
+              <a href="https://globalcarbonbudget.org/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://globalcarbonbudget.org/ ↗</a>
+            </li>
+            <li>
+              <strong>MacDougall et al. (2020), <em>Biogeosciences</em> — Is there warming in the pipeline? A multi-model analysis of the Zero Emissions Commitment from CO₂:</strong><br>
+              <a href="https://bg.copernicus.org/articles/17/2987/2020/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://bg.copernicus.org/articles/17/2987/2020/ ↗</a>
+            </li>
+            <li>
+              <strong>McGlade & Ekins (2015), <em>Nature</em> — The geographical distribution of fossil fuels unused when limiting global warming to 2 °C:</strong><br>
+              <a href="https://www.nature.com/articles/nature14016" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.nature.com/articles/nature14016 ↗</a>
             </li>
           </ul>
         </div>
