@@ -1908,7 +1908,7 @@
               <strong>☀️ Solar Photovoltaics (Utility & Rooftop)</strong>
               <span id="lblSolSolar">1,600 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Capacity factor ~20% · Lowest levelized cost ($0.03–0.05/kWh)</div>
+            <div class="budget-slider-sub">Current fleet: ~1,600 GW (1,600 TWh/yr) · LCOE: $0.03–$0.05/kWh · Capacity factor ~20%</div>
             <input type="range" id="sliderSolSolar" min="0" max="50000" step="500" value="1600">
           </div>
 
@@ -1917,7 +1917,7 @@
               <strong>💨 Wind Power (Onshore & Offshore)</strong>
               <span id="lblSolWind">2,300 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Capacity factor ~35–50% · High winter output · High capacity value</div>
+            <div class="budget-slider-sub">Current fleet: ~1,020 GW (2,300 TWh/yr) · LCOE: $0.035–$0.065/kWh (Onshore $0.035–$0.05, Offshore $0.07–$0.09) · Capacity factor ~35–50%</div>
             <input type="range" id="sliderSolWind" min="0" max="40000" step="500" value="2300">
           </div>
 
@@ -1926,7 +1926,7 @@
               <strong>⚛️ Nuclear Fission (Fleet & Advanced SMRs)</strong>
               <span id="lblSolNuclear">2,650 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Capacity factor ~90% · 24/7 firm zero-carbon baseload · Tiny land footprint</div>
+            <div class="budget-slider-sub">Current fleet: ~375 GW / 413 reactors (2,650 TWh/yr) · LCOE: $0.07–$0.15/kWh (amortized $0.03–$0.04) · Capacity factor ~90% · 24/7 firm baseload</div>
             <input type="range" id="sliderSolNuclear" min="0" max="20000" step="250" value="2650">
           </div>
 
@@ -1935,7 +1935,7 @@
               <strong>🌊 Hydroelectric (Reservoir & Run-of-River)</strong>
               <span id="lblSolHydro">4,300 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Capacity factor ~42% · Dispatchable renewable generation · Seasonal water storage</div>
+            <div class="budget-slider-sub">Current fleet: ~1,250 GW (4,300 TWh/yr) · LCOE: $0.04–$0.08/kWh · Capacity factor ~42% · Dispatchable clean inertia & seasonal reservoir storage</div>
             <input type="range" id="sliderSolHydro" min="0" max="10000" step="200" value="4300">
           </div>
 
@@ -1944,7 +1944,7 @@
               <strong>🌿 Geothermal, Sustainable Biomass & Marine</strong>
               <span id="lblSolBioGeo">800 TWh/yr</span>
             </div>
-            <div class="budget-slider-sub">Capacity factor ~70–85% · High-temperature industrial heat & dispatchable firm power</div>
+            <div class="budget-slider-sub">Current fleet: ~175 GW (800 TWh/yr — Biomass 145 GW, Geothermal 16 GW, Marine 0.5 GW) · LCOE: $0.05–$0.10/kWh · Capacity factor ~70–85% · High-temp steam & firm heat</div>
             <input type="range" id="sliderSolBioGeo" min="0" max="10000" step="100" value="800">
           </div>
 
@@ -1958,7 +1958,7 @@
               <strong>🔋 Battery Storage (Li-ion, Sodium-ion, LFP, Flow)</strong>
               <span id="lblSolBattery">0.8 TWh</span>
             </div>
-            <div class="budget-slider-sub">RTE ~88% · 2–8 hr duration · Sub-second response · Peak shaving & solar firming</div>
+            <div class="budget-slider-sub">Current capacity: ~0.8 TWh (800 GWh / ~150 GW) · LCOS: $0.10–$0.18/kWh-cycle · RTE ~88% · 2–8 hr duration · Peak shaving & solar firming</div>
             <input type="range" id="sliderSolBattery" min="0" max="50" step="0.5" value="0.8">
           </div>
 
@@ -1967,7 +1967,7 @@
               <strong>🏔️ Pumped Hydroelectric Storage (PHS)</strong>
               <span id="lblSolPumped">9.0 TWh</span>
             </div>
-            <div class="budget-slider-sub">RTE ~80% · 8–24+ hr duration · >90% of current global grid storage · Gravitational MWh</div>
+            <div class="budget-slider-sub">Current capacity: ~9.0 TWh (9,000 GWh / ~165 GW, >90% global) · LCOS: $0.05–$0.12/kWh-cycle · RTE ~80% · 8–24+ hr duration · 50–100 yr life</div>
             <input type="range" id="sliderSolPumped" min="0" max="40" step="0.5" value="9.0">
           </div>
 
@@ -1976,7 +1976,7 @@
               <strong>💨 Compressed Air Energy Storage (CAES)</strong>
               <span id="lblSolCaes">0.2 TWh</span>
             </div>
-            <div class="budget-slider-sub">RTE ~62% · 6–20 hr duration · Salt cavern pneumatic storage · Zero mineral degradation</div>
+            <div class="budget-slider-sub">Current capacity: ~0.2 TWh (200 GWh / ~2 GW in salt caverns) · LCOS: $0.07–$0.14/kWh-cycle · RTE ~62% · 6–20 hr duration · Zero rare metals</div>
             <input type="range" id="sliderSolCaes" min="0" max="20" step="0.2" value="0.2">
           </div>
 
@@ -1985,7 +1985,7 @@
               <strong>🏗️ Gravity Storage (Weights & Mine Shafts)</strong>
               <span id="lblSolGravity">0.05 TWh</span>
             </div>
-            <div class="budget-slider-sub">RTE ~80% · 4–12 hr duration · Solid mass potential energy (m·g·h) · 40+ yr lifespan</div>
+            <div class="budget-slider-sub">Current capacity: ~0.05 TWh (~50 GWh early commercial) · LCOS: $0.08–$0.15/kWh-cycle · RTE ~80% · 4–12 hr duration · Solid mass m·g·h · 40+ yr life</div>
             <input type="range" id="sliderSolGravity" min="0" max="15" step="0.2" value="0.05">
           </div>
 
@@ -1994,7 +1994,7 @@
               <strong>🔄 Flywheels (High-Speed Rotors)</strong>
               <span id="lblSolFlywheel">0.02 TWh</span>
             </div>
-            <div class="budget-slider-sub">RTE ~88% · Minutes to 1 hr · Kinetic energy (½·I·ω²) · Synthetic grid inertia & frequency support</div>
+            <div class="budget-slider-sub">Current capacity: ~0.02 TWh (~20 GWh / ~1.5 GW) · LCOS: $0.15–$0.25/kWh-cycle · RTE ~88% · Seconds to 1 hr · Kinetic ½·I·ω² · Grid frequency & inertia</div>
             <input type="range" id="sliderSolFlywheel" min="0" max="5" step="0.1" value="0.02">
           </div>
 
@@ -2003,7 +2003,7 @@
               <strong>🧪 Hydrogen & Power-to-Gas (Seasonal Multi-Week)</strong>
               <span id="lblSolH2">0.5 TWh</span>
             </div>
-            <div class="budget-slider-sub">RTE ~42% · Multi-week seasonal storage · Electrolysis into salt caverns · Heavy industry fuel</div>
+            <div class="budget-slider-sub">Current capacity: ~0.5 TWh (500 GWh cavern storage) · LCOS: $0.18–$0.35/kWh-cycle · RTE ~42% · Multi-week seasonal storage · Heavy industry fuel</div>
             <input type="range" id="sliderSolH2" min="0" max="50" step="0.5" value="0.5">
           </div>
 
@@ -2045,35 +2045,41 @@
 
           <!-- Energy Storage Technology Comparison Matrix -->
           <div style="margin-top: 16px;">
-            <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 8px;">Storage Technology Physics & Operational Roles:</div>
+            <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 8px;">Storage Technology Physics, Costs & Global Capacities:</div>
             <div class="storage-tech-grid">
               <div class="storage-tech-card">
                 <div><strong style="color: var(--cyan);">🔋 Chemical Batteries</strong> (Li/Na/LFP)</div>
+                <div>Current: <strong>~0.8 TWh (800 GWh)</strong> · LCOS: <strong>$0.10–$0.18/kWh</strong></div>
                 <div>RTE: <strong>85–92%</strong> · Duration: <strong>2–8 hrs</strong></div>
                 <div style="font-size: 0.72rem; color: var(--text-muted);">Rapid response (<20 ms). Solves daily solar ramp and evening peak. Moderate degradation over 10–15 yrs.</div>
               </div>
               <div class="storage-tech-card">
                 <div><strong style="color: var(--emerald);">🏔️ Pumped Hydro (PHS)</strong></div>
+                <div>Current: <strong>~9.0 TWh (>90% global)</strong> · LCOS: <strong>$0.05–$0.12/kWh</strong></div>
                 <div>RTE: <strong>75–82%</strong> · Duration: <strong>8–24+ hrs</strong></div>
                 <div style="font-size: 0.72rem; color: var(--text-muted);">Gravitational water elevation (m·g·h). Zero capacity fade over 50–100 yrs. Lowest levelized storage cost for large volumes.</div>
               </div>
               <div class="storage-tech-card">
                 <div><strong style="color: var(--amber);">💨 Compressed Air (CAES)</strong></div>
+                <div>Current: <strong>~0.2 TWh (200 GWh)</strong> · LCOS: <strong>$0.07–$0.14/kWh</strong></div>
                 <div>RTE: <strong>55–70%</strong> · Duration: <strong>6–24 hrs</strong></div>
                 <div style="font-size: 0.72rem; color: var(--text-muted);">Air compressed in underground salt caverns. Recapturing heat of compression (adiabatic) boosts efficiency. No rare metals.</div>
               </div>
               <div class="storage-tech-card">
                 <div><strong style="color: #cbd5e1;">🏗️ Gravity Storage</strong></div>
+                <div>Current: <strong>~0.05 TWh (50 GWh)</strong> · LCOS: <strong>$0.08–$0.15/kWh</strong></div>
                 <div>RTE: <strong>75–85%</strong> · Duration: <strong>4–12 hrs</strong></div>
                 <div style="font-size: 0.72rem; color: var(--text-muted);">Mechanical lifting of composite weights in shafts or towers. Zero standby loss and indefinite cycle life.</div>
               </div>
               <div class="storage-tech-card">
                 <div><strong style="color: #a855f7;">🔄 Flywheels</strong></div>
+                <div>Current: <strong>~0.02 TWh (20 GWh)</strong> · LCOS: <strong>$0.15–$0.25/kWh</strong></div>
                 <div>RTE: <strong>85–90%</strong> · Duration: <strong>Seconds–1 hr</strong></div>
                 <div style="font-size: 0.72rem; color: var(--text-muted);">Vacuum magnetic levitation rotors (½·I·ω²). Invaluable for synthetic inertia and sub-cycle frequency stability (>100k cycles).</div>
               </div>
               <div class="storage-tech-card">
                 <div><strong style="color: #38bdf8;">🧪 Hydrogen / Thermal</strong></div>
+                <div>Current: <strong>~0.5 TWh (500 GWh)</strong> · LCOS: <strong>$0.18–$0.35/kWh</strong></div>
                 <div>RTE: <strong>35–48%</strong> · Duration: <strong>Weeks–Months</strong></div>
                 <div style="font-size: 0.72rem; color: var(--text-muted);">Electrolysis into cavern gas storage. Solves multi-week winter "Dunkelflaute" when wind and solar output both lag.</div>
               </div>
@@ -3325,16 +3331,16 @@
             <strong>The Bottom Line:</strong> Because electrified devices waste far less energy, fully replacing 135,000 TWh of fossil primary energy requires only <strong>~70,000 to ~80,000 TWh/yr of clean useful electricity</strong> (we adopt <strong>75,000 TWh/yr</strong> as the central planetary benchmark).
           </p>
 
-          <h4>2. Clean Generation Technologies</h4>
+          <h4>2. Clean Generation Technologies, Costs & Capacities</h4>
           <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-muted);">
-            <li><strong>Solar Photovoltaics (PV):</strong> Current global output ~1,600 TWh/yr. Levelized cost of electricity (LCOE) has dropped >85% since 2010 ($0.03–$0.05/kWh). Capacity factor is typically 18% to 25%, producing large daytime generation surpluses that require storage.</li>
-            <li><strong>Wind Power (Onshore & Offshore):</strong> Current output ~2,300 TWh/yr. Capacity factors reach 35% onshore and 45%–55% for offshore turbines. Produces higher output in winter and night, offering strong seasonal complementarity to solar PV.</li>
-            <li><strong>Nuclear Fission (Baseload & SMRs):</strong> Current output ~2,650 TWh/yr. Operates at a ~90% capacity factor, providing 24/7 firm, weather-independent clean power with the lowest land-use footprint of any clean energy source (~0.1 m²/MWh).</li>
-            <li><strong>Hydroelectric (Conventional & Run-of-River):</strong> Current output ~4,300 TWh/yr. Operates at ~42% capacity factor. Provides essential dispatchable baseload and black-start capabilities.</li>
-            <li><strong>Geothermal & Biomass:</strong> Provides continuous high-temperature industrial steam and dispatchable firm electricity (~800 TWh/yr currently).</li>
+            <li><strong>Solar Photovoltaics (PV):</strong> Current global capacity ~1,600 GW (output ~1,600 TWh/yr). Levelized Cost of Electricity (LCOE) is <strong>$0.03 to $0.05 / kWh</strong> (down >85% since 2010; the cheapest source of new bulk energy in history). Capacity factor averages 18% to 22%, necessitating daytime solar storage firming.</li>
+            <li><strong>Wind Power (Onshore & Offshore):</strong> Current global capacity ~1,020 GW (output ~2,300 TWh/yr). LCOE is <strong>$0.035 to $0.05 / kWh onshore</strong> and <strong>$0.07 to $0.09 / kWh offshore</strong>. Capacity factors reach 35% onshore and 45%–55% for offshore turbines. Produces higher output in winter and night, offering strong seasonal complementarity to solar PV.</li>
+            <li><strong>Nuclear Fission (Baseload & SMRs):</strong> Current global capacity ~375 GW across 413 reactors (output ~2,650 TWh/yr). LCOE is <strong>$0.07 to $0.15 / kWh for new builds</strong> (amortized existing fleet $0.03 to $0.04 / kWh). Operates at a ~90% capacity factor, providing 24/7 firm, weather-independent clean power with the lowest land-use footprint of any clean energy source (~0.1 m²/MWh).</li>
+            <li><strong>Hydroelectric (Conventional & Run-of-River):</strong> Current global capacity ~1,250 GW (output ~4,300 TWh/yr). LCOE is <strong>$0.04 to $0.08 / kWh</strong>. Operates at ~42% capacity factor, providing essential dispatchable clean inertia, synchronous grid stabilization, and seasonal reservoir storage.</li>
+            <li><strong>Geothermal, Biomass & Marine:</strong> Current global capacity ~175 GW (Biomass ~145 GW, Geothermal ~16 GW, Marine ~0.5 GW; output ~800 TWh/yr). LCOE is <strong>$0.05 to $0.08 / kWh for geothermal</strong> and <strong>$0.07 to $0.12 / kWh for biomass</strong>. Operates at ~70% to 85% capacity factor, delivering continuous high-temperature industrial steam and dispatchable firm power.</li>
           </ul>
 
-          <h4>3. Physics & Mechanics of the Six Grid Storage Technologies</h4>
+          <h4>3. Physics, Costs & Mechanics of the Six Grid Storage Technologies</h4>
           <p>
             Because solar and wind generation vary with weather and daylight, energy storage and grid firming are required to prevent outages (such as during multi-day winter wind/solar lulls, or <em>Dunkelflaute</em>):
           </p>
@@ -3342,54 +3348,61 @@
             <thead>
               <tr>
                 <th>Technology</th>
-                <th>Governing Physical Law</th>
+                <th>Current Capacity</th>
+                <th>Levelized Cost (LCOS)</th>
                 <th>Round-Trip Efficiency (RTE)</th>
                 <th>Discharge Duration</th>
-                <th>Optimal Grid Application</th>
+                <th>Optimal Grid Application & Physics</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><strong>1. Chemical Batteries</strong><br>(Li-ion, Na-ion, LFP, Flow)</td>
-                <td>Electrochemical intercalation / redox reactions: Δ<i>G</i> = -<i>nFE</i></td>
+                <td>~0.8 TWh<br>(~800 GWh / ~150 GW)</td>
+                <td><strong>$0.10 – $0.18 / kWh-cycle</strong></td>
                 <td><strong>85% – 92%</strong></td>
                 <td>2 – 8 hours</td>
-                <td>Sub-second frequency regulation; evening solar peak shaving; distribution substation firming. Moderate degradation over 3,000–8,000 cycles.</td>
+                <td>Sub-second frequency regulation; evening solar peak shaving; distribution substation firming. Moderate degradation over 3,000–8,000 cycles. (Δ<i>G</i> = -<i>nFE</i>)</td>
               </tr>
               <tr>
                 <td><strong>2. Pumped Hydro Storage (PHS)</strong></td>
-                <td>Gravitational potential energy:<br><i>E</i> = ρ · <i>V</i> · <i>g</i> · <i>h</i></td>
+                <td>~9.0 TWh<br>(>90% of global storage)</td>
+                <td><strong>$0.05 – $0.12 / kWh-cycle</strong></td>
                 <td><strong>75% – 82%</strong></td>
                 <td>8 – 24+ hours</td>
-                <td>Bulk daily and multi-day dispatch. Currently represents >90% of all worldwide grid energy storage capacity (~9,000 GWh). Zero capacity degradation over 50–100 years.</td>
+                <td>Bulk daily and multi-day dispatch. Lowest levelized storage cost for massive volume. Zero capacity degradation over 50–100 years. (<i>E</i> = ρ<i>Vgh</i>)</td>
               </tr>
               <tr>
                 <td><strong>3. Compressed Air (CAES)</strong></td>
-                <td>Pneumatic gas expansion:<br><i>W</i> = ∫ <i>P</i> <i>dV</i> (in underground salt caverns)</td>
-                <td><strong>55% – 70%</strong><br>(higher with adiabatic thermal recovery)</td>
+                <td>~0.2 TWh<br>(~200 GWh / ~2 GW)</td>
+                <td><strong>$0.07 – $0.14 / kWh-cycle</strong></td>
+                <td><strong>55% – 70%</strong><br>(adiabatic thermal recovery)</td>
                 <td>6 – 24 hours</td>
-                <td>Large-scale intraday bulk storage without rare battery metals. High cycling endurance with deep depth of discharge.</td>
+                <td>Large-scale intraday bulk storage in salt caverns without rare battery metals. High cycling endurance with deep depth of discharge. (<i>W</i> = ∫<i>P\,dV</i>)</td>
               </tr>
               <tr>
                 <td><strong>4. Gravity Energy Storage</strong></td>
-                <td>Mechanical potential energy:<br><i>E</i> = <i>m</i> · <i>g</i> · <i>h</i> (lifting heavy solid masses in shafts)</td>
+                <td>~0.05 TWh<br>(~50 GWh commercial)</td>
+                <td><strong>$0.08 – $0.15 / kWh-cycle</strong></td>
                 <td><strong>75% – 85%</strong></td>
                 <td>4 – 12 hours</td>
-                <td>Medium-duration storage utilizing abandoned mine shafts or vertical towers. Zero standby self-discharge; 40+ year mechanical design life.</td>
+                <td>Medium-duration storage utilizing abandoned mine shafts or vertical towers. Zero standby self-discharge; 40+ year mechanical design life. (<i>E</i> = <i>mgh</i>)</td>
               </tr>
               <tr>
                 <td><strong>5. Flywheels</strong></td>
-                <td>Rotational kinetic energy:<br><i>E</i> = ½ · <i>I</i> · ω²</td>
+                <td>~0.02 TWh<br>(~20 GWh / ~1.5 GW)</td>
+                <td><strong>$0.15 – $0.25 / kWh-cycle</strong></td>
                 <td><strong>85% – 90%</strong></td>
                 <td>Seconds to 1 hour</td>
-                <td>Instantaneous sub-cycle grid frequency regulation (<10 ms); synchronous inertia to stabilize transmission grids lacking spinning steam turbines; >100,000 cycle lifespan.</td>
+                <td>Instantaneous sub-cycle grid frequency regulation (<10 ms); synchronous inertia to stabilize transmission grids lacking spinning steam turbines; >100,000 cycle lifespan. (<i>E</i> = ½<i>I</i>ω²)</td>
               </tr>
               <tr>
                 <td><strong>6. Hydrogen & Power-to-Gas</strong></td>
-                <td>Thermochemical water splitting:<br>2H₂O + energy → 2H₂ + O₂</td>
+                <td>~0.5 TWh<br>(~500 GWh in salt caverns)</td>
+                <td><strong>$0.18 – $0.35 / kWh-cycle</strong></td>
                 <td><strong>35% – 48%</strong><br>(power-to-gas-to-power)</td>
                 <td>Weeks to Months</td>
-                <td>Multi-week seasonal energy storage; storing summer solar surplus in salt caverns for winter heating; zero-carbon fuel for green steel and long-haul transport.</td>
+                <td>Multi-week seasonal energy storage; storing summer solar surplus in salt caverns for winter heating; zero-carbon fuel for green steel and long-haul transport. (2H₂O → 2H₂ + O₂)</td>
               </tr>
             </tbody>
           </table>
@@ -6580,19 +6593,32 @@
         const storFlywheel = parseFloat(sliderSolFlywheel.value);
         const storH2 = parseFloat(sliderSolH2.value);
 
-        // Update Slider Numerical Badges
-        document.getElementById("lblSolSolar").textContent = `${genSolar.toLocaleString()} TWh/yr`;
-        document.getElementById("lblSolWind").textContent = `${genWind.toLocaleString()} TWh/yr`;
-        document.getElementById("lblSolNuclear").textContent = `${genNuclear.toLocaleString()} TWh/yr`;
-        document.getElementById("lblSolHydro").textContent = `${genHydro.toLocaleString()} TWh/yr`;
-        document.getElementById("lblSolBioGeo").textContent = `${genBioGeo.toLocaleString()} TWh/yr`;
+        // Update Slider Numerical Badges with Dynamic Build Multipliers
+        function formatBuildBadge(val, base, unit) {
+          const mult = (val / base).toFixed(1);
+          const diff = val - base;
+          if (Math.abs(diff) < 0.001) {
+            return `${val.toLocaleString()} ${unit} <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-muted); font-size: 0.7rem; margin-left: 6px;">Current 1.0×</span>`;
+          } else if (diff > 0) {
+            const diffStr = diff >= 10 ? `+${Math.round(diff).toLocaleString()}` : `+${diff.toFixed(2)}`;
+            return `${val.toLocaleString()} ${unit} <span class="badge" style="background: rgba(0,229,255,0.15); color: var(--cyan); font-size: 0.7rem; margin-left: 6px;">Build ${mult}× (${diffStr} ${unit})</span>`;
+          } else {
+            return `${val.toLocaleString()} ${unit} <span class="badge" style="background: rgba(244,63,94,0.15); color: var(--rose); font-size: 0.7rem; margin-left: 6px;">${mult}× fleet</span>`;
+          }
+        }
 
-        document.getElementById("lblSolBattery").textContent = `${storBattery.toFixed(1)} TWh`;
-        document.getElementById("lblSolPumped").textContent = `${storPumped.toFixed(1)} TWh`;
-        document.getElementById("lblSolCaes").textContent = `${storCaes.toFixed(1)} TWh`;
-        document.getElementById("lblSolGravity").textContent = `${storGravity.toFixed(2)} TWh`;
-        document.getElementById("lblSolFlywheel").textContent = `${storFlywheel.toFixed(2)} TWh`;
-        document.getElementById("lblSolH2").textContent = `${storH2.toFixed(1)} TWh`;
+        document.getElementById("lblSolSolar").innerHTML = formatBuildBadge(genSolar, 1600, "TWh/yr");
+        document.getElementById("lblSolWind").innerHTML = formatBuildBadge(genWind, 2300, "TWh/yr");
+        document.getElementById("lblSolNuclear").innerHTML = formatBuildBadge(genNuclear, 2650, "TWh/yr");
+        document.getElementById("lblSolHydro").innerHTML = formatBuildBadge(genHydro, 4300, "TWh/yr");
+        document.getElementById("lblSolBioGeo").innerHTML = formatBuildBadge(genBioGeo, 800, "TWh/yr");
+
+        document.getElementById("lblSolBattery").innerHTML = formatBuildBadge(storBattery, 0.8, "TWh");
+        document.getElementById("lblSolPumped").innerHTML = formatBuildBadge(storPumped, 9.0, "TWh");
+        document.getElementById("lblSolCaes").innerHTML = formatBuildBadge(storCaes, 0.2, "TWh");
+        document.getElementById("lblSolGravity").innerHTML = formatBuildBadge(storGravity, 0.05, "TWh");
+        document.getElementById("lblSolFlywheel").innerHTML = formatBuildBadge(storFlywheel, 0.02, "TWh");
+        document.getElementById("lblSolH2").innerHTML = formatBuildBadge(storH2, 0.5, "TWh");
 
         const totalCleanGen = genSolar + genWind + genNuclear + genHydro + genBioGeo;
         const usefulGoalTwh = 75000.0;
@@ -6618,8 +6644,10 @@
 
         // Update Top Stat Badges
         const pctGoal = ((totalCleanGen / usefulGoalTwh) * 100).toFixed(1);
+        const totalGenMult = (totalCleanGen / 11650).toFixed(1);
+        const totalGenAdd = Math.max(0, totalCleanGen - 11650);
         document.getElementById("solStatGenVal").innerHTML = `${totalCleanGen.toLocaleString()} <span style="font-size: 0.8rem; color: var(--text-muted);">TWh/yr</span>`;
-        document.getElementById("solStatGenSub").textContent = `${pctGoal}% of fossil energy replaced (${totalCleanGen < 12000 ? '2026 fleet' : 'Clean Grid'})`;
+        document.getElementById("solStatGenSub").textContent = `${pctGoal}% of goal · Total Build: ${totalGenMult}× fleet (+${totalGenAdd.toLocaleString()} TWh/yr)`;
 
         document.getElementById("solStatDisplacedVal").innerHTML = `${fossilDisplacedGt.toFixed(1)} <span style="font-size: 0.8rem; color: var(--text-muted);">Gt CO₂/yr</span>`;
         document.getElementById("solStatDisplacedSub").textContent = `${remainingFossilGt.toFixed(1)} Gt CO₂/yr remaining emissions`;
@@ -6627,8 +6655,10 @@
         document.getElementById("solStatGrowthVal").innerHTML = `${netPpmRate >= 0 ? '+' : ''}${netPpmRate.toFixed(2)} <span style="font-size: 0.8rem; color: var(--text-muted);">ppm/yr</span>`;
         document.getElementById("solStatGrowthSub").textContent = `${netPpmRate >= 0 ? '+' : ''}${warmingRateDecade.toFixed(2)} °C/decade warming pace`;
 
+        const storMult = (totalStorageTwh / 10.57).toFixed(1);
+        const storAdd = Math.max(0, totalStorageTwh - 10.57);
         document.getElementById("solStatFirmingVal").innerHTML = `${gridFirmingScore}% <span style="font-size: 0.8rem; color: var(--text-muted);">Reliability</span>`;
-        document.getElementById("solStatFirmingSub").textContent = `Storage Buffer: ~${storageBufferDays.toFixed(1)} days (${totalStorageTwh.toFixed(1)} TWh)`;
+        document.getElementById("solStatFirmingSub").textContent = `Buffer: ~${storageBufferDays.toFixed(1)} days (${totalStorageTwh.toFixed(1)} TWh · ${storMult}× build, +${storAdd.toFixed(1)} TWh)`;
 
         drawSolutionsChart();
       }
