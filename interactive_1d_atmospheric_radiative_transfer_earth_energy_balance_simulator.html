@@ -750,12 +750,12 @@
       }
     }
 
-    /* Action Button on 500-Year Temperature Chart (aligned on the same line as the 500-year heading) */
+    /* Action Button on 500-Year Temperature Chart (positioned cleanly below the +4°C threshold line) */
     .chart-action-btn-paleo {
       position: absolute;
-      top: calc((100% - 36px) / 2 + 12px);
-      left: calc(24px + (100% - 48px) * 0.60);
-      right: auto;
+      top: calc((100% - 36px) / 2 + 82px);
+      right: 32px;
+      left: auto;
       z-index: 25;
       display: inline-flex;
       align-items: center;
@@ -784,10 +784,20 @@
     }
     @media (max-width: 600px) {
       .chart-action-btn-paleo {
-        top: calc((100% - 36px) / 2 + 10px);
-        left: calc(24px + (100% - 48px) * 0.52);
+        top: calc((100% - 36px) / 2 + 82px);
+        right: 28px;
+        left: auto;
         font-size: 0.68rem;
-        padding: 3px 7px;
+        padding: 2.5px 8px;
+        gap: 4px;
+      }
+    }
+    @media (max-width: 420px) {
+      .chart-action-btn-paleo {
+        right: 18px;
+        font-size: 0.64rem;
+        padding: 2px 6px;
+        gap: 3px;
       }
     }
 
