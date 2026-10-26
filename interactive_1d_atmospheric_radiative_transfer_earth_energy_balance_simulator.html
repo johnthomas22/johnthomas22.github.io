@@ -4681,7 +4681,7 @@
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
           ctx.fillStyle = th === 0.0 ? "#94a3b8" : (th === 1.5 ? "#f59e0b" : "#f43f5e");
           ctx.font = "bold 9px ui-monospace, monospace";
-          const label = th === 0.0 ? "0.0°C (1850–1900 Baseline)" : `+${th.toFixed(1)}°C (1850–1900)`;
+          const label = th === 0.0 ? "0.0°C (Baseline)" : `+${th.toFixed(1)}°C`;
           ctx.fillText(label, tGridLeft + 3, y - 2);
         });
 
@@ -5251,10 +5251,32 @@
             (mousePos.x >= curYrBadgeX && mousePos.x <= curYrBadgeX + curYrBadgeW && mousePos.y >= curYrBadgeY && mousePos.y <= curYrBadgeY + 18)
           );
 
+          // Check proximity to horizontal temperature reference lines / labels
+          let hoveredThreshold = null;
+          [0.0, 1.5, 2.0, 3.0, 4.0].forEach(th => {
+            const lineY = dtToY(th);
+            const isOverLabel = (mousePos.x >= tGridLeft && mousePos.x <= tGridLeft + 85 && Math.abs(mousePos.y - (lineY - 4)) <= 9);
+            const isOverLine = (Math.abs(mousePos.y - lineY) <= 3 && mousePos.x >= tGridLeft && mousePos.x <= tGridRight);
+            if (isOverLabel || (isOverLine && distTemp > 10 && distCo2 > 10)) {
+              hoveredThreshold = { th, lineY, isOverLabel };
+            }
+          });
+
           isHoveringMainTpBadge = !!hoveredMainTp;
           if (hoveredMainTp) {
             isPointerHover = true;
             openTippingPointCard(hoveredMainTp.grp, hoveredMainTp.crossYr, rect.left + hoveredMainTp.anchorX, rect.top + hoveredMainTp.anchorY, false, hoveredMainTp.itemIdx);
+          } else if (hoveredThreshold && hoveredThreshold.isOverLabel) {
+            isPointerHover = true;
+            const thValStr = hoveredThreshold.th === 0.0 ? "0.0°C" : `+${hoveredThreshold.th.toFixed(1)}°C`;
+            const thStroke = hoveredThreshold.th === 0.0 ? "#94a3b8" : (hoveredThreshold.th === 1.5 ? "#f59e0b" : "#f43f5e");
+            activeTip = {
+              text: `${thValStr} · Relative to 1850–1900 baseline.`,
+              stroke: thStroke,
+              compact: true,
+              pointX: Math.max(tGridLeft + 25, mousePos.x),
+              pointY: hoveredThreshold.lineY
+            };
           } else if (isOverTempLine) {
             isPointerHover = true;
             const tempStroke = hoverYr <= 1958 ? "#f59e0b" : "#f43f5e";
@@ -5292,6 +5314,17 @@
             activeTip = {
               text: `Active Simulation Year: ${Math.round(state.year)} CE · Atmospheric CO2: ${Math.round(state.co2)} ppm · Surface Warming: ${curObsDt >= 0 ? "+" : ""}${curObsDt.toFixed(2)}°C (rel. 1850–1900).`,
               stroke: "#00e5ff"
+            };
+          } else if (hoveredThreshold && !hoveredThreshold.isOverLabel) {
+            isPointerHover = true;
+            const thValStr = hoveredThreshold.th === 0.0 ? "0.0°C" : `+${hoveredThreshold.th.toFixed(1)}°C`;
+            const thStroke = hoveredThreshold.th === 0.0 ? "#94a3b8" : (hoveredThreshold.th === 1.5 ? "#f59e0b" : "#f43f5e");
+            activeTip = {
+              text: `${thValStr} · Relative to 1850–1900 baseline.`,
+              stroke: thStroke,
+              compact: true,
+              pointX: mousePos.x,
+              pointY: hoveredThreshold.lineY
             };
           }
         }
