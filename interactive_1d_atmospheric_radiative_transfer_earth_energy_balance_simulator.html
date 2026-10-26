@@ -1329,7 +1329,7 @@
       <div class="stat-card">
         <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose">ΔT</span></div>
         <div class="stat-value" id="valDeltaT" style="color: var(--rose);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">°C</span></div>
-        <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (Anomaly: +0.00 °C)</div>
+        <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (-0.12 °C rel. 1850–1900)</div>
       </div>
     </div>
 
@@ -2545,7 +2545,7 @@
           </p>
           <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; color: var(--text-muted);">
             <li><strong>Physical Radiative & Ocean Integration:</strong> Solved forward from the unforced 1750 equilibrium (Δ<i>T</i> = 0, EEI = 0) with zero artificial initialization fudge factors.</li>
-            <li><strong>Tipping Points & Chart Reference Lines:</strong> Evaluated relative to the standard <strong>1850–1900 Paris baseline</strong> by accounting for the model's +0.12 °C offset, ensuring all threshold crossing dates (e.g. Greenland Ice Sheet, Coral Reefs) align with published empirical science (Armstrong McKay et al. 2022).</li>
+            <li><strong>500-Year Trajectory & Tipping Points:</strong> Rendered directly on the standard <strong>1850–1900 IPCC baseline</strong> (with 1750 starting at -0.12 °C and 2026 at +1.14 °C), ensuring all curves, grid lines, and threshold crossing dates (e.g. Greenland Ice Sheet, Coral Reefs) align 1:1 with published empirical science (IPCC AR6; Armstrong McKay et al. 2022).</li>
           </ul>
 
           <h4 style="margin-top: 20px;">Transient Warming vs. Instant Ocean Equilibrium (Committed Warming)</h4>
@@ -4613,8 +4613,8 @@
         const legLeft = tGridLeft + 8;
         const legY = tGridTop + titleFontSize + 19;
         ctx.fillStyle = "#f43f5e";
-        ctx.fillText("■ Surface ΔT (°C rel. to 1750)", legLeft, legY);
-        const dtLegendW = ctx.measureText("■ Surface ΔT (°C rel. to 1750)").width;
+        ctx.fillText("■ Surface ΔT (°C rel. to 1850–1900)", legLeft, legY);
+        const dtLegendW = ctx.measureText("■ Surface ΔT (°C rel. to 1850–1900)").width;
 
         ctx.fillStyle = "#c084fc";
         const co2LegendX = legLeft + dtLegendW + 16;
@@ -4624,12 +4624,12 @@
         if (tGridW > 850) {
           ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
           ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
-          ctx.fillText("(Thresholds: 1850–1900 baseline, +0.12°C offset)", co2LegendX + co2LegendW + 16, legY);
+          ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 16, legY);
         }
 
         function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
-        // Scaled to 5.2°C span so +2.5 ppm/yr trajectory comfortably sits in upper chart with head room
-        function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.2)) / 5.2) * tGridH; }
+        // Scaled to 5.2°C span so +2.5 ppm/yr trajectory comfortably sits in upper chart with head room (relative to 1850–1900)
+        function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.35)) / 5.2) * tGridH; }
         // CO2 Scale: 250 ppm to 1000 ppm fitted across the 500-Year chart height
         function co2ToY(c) { return tGridBottom - ((c - 250) / 750) * tGridH; }
 
@@ -4674,15 +4674,14 @@
           }
         }
 
-        // Threshold Reference Lines (1850–1900 targets mapped onto 1750 chart axis)
+        // Threshold Reference Lines (Evaluated directly on standard 1850–1900 baseline)
         [0.0, 1.5, 2.0, 3.0, 4.0].forEach(th => {
-          const yVal = th === 0.0 ? 0.0 : (th + OFFSET_1850_1900);
-          const y = dtToY(yVal);
+          const y = dtToY(th);
           ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (th === 1.5 ? "rgba(245,158,11,0.4)" : "rgba(244,63,94,0.4)");
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
           ctx.fillStyle = th === 0.0 ? "#94a3b8" : (th === 1.5 ? "#f59e0b" : "#f43f5e");
           ctx.font = "bold 9px ui-monospace, monospace";
-          const label = th === 0.0 ? "0.0°C (1750 Baseline)" : `+${th.toFixed(1)}°C (1850–1900)`;
+          const label = th === 0.0 ? "0.0°C (1850–1900 Baseline)" : `+${th.toFixed(1)}°C (1850–1900)`;
           ctx.fillText(label, tGridLeft + 3, y - 2);
         });
 
@@ -4743,7 +4742,7 @@
         ctx.beginPath();
         STATIC_HISTORICAL_1750_1958.forEach((pt, i) => {
           const cx = yrToX(pt.year);
-          const cy = dtToY(pt.deltaTs);
+          const cy = dtToY(pt.deltaTs - OFFSET_1850_1900);
           if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
         });
         ctx.stroke();
@@ -4775,19 +4774,19 @@
             const pt = state.history[i];
             if (pt.year >= 1958) {
               const cx = yrToX(pt.year);
-              const cy = dtToY(pt.deltaTs);
+              const cy = dtToY(pt.deltaTs - OFFSET_1850_1900);
               if (!tDynStarted) { ctx.moveTo(cx, cy); tDynStarted = true; } else { ctx.lineTo(cx, cy); }
             }
           }
           if (tDynStarted) ctx.stroke();
         }
 
-        // Helper to find temperature delta at a given year along the history curve
+        // Helper to find temperature delta at a given year along the history curve (relative to 1850–1900 baseline)
         function getHistoricalDeltaAt(yr) {
-          if (yr === 2026 && state.year >= 2026) return 1.26;
+          if (yr === 2026 && state.year >= 2026) return (1.26 - OFFSET_1850_1900);
           if (yr <= 1958) {
             const pt = STATIC_HISTORICAL_1750_1958.find(p => Math.abs(p.year - yr) < 0.6);
-            if (pt) return pt.deltaTs;
+            if (pt) return pt.deltaTs - OFFSET_1850_1900;
           }
           if (!state.history || state.history.length === 0) return null;
           if (yr < state.history[0].year) return null;
@@ -4798,10 +4797,11 @@
             if (yr >= p1.year && yr <= p2.year) {
               const span = p2.year - p1.year;
               const frac = span === 0 ? 0 : (yr - p1.year) / span;
-              return p1.deltaTs + frac * (p2.deltaTs - p1.deltaTs);
+              const raw = p1.deltaTs + frac * (p2.deltaTs - p1.deltaTs);
+              return raw - OFFSET_1850_1900;
             }
           }
-          return state.history[state.history.length - 1].deltaTs;
+          return state.history[state.history.length - 1].deltaTs - OFFSET_1850_1900;
         }
 
         // Helper to find atmospheric CO2 (ppm) at a given year along the history curve
@@ -4827,7 +4827,7 @@
         // 1. Prepare temperature change callout badges at intersections with the orange dashed marker lines (linked from the LEFT)
         const markerBadgeBoxes = [];
         [1958, 2026].forEach(targetYr => {
-          const dtVal = (targetYr === 2026 && state.year >= 2026) ? 1.26 : getHistoricalDeltaAt(targetYr);
+          const dtVal = (targetYr === 2026 && state.year >= 2026) ? (1.26 - OFFSET_1850_1900) : getHistoricalDeltaAt(targetYr);
           if (dtVal !== null) {
             const ix = yrToX(targetYr);
             const iy = dtToY(dtVal);
@@ -4854,7 +4854,7 @@
           const crossYr = getThresholdCrossingYear(state.history, grp.thresholdC, state.year, state.deltaTs);
           if (crossYr !== null && grp.thresholdC <= 5.0) {
             const tx = yrToX(crossYr);
-            const ty = dtToY(grp.thresholdC + OFFSET_1850_1900);
+            const ty = dtToY(grp.thresholdC);
 
             // Badge dimensions positioned cleanly above-LEFT of the crossing point so it never obscures the rising curve
             ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
@@ -5283,13 +5283,14 @@
           } else if (isOver2026) {
             isPointerHover = true;
             activeTip = {
-              text: "Present-day observational benchmark (+1.26°C anomaly, 427 ppm CO2), dividing instrumental history from future warming trajectories.",
+              text: "Present-day observational benchmark (+1.14°C anomaly rel. 1850–1900 / +1.26°C rel. 1750, 427 ppm CO2), dividing instrumental history from future warming trajectories.",
               stroke: "#f59e0b"
             };
           } else if (isOverActiveYr) {
             isPointerHover = true;
+            const curObsDt = state.deltaTs - OFFSET_1850_1900;
             activeTip = {
-              text: `Active Simulation Year: ${Math.round(state.year)} CE · Atmospheric CO2: ${Math.round(state.co2)} ppm · Surface Warming: +${state.deltaTs.toFixed(2)}°C.`,
+              text: `Active Simulation Year: ${Math.round(state.year)} CE · Atmospheric CO2: ${Math.round(state.co2)} ppm · Surface Warming: ${curObsDt >= 0 ? "+" : ""}${curObsDt.toFixed(2)}°C (rel. 1850–1900).`,
               stroke: "#00e5ff"
             };
           }
@@ -5405,7 +5406,7 @@
         document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${(p.OLR - ASR >= 0 ? "+" : "")}${(p.OLR - ASR).toFixed(2)} W/m²`;
         document.getElementById("valEEI").innerHTML = `${p.EEI >= 0 ? "+" : ""}${p.EEI.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
         document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
-        document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (Anomaly: ${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} °C)`;
+        document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (+${(state.deltaTs - OFFSET_1850_1900).toFixed(2)} °C rel. 1850–1900)`;
         document.getElementById("simYearDisplay").textContent = `Year: ${Math.round(state.year)} CE`;
 
         // Sync Gentle Intro Bar
