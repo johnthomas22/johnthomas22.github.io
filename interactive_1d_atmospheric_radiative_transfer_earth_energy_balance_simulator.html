@@ -1846,7 +1846,10 @@
               <button class="btn btn-secondary" id="btnBackToSimFromSources" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
               <button class="btn btn-secondary" id="btnJumpToBudgetsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">🛢️ View Carbon Budgets</button>
             </div>
-            <button class="btn btn-start" id="btnJumpToSolutionsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">💡 How to Replace 41 Gt/yr (Solutions) →</button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-modal" id="btnOpenGuideFromSources" style="font-size: 0.78rem; padding: 6px 14px;">📖 Open Sources & Methane Guide →</button>
+              <button class="btn btn-start" id="btnJumpToSolutionsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">💡 How to Replace 41 Gt/yr (Solutions) →</button>
+            </div>
           </div>
         </div>
 
@@ -2306,11 +2309,11 @@
               </li>
                             <li>
                 <a class="toc-link" data-target="page-sources-owid">
-                  <span>🏭</span> <strong>Page 7: Global Emissions Anatomy — Sectors, Fuels & Non-CO₂ Warming Gases (Our World in Data)</strong>
+                  <span>🏭</span> <strong>Page 7: Global Emissions Anatomy — Sectors, Fuels & The Methane Problem (Our World in Data)</strong>
                   <span class="badge badge-cyan" style="margin-left: 8px;">OWID / Climate Watch / GCP</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Complete quantitative breakdown of global annual emissions (54.6 Gt CO₂e total, ~40.9 Gt CO₂). Analyzes the 4 primary economic sectors: Energy (73.2% — Industry 24.2%, Transport 16.2%, Buildings 17.5%, Fugitive 5.8%), Agriculture & Land Use (AFOLU, 18.4% — livestock methane, fertilizer N₂O, deforestation), Direct Industrial Processes (5.2% — cement calcination, chemicals), and Waste (3.2%). Maps fossil fuels by source (Coal 41%, Oil 33%, Gas 21%) and pairs each emission category with its direct technological replacement.
+                  Complete quantitative breakdown of global annual emissions (54.6 Gt CO₂e total, ~40.9 Gt CO₂). Analyzes the 4 primary economic sectors: Energy (73.2%), Agriculture & Land Use (AFOLU, 18.4%), Direct Industrial Processes (5.2%), and Waste (3.2%). Maps fossil fuels by source (Coal 41%, Oil 33%, Gas 21%) and pairs each emission category with its direct technological replacement. Explores the atmospheric physics of methane (CH₄): why its 84× 20-year warming potency (GWP₂₀), 11.8-year hydroxyl radical (•OH) lifetime, and +0.5 °C present warming contribution make methane abatement humanity's fastest near-term cooling brake.
                 </div>
               </li>
               <li>
@@ -3316,6 +3319,90 @@
             <li><strong>Natural Gas (21.1% · 7.9 Gt CO₂/yr):</strong> Emits ~56 kg CO₂/GJ. Powers combined-cycle gas turbines (CCGT), residential/commercial building heating, and industrial steam.</li>
             <li><strong>Cement Process & Flaring (5.3% · 2.0 Gt CO₂/yr):</strong> Direct limestone chemical calcination and upstream oilfield safety flaring.</li>
           </ul>
+
+          <h4>5. Atmospheric Physics & The Methane Problem: The 20-Year Climate Brake</h4>
+          <p>
+            Methane (CH₄) occupies a critical, double-edged position in atmospheric physics. Often described as climate change's <em>"emergency brake"</em>, methane operates under fundamentally different radiative, chemical, and temporal dynamics than carbon dioxide:
+          </p>
+          <div class="code-box">
+            • <b>20-Year Potency (GWP₂₀ = 82.5 to 84×):</b> Over a 20-year timescale, 1 tonne of CH₄ traps <b>~84 times more heat</b> than 1 tonne of CO₂. Under the standard 100-year accounting metric (GWP₁₀₀ = 28 to 30×), methane's acute short-term heating is heavily diluted by mathematical averaging.<br>
+            • <b>Present-Day Warming Contribution:</b> Methane is directly responsible for approximately <b>+0.5 °C of forced surface warming</b> (roughly 30% to 35% of all human-induced warming to date).<br>
+            • <b>Atmospheric Lifetime (11.8 Years):</b> Unlike CO₂ (which lingers for hundreds to thousands of years), CH₄ is actively destroyed in the troposphere via chemical oxidation by hydroxyl radicals (•OH).<br>
+            • <b>Ground-Level Ozone Formation:</b> Atmospheric CH₄ oxidation in the presence of nitrogen oxides (NOₓ) produces toxic tropospheric ozone (O₃), causing an estimated <b>~1 million premature respiratory deaths annually</b> and suppressing global crop yields (wheat, rice, maize, soy) by $15 to $25 billion each year.
+          </div>
+
+          <h5 style="color: var(--cyan); margin-top: 14px; margin-bottom: 6px;">A. Radiative Physics: The Unsaturated Atmospheric Window</h5>
+          <p>
+            Why is a molecule of methane so much more radiatively potent than a molecule of CO₂?
+          </p>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; color: var(--text-muted);">
+            <li><strong>Spectral Window Absorption:</strong> Carbon dioxide's primary absorption band (centered at 15 µm) is already largely saturated near the surface, meaning additional CO₂ primarily acts at the band edges and in the upper troposphere (logarithmic forcing, Δ<i>F</i> &prop; ln(<i>C</i>/<i>C</i>₀)). In contrast, methane's fundamental vibrational-rotational band is centered at <strong>7.66 µm (1,306 cm⁻¹)</strong>—a wavelength region where Earth's atmosphere is relatively transparent (the infrared "window").</li>
+            <li><strong>High Radiative Efficiency:</strong> Because its absorption window is unsaturated, each additional CH₄ molecule exerts a radiative efficiency of <strong>~0.00037 W/m² per ppb</strong>—over <strong>26 times greater per mole</strong> than CO₂ (~0.000014 W/m²/ppb).</li>
+          </ul>
+
+          <h5 style="color: var(--cyan); margin-top: 14px; margin-bottom: 6px;">B. Chemical Destruction: The Hydroxyl Radical (•OH) Sink</h5>
+          <p>
+            Methane's concentration in the air is governed by a dynamic chemical equilibrium between surface emission and chemical destruction in the air:
+          </p>
+          <div class="code-box">
+            CH₄ + •OH &longrightarrow; •CH₃ + H₂O &longrightarrow; ... &longrightarrow; HCHO &longrightarrow; CO &longrightarrow; CO₂ + 2 H₂O
+          </div>
+          <p>
+            Over 90% of atmospheric methane is removed by reaction with short-lived <strong>hydroxyl radicals (•OH)</strong>—often called the atmosphere's "detergent"—in the sunlit troposphere. This gives methane an <em>e-folding turnover lifetime of ~11.8 years</em>. Consequently:
+          </p>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; color: var(--text-muted);">
+            <li><strong>Rapid Climate Responsiveness:</strong> If global methane emissions are reduced today, atmospheric methane concentrations begin dropping within a few years. Halving global methane emissions could shave nearly <strong>~0.3 °C of peak global warming by 2040–2050</strong>.</li>
+            <li><strong>The "Brake" vs. "Steering Wheel" Dilemma:</strong> Methane acts like a heater that turns off 12 years after emissions stop; CO₂ acts like permanent insulation. Cutting methane buys humanity crucial breathing room to prevent crossing catastrophic tipping points (such as permafrost collapse and marine ice-sheet loss), but <strong>methane reductions cannot substitute for CO₂ phaseout</strong>. If CO₂ emissions continue, cumulative atmospheric carbon will inevitably push global temperatures past safe thresholds once the methane reduction dividend is exhausted.</li>
+          </ul>
+
+          <h5 style="color: var(--cyan); margin-top: 14px; margin-bottom: 6px;">C. The Three Anthropogenic Methane Pillars & "Super-Emitters"</h5>
+          <p>
+            Human activities emit approximately <strong>380 million tonnes of CH₄ per year</strong> (~60% of all methane emissions; the remaining ~40% originates from natural wetlands):
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Source Category</th>
+                <th>Global Share</th>
+                <th>Underlying Mechanism</th>
+                <th>Abatement Solutions & Economics</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Fossil Fuel Extraction</strong><br>(Oil, Gas & Coal)</td>
+                <td><strong>~35%</strong><br>(~135 Mt CH₄)</td>
+                <td>
+                  <strong>Fugitive leaks & venting:</strong> Unlit flares, pressurized pipeline leaks, compressor seals, pneumatic valves, and coal mine ventilation shafts.<br>
+                  <strong>The "Gas vs. Coal" Parity Risk:</strong> Because natural gas is 80%–95% CH₄, a supply-chain leak rate of just <strong>2.5% to 3.0%</strong> makes gas as warming over 20 years as burning coal.
+                </td>
+                <td>
+                  <strong>Satellite detection & LDAR:</strong> Modern satellites (TROPOMI, MethaneSAT) pinpoint industrial "super-emitters." Installing vapor recovery units, replacing pneumatic valves with electric actuators, and ending routine venting often has <strong>negative net cost</strong> because captured natural gas is sold immediately into commercial pipelines.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>2. Agriculture & Livestock</strong></td>
+                <td><strong>~40%</strong><br>(~150 Mt CH₄)</td>
+                <td>
+                  <strong>Ruminant Enteric Fermentation (~30%):</strong> Methanogenic microbes in the rumen stomach of cattle, sheep, and goats ferment cellulose, burping methane.<br>
+                  <strong>Flooded Rice Paddies (~10%):</strong> Continuously submerged paddies create anoxic conditions where soil methanogens thrive.
+                </td>
+                <td>
+                  <strong>Dietary Shifts & Feed Additives:</strong> Shifting diets toward plant proteins directly eliminates livestock emissions. Feed additives (3-NOP, red seaweed <i>Asparagopsis</i>) suppress methanogenesis enzymes in cattle by 30%–80%. Alternate Wetting and Drying (AWD) in rice paddies introduces periodic soil oxygenation, cutting methane by 30%–50% while saving irrigation water.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>3. Waste & Landfills</strong></td>
+                <td><strong>~20%</strong><br>(~75 Mt CH₄)</td>
+                <td>
+                  <strong>Anaerobic Digestion:</strong> Food waste, paper, and organic matter buried under compacted landfill trash rot in zero-oxygen environments, venting landfill gas (50% CH₄, 50% CO₂). Open sewage sludge lagoons produce similar biogenic methane.
+                </td>
+                <td>
+                  <strong>Gas Capture & Composting:</strong> Capping landfills with permeable extraction wells to capture and burn methane for electricity generation or upgrade into biomethane. Diverting food waste to municipal composting and industrial anaerobic digesters.
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
 
@@ -6607,6 +6694,13 @@
         if (btnJumpBudgets) btnJumpBudgets.addEventListener("click", () => setViewMode("budgets"));
         const btnJumpSolutions = document.getElementById("btnJumpToSolutionsFromSources");
         if (btnJumpSolutions) btnJumpSolutions.addEventListener("click", () => setViewMode("solutions"));
+        const btnOpenGuideSources = document.getElementById("btnOpenGuideFromSources");
+        if (btnOpenGuideSources) {
+          btnOpenGuideSources.addEventListener("click", () => {
+            modalOverlay.style.display = "flex";
+            setDocPage("page-sources-owid");
+          });
+        }
 
         updateSourcesView();
       }
