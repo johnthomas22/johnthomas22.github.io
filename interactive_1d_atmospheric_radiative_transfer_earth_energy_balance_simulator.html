@@ -633,6 +633,12 @@
     .btn-secondary:hover { border-color: var(--text-muted); }
     .btn-amber { background: rgba(245, 158, 11, 0.15); border-color: var(--amber); color: var(--amber); }
     .btn-amber:hover { background: rgba(245, 158, 11, 0.25); }
+    .btn-amber.active {
+      background: var(--amber) !important;
+      color: #000000 !important;
+      font-weight: 700 !important;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.45) !important;
+    }
 
     .speed-btn {
       background: transparent; border: 1px solid var(--border); color: var(--text-muted);
@@ -1374,7 +1380,7 @@
           <div class="sim-controls-row">
             <button class="btn btn-start" id="btnPlayPause">▶ Start Simulation</button>
             <button class="btn btn-amber" id="btnSnapEquilibrium" title="Instant Ocean Equilibrium: Instantly removes ocean thermal lag to reveal the ultimate committed warming locked in at the current CO₂ level (EEI = 0)">⚡ Instant Ocean Equilibrium</button>
-            <button class="btn btn-secondary" id="btnReset">↺ Reset (2026)</button>
+            <button class="btn btn-secondary" id="btnReset">↺ Reset</button>
           </div>
         </div>
 
@@ -3722,6 +3728,10 @@
         speed: 1.0,
         running: false, // Initial state: does not start automatically
         hasStarted: false,
+        instantEquilibrium: false,
+        savedTransientTs: PRESENT_2026_PT.deltaTs,
+        savedTransientTd: PRESENT_2026_PT.deltaTd,
+        savedTransientYear: PRESENT_2026_PT.year,
         history: STATIC_HISTORICAL_RUN.slice()
       };
 
@@ -5530,6 +5540,19 @@
         if (b15) b15.classList.toggle("active", roundedRate === 1.5);
         if (b25) b25.classList.toggle("active", roundedRate === 2.5);
 
+        const btnSnap = document.getElementById("btnSnapEquilibrium");
+        if (btnSnap) {
+          if (state.instantEquilibrium) {
+            btnSnap.classList.add("active");
+            btnSnap.textContent = "⚡ Ocean Equilibrium: ON";
+            btnSnap.title = "Instant Ocean Equilibrium is ON (zero ocean thermal lag, committed warming, EEI = 0). Click to toggle back to realistic transient ocean lag.";
+          } else {
+            btnSnap.classList.remove("active");
+            btnSnap.textContent = "⚡ Instant Ocean Equilibrium";
+            btnSnap.title = "Instant Ocean Equilibrium: Toggle zero ocean thermal lag to reveal ultimate committed warming (EEI = 0), or toggle off to resume transient ocean heating";
+          }
+        }
+
         document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
         document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${(p.OLR - ASR >= 0 ? "+" : "")}${(p.OLR - ASR).toFixed(2)} W/m²`;
         document.getElementById("valEEI").innerHTML = `${p.EEI >= 0 ? "+" : ""}${p.EEI.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
@@ -5589,11 +5612,16 @@
           // Coupled Two-Layer EBM (Held et al. 2010; Geoffroy et al. 2013)
           // Standard IPCC AR6 effective radiative forcing: F2x = 3.93 W/m^2 (ALPHA_RF = 3.93 / ln(2))
           const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
-          const dTs = (rf - LAMBDA_FEEDBACK * state.deltaTs - GAMMA * (state.deltaTs - state.deltaTd)) / CM;
-          const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
+          if (state.instantEquilibrium) {
+            state.deltaTs = rf / LAMBDA_FEEDBACK;
+            state.deltaTd = state.deltaTs;
+          } else {
+            const dTs = (rf - LAMBDA_FEEDBACK * state.deltaTs - GAMMA * (state.deltaTs - state.deltaTd)) / CM;
+            const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
 
-          state.deltaTs += dTs * dt;
-          state.deltaTd += dTd * dt;
+            state.deltaTs += dTs * dt;
+            state.deltaTd += dTd * dt;
+          }
 
           // Prevent drawdown from plunging below zero increase since 1750
           if (state.deltaTs <= 0.0 && state.rate <= 0 && state.year >= 2026) {
@@ -7171,6 +7199,10 @@
         state.deltaTs = PRESENT_2026_PT.deltaTs;
         state.deltaTd = PRESENT_2026_PT.deltaTd;
         state.year = PRESENT_2026_PT.year;
+        state.instantEquilibrium = false;
+        state.savedTransientTs = PRESENT_2026_PT.deltaTs;
+        state.savedTransientTd = PRESENT_2026_PT.deltaTd;
+        state.savedTransientYear = PRESENT_2026_PT.year;
         state.history = getCalibratedHistoricalRun();
         if (typeof autoRun === "boolean") {
           state.running = autoRun;
@@ -7186,9 +7218,22 @@
       document.getElementById("btnIntroReset2026").addEventListener("click", () => resetToPresentDay(false));
 
       document.getElementById("btnSnapEquilibrium").addEventListener("click", () => {
+        state.instantEquilibrium = !state.instantEquilibrium;
         const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
-        state.deltaTs = rf / LAMBDA_FEEDBACK;
-        state.deltaTd = state.deltaTs;
+        if (state.instantEquilibrium) {
+          state.savedTransientTs = state.deltaTs;
+          state.savedTransientTd = state.deltaTd;
+          state.savedTransientYear = state.year;
+          state.deltaTs = rf / LAMBDA_FEEDBACK;
+          state.deltaTd = state.deltaTs;
+        } else {
+          if (state.year === state.savedTransientYear && state.savedTransientTs !== undefined) {
+            state.deltaTs = state.savedTransientTs;
+            state.deltaTd = state.savedTransientTd;
+          } else {
+            state.deltaTd = state.deltaTs * 0.7;
+          }
+        }
         syncUI();
         draw();
       });
@@ -7214,6 +7259,11 @@
           resetToPresentDay(state.running);
         }
         state.co2 = targetCO2;
+        if (state.instantEquilibrium) {
+          const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
+          state.deltaTs = rf / LAMBDA_FEEDBACK;
+          state.deltaTd = state.deltaTs;
+        }
         syncUI();
         draw();
       });
