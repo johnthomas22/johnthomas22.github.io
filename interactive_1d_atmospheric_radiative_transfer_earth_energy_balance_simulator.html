@@ -575,15 +575,22 @@
 
     .top-sim-row {
       display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(350px, 1fr);
-      gap: 14px;
+      grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) minmax(320px, 1.45fr);
+      gap: 12px;
       align-items: stretch;
       margin-bottom: 14px;
     }
-    .top-sim-row .top-stats-strip {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .stat-col {
+      display: flex;
+      flex-direction: column;
       gap: 10px;
+    }
+    .stat-col .stat-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10px 14px;
     }
     .radiative-flux-card {
       margin: 0;
@@ -595,7 +602,8 @@
     .flux-canvas-container {
       position: relative;
       width: 100%;
-      height: 135px;
+      flex: 1;
+      min-height: 145px;
     }
     .flux-canvas-container canvas {
       position: absolute;
@@ -603,13 +611,16 @@
       width: 100%;
       height: 100%;
     }
-    @media (max-width: 1080px) {
+    @media (max-width: 960px) {
       .top-sim-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+      }
+      .radiative-flux-card {
+        grid-column: 1 / -1;
       }
     }
-    @media (max-width: 600px) {
-      .top-sim-row .top-stats-strip {
+    @media (max-width: 550px) {
+      .top-sim-row {
         grid-template-columns: 1fr;
       }
     }
@@ -766,7 +777,7 @@
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 720px;
+      height: clamp(620px, 75vh, 920px);
       background: #05080f;
       border-radius: 8px;
       overflow: hidden;
@@ -833,7 +844,7 @@
     /* Action Button on 500-Year Temperature Chart */
     .chart-action-btn-paleo {
       position: absolute;
-      top: 14px;
+      top: 50%;
       right: 28px;
       left: auto;
       z-index: 25;
@@ -850,7 +861,7 @@
       border: 1.5px solid var(--cyan);
       color: var(--cyan);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-      transition: all 0.15s ease;
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
       user-select: none;
       white-space: nowrap;
     }
@@ -1392,21 +1403,24 @@
 
     <!-- Advanced Simulator Mode: Top Metrics & Radiative Flux Strip -->
     <div class="top-sim-row">
-      <div class="top-stats-strip">
+      <div class="stat-col">
         <div class="stat-card">
           <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber">ASR</span></div>
           <div class="stat-value" id="valASR" style="color: var(--amber);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
           <div class="stat-sub">Sunlight absorbed post-albedo (~30%)</div>
         </div>
         <div class="stat-card">
-          <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan">OLR</span></div>
-          <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-          <div class="stat-sub" id="subOLR">Escaping at TOA · Δ: 0.0 W/m²</div>
-        </div>
-        <div class="stat-card">
           <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald" id="badgeEEI">Balanced</span></div>
           <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
           <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
+        </div>
+      </div>
+
+      <div class="stat-col">
+        <div class="stat-card">
+          <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan">OLR</span></div>
+          <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+          <div class="stat-sub" id="subOLR">Escaping at TOA · Δ: 0.0 W/m²</div>
         </div>
         <div class="stat-card">
           <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose">ΔT</span></div>
@@ -1417,8 +1431,8 @@
 
       <div class="card radiative-flux-card" id="radiativeFluxCard">
         <div class="card-title-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-          <div class="card-title" style="margin-bottom: 0; font-size: 0.78rem;">Atmospheric Radiative Flux Profile</div>
-          <span class="badge badge-cyan" id="fluxZeffBadge" style="font-size: 0.68rem;">Emission: ~5,200m</span>
+          <div class="card-title" style="margin-bottom: 0; font-size: 0.78rem;">How Heat Escapes into Space</div>
+          <span class="badge badge-cyan" id="fluxZeffBadge" style="font-size: 0.68rem;">Escape Height: ~5,200m</span>
         </div>
         <div class="flux-canvas-container">
           <canvas id="fluxCanvas"></canvas>
@@ -4604,7 +4618,7 @@
         fCtx.fillStyle = "rgba(148, 163, 184, 0.75)";
         fCtx.font = "8px system-ui, sans-serif";
         fCtx.textAlign = "center";
-        fCtx.fillText("Radiative Flux (W/m²)", chartLeft + chartW / 2, chartBottom + 20);
+        fCtx.fillText("Heat Flow (W/m²)", chartLeft + chartW / 2, chartBottom + 20);
         fCtx.textAlign = "left";
 
         // Measure 1: Solar Inflow (Dashed Yellow)
@@ -4654,7 +4668,7 @@
 
         const zBadge = document.getElementById("fluxZeffBadge");
         if (zBadge) {
-          zBadge.textContent = `Emission: ${Math.round(p.zEffM).toLocaleString()}m (${p.TeffC.toFixed(1)}°C)`;
+          zBadge.textContent = `Escape Height: ${Math.round(p.zEffM).toLocaleString()}m (${p.TeffC.toFixed(1)}°C)`;
         }
 
         // Compact Legend inside Top-Left of the Graph
@@ -4663,21 +4677,21 @@
         fCtx.fillStyle = "rgba(11, 19, 32, 0.88)";
         fCtx.strokeStyle = "rgba(51, 65, 85, 0.55)";
         fCtx.lineWidth = 1;
-        fCtx.beginPath(); fCtx.roundRect(legX, legY, 96, 42, 3); fCtx.fill(); fCtx.stroke();
+        fCtx.beginPath(); fCtx.roundRect(legX, legY, 104, 42, 3); fCtx.fill(); fCtx.stroke();
 
         fCtx.strokeStyle = "#eab308"; fCtx.lineWidth = 1.5; fCtx.setLineDash([2, 2]);
         fCtx.beginPath(); fCtx.moveTo(legX + 4, legY + 9); fCtx.lineTo(legX + 18, legY + 9); fCtx.stroke();
         fCtx.setLineDash([]);
         fCtx.fillStyle = "#e2e8f0"; fCtx.font = "8px system-ui";
-        fCtx.fillText("Solar (239)", legX + 22, legY + 12);
+        fCtx.fillText("Sunlight in (239)", legX + 22, legY + 12);
 
         fCtx.strokeStyle = "#00e5ff"; fCtx.lineWidth = 2;
         fCtx.beginPath(); fCtx.moveTo(legX + 4, legY + 22); fCtx.lineTo(legX + 18, legY + 22); fCtx.stroke();
-        fCtx.fillText("Upward F↑", legX + 22, legY + 25);
+        fCtx.fillText("Escaping heat", legX + 22, legY + 25);
 
         fCtx.strokeStyle = "#f59e0b"; fCtx.lineWidth = 2;
         fCtx.beginPath(); fCtx.moveTo(legX + 4, legY + 34); fCtx.lineTo(legX + 18, legY + 34); fCtx.stroke();
-        fCtx.fillText("Temp T(z)", legX + 22, legY + 37);
+        fCtx.fillText("Air temperature", legX + 22, legY + 37);
 
         // Interactive Hover Tooltips on fluxCanvas
         if (fluxMousePos.active && fluxMousePos.x >= chartLeft && fluxMousePos.x <= chartRight && fluxMousePos.y >= chartTop && fluxMousePos.y <= chartBottom) {
@@ -4686,12 +4700,12 @@
           let tipY = fluxMousePos.y - 10;
 
           if (Math.abs(fluxMousePos.x - asrX) <= 6) {
-            tooltipText = `Solar Inflow: 239.0 W/m²`;
+            tooltipText = `Sunlight In: 239.0 W/m²`;
           }
           if (!tooltipText) {
             for (const pt of tPoints) {
               if (Math.hypot(pt.x - fluxMousePos.x, pt.y - fluxMousePos.y) <= 8) {
-                tooltipText = `Temp: ${pt.val.toFixed(1)}°C`;
+                tooltipText = `Air Temp: ${pt.val.toFixed(1)}°C`;
                 break;
               }
             }
@@ -4699,13 +4713,13 @@
           if (!tooltipText) {
             for (const pt of fPoints) {
               if (Math.hypot(pt.x - fluxMousePos.x, pt.y - fluxMousePos.y) <= 8) {
-                tooltipText = `Upward Flux: ${pt.val.toFixed(1)} W/m²`;
+                tooltipText = `Escaping Heat: ${pt.val.toFixed(1)} W/m²`;
                 break;
               }
             }
           }
           if (!tooltipText && Math.abs(fluxMousePos.y - rY) <= 6) {
-            tooltipText = `Emission Level: ${Math.round(p.zEffM)}m (${p.TeffC.toFixed(1)}°C)`;
+            tooltipText = `Escape Level: ${Math.round(p.zEffM).toLocaleString()}m (${p.TeffC.toFixed(1)}°C)`;
           }
 
           if (tooltipText) {
@@ -4967,10 +4981,18 @@
         }
 
         function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
-        // Scaled to 5.2°C span so +2.5 ppm/yr trajectory comfortably sits in upper chart with head room (relative to 1850–1900)
-        function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.35)) / 5.2) * tGridH; }
-        // CO2 Scale: 250 ppm to 1000 ppm fitted across the 500-Year chart height
-        function co2ToY(c) { return tGridBottom - ((c - 250) / 750) * tGridH; }
+        // Scaled to 6.5°C span (-0.5°C to +6.0°C) so trajectories up to +5.5°C comfortably sit with head room (relative to 1850–1900)
+        function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.5)) / 6.5) * tGridH; }
+        // CO2 Scale: 200 ppm to 1050 ppm fitted across the 500-Year chart height
+        function co2ToY(c) { return tGridBottom - ((c - 200) / 850) * tGridH; }
+
+        // Position 1-Million-Year Comparison button dynamically between +2°C and +3°C lines
+        const btnMillion = document.getElementById("btnMillionYear");
+        if (btnMillion) {
+          const yBetween = (dtToY(2.0) + dtToY(3.0)) / 2;
+          btnMillion.style.top = Math.round(yBetween - 13) + "px";
+          btnMillion.style.right = (isMobileNarrow ? 14 : 28) + "px";
+        }
 
         // Right-hand Y-Axis Labels for CO2 in Purple (280, 400, 600, 800, 1000 ppm)
         [280, 400, 600, 800, 1000].forEach(cVal => {
@@ -5014,7 +5036,7 @@
         }
 
         // Threshold Reference Lines (Evaluated directly on standard 1850–1900 baseline)
-        [0.0, 1.5, 2.0, 3.0, 4.0].forEach(th => {
+        [0.0, 1.5, 2.0, 3.0, 4.0, 5.0].forEach(th => {
           const y = dtToY(th);
           ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (th === 1.5 ? "rgba(245,158,11,0.4)" : "rgba(244,63,94,0.4)");
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
@@ -5071,7 +5093,7 @@
         ctx.beginPath();
         STATIC_HISTORICAL_1750_1958.forEach((pt, i) => {
           const cx = yrToX(pt.year);
-          const cy = co2ToY(pt.co2);
+          const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, co2ToY(pt.co2)));
           if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
         });
         ctx.stroke();
@@ -5081,7 +5103,7 @@
         ctx.beginPath();
         STATIC_HISTORICAL_1750_1958.forEach((pt, i) => {
           const cx = yrToX(pt.year);
-          const cy = dtToY(pt.deltaTs - OFFSET_1850_1900);
+          const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.deltaTs - OFFSET_1850_1900)));
           if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
         });
         ctx.stroke();
@@ -5098,7 +5120,7 @@
             if (pt.year >= 1958) {
               const cVal = pt.co2 || (pt.year <= 2026 ? getHistoricalCO2(pt.year) : 427.0);
               const cx = yrToX(pt.year);
-              const cy = co2ToY(cVal);
+              const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, co2ToY(cVal)));
               if (!co2DynStarted) { ctx.moveTo(cx, cy); co2DynStarted = true; } else { ctx.lineTo(cx, cy); }
             }
           }
@@ -5113,7 +5135,7 @@
             const pt = state.history[i];
             if (pt.year >= 1958) {
               const cx = yrToX(pt.year);
-              const cy = dtToY(pt.deltaTs - OFFSET_1850_1900);
+              const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.deltaTs - OFFSET_1850_1900)));
               if (!tDynStarted) { ctx.moveTo(cx, cy); tDynStarted = true; } else { ctx.lineTo(cx, cy); }
             }
           }
