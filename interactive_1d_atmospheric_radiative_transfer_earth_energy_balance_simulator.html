@@ -48,10 +48,21 @@
       border-radius: 10px;
       padding: 12px 20px;
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .header-top-row {
+      display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
+      width: 100%;
       gap: 12px;
+    }
+    .header-nav-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      overflow-x: auto;
     }
     .brand-title { font-size: 1.15rem; font-weight: 700; }
     .badge {
@@ -1417,16 +1428,19 @@
   <div class="app-wrapper simple-mode" id="appWrapper">
 
     <header>
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 1.3rem;">⚡</span>
-        <div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
+      <div class="header-top-row">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 1.3rem;">⚡</span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
-          <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
         </div>
+        <button class="btn-modal" id="openModalBtn">📖 Guide & Proofs</button>
       </div>
-      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <div class="header-nav-row">
         <div class="mode-switch-group" role="group" aria-label="View Mode">
           <button class="mode-switch-btn active" id="btnModeSimple">Introduction</button>
           <button class="mode-switch-btn" id="btnModeAdvanced">Warming Simulator</button>
@@ -1434,7 +1448,6 @@
           <button class="mode-switch-btn" id="btnModeSources">🏭 Greenhouse Gas Sources</button>
           <button class="mode-switch-btn" id="btnModeSolutions">💡 Energy Solutions</button>
         </div>
-        <button class="btn-modal" id="openModalBtn">📖 Guide & Proofs</button>
       </div>
     </header>
 
@@ -1522,7 +1535,7 @@
           <!-- CO2 Emissions & Drawdown Controls -->
           <div style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">CO₂ Emissions &amp; Drawdown</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">CO₂ emissions or drawdown per year</span>
               <div class="badge badge-cyan" id="co2Display" style="font-size: 0.82rem; font-weight: 700;">427 ppm</div>
             </div>
 
