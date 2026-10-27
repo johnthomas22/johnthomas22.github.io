@@ -73,6 +73,9 @@
     .badge-cyan {
       background: rgba(0, 229, 255, 0.15); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.3);
     }
+    #co2Display {
+      text-transform: none;
+    }
     .badge-rose { background: rgba(244, 63, 94, 0.15); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.3); }
     .badge-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
     .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
@@ -5681,7 +5684,12 @@
         document.getElementById("introCO2Display").textContent = `${Math.round(state.co2)} ppm`;
         document.getElementById("introDeltaTDisplay").textContent = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} °C`;
 
-        if (state.running) {
+        if (state.year >= 2250) {
+          btnPlayPause.textContent = "↺ Re-run Simulation";
+          btnPlayPause.className = "btn btn-start";
+          btnIntroPlayPause.textContent = "↺ Re-run";
+          btnIntroPlayPause.className = "btn btn-start";
+        } else if (state.running) {
           btnPlayPause.textContent = "⏸ Pause Simulation";
           btnPlayPause.className = "btn btn-pause";
           btnIntroPlayPause.textContent = "⏸ Pause";
@@ -5702,47 +5710,70 @@
       function update() {
         const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
         if (state.running && !isSimple) {
-          const baseSpeedFactor = 0.0875;
-          const dt = baseSpeedFactor * state.speed;
-
-          if (state.year < 2026) {
-            // ALWAYS follow calibrated historical data (Law Dome ice core & Mauna Loa Keeling) up to 2026
-            state.co2 = getHistoricalCO2(state.year);
-          } else if (state.rate !== 0) {
-            // Beyond 2026, advance based on the chosen future scenario rate
-            if (state.rate < 0) {
-              // Carbon drawdown stops when returning to the 1750 pre-industrial baseline (zero increase since 1750)
-              const nextCO2 = state.co2 + state.rate * dt;
-              if (nextCO2 <= CO2_BASE) {
-                state.co2 = CO2_BASE;
-                state.rate = 0.0;
-                state.running = false;
-              } else {
-                state.co2 = nextCO2;
-              }
-            } else {
-              state.co2 = Math.min(1000, state.co2 + state.rate * dt);
-            }
+          if (state.year >= 2250) {
+            state.year = 2250;
+            state.running = false;
+            syncUI();
+            draw();
+            return;
           }
 
-          // Coupled Two-Layer EBM (Held et al. 2010; Geoffroy et al. 2013)
-          // Standard IPCC AR6 effective radiative forcing: F2x = 3.93 W/m^2 (ALPHA_RF = 3.93 / ln(2))
-          const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
-          const dTs = (rf - LAMBDA_FEEDBACK * state.deltaTs - GAMMA * (state.deltaTs - state.deltaTd)) / CM;
-          const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
+          const baseSpeedFactor = 0.0875;
+          let dt = baseSpeedFactor * state.speed;
 
-          state.deltaTs += dTs * dt;
-          state.deltaTd += dTd * dt;
+          // Clamp dt if advancing to or beyond 2250 CE
+          let reachedEnd = false;
+          if (state.year + dt >= 2250) {
+            dt = Math.max(0, 2250 - state.year);
+            reachedEnd = true;
+          }
 
-          // Prevent drawdown from plunging below zero increase since 1750
-          if (state.deltaTs <= 0.0 && state.rate <= 0 && state.year >= 2026) {
-            state.deltaTs = 0.0;
-            state.rate = 0.0;
+          if (dt > 0) {
+            if (state.year < 2026) {
+              // ALWAYS follow calibrated historical data (Law Dome ice core & Mauna Loa Keeling) up to 2026
+              state.co2 = getHistoricalCO2(state.year + dt);
+            } else if (state.rate !== 0) {
+              // Beyond 2026, advance based on the chosen future scenario rate
+              if (state.rate < 0) {
+                // Carbon drawdown stops when returning to the 1750 pre-industrial baseline (zero increase since 1750)
+                const nextCO2 = state.co2 + state.rate * dt;
+                if (nextCO2 <= CO2_BASE) {
+                  state.co2 = CO2_BASE;
+                  state.rate = 0.0;
+                  state.running = false;
+                } else {
+                  state.co2 = nextCO2;
+                }
+              } else {
+                state.co2 = state.co2 + state.rate * dt;
+              }
+            }
+
+            // Coupled Two-Layer EBM (Held et al. 2010; Geoffroy et al. 2013)
+            // Standard IPCC AR6 effective radiative forcing: F2x = 3.93 W/m^2 (ALPHA_RF = 3.93 / ln(2))
+            const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
+            const dTs = (rf - LAMBDA_FEEDBACK * state.deltaTs - GAMMA * (state.deltaTs - state.deltaTd)) / CM;
+            const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
+
+            state.deltaTs += dTs * dt;
+            state.deltaTd += dTd * dt;
+
+            // Prevent drawdown from plunging below zero increase since 1750
+            if (state.deltaTs <= 0.0 && state.rate <= 0 && state.year >= 2026) {
+              state.deltaTs = 0.0;
+              state.rate = 0.0;
+              state.running = false;
+            }
+
+            state.year += dt;
+          }
+
+          if (reachedEnd || state.year >= 2250) {
+            state.year = 2250;
             state.running = false;
           }
-          state.year = Math.min(2250, state.year + dt);
 
-          if (state.history.length === 0 || state.year - state.history[state.history.length - 1].year >= 1.0) {
+          if (state.history.length === 0 || state.year - state.history[state.history.length - 1].year >= 1.0 || state.year >= 2250) {
             state.history.push({ year: state.year, deltaTs: state.deltaTs, co2: state.co2 });
           }
 
@@ -7295,6 +7326,10 @@
 
       // Simulation Controls
       function togglePlayPause() {
+        if (state.year >= 2250) {
+          resetToPresentDay(true);
+          return;
+        }
         state.running = !state.running;
         if (state.running) {
           state.hasStarted = true;
