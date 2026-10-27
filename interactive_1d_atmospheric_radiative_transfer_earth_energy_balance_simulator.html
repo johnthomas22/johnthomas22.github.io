@@ -654,6 +654,27 @@
     .preset-name { font-size: 0.82rem; font-weight: 700; color: #ffffff !important; margin-bottom: 2px; }
     .preset-sub { font-size: 0.7rem; color: #cbd5e1 !important; line-height: 1.3; }
 
+    .rate-preset-btn {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .rate-preset-btn:hover {
+      border-color: var(--cyan);
+      color: #ffffff;
+    }
+    .rate-preset-btn.active {
+      background: rgba(0, 229, 255, 0.18) !important;
+      border-color: var(--cyan) !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.25) !important;
+    }
+
     .slider-group { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
     .slider-labels { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 600; }
     .slider-val-badge {
@@ -1347,50 +1368,23 @@
                 <button class="speed-btn" data-speed="2.0" title="2.0× Double Speed">2.0×</button>
                 <button class="speed-btn" data-speed="4.0" title="4.0× Quad Speed">4.0×</button>
               </div>
-              <div class="badge badge-cyan" id="simYearDisplay">Year: 1750 CE</div>
+              <div class="badge badge-cyan" id="simYearDisplay">Year: 2026 CE</div>
             </div>
           </div>
           <div class="sim-controls-row">
             <button class="btn btn-start" id="btnPlayPause">▶ Start Simulation</button>
             <button class="btn btn-amber" id="btnSnapEquilibrium" title="Instant Ocean Equilibrium: Instantly removes ocean thermal lag to reveal the ultimate committed warming locked in at the current CO₂ level (EEI = 0)">⚡ Instant Ocean Equilibrium</button>
-            <button class="btn btn-secondary" id="btnReset">↺ Reset (1750)</button>
+            <button class="btn btn-secondary" id="btnReset">↺ Reset (2026)</button>
           </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title-row">
-            <div class="card-title">Experiment Presets</div>
-          </div>
-          <div class="presets-grid">
-            <button class="preset-card active" id="presetPreInd">
-              <div class="preset-name">1. Historical (1958 Keeling → 2026+)</div>
-              <div class="preset-sub">1750–1958 static baseline · Live run from 1958</div>
-            </button>
-            <button class="preset-card" id="presetPresent">
-              <div class="preset-name">2. Present Day (2026)</div>
-              <div class="preset-sub">427 ppm · +2.5 ppm/yr ramp</div>
-            </button>
-            <button class="preset-card" id="preset2x">
-              <div class="preset-name">3. Instant 2× CO₂ Pulse</div>
-              <div class="preset-sub">556 ppm · +3.7 W/m² pulse</div>
-            </button>
-            <button class="preset-card" id="presetDrawdown">
-              <div class="preset-name">4. Carbon Drawdown (CDR)</div>
-              <div class="preset-sub">278 ppm (1750) · -1.5 ppm/yr CDR</div>
-            </button>
-          </div>
-          <button class="btn btn-secondary" id="btnJumpToBudgets" style="margin-top: 10px; width: 100%; border-color: rgba(0, 229, 255, 0.4); color: var(--cyan); background: rgba(0, 229, 255, 0.08); font-size: 0.78rem; font-weight: 700; padding: 7px 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            🛢️ Explore Fossil Extraction & Carbon Budgets Page →
-          </button>
         </div>
 
         <div class="card">
           <div class="slider-group" style="margin-top: 0;">
             <div class="slider-labels">
               <span>Atmospheric CO₂ (Log Scale)</span>
-              <span class="slider-val-badge" id="co2Display">278 ppm</span>
+              <span class="slider-val-badge" id="co2Display">427 ppm</span>
             </div>
-            <input type="range" id="sliderCO2" min="0" max="1000" step="1" value="325">
+            <input type="range" id="sliderCO2" min="0" max="1000" step="1" value="552">
             <div class="slider-ticks-container">
               <div class="slider-tick-anchor" style="left: 0%;"><div class="tick-line"></div><div class="tick-label">150</div></div>
               <div class="slider-tick-anchor" style="left: 32.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--cyan);">278 (1750)</div></div>
@@ -1404,16 +1398,20 @@
           <div class="slider-group" style="margin-top: 8px;">
             <div class="slider-labels">
               <span>Annual CO₂ Ramp / Drawdown Rate</span>
-              <span class="slider-val-badge" id="rateDisplay">+0.00 ppm/yr</span>
+              <span class="slider-val-badge" id="rateDisplay">+2.50 ppm/yr</span>
             </div>
-            <input type="range" id="sliderRate" min="-3.0" max="4.0" step="0.1" value="0.0">
+            <input type="range" id="sliderRate" min="-3.0" max="4.0" step="0.1" value="2.5">
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px;">
-              <button class="btn btn-secondary" id="ratePresetM1" style="font-size: 0.65rem;">-1.5 CDR</button>
-              <button class="btn btn-secondary" id="ratePreset0" style="font-size: 0.65rem;">0.0 NetZero</button>
-              <button class="btn btn-secondary" id="ratePreset15" style="font-size: 0.65rem;">+1.5 Mid20</button>
-              <button class="btn btn-secondary" id="ratePreset25" style="font-size: 0.65rem;">+2.5 Modern</button>
+              <button class="btn btn-secondary rate-preset-btn" id="ratePresetM1" style="font-size: 0.68rem; padding: 5px 2px;" title="Drawdown 1.5ppm/yr">-1.5</button>
+              <button class="btn btn-secondary rate-preset-btn" id="ratePreset0" style="font-size: 0.68rem; padding: 5px 2px;" title="Net Zero, any carbon emitted is removed">Net Zero</button>
+              <button class="btn btn-secondary rate-preset-btn" id="ratePreset15" style="font-size: 0.68rem; padding: 5px 2px;" title="Mid 20th Century 1.5ppm/yr">+1.5</button>
+              <button class="btn btn-secondary rate-preset-btn active" id="ratePreset25" style="font-size: 0.68rem; padding: 5px 2px;" title="Today, 2.5ppm/yr">2.5</button>
             </div>
           </div>
+
+          <button class="btn btn-secondary" id="btnJumpToBudgets" style="margin-top: 14px; width: 100%; border-color: rgba(0, 229, 255, 0.4); color: var(--cyan); background: rgba(0, 229, 255, 0.08); font-size: 0.78rem; font-weight: 700; padding: 7px 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            🛢️ Explore Fossil Extraction & Carbon Budgets Page →
+          </button>
         </div>
 
       </div>
@@ -5522,6 +5520,16 @@
         document.getElementById("sliderRate").value = state.rate.toFixed(1);
         document.getElementById("rateDisplay").textContent = `${state.rate >= 0 ? "+" : ""}${state.rate.toFixed(2)} ppm/yr`;
 
+        const roundedRate = Math.round(state.rate * 10) / 10;
+        const bM1 = document.getElementById("ratePresetM1");
+        const b0 = document.getElementById("ratePreset0");
+        const b15 = document.getElementById("ratePreset15");
+        const b25 = document.getElementById("ratePreset25");
+        if (bM1) bM1.classList.toggle("active", roundedRate === -1.5);
+        if (b0) b0.classList.toggle("active", roundedRate === 0.0);
+        if (b15) b15.classList.toggle("active", roundedRate === 1.5);
+        if (b25) b25.classList.toggle("active", roundedRate === 2.5);
+
         document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
         document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${(p.OLR - ASR >= 0 ? "+" : "")}${(p.OLR - ASR).toFixed(2)} W/m²`;
         document.getElementById("valEEI").innerHTML = `${p.EEI >= 0 ? "+" : ""}${p.EEI.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
@@ -7158,8 +7166,6 @@
       btnIntroPlayPause.addEventListener("click", togglePlayPause);
 
       function resetToPresentDay(autoRun) {
-        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
-        document.getElementById("presetPresent").classList.add("active");
         state.co2 = PRESENT_2026_PT.co2;
         state.rate = 2.5;
         state.deltaTs = PRESENT_2026_PT.deltaTs;
@@ -7169,6 +7175,9 @@
         if (typeof autoRun === "boolean") {
           state.running = autoRun;
           state.hasStarted = autoRun;
+        } else {
+          state.running = false;
+          state.hasStarted = false;
         }
         syncUI();
         draw();
@@ -7185,19 +7194,7 @@
       });
 
       document.getElementById("btnReset").addEventListener("click", () => {
-        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
-        document.getElementById("presetPreInd").classList.add("active");
-        state.running = false;
-        state.hasStarted = false;
-        state.co2 = BASELINE_1958_PT.co2; // Starts at 1958 Keeling (1750-1958 already static on chart)
-        state.rate = 2.5;
-        state.deltaTs = BASELINE_1958_PT.deltaTs;
-        state.deltaTd = BASELINE_1958_PT.deltaTd;
-        state.year = BASELINE_1958_PT.year;
-        state.history = STATIC_HISTORICAL_1750_1958.slice();
-
-        syncUI();
-        draw();
+        resetToPresentDay(false);
       });
 
       document.querySelectorAll(".speed-btn").forEach(b => {
@@ -7206,44 +7203,6 @@
           e.target.classList.add("active");
           state.speed = parseFloat(e.target.dataset.speed);
         });
-      });
-
-      // Presets
-      document.getElementById("presetPreInd").addEventListener("click", () => {
-        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
-        document.getElementById("presetPreInd").classList.add("active");
-        state.co2 = BASELINE_1958_PT.co2; // 1958 Keeling continuous monitoring start
-        state.rate = 2.5;
-        state.deltaTs = BASELINE_1958_PT.deltaTs;
-        state.deltaTd = BASELINE_1958_PT.deltaTd;
-        state.year = BASELINE_1958_PT.year;
-        state.history = STATIC_HISTORICAL_1750_1958.slice();
-        state.running = true;
-        state.hasStarted = true;
-        syncUI();
-        draw();
-      });
-
-      document.getElementById("presetPresent").addEventListener("click", () => resetToPresentDay(true));
-
-      document.getElementById("preset2x").addEventListener("click", () => {
-        resetToPresentDay(true);
-        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
-        document.getElementById("preset2x").classList.add("active");
-        state.co2 = 556.0; // 2x Pre-industrial pulse starting from Present Day
-        state.rate = 0.0;  // stabilized constant
-        syncUI();
-        draw();
-      });
-
-      document.getElementById("presetDrawdown").addEventListener("click", () => {
-        resetToPresentDay(true);
-        document.querySelectorAll(".preset-card").forEach(c => c.classList.remove("active"));
-        document.getElementById("presetDrawdown").classList.add("active");
-        state.co2 = 427.0;
-        state.rate = -1.5; // active CDR from 2026
-        syncUI();
-        draw();
       });
 
       document.getElementById("sliderCO2").addEventListener("input", e => {
@@ -7268,18 +7227,22 @@
       document.getElementById("ratePresetM1").addEventListener("click", () => {
         state.rate = -1.5;
         syncUI();
+        draw();
       });
       document.getElementById("ratePreset0").addEventListener("click", () => {
         state.rate = 0.0;
         syncUI();
+        draw();
       });
       document.getElementById("ratePreset15").addEventListener("click", () => {
         state.rate = 1.5;
         syncUI();
+        draw();
       });
       document.getElementById("ratePreset25").addEventListener("click", () => {
         state.rate = 2.5;
         syncUI();
+        draw();
       });
 
       window.addEventListener("resize", () => {
