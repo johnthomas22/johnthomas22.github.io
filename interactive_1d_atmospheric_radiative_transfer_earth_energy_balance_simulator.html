@@ -573,6 +573,59 @@
       gap: 6px;
     }
 
+    .top-sim-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(350px, 1fr);
+      gap: 14px;
+      align-items: stretch;
+      margin-bottom: 14px;
+    }
+    .top-sim-row .top-stats-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .radiative-flux-card {
+      margin: 0;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .flux-canvas-container {
+      position: relative;
+      width: 100%;
+      height: 135px;
+    }
+    .flux-canvas-container canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    @media (max-width: 1080px) {
+      .top-sim-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .top-sim-row .top-stats-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .app-wrapper.simple-mode .top-sim-row,
+    .app-wrapper.budgets-mode .top-sim-row,
+    .app-wrapper.sources-mode .top-sim-row,
+    .app-wrapper.solutions-mode .top-sim-row {
+      display: none !important;
+    }
+
+    .app-wrapper:not(.simple-mode) .speech-pin,
+    .app-wrapper:not(.simple-mode) .speech-pin-action {
+      display: none !important;
+    }
+
     .top-stats-strip {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -615,7 +668,7 @@
     }
     .card-title { font-size: 0.85rem; font-weight: 700; }
     .sim-controls-row {
-      display: grid; grid-template-columns: 1fr 1.35fr 0.85fr; gap: 6px; margin-bottom: 0;
+      display: grid; grid-template-columns: 1.35fr 1fr; gap: 8px; margin-bottom: 0;
     }
     .sim-controls-row .btn {
       padding: 8px 4px; font-size: 0.74rem; white-space: nowrap;
@@ -777,18 +830,18 @@
       }
     }
 
-    /* Action Button on 500-Year Temperature Chart (positioned cleanly below the +4°C threshold line) */
+    /* Action Button on 500-Year Temperature Chart */
     .chart-action-btn-paleo {
       position: absolute;
-      top: calc((100% - 36px) / 2 + 82px);
-      right: 32px;
+      top: 14px;
+      right: 28px;
       left: auto;
       z-index: 25;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 5px;
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: 5px;
       font-size: 0.74rem;
       font-weight: 700;
@@ -1337,26 +1390,39 @@
       </div>
     </div>
 
-    <div class="top-stats-strip">
-      <div class="stat-card">
-        <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber">ASR</span></div>
-        <div class="stat-value" id="valASR" style="color: var(--amber);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-        <div class="stat-sub">Sunlight absorbed post-albedo (~30%)</div>
+    <!-- Advanced Simulator Mode: Top Metrics & Radiative Flux Strip -->
+    <div class="top-sim-row">
+      <div class="top-stats-strip">
+        <div class="stat-card">
+          <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber">ASR</span></div>
+          <div class="stat-value" id="valASR" style="color: var(--amber);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+          <div class="stat-sub">Sunlight absorbed post-albedo (~30%)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan">OLR</span></div>
+          <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+          <div class="stat-sub" id="subOLR">Escaping at TOA · Δ: 0.0 W/m²</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald" id="badgeEEI">Balanced</span></div>
+          <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+          <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose">ΔT</span></div>
+          <div class="stat-value" id="valDeltaT" style="color: var(--rose);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">°C</span></div>
+          <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (-0.12 °C rel. 1850–1900)</div>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan">OLR</span></div>
-        <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-        <div class="stat-sub" id="subOLR">Escaping at TOA · Δ: 0.0 W/m²</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald" id="badgeEEI">Balanced</span></div>
-        <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-        <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose">ΔT</span></div>
-        <div class="stat-value" id="valDeltaT" style="color: var(--rose);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">°C</span></div>
-        <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (-0.12 °C rel. 1850–1900)</div>
+
+      <div class="card radiative-flux-card" id="radiativeFluxCard">
+        <div class="card-title-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <div class="card-title" style="margin-bottom: 0; font-size: 0.78rem;">Atmospheric Radiative Flux Profile</div>
+          <span class="badge badge-cyan" id="fluxZeffBadge" style="font-size: 0.68rem;">Emission: ~5,200m</span>
+        </div>
+        <div class="flux-canvas-container">
+          <canvas id="fluxCanvas"></canvas>
+        </div>
       </div>
     </div>
 
@@ -1379,31 +1445,19 @@
           </div>
           <div class="sim-controls-row">
             <button class="btn btn-start" id="btnPlayPause">▶ Start Simulation</button>
-            <button class="btn btn-amber" id="btnSnapEquilibrium" title="Instant Ocean Equilibrium: Instantly removes ocean thermal lag to reveal the ultimate committed warming locked in at the current CO₂ level (EEI = 0)">⚡ Instant Ocean Equilibrium</button>
             <button class="btn btn-secondary" id="btnReset">↺ Reset</button>
           </div>
         </div>
 
         <div class="card">
-          <div class="slider-group" style="margin-top: 0;">
-            <div class="slider-labels">
-              <span>Atmospheric CO₂ (Log Scale)</span>
-              <span class="slider-val-badge" id="co2Display">427 ppm</span>
-            </div>
-            <input type="range" id="sliderCO2" min="0" max="1000" step="1" value="552">
-            <div class="slider-ticks-container">
-              <div class="slider-tick-anchor" style="left: 0%;"><div class="tick-line"></div><div class="tick-label">150</div></div>
-              <div class="slider-tick-anchor" style="left: 32.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--cyan);">278 (1750)</div></div>
-              <div class="slider-tick-anchor" style="left: 44.7%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--emerald);">350</div></div>
-              <div class="slider-tick-anchor" style="left: 55.2%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--cyan);">427 (2026)</div></div>
-              <div class="slider-tick-anchor" style="left: 69.5%;"><div class="tick-line"></div><div class="tick-label" style="color: var(--amber);">556 (2×)</div></div>
-              <div class="slider-tick-anchor" style="left: 100%;"><div class="tick-line"></div><div class="tick-label">1000</div></div>
-            </div>
+          <div class="card-title-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div class="card-title" style="margin-bottom: 0;">CO₂ Emissions & Drawdown</div>
+            <div class="badge badge-cyan" id="co2Display" style="font-size: 0.82rem; font-weight: 700;">427 ppm</div>
           </div>
 
-          <div class="slider-group" style="margin-top: 8px;">
+          <div class="slider-group" style="margin-top: 0;">
             <div class="slider-labels">
-              <span>Annual CO₂ Ramp / Drawdown Rate</span>
+              <span>Annual Ramp / Drawdown Rate</span>
               <span class="slider-val-badge" id="rateDisplay">+2.50 ppm/yr</span>
             </div>
             <input type="range" id="sliderRate" min="-3.0" max="4.0" step="0.1" value="2.5">
@@ -3728,10 +3782,6 @@
         speed: 1.0,
         running: false, // Initial state: does not start automatically
         hasStarted: false,
-        instantEquilibrium: false,
-        savedTransientTs: PRESENT_2026_PT.deltaTs,
-        savedTransientTd: PRESENT_2026_PT.deltaTd,
-        savedTransientYear: PRESENT_2026_PT.year,
         history: STATIC_HISTORICAL_RUN.slice()
       };
 
@@ -4484,6 +4534,196 @@
         }
       });
 
+      let fluxMousePos = { x: -1, y: -1, active: false };
+      const fluxCanvasEl = document.getElementById("fluxCanvas");
+      if (fluxCanvasEl) {
+        fluxCanvasEl.addEventListener("mousemove", e => {
+          const rect = fluxCanvasEl.getBoundingClientRect();
+          fluxMousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top, active: true };
+          drawFluxProfile();
+        });
+        fluxCanvasEl.addEventListener("mouseleave", () => {
+          fluxMousePos.active = false;
+          drawFluxProfile();
+        });
+      }
+
+      function drawFluxProfile() {
+        const fCanvas = document.getElementById("fluxCanvas");
+        if (!fCanvas) return;
+        const rect = fCanvas.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return;
+        const dpr = window.devicePixelRatio || 1;
+        if (fCanvas.width !== rect.width * dpr || fCanvas.height !== rect.height * dpr) {
+          fCanvas.width = rect.width * dpr;
+          fCanvas.height = rect.height * dpr;
+        }
+
+        const fCtx = fCanvas.getContext("2d");
+        fCtx.save();
+        fCtx.scale(dpr, dpr);
+        const fw = rect.width;
+        const fh = rect.height;
+        fCtx.clearRect(0, 0, fw, fh);
+
+        const p = computePhysics();
+
+        const chartLeft = 36;
+        const chartRight = fw - 16;
+        const chartW = chartRight - chartLeft;
+        const chartTop = 8;
+        const chartH = fh - chartTop - 22;
+        const chartBottom = chartTop + chartH;
+
+        fCtx.strokeStyle = "rgba(51, 65, 85, 0.45)";
+        fCtx.strokeRect(chartLeft, chartTop, chartW, chartH);
+
+        // Vertical Altitude Scale (0 to 10,000m)
+        [0, 2000, 4000, 6000, 8000, 10000].forEach(alt => {
+          const y = chartBottom - (alt / MAX_ALT) * chartH;
+          fCtx.strokeStyle = "rgba(51, 65, 85, 0.22)";
+          fCtx.beginPath(); fCtx.moveTo(chartLeft, y); fCtx.lineTo(chartRight, y); fCtx.stroke();
+          fCtx.fillStyle = "#64748b";
+          fCtx.font = "8px ui-monospace, monospace";
+          fCtx.fillText(`${alt / 1000}k`, chartLeft - 18, y + 3);
+        });
+
+        // Horizontal Scale (200 to 400 W/m²)
+        [200, 250, 300, 350, 400].forEach(flux => {
+          const fx = chartLeft + ((flux - 200) / 220) * chartW;
+          if (fx >= chartLeft && fx <= chartRight) {
+            fCtx.strokeStyle = "rgba(51, 65, 85, 0.35)";
+            fCtx.beginPath(); fCtx.moveTo(fx, chartBottom); fCtx.lineTo(fx, chartBottom + 3); fCtx.stroke();
+            fCtx.fillStyle = "#64748b";
+            fCtx.font = "8px ui-monospace, monospace";
+            fCtx.textAlign = "center";
+            fCtx.fillText(`${flux}`, fx, chartBottom + 11);
+            fCtx.textAlign = "left";
+          }
+        });
+        fCtx.fillStyle = "rgba(148, 163, 184, 0.75)";
+        fCtx.font = "8px system-ui, sans-serif";
+        fCtx.textAlign = "center";
+        fCtx.fillText("Radiative Flux (W/m²)", chartLeft + chartW / 2, chartBottom + 20);
+        fCtx.textAlign = "left";
+
+        // Measure 1: Solar Inflow (Dashed Yellow)
+        const asrX = chartLeft + ((ASR - 200) / 220) * chartW;
+        fCtx.strokeStyle = "#eab308";
+        fCtx.lineWidth = 1.5;
+        fCtx.setLineDash([3, 3]);
+        fCtx.beginPath(); fCtx.moveTo(asrX, chartTop); fCtx.lineTo(asrX, chartBottom); fCtx.stroke();
+        fCtx.setLineDash([]);
+
+        // Measure 2: Temperature Profile T(z) (Solid Amber)
+        fCtx.strokeStyle = "#f59e0b";
+        fCtx.lineWidth = 2;
+        fCtx.beginPath();
+        const tPoints = [];
+        for (let alt = 0; alt <= MAX_ALT; alt += 250) {
+          const t = p.currentTs - LAPSE_RATE * alt;
+          const x = chartLeft + ((t - (-70)) / 100) * chartW;
+          const y = chartBottom - (alt / MAX_ALT) * chartH;
+          tPoints.push({ x, y, val: t });
+          if (alt === 0) fCtx.moveTo(x, y); else fCtx.lineTo(x, y);
+        }
+        fCtx.stroke();
+
+        // Measure 3: Upward Flux F↑ (Pure Cyan)
+        const groundFlux = SIGMA * Math.pow(p.currentTsK, 4);
+        fCtx.strokeStyle = "#00e5ff";
+        fCtx.lineWidth = 2.2;
+        fCtx.beginPath();
+        const fPoints = [];
+        for (let alt = 0; alt <= MAX_ALT; alt += 250) {
+          const sig = 1 / (1 + Math.exp(-((alt - p.zEffM) / 1500.0)));
+          const flux = groundFlux - sig * (groundFlux - p.OLR);
+          const x = chartLeft + ((flux - 200) / 220) * chartW;
+          const y = chartBottom - (alt / MAX_ALT) * chartH;
+          fPoints.push({ x, y, val: flux });
+          if (alt === 0) fCtx.moveTo(x, y); else fCtx.lineTo(x, y);
+        }
+        fCtx.stroke();
+
+        // Measure 4: Emission Altitude Line & Badge
+        const rY = chartBottom - (p.zEffM / MAX_ALT) * chartH;
+        fCtx.strokeStyle = "rgba(244, 63, 94, 0.75)";
+        fCtx.setLineDash([3, 3]);
+        fCtx.beginPath(); fCtx.moveTo(chartLeft, rY); fCtx.lineTo(chartRight, rY); fCtx.stroke();
+        fCtx.setLineDash([]);
+
+        const zBadge = document.getElementById("fluxZeffBadge");
+        if (zBadge) {
+          zBadge.textContent = `Emission: ${Math.round(p.zEffM).toLocaleString()}m (${p.TeffC.toFixed(1)}°C)`;
+        }
+
+        // Compact Legend inside Top-Left of the Graph
+        const legX = chartLeft + 6;
+        const legY = chartTop + 5;
+        fCtx.fillStyle = "rgba(11, 19, 32, 0.88)";
+        fCtx.strokeStyle = "rgba(51, 65, 85, 0.55)";
+        fCtx.lineWidth = 1;
+        fCtx.beginPath(); fCtx.roundRect(legX, legY, 96, 42, 3); fCtx.fill(); fCtx.stroke();
+
+        fCtx.strokeStyle = "#eab308"; fCtx.lineWidth = 1.5; fCtx.setLineDash([2, 2]);
+        fCtx.beginPath(); fCtx.moveTo(legX + 4, legY + 9); fCtx.lineTo(legX + 18, legY + 9); fCtx.stroke();
+        fCtx.setLineDash([]);
+        fCtx.fillStyle = "#e2e8f0"; fCtx.font = "8px system-ui";
+        fCtx.fillText("Solar (239)", legX + 22, legY + 12);
+
+        fCtx.strokeStyle = "#00e5ff"; fCtx.lineWidth = 2;
+        fCtx.beginPath(); fCtx.moveTo(legX + 4, legY + 22); fCtx.lineTo(legX + 18, legY + 22); fCtx.stroke();
+        fCtx.fillText("Upward F↑", legX + 22, legY + 25);
+
+        fCtx.strokeStyle = "#f59e0b"; fCtx.lineWidth = 2;
+        fCtx.beginPath(); fCtx.moveTo(legX + 4, legY + 34); fCtx.lineTo(legX + 18, legY + 34); fCtx.stroke();
+        fCtx.fillText("Temp T(z)", legX + 22, legY + 37);
+
+        // Interactive Hover Tooltips on fluxCanvas
+        if (fluxMousePos.active && fluxMousePos.x >= chartLeft && fluxMousePos.x <= chartRight && fluxMousePos.y >= chartTop && fluxMousePos.y <= chartBottom) {
+          let tooltipText = "";
+          let tipX = fluxMousePos.x + 10;
+          let tipY = fluxMousePos.y - 10;
+
+          if (Math.abs(fluxMousePos.x - asrX) <= 6) {
+            tooltipText = `Solar Inflow: 239.0 W/m²`;
+          }
+          if (!tooltipText) {
+            for (const pt of tPoints) {
+              if (Math.hypot(pt.x - fluxMousePos.x, pt.y - fluxMousePos.y) <= 8) {
+                tooltipText = `Temp: ${pt.val.toFixed(1)}°C`;
+                break;
+              }
+            }
+          }
+          if (!tooltipText) {
+            for (const pt of fPoints) {
+              if (Math.hypot(pt.x - fluxMousePos.x, pt.y - fluxMousePos.y) <= 8) {
+                tooltipText = `Upward Flux: ${pt.val.toFixed(1)} W/m²`;
+                break;
+              }
+            }
+          }
+          if (!tooltipText && Math.abs(fluxMousePos.y - rY) <= 6) {
+            tooltipText = `Emission Level: ${Math.round(p.zEffM)}m (${p.TeffC.toFixed(1)}°C)`;
+          }
+
+          if (tooltipText) {
+            fCtx.font = "bold 9px system-ui";
+            const tw = fCtx.measureText(tooltipText).width + 12;
+            if (tipX + tw > fw - 6) tipX = fluxMousePos.x - tw - 6;
+            fCtx.fillStyle = "#070d17";
+            fCtx.strokeStyle = "var(--cyan)";
+            fCtx.lineWidth = 1.2;
+            fCtx.beginPath(); fCtx.roundRect(tipX, tipY - 14, tw, 18, 3); fCtx.fill(); fCtx.stroke();
+            fCtx.fillStyle = "#ffffff";
+            fCtx.fillText(tooltipText, tipX + 6, tipY - 1);
+          }
+        }
+
+        fCtx.restore();
+      }
+
       function draw() {
         const dpr = window.devicePixelRatio || 1;
         const rect = canvas.getBoundingClientRect();
@@ -4501,14 +4741,16 @@
         const p = computePhysics();
         const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
 
-        // Upper section split: Atmospheric column takes full canvas in Simple mode; equal height with lower temperature chart in Simulator mode
         const isMobileNarrow = w < 520;
-        const splitX = isSimple ? w : (isMobileNarrow ? w * 0.72 : w * 0.67);
-        const atmosH = isSimple ? h : Math.round((h - 36) / 2);
 
-        // 1. TOP PANEL: Atmospheric Column (Reduced oversized space above radiating layer via MAX_ALT = 10,500m)
-        ctx.fillStyle = "#0a1322";
-        ctx.fillRect(0, 0, splitX, atmosH);
+        if (isSimple) {
+          // Upper section: Atmospheric column takes full canvas in Simple mode
+          const splitX = w;
+          const atmosH = h;
+
+          // 1. TOP PANEL: Atmospheric Column
+          ctx.fillStyle = "#0a1322";
+          ctx.fillRect(0, 0, splitX, atmosH);
 
         // Effective Radiating Layer in SI Metres
         const zEffY = atmosH - (p.zEffM / MAX_ALT) * atmosH;
@@ -4676,20 +4918,22 @@
         });
 
         // In Simple (Introduction) mode, only the atmospheric column is shown
-        if (isSimple) {
           mainChartTpHitboxes = [];
           canvas.style.cursor = "default";
           ctx.restore();
           return;
         }
 
-        // 2. DEDICATED LOWER PANEL: 500-Year ΔT Timeline Curve (Simulator Mode Only)
-        // Spans across the entire canvas width below the two top charts (in both Simple and Advanced modes)
-        const tGridTop = atmosH + 14;           // Starts cleanly below the atmospheric column
-        const tGridBottom = h - 22;             // Dedicated clearance at bottom for year labels
+        // =========================================================================
+        // 2. SIMULATOR MODE: 500-Year ΔT & CO2 Trajectory Chart (Full simCanvas)
+        // =========================================================================
+        drawFluxProfile();
+
+        const tGridTop = 18;
+        const tGridBottom = h - 26;
+        const tGridLeft = isMobileNarrow ? 28 : 36;
+        const tGridRight = w - (isMobileNarrow ? 36 : 46);
         const tGridH = tGridBottom - tGridTop;
-        const tGridLeft = 24;
-        const tGridRight = w - 24;              // Full span across entire canvas
         const tGridW = tGridRight - tGridLeft;
 
         ctx.fillStyle = "rgba(11, 19, 32, 0.72)";
@@ -5087,216 +5331,6 @@
           ctx.fillText(curYStr, badgeX + 5, badgeY + 12);
         }
 
-        // 3. RIGHT PANEL: Radiative Profile Chart (Advanced Mode Only, Aligned to MAX_ALT)
-        if (!isSimple) {
-          const chartLeft = splitX + (isMobileNarrow ? 30 : 50);
-          const chartRight = w - (isMobileNarrow ? 10 : 24);
-          const chartW = chartRight - chartLeft;
-          const chartTop = 10;
-          const chartH = atmosH - chartTop - 26; // Room for horizontal X-axis labels at bottom
-          const chartBottom = chartTop + chartH;
-
-          ctx.strokeStyle = "rgba(51, 65, 85, 0.5)";
-          ctx.strokeRect(chartLeft, chartTop, chartW, chartH);
-
-          // Metric Ticks (Vertical Altitude Scale)
-          [0, 2000, 4000, 6000, 8000, 10000].forEach(alt => {
-            const y = chartBottom - (alt / MAX_ALT) * chartH;
-            ctx.strokeStyle = "rgba(51, 65, 85, 0.25)";
-            ctx.beginPath(); ctx.moveTo(chartLeft, y); ctx.lineTo(chartRight, y); ctx.stroke();
-            ctx.fillStyle = "#64748b";
-            ctx.font = isMobileNarrow ? "8px ui-monospace, monospace" : "9px ui-monospace, monospace";
-            const altLabel = isMobileNarrow ? `${alt / 1000}k` : `${alt.toLocaleString()} m`;
-            const labelX = isMobileNarrow ? chartLeft - 24 : chartLeft - 45;
-            ctx.fillText(altLabel, labelX, y + 3);
-          });
-
-          // Horizontal Scale (Flux & Energy in W/m² along bottom X-axis)
-          const fluxTicks = isMobileNarrow
-            ? (chartW < 85 ? [200, 400] : [200, 300, 400])
-            : [200, 250, 300, 350, 400];
-          fluxTicks.forEach(flux => {
-            const fx = chartLeft + ((flux - 200) / 220) * chartW;
-            if (fx >= chartLeft && fx <= chartRight) {
-              ctx.strokeStyle = "rgba(51, 65, 85, 0.35)";
-              ctx.beginPath();
-              ctx.moveTo(fx, chartBottom);
-              ctx.lineTo(fx, chartBottom + 4);
-              ctx.stroke();
-
-              ctx.fillStyle = "#64748b";
-              ctx.font = isMobileNarrow ? "8px ui-monospace, monospace" : "9px ui-monospace, monospace";
-              ctx.textAlign = "center";
-              ctx.fillText(`${flux}`, fx, chartBottom + 12);
-              ctx.textAlign = "left";
-            }
-          });
-          // Centered horizontal axis label beneath tick marks (eliminates collision with 400 tick)
-          ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
-          ctx.font = isMobileNarrow ? "8px system-ui, sans-serif" : "9px system-ui, -apple-system, sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText(isMobileNarrow ? "Flux (W/m²)" : "Radiative Flux (W/m²)", chartLeft + chartW / 2, chartBottom + 24);
-          ctx.textAlign = "left";
-
-          // Measure 1: Inbound Solar Reference Line (Yellow Dashed)
-          const asrX = chartLeft + ((ASR - 200) / 220) * chartW;
-          ctx.strokeStyle = "#eab308";
-          ctx.lineWidth = 1.5;
-          ctx.setLineDash([4, 4]);
-          ctx.beginPath(); ctx.moveTo(asrX, chartTop); ctx.lineTo(asrX, chartBottom); ctx.stroke();
-          ctx.setLineDash([]);
-
-          // Measure 2: Temperature T(z) in Solid Amber
-          ctx.strokeStyle = "#f59e0b";
-          ctx.lineWidth = 2.5;
-          ctx.beginPath();
-          const tPoints = [];
-          for (let alt = 0; alt <= MAX_ALT; alt += 250) {
-            const t = p.currentTs - LAPSE_RATE * alt;
-            const x = chartLeft + ((t - (-70)) / 100) * chartW;
-            const y = chartBottom - (alt / MAX_ALT) * chartH;
-            tPoints.push({ x, y, val: t });
-            if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-          }
-          ctx.stroke();
-
-          // Measure 3: Upward Flux F↑ in Pure Cyan
-          const groundFlux = SIGMA * Math.pow(p.currentTsK, 4);
-          ctx.strokeStyle = "#00e5ff";
-          ctx.lineWidth = 2.5;
-          ctx.beginPath();
-          const fPoints = [];
-          for (let alt = 0; alt <= MAX_ALT; alt += 250) {
-            const sig = 1 / (1 + Math.exp(-((alt - p.zEffM) / 1500.0)));
-            const flux = groundFlux - sig * (groundFlux - p.OLR);
-            const x = chartLeft + ((flux - 200) / 220) * chartW;
-            const y = chartBottom - (alt / MAX_ALT) * chartH;
-            fPoints.push({ x, y, val: flux });
-            if (alt === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-          }
-          ctx.stroke();
-
-          // Measure 4: Radiating Layer Crosshair & Badge
-          const rY = chartBottom - (p.zEffM / MAX_ALT) * chartH;
-          ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
-          ctx.setLineDash([4, 4]);
-          ctx.beginPath(); ctx.moveTo(chartLeft, rY); ctx.lineTo(chartRight, rY); ctx.stroke();
-          ctx.setLineDash([]);
-
-          const badgeW = isMobileNarrow ? Math.min(chartW - 6, 130) : Math.min(chartW - 12, 190);
-          const badgeX = chartRight - badgeW - (isMobileNarrow ? 3 : 6);
-          ctx.fillStyle = "rgba(11, 19, 32, 0.92)";
-          ctx.strokeStyle = "rgba(244, 63, 94, 0.75)";
-          ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.roundRect(badgeX, rY - 10, badgeW, 18, 4); ctx.fill(); ctx.stroke();
-          ctx.fillStyle = "#fca5a5";
-          ctx.font = isMobileNarrow ? "bold 8px ui-monospace, monospace" : "bold 9px ui-monospace, monospace";
-          const badgeText = isMobileNarrow
-            ? `${Math.round(p.zEffM)}m (${p.TeffC.toFixed(0)}°C)`
-            : `Emission: ${Math.round(p.zEffM).toLocaleString()} m (${p.TeffC.toFixed(1)}°C)`;
-          ctx.fillText(badgeText, badgeX + (isMobileNarrow ? 4 : 6), rY + 3);
-
-          // Compact Legend Stacked Neatly Inside Top-Left of the Graph
-          if (chartW >= 75) {
-            const legW = isMobileNarrow ? Math.min(chartW - 8, 92) : 120;
-            const legH = isMobileNarrow ? 46 : 58;
-            const legX = chartLeft + (isMobileNarrow ? 4 : 10);
-            const legY = chartTop + (isMobileNarrow ? 4 : 10);
-
-            ctx.fillStyle = "rgba(11, 19, 32, 0.88)";
-            ctx.strokeStyle = "rgba(51, 65, 85, 0.65)";
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.roundRect(legX, legY, legW, legH, 4);
-            ctx.fill();
-            ctx.stroke();
-
-            // Legend Item 1: Solar (Dashed Yellow)
-            ctx.strokeStyle = "#eab308";
-            ctx.lineWidth = 2;
-            ctx.setLineDash([3, 3]);
-            ctx.beginPath();
-            ctx.moveTo(legX + 6, legY + (isMobileNarrow ? 11 : 14));
-            ctx.lineTo(legX + (isMobileNarrow ? 18 : 26), legY + (isMobileNarrow ? 11 : 14));
-            ctx.stroke();
-            ctx.setLineDash([]);
-            ctx.fillStyle = "#e2e8f0";
-            ctx.font = isMobileNarrow ? "8px system-ui" : "10px system-ui";
-            ctx.fillText(isMobileNarrow ? "Solar (239)" : "Solar (239 W/m²)", legX + (isMobileNarrow ? 22 : 32), legY + (isMobileNarrow ? 14 : 18));
-
-            // Legend Item 2: Upward Flux F↑ (Cyan Solid)
-            ctx.strokeStyle = "#00e5ff";
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            ctx.moveTo(legX + 6, legY + (isMobileNarrow ? 23 : 30));
-            ctx.lineTo(legX + (isMobileNarrow ? 18 : 26), legY + (isMobileNarrow ? 23 : 30));
-            ctx.stroke();
-            ctx.fillStyle = "#e2e8f0";
-            ctx.fillText(isMobileNarrow ? "Flux F↑" : "Upward Flux F↑", legX + (isMobileNarrow ? 22 : 32), legY + (isMobileNarrow ? 26 : 34));
-
-            // Legend Item 3: Temperature T(z) (Amber Solid)
-            ctx.strokeStyle = "#f59e0b";
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            ctx.moveTo(legX + 6, legY + (isMobileNarrow ? 35 : 46));
-            ctx.lineTo(legX + (isMobileNarrow ? 18 : 26), legY + (isMobileNarrow ? 35 : 46));
-            ctx.stroke();
-            ctx.fillStyle = "#e2e8f0";
-            ctx.fillText(isMobileNarrow ? "Temp T(z)" : "Temp T(z)", legX + (isMobileNarrow ? 22 : 32), legY + (isMobileNarrow ? 38 : 50));
-          }
-
-          // Interactive Hover Tooltips Over Lines
-          if (mousePos.active && mousePos.x >= chartLeft && mousePos.x <= chartRight && mousePos.y >= chartTop && mousePos.y <= chartBottom) {
-            let tooltipText = "";
-            let tipX = mousePos.x + 12;
-            let tipY = mousePos.y - 12;
-
-            // Check Solar dashed line proximity (within 6px)
-            if (Math.abs(mousePos.x - asrX) <= 6) {
-              tooltipText = `Solar Inflow: 239.0 W/m² (Absorbed solar post-albedo)`;
-            }
-
-            // Check Temperature curve proximity
-            if (!tooltipText) {
-              for (const pt of tPoints) {
-                const dist = Math.hypot(pt.x - mousePos.x, pt.y - mousePos.y);
-                if (dist <= 8) {
-                  tooltipText = `Atmospheric Temp: ${pt.val.toFixed(1)}°C (Lapse rate: -6.5°C/km)`;
-                  break;
-                }
-              }
-            }
-
-            // Check Flux curve proximity
-            if (!tooltipText) {
-              for (const pt of fPoints) {
-                const dist = Math.hypot(pt.x - mousePos.x, pt.y - mousePos.y);
-                if (dist <= 8) {
-                  tooltipText = `Upward Thermal Flux F↑: ${pt.val.toFixed(1)} W/m²`;
-                  break;
-                }
-              }
-            }
-
-            if (tooltipText) {
-              ctx.font = "bold 10px system-ui";
-              const tw = ctx.measureText(tooltipText).width + 16;
-              if (tipX + tw > w - 10) tipX = mousePos.x - tw - 6;
-
-              ctx.fillStyle = "#070d17"; // 100% solid opaque
-              ctx.strokeStyle = "var(--cyan)";
-              ctx.lineWidth = 1.2;
-              ctx.beginPath();
-              ctx.roundRect(tipX, tipY - 16, tw, 22, 4);
-              ctx.fill();
-              ctx.stroke();
-
-              ctx.fillStyle = "#ffffff";
-              ctx.fillText(tooltipText, tipX + 8, tipY - 1);
-            }
-          }
-        } // End of if (!isSimple)
-
         // 4. INTERACTIVE TOOLTIPS FOR TEMPERATURE CHART MARKERS & LABELS (Runs on top of all panels)
         let activeTip = null;
         let isPointerHover = false;
@@ -5510,7 +5544,7 @@
         // Update canvas cursor for interactivity feedback
         if (isPointerHover) {
           canvas.style.cursor = "pointer";
-        } else if (mousePos.active && !isSimple && mousePos.x >= splitX + 50 && mousePos.y <= atmosH) {
+        } else if (mousePos.active && !isSimple && mousePos.x >= tGridLeft && mousePos.x <= tGridRight && mousePos.y >= tGridTop && mousePos.y <= tGridBottom) {
           canvas.style.cursor = "crosshair";
         } else {
           canvas.style.cursor = "default";
@@ -5524,11 +5558,17 @@
 
       function syncUI() {
         const p = computePhysics();
-        const sliderVal = Math.round(((Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150))) * 1000);
-        document.getElementById("sliderCO2").value = sliderVal;
-        document.getElementById("co2Display").textContent = Math.round(state.co2) + " ppm";
-        document.getElementById("sliderRate").value = state.rate.toFixed(1);
-        document.getElementById("rateDisplay").textContent = `${state.rate >= 0 ? "+" : ""}${state.rate.toFixed(2)} ppm/yr`;
+        const sCO2 = document.getElementById("sliderCO2");
+        if (sCO2) {
+          const sliderVal = Math.round(((Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150))) * 1000);
+          sCO2.value = sliderVal;
+        }
+        const co2Disp = document.getElementById("co2Display");
+        if (co2Disp) co2Disp.textContent = Math.round(state.co2) + " ppm";
+        const sRate = document.getElementById("sliderRate");
+        if (sRate) sRate.value = state.rate.toFixed(1);
+        const rDisp = document.getElementById("rateDisplay");
+        if (rDisp) rDisp.textContent = `${state.rate >= 0 ? "+" : ""}${state.rate.toFixed(2)} ppm/yr`;
 
         const roundedRate = Math.round(state.rate * 10) / 10;
         const bM1 = document.getElementById("ratePresetM1");
@@ -5540,18 +5580,7 @@
         if (b15) b15.classList.toggle("active", roundedRate === 1.5);
         if (b25) b25.classList.toggle("active", roundedRate === 2.5);
 
-        const btnSnap = document.getElementById("btnSnapEquilibrium");
-        if (btnSnap) {
-          if (state.instantEquilibrium) {
-            btnSnap.classList.add("active");
-            btnSnap.textContent = "⚡ Ocean Equilibrium: ON";
-            btnSnap.title = "Instant Ocean Equilibrium is ON (zero ocean thermal lag, committed warming, EEI = 0). Click to toggle back to realistic transient ocean lag.";
-          } else {
-            btnSnap.classList.remove("active");
-            btnSnap.textContent = "⚡ Instant Ocean Equilibrium";
-            btnSnap.title = "Instant Ocean Equilibrium: Toggle zero ocean thermal lag to reveal ultimate committed warming (EEI = 0), or toggle off to resume transient ocean heating";
-          }
-        }
+        drawFluxProfile();
 
         document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
         document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${(p.OLR - ASR >= 0 ? "+" : "")}${(p.OLR - ASR).toFixed(2)} W/m²`;
@@ -5612,16 +5641,11 @@
           // Coupled Two-Layer EBM (Held et al. 2010; Geoffroy et al. 2013)
           // Standard IPCC AR6 effective radiative forcing: F2x = 3.93 W/m^2 (ALPHA_RF = 3.93 / ln(2))
           const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
-          if (state.instantEquilibrium) {
-            state.deltaTs = rf / LAMBDA_FEEDBACK;
-            state.deltaTd = state.deltaTs;
-          } else {
-            const dTs = (rf - LAMBDA_FEEDBACK * state.deltaTs - GAMMA * (state.deltaTs - state.deltaTd)) / CM;
-            const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
+          const dTs = (rf - LAMBDA_FEEDBACK * state.deltaTs - GAMMA * (state.deltaTs - state.deltaTd)) / CM;
+          const dTd = (GAMMA * (state.deltaTs - state.deltaTd)) / CD;
 
-            state.deltaTs += dTs * dt;
-            state.deltaTd += dTd * dt;
-          }
+          state.deltaTs += dTs * dt;
+          state.deltaTd += dTd * dt;
 
           // Prevent drawdown from plunging below zero increase since 1750
           if (state.deltaTs <= 0.0 && state.rate <= 0 && state.year >= 2026) {
@@ -7199,10 +7223,6 @@
         state.deltaTs = PRESENT_2026_PT.deltaTs;
         state.deltaTd = PRESENT_2026_PT.deltaTd;
         state.year = PRESENT_2026_PT.year;
-        state.instantEquilibrium = false;
-        state.savedTransientTs = PRESENT_2026_PT.deltaTs;
-        state.savedTransientTd = PRESENT_2026_PT.deltaTd;
-        state.savedTransientYear = PRESENT_2026_PT.year;
         state.history = getCalibratedHistoricalRun();
         if (typeof autoRun === "boolean") {
           state.running = autoRun;
@@ -7217,27 +7237,6 @@
 
       document.getElementById("btnIntroReset2026").addEventListener("click", () => resetToPresentDay(false));
 
-      document.getElementById("btnSnapEquilibrium").addEventListener("click", () => {
-        state.instantEquilibrium = !state.instantEquilibrium;
-        const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
-        if (state.instantEquilibrium) {
-          state.savedTransientTs = state.deltaTs;
-          state.savedTransientTd = state.deltaTd;
-          state.savedTransientYear = state.year;
-          state.deltaTs = rf / LAMBDA_FEEDBACK;
-          state.deltaTd = state.deltaTs;
-        } else {
-          if (state.year === state.savedTransientYear && state.savedTransientTs !== undefined) {
-            state.deltaTs = state.savedTransientTs;
-            state.deltaTd = state.savedTransientTd;
-          } else {
-            state.deltaTd = state.deltaTs * 0.7;
-          }
-        }
-        syncUI();
-        draw();
-      });
-
       document.getElementById("btnReset").addEventListener("click", () => {
         resetToPresentDay(false);
       });
@@ -7248,24 +7247,6 @@
           e.target.classList.add("active");
           state.speed = parseFloat(e.target.dataset.speed);
         });
-      });
-
-      document.getElementById("sliderCO2").addEventListener("input", e => {
-        const frac = e.target.value / 1000;
-        const targetCO2 = Math.exp(Math.log(150) + frac * (Math.log(1000) - Math.log(150)));
-        if (state.year < 2026) {
-          // If user adjusts CO2 slider while in pre-2026 historical era, fast-forward cleanly to 2026 Present Day
-          // so history is never rewritten
-          resetToPresentDay(state.running);
-        }
-        state.co2 = targetCO2;
-        if (state.instantEquilibrium) {
-          const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
-          state.deltaTs = rf / LAMBDA_FEEDBACK;
-          state.deltaTd = state.deltaTs;
-        }
-        syncUI();
-        draw();
       });
 
       document.getElementById("sliderRate").addEventListener("input", e => {
