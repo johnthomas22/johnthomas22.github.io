@@ -433,6 +433,14 @@
     .has-tooltip:hover::after {
       opacity: 1;
     }
+    .badge.has-tooltip {
+      border-bottom: none;
+      cursor: help;
+    }
+    abbr.has-tooltip {
+      text-decoration: underline dotted;
+      cursor: help;
+    }
 
     /* Rich Interactive Tooltip (Hover & Clickable Links) */
     .rich-tooltip-wrap {
@@ -841,7 +849,63 @@
       }
     }
 
-    /* Action Button on 500-Year Temperature Chart */
+    /* Action Buttons Below 500-Year Warming Chart (Side by Side) */
+    .chart-actions-bottom {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .chart-bottom-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 16px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 6px;
+      background: rgba(11, 19, 32, 0.90);
+      border: 1.5px solid var(--border);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    #btnMillionYear.chart-bottom-btn {
+      border-color: rgba(0, 229, 255, 0.45);
+      color: var(--cyan);
+    }
+    #btnMillionYear.chart-bottom-btn:hover {
+      background: rgba(0, 229, 255, 0.15);
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+      color: #fff;
+    }
+    #btnJumpToBudgets.chart-bottom-btn {
+      border-color: rgba(0, 229, 255, 0.45);
+      color: var(--cyan);
+      background: rgba(0, 229, 255, 0.08);
+    }
+    #btnJumpToBudgets.chart-bottom-btn:hover {
+      background: rgba(0, 229, 255, 0.18);
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+      color: #fff;
+    }
+    .app-wrapper.simple-mode .chart-actions-bottom {
+      display: none !important;
+    }
+    @media (max-width: 600px) {
+      .chart-actions-bottom {
+        flex-direction: column;
+      }
+    }
+
+    /* Fallback Action Button on 500-Year Temperature Chart */
     .chart-action-btn-paleo {
       position: absolute;
       top: 50%;
@@ -1405,12 +1469,12 @@
     <div class="top-sim-row">
       <div class="stat-col">
         <div class="stat-card">
-          <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber">ASR</span></div>
+          <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber has-tooltip" data-tooltip="Absorbed Solar Radiation (ASR): Sunlight absorbed by Earth after reflection from clouds and surface albedo (~239 W/m²)" title="Absorbed Solar Radiation (ASR)">ASR</span></div>
           <div class="stat-value" id="valASR" style="color: var(--amber);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
           <div class="stat-sub">Sunlight absorbed post-albedo (~30%)</div>
         </div>
         <div class="stat-card">
-          <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald" id="badgeEEI">Balanced</span></div>
+          <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald has-tooltip" id="badgeEEI" data-tooltip="Earth's Energy Imbalance (EEI = ASR − OLR): Net heating or cooling rate driving global warming" title="Earth's Energy Imbalance (EEI)">Balanced</span></div>
           <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
           <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
         </div>
@@ -1418,12 +1482,12 @@
 
       <div class="stat-col">
         <div class="stat-card">
-          <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan">OLR</span></div>
+          <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan has-tooltip" data-tooltip="Outbound Longwave Radiation / Infrared (OLR): Thermal heat emitted upward from Earth and its atmosphere out to space" title="Outbound Longwave Radiation / Infrared (OLR)">OLR</span></div>
           <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-          <div class="stat-sub" id="subOLR">Escaping at TOA · Δ: 0.0 W/m²</div>
+          <div class="stat-sub" id="subOLR">Escaping at <abbr class="has-tooltip" data-tooltip="Top of Atmosphere (~100 km boundary where heat radiates into space)" title="Top of Atmosphere">TOA</abbr> · Δ: 0.0 W/m²</div>
         </div>
         <div class="stat-card">
-          <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose">ΔT</span></div>
+          <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose has-tooltip" data-tooltip="Surface temperature anomaly relative to the 1750 pre-industrial baseline" title="Surface Warming (1750 Baseline)">ΔT</span></div>
           <div class="stat-value" id="valDeltaT" style="color: var(--rose);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">°C</span></div>
           <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (-0.12 °C rel. 1850–1900)</div>
         </div>
@@ -1457,35 +1521,29 @@
               <div class="badge badge-cyan" id="simYearDisplay">Year: 2026 CE</div>
             </div>
           </div>
+
+          <!-- CO2 Emissions & Drawdown Controls -->
+          <div style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">CO₂ Emissions &amp; Drawdown</span>
+              <div class="badge badge-cyan" id="co2Display" style="font-size: 0.82rem; font-weight: 700;">427 ppm</div>
+            </div>
+
+            <div class="slider-group" style="margin-top: 0; margin-bottom: 0;">
+              <input type="range" id="sliderRate" min="-3.0" max="4.0" step="0.1" value="2.5" title="Adjust annual CO₂ ramp or drawdown rate (-3.0 to +4.0 ppm/yr)">
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 8px;">
+                <button class="btn btn-secondary rate-preset-btn" id="ratePresetM1" style="font-size: 0.70rem; padding: 6px 2px;" title="Drawdown 1.5 ppm/yr">-1.5 ppm/yr</button>
+                <button class="btn btn-secondary rate-preset-btn" id="ratePreset0" style="font-size: 0.70rem; padding: 6px 2px;" title="Net Zero (0.0 ppm/yr) — any carbon emitted is removed">Net Zero</button>
+                <button class="btn btn-secondary rate-preset-btn" id="ratePreset15" style="font-size: 0.70rem; padding: 6px 2px;" title="Mid 20th Century 1.5 ppm/yr">+1.5 ppm/yr</button>
+                <button class="btn btn-secondary rate-preset-btn active" id="ratePreset25" style="font-size: 0.70rem; padding: 6px 2px;" title="Today, 2.5 ppm/yr">+2.5 ppm/yr</button>
+              </div>
+            </div>
+          </div>
+
           <div class="sim-controls-row">
             <button class="btn btn-start" id="btnPlayPause">▶ Start Simulation</button>
             <button class="btn btn-secondary" id="btnReset">↺ Reset</button>
           </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div class="card-title" style="margin-bottom: 0;">CO₂ Emissions & Drawdown</div>
-            <div class="badge badge-cyan" id="co2Display" style="font-size: 0.82rem; font-weight: 700;">427 ppm</div>
-          </div>
-
-          <div class="slider-group" style="margin-top: 0;">
-            <div class="slider-labels">
-              <span>Annual Ramp / Drawdown Rate</span>
-              <span class="slider-val-badge" id="rateDisplay">+2.50 ppm/yr</span>
-            </div>
-            <input type="range" id="sliderRate" min="-3.0" max="4.0" step="0.1" value="2.5">
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px;">
-              <button class="btn btn-secondary rate-preset-btn" id="ratePresetM1" style="font-size: 0.68rem; padding: 5px 2px;" title="Drawdown 1.5ppm/yr">-1.5</button>
-              <button class="btn btn-secondary rate-preset-btn" id="ratePreset0" style="font-size: 0.68rem; padding: 5px 2px;" title="Net Zero, any carbon emitted is removed">Net Zero</button>
-              <button class="btn btn-secondary rate-preset-btn" id="ratePreset15" style="font-size: 0.68rem; padding: 5px 2px;" title="Mid 20th Century 1.5ppm/yr">+1.5</button>
-              <button class="btn btn-secondary rate-preset-btn active" id="ratePreset25" style="font-size: 0.68rem; padding: 5px 2px;" title="Today, 2.5ppm/yr">2.5</button>
-            </div>
-          </div>
-
-          <button class="btn btn-secondary" id="btnJumpToBudgets" style="margin-top: 14px; width: 100%; border-color: rgba(0, 229, 255, 0.4); color: var(--cyan); background: rgba(0, 229, 255, 0.08); font-size: 0.78rem; font-weight: 700; padding: 7px 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            🛢️ Explore Fossil Extraction & Carbon Budgets Page →
-          </button>
         </div>
 
       </div>
@@ -1506,11 +1564,6 @@
             What can I do about it?
           </button>
 
-          <!-- Top-Right Action Button on 500-Year Temperature Chart -->
-          <button type="button" class="chart-action-btn-paleo" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
-            <span>🔍</span> 1-Million-Year Comparison
-          </button>
-
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
             <div class="bubble-header">
@@ -1524,6 +1577,16 @@
               <button class="bubble-nav-btn" id="bubbleNextBtn">Next →</button>
             </div>
           </div>
+        </div>
+
+        <!-- Action Buttons Below 500-Year Warming Chart (Side by Side) -->
+        <div class="chart-actions-bottom" id="chartActionsBottom">
+          <button type="button" class="chart-bottom-btn" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
+            <span>🔍</span> 1-Million-Year Comparison
+          </button>
+          <button type="button" class="chart-bottom-btn" id="btnJumpToBudgets" title="Explore Fossil Extraction, Carbon Budgets &amp; Warming scenarios">
+            🛢️ Explore Fossil Extraction &amp; Carbon Budgets Page →
+          </button>
         </div>
       </div>
 
@@ -4986,14 +5049,6 @@
         // CO2 Scale: 200 ppm to 1050 ppm fitted across the 500-Year chart height
         function co2ToY(c) { return tGridBottom - ((c - 200) / 850) * tGridH; }
 
-        // Position 1-Million-Year Comparison button dynamically between +2°C and +3°C lines
-        const btnMillion = document.getElementById("btnMillionYear");
-        if (btnMillion) {
-          const yBetween = (dtToY(2.0) + dtToY(3.0)) / 2;
-          btnMillion.style.top = Math.round(yBetween - 13) + "px";
-          btnMillion.style.right = (isMobileNarrow ? 14 : 28) + "px";
-        }
-
         // Right-hand Y-Axis Labels for CO2 in Purple (280, 400, 600, 800, 1000 ppm)
         [280, 400, 600, 800, 1000].forEach(cVal => {
           const cy = co2ToY(cVal);
@@ -5605,7 +5660,7 @@
         drawFluxProfile();
 
         document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
-        document.getElementById("subOLR").textContent = `Escaping at TOA · Δ: ${(p.OLR - ASR >= 0 ? "+" : "")}${(p.OLR - ASR).toFixed(2)} W/m²`;
+        document.getElementById("subOLR").innerHTML = `Escaping at <abbr class="has-tooltip" data-tooltip="Top of Atmosphere (~100 km boundary where heat radiates into space)" title="Top of Atmosphere">TOA</abbr> · Δ: ${(p.OLR - ASR >= 0 ? "+" : "")}${(p.OLR - ASR).toFixed(2)} W/m²`;
         document.getElementById("valEEI").innerHTML = `${p.EEI >= 0 ? "+" : ""}${p.EEI.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
         document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
         document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (+${(state.deltaTs - OFFSET_1850_1900).toFixed(2)} °C rel. 1850–1900)`;
