@@ -73,7 +73,7 @@
     .badge-cyan {
       background: rgba(0, 229, 255, 0.15); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.3);
     }
-    #co2Display {
+    #rateDisplay, #co2Display {
       text-transform: none;
     }
     .badge-rose { background: rgba(244, 63, 94, 0.15); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.3); }
@@ -1622,14 +1622,11 @@
         <div class="card">
           <div class="card-title-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
             <div class="card-title" style="margin-bottom: 0;">Simulator</div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <div style="display: flex; gap: 3px;">
-                <button class="speed-btn" data-speed="0.5" title="0.5× Half Speed">0.5×</button>
-                <button class="speed-btn active" data-speed="1.0" title="1.0× Normal Speed">1.0×</button>
-                <button class="speed-btn" data-speed="2.0" title="2.0× Double Speed">2.0×</button>
-                <button class="speed-btn" data-speed="4.0" title="4.0× Quad Speed">4.0×</button>
-              </div>
-              <div class="badge badge-cyan" id="simYearDisplay">Year: 2026 CE</div>
+            <div style="display: flex; gap: 3px;">
+              <button class="speed-btn" data-speed="0.5" title="0.5× Half Speed">0.5×</button>
+              <button class="speed-btn active" data-speed="1.0" title="1.0× Normal Speed">1.0×</button>
+              <button class="speed-btn" data-speed="2.0" title="2.0× Double Speed">2.0×</button>
+              <button class="speed-btn" data-speed="4.0" title="4.0× Quad Speed">4.0×</button>
             </div>
           </div>
 
@@ -1637,7 +1634,7 @@
           <div style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">CO₂ emissions or drawdown per year</span>
-              <div class="badge badge-cyan" id="co2Display" style="font-size: 0.82rem; font-weight: 700;">427 ppm</div>
+              <div class="badge badge-cyan" id="rateDisplay" style="font-size: 0.82rem; font-weight: 700;">+2.5 ppm/yr</div>
             </div>
 
             <div class="slider-group" style="margin-top: 0; margin-bottom: 0;">
@@ -5827,12 +5824,15 @@
           const sliderVal = Math.round(((Math.log(state.co2) - Math.log(150)) / (Math.log(1000) - Math.log(150))) * 1000);
           sCO2.value = sliderVal;
         }
-        const co2Disp = document.getElementById("co2Display");
-        if (co2Disp) co2Disp.textContent = Math.round(state.co2) + " ppm";
         const sRate = document.getElementById("sliderRate");
         if (sRate) sRate.value = state.rate.toFixed(1);
         const rDisp = document.getElementById("rateDisplay");
-        if (rDisp) rDisp.textContent = `${state.rate >= 0 ? "+" : ""}${state.rate.toFixed(2)} ppm/yr`;
+        if (rDisp) {
+          const rateVal = Math.round(state.rate * 10) / 10;
+          rDisp.textContent = Math.abs(rateVal) < 0.05
+            ? "0.0 ppm/yr (Net Zero)"
+            : `${rateVal > 0 ? "+" : ""}${rateVal.toFixed(1)} ppm/yr`;
+        }
 
         const roundedRate = Math.round(state.rate * 10) / 10;
         const bM1 = document.getElementById("ratePresetM1");
@@ -5851,7 +5851,8 @@
         document.getElementById("valEEI").innerHTML = `${p.EEI >= 0 ? "+" : ""}${p.EEI.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
         document.getElementById("valDeltaT").innerHTML = `${state.deltaTs >= 0 ? "+" : ""}${state.deltaTs.toFixed(2)} <span style="font-size: 0.8rem; color: #94a3b8;">°C</span>`;
         document.getElementById("subDeltaT").textContent = `Ts = ${p.currentTs.toFixed(2)} °C (+${(state.deltaTs - OFFSET_1850_1900).toFixed(2)} °C rel. 1850–1900)`;
-        document.getElementById("simYearDisplay").textContent = `Year: ${Math.round(state.year)} CE`;
+        const simYr = document.getElementById("simYearDisplay");
+        if (simYr) simYr.textContent = `Year: ${Math.round(state.year)} CE`;
 
         // Sync Gentle Intro Bar
         document.getElementById("introYearDisplay").textContent = `${Math.round(state.year)} CE`;
