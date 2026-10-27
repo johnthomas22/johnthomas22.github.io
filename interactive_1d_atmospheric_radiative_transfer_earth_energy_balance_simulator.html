@@ -356,6 +356,104 @@
       filter: brightness(1.25);
     }
 
+    /* The Electrification & Abatement Playbook Accordion Styles */
+    .playbook-card {
+      background: rgba(0, 229, 255, 0.04);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .playbook-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+    }
+    .playbook-main-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+    .playbook-expand-all-btn {
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      color: var(--cyan);
+      font-size: 0.70rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .playbook-expand-all-btn:hover {
+      background: rgba(0, 229, 255, 0.22);
+      color: #fff;
+      border-color: var(--cyan);
+    }
+    .playbook-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .playbook-item {
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      background: rgba(11, 19, 32, 0.4);
+      overflow: hidden;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .playbook-item:hover {
+      border-color: rgba(0, 229, 255, 0.25);
+    }
+    .playbook-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 10px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.77rem;
+      color: #e2e8f0;
+    }
+    .playbook-header:hover {
+      background: rgba(0, 229, 255, 0.06);
+    }
+    .playbook-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .playbook-bullet {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+    .playbook-badge-btn {
+      font-family: ui-monospace, monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--cyan);
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 1px 6px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+    .playbook-header:hover .playbook-badge-btn {
+      background: var(--cyan);
+      color: #000;
+    }
+    .playbook-body {
+      padding: 8px 12px 10px 24px;
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      background: rgba(0, 0, 0, 0.15);
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
     /* Solutions Grid Styles */
     .solutions-grid {
       display: grid;
@@ -1975,16 +2073,92 @@
             </div>
           </div>
 
-          <!-- What Directly Replaces Each Emission Source? -->
-          <div style="background: rgba(0, 229, 255, 0.04); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
-            <div style="font-size: 0.82rem; font-weight: 700; color: var(--cyan); margin-bottom: 6px;">💡 The Electrification & Abatement Playbook</div>
-            <div style="font-size: 0.77rem; color: #cbd5e1; line-height: 1.5; display: flex; flex-direction: column; gap: 6px;">
-              <div>• <strong>Road Transport (11.9% of GHG):</strong> Battery Electric Vehicles (BEVs), electric buses, rail freight. High electric motor efficiency (85–90% vs 25% for ICE) cuts primary energy demand by ~3×.</div>
-              <div>• <strong>Building Heating (17.5% of GHG):</strong> Heat pumps (Air-to-water, Ground-source). Delivers 3 to 4 kWh of heat per 1 kWh electricity (COP 3.0–4.0), replacing gas boilers.</div>
-              <div>• <strong>Electricity Generation (Coal & Gas):</strong> Solar PV, Wind, Nuclear baseload, and Hydro, backed by multi-duration grid storage (batteries, pumped hydro, CAES).</div>
-              <div>• <strong>Iron & Steel (7.2% of GHG):</strong> Green hydrogen direct reduced iron (H₂-DRI) feeding Electric Arc Furnaces (EAF), replacing metallurgical coal.</div>
-              <div>• <strong>Cement (3.0% of GHG):</strong> Clinker substitution with calcined clays (LC3 cement), geopolymer binders, and point-source carbon capture (CCUS).</div>
-              <div>• <strong>Agriculture & Land Use (18.4% of GHG):</strong> Shifting to plant-rich protein eliminates the 10:1 animal calorie penalty, freeing up to 75% of global farmland (~30 million km²) for massive natural carbon sequestration (~300–500 Gt CO₂).</div>
+          <!-- What Directly Replaces Each Emission Source? (The Electrification & Abatement Playbook) -->
+          <div class="playbook-card">
+            <div class="playbook-top-row">
+              <div class="playbook-main-title">💡 The Electrification &amp; Abatement Playbook</div>
+              <button type="button" class="playbook-expand-all-btn" id="playbookExpandAllBtn" title="Expand all abatement measures">Expand All</button>
+            </div>
+            <div class="playbook-list">
+
+              <div class="playbook-item">
+                <div class="playbook-header" role="button" tabindex="0">
+                  <div class="playbook-title-wrap">
+                    <span class="playbook-bullet">•</span>
+                    <strong class="playbook-title">Road Transport (11.9% of GHG)</strong>
+                  </div>
+                  <span class="playbook-badge-btn">(+)</span>
+                </div>
+                <div class="playbook-body" style="display: none;">
+                  Battery Electric Vehicles (BEVs), electric buses, rail freight. High electric motor efficiency (85–90% vs 25% for ICE) cuts primary energy demand by ~3×.
+                </div>
+              </div>
+
+              <div class="playbook-item">
+                <div class="playbook-header" role="button" tabindex="0">
+                  <div class="playbook-title-wrap">
+                    <span class="playbook-bullet">•</span>
+                    <strong class="playbook-title">Building Heating (17.5% of GHG)</strong>
+                  </div>
+                  <span class="playbook-badge-btn">(+)</span>
+                </div>
+                <div class="playbook-body" style="display: none;">
+                  Heat pumps (Air-to-water, Ground-source). Delivers 3 to 4 kWh of heat per 1 kWh electricity (COP 3.0–4.0), replacing gas boilers.
+                </div>
+              </div>
+
+              <div class="playbook-item">
+                <div class="playbook-header" role="button" tabindex="0">
+                  <div class="playbook-title-wrap">
+                    <span class="playbook-bullet">•</span>
+                    <strong class="playbook-title">Electricity Generation (Coal &amp; Gas)</strong>
+                  </div>
+                  <span class="playbook-badge-btn">(+)</span>
+                </div>
+                <div class="playbook-body" style="display: none;">
+                  Solar PV, Wind, Nuclear baseload, and Hydro, backed by multi-duration grid storage (batteries, pumped hydro, CAES).
+                </div>
+              </div>
+
+              <div class="playbook-item">
+                <div class="playbook-header" role="button" tabindex="0">
+                  <div class="playbook-title-wrap">
+                    <span class="playbook-bullet">•</span>
+                    <strong class="playbook-title">Iron &amp; Steel (7.2% of GHG)</strong>
+                  </div>
+                  <span class="playbook-badge-btn">(+)</span>
+                </div>
+                <div class="playbook-body" style="display: none;">
+                  Green hydrogen direct reduced iron (H₂-DRI) feeding Electric Arc Furnaces (EAF), replacing metallurgical coal.
+                </div>
+              </div>
+
+              <div class="playbook-item">
+                <div class="playbook-header" role="button" tabindex="0">
+                  <div class="playbook-title-wrap">
+                    <span class="playbook-bullet">•</span>
+                    <strong class="playbook-title">Cement (3.0% of GHG)</strong>
+                  </div>
+                  <span class="playbook-badge-btn">(+)</span>
+                </div>
+                <div class="playbook-body" style="display: none;">
+                  Clinker substitution with calcined clays (LC3 cement), geopolymer binders, and point-source carbon capture (CCUS).
+                </div>
+              </div>
+
+              <div class="playbook-item">
+                <div class="playbook-header" role="button" tabindex="0">
+                  <div class="playbook-title-wrap">
+                    <span class="playbook-bullet">•</span>
+                    <strong class="playbook-title">Agriculture &amp; Land Use (18.4% of GHG)</strong>
+                  </div>
+                  <span class="playbook-badge-btn">(+)</span>
+                </div>
+                <div class="playbook-body" style="display: none;">
+                  Shifting to plant-rich protein eliminates the 10:1 animal calorie penalty, freeing up to 75% of global farmland (~30 million km²) for massive natural carbon sequestration (~300–500 Gt CO₂).
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -6877,6 +7051,44 @@
           btnOpenGuideSources.addEventListener("click", () => {
             modalOverlay.style.display = "flex";
             setDocPage("page-sources-owid");
+          });
+        }
+
+        // Playbook Expand/Collapse Accordion & Expand All Toggle
+        const playbookExpandAllBtn = document.getElementById("playbookExpandAllBtn");
+        const playbookHeaders = document.querySelectorAll(".playbook-header");
+
+        function updatePlaybookExpandAllState() {
+          const bodies = document.querySelectorAll(".playbook-body");
+          const allOpen = Array.from(bodies).every(b => b.style.display !== "none");
+          if (playbookExpandAllBtn) {
+            playbookExpandAllBtn.textContent = allOpen ? "Collapse All" : "Expand All";
+            playbookExpandAllBtn.title = allOpen ? "Collapse all abatement measures" : "Expand all abatement measures";
+          }
+        }
+
+        playbookHeaders.forEach(header => {
+          header.addEventListener("click", () => {
+            const body = header.nextElementSibling;
+            const badge = header.querySelector(".playbook-badge-btn");
+            const isOpen = body.style.display !== "none";
+            body.style.display = isOpen ? "none" : "block";
+            if (badge) badge.textContent = isOpen ? "(+)" : "(−)";
+            updatePlaybookExpandAllState();
+          });
+        });
+
+        if (playbookExpandAllBtn) {
+          playbookExpandAllBtn.addEventListener("click", () => {
+            const bodies = document.querySelectorAll(".playbook-body");
+            const allOpen = Array.from(bodies).every(b => b.style.display !== "none");
+            const shouldOpen = !allOpen;
+            bodies.forEach(b => { b.style.display = shouldOpen ? "block" : "none"; });
+            document.querySelectorAll(".playbook-badge-btn").forEach(badge => {
+              badge.textContent = shouldOpen ? "(−)" : "(+)";
+            });
+            playbookExpandAllBtn.textContent = shouldOpen ? "Collapse All" : "Expand All";
+            playbookExpandAllBtn.title = shouldOpen ? "Collapse all abatement measures" : "Expand all abatement measures";
           });
         }
 
