@@ -6895,16 +6895,21 @@
           const committedC = rf / LAMBDA_FEEDBACK;
           const pctOf15Budget = (grossGt / 200.0) * 100.0;
 
+          const fmtPpm = netPpm >= 1 ? netPpm.toFixed(2) : (netPpm >= 0.01 ? netPpm.toFixed(3) : netPpm.toFixed(5));
+          const fmtRf = rf >= 0.05 ? rf.toFixed(2) : (rf >= 0.001 ? rf.toFixed(4) : rf.toFixed(6));
+          const fmtC = committedC >= 0.01 ? committedC.toFixed(2) : (committedC >= 0.001 ? committedC.toFixed(4) : committedC.toFixed(5));
+          const fmtBudget = pctOf15Budget >= 10 ? pctOf15Budget.toFixed(1) : pctOf15Budget.toFixed(2);
+
           convResultBox.innerHTML = `
             <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 4px;">
               <strong style="color: var(--amber);">${item.label}:</strong>
               <span style="color: #fff; font-family: ui-monospace, monospace; font-weight: 700;">${grossGt.toFixed(grossGt < 1 ? 3 : 1)} Gt CO₂</span>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 4px;">
-              <div>Atmospheric CO₂ Added: <b style="color: var(--cyan);">+${netPpm.toFixed(netPpm < 0.01 ? 5 : 3)} ppm</b></div>
-              <div>Incremental Forcing: <b style="color: var(--cyan);">+${rf.toFixed(rf < 0.001 ? 6 : 4)} W/m²</b></div>
-              <div>Committed Warming: <b style="color: var(--rose);">+${committedC.toFixed(committedC < 0.001 ? 6 : 4)} °C</b></div>
-              <div>1.5°C Budget Consumed: <b style="color: ${pctOf15Budget > 100 ? 'var(--rose)' : 'var(--amber)'};">${pctOf15Budget.toFixed(pctOf15Budget < 1 ? 2 : 1)}%</b></div>
+              <div>Atmospheric CO₂ Added: <b style="color: var(--cyan);">+${fmtPpm} ppm</b></div>
+              <div>Incremental Forcing: <b style="color: var(--cyan);">+${fmtRf} W/m²</b></div>
+              <div>Committed Warming: <b style="color: var(--rose);">+${fmtC} °C</b></div>
+              <div>1.5°C Budget Consumed: <b style="color: ${pctOf15Budget > 100 ? 'var(--rose)' : 'var(--amber)'};">${fmtBudget}%</b></div>
             </div>
           `;
         }
