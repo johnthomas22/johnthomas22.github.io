@@ -880,10 +880,65 @@
     input[type="range"]::-moz-range-thumb {
       width: 16px; height: 16px; border-radius: 50%; background: var(--cyan); cursor: pointer; border: none;
     }
-    .slider-ticks-container { position: relative; height: 20px; margin-top: 2px; }
-    .slider-tick-anchor { position: absolute; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
-    .tick-line { width: 1px; height: 4px; background: #475569; }
-    .tick-label { font-size: 0.65rem; color: var(--text-muted); font-family: ui-monospace, monospace; }
+    .slider-pips-container {
+      position: relative;
+      height: 18px;
+      margin: 3px 8px 4px 8px;
+      user-select: none;
+    }
+    .slider-pip {
+      position: absolute;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+    .pip-tick {
+      width: 1px;
+      background: #475569;
+      transition: background 0.15s ease, height 0.15s ease;
+    }
+    .pip-tick.minor {
+      height: 3px;
+    }
+    .pip-tick.major {
+      height: 5px;
+      background: #64748b;
+    }
+    .pip-tick.zero {
+      background: var(--cyan);
+      width: 2px;
+    }
+    .pip-label {
+      font-size: 0.64rem;
+      color: #94a3b8;
+      font-family: ui-monospace, monospace;
+      margin-top: 1px;
+      line-height: 1;
+      transition: color 0.15s ease, font-weight 0.15s ease;
+    }
+    .pip-label.zero {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+    .slider-pip:hover .pip-tick {
+      background: #fff;
+    }
+    .slider-pip:hover .pip-label {
+      color: #fff;
+    }
+    .slider-pip.active .pip-tick {
+      background: var(--cyan);
+      height: 6px;
+      width: 2px;
+    }
+    .slider-pip.active .pip-label {
+      color: #fff;
+      font-weight: 700;
+      text-shadow: 0 0 6px rgba(0, 229, 255, 0.6);
+    }
 
     .canvas-panel {
       background: var(--card-bg);
@@ -1639,7 +1694,62 @@
 
             <div class="slider-group" style="margin-top: 0; margin-bottom: 0;">
               <input type="range" id="sliderRate" min="-3.0" max="4.0" step="0.1" value="2.5" title="Adjust annual CO₂ ramp or drawdown rate (-3.0 to +4.0 ppm/yr)">
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 8px;">
+              <div class="slider-pips-container" id="sliderRatePips">
+                <div class="slider-pip" data-val="-3.0" style="left: 0%;" title="-3.0 ppm/yr">
+                  <span class="pip-tick major"></span>
+                  <span class="pip-label">-3</span>
+                </div>
+                <div class="slider-pip" data-val="-2.5" style="left: 7.14%;" title="-2.5 ppm/yr">
+                  <span class="pip-tick minor"></span>
+                </div>
+                <div class="slider-pip" data-val="-2.0" style="left: 14.29%;" title="-2.0 ppm/yr">
+                  <span class="pip-tick major"></span>
+                  <span class="pip-label">-2</span>
+                </div>
+                <div class="slider-pip" data-val="-1.5" style="left: 21.43%;" title="-1.5 ppm/yr">
+                  <span class="pip-tick minor"></span>
+                </div>
+                <div class="slider-pip" data-val="-1.0" style="left: 28.57%;" title="-1.0 ppm/yr">
+                  <span class="pip-tick major"></span>
+                  <span class="pip-label">-1</span>
+                </div>
+                <div class="slider-pip" data-val="-0.5" style="left: 35.71%;" title="-0.5 ppm/yr">
+                  <span class="pip-tick minor"></span>
+                </div>
+                <div class="slider-pip" data-val="0.0" style="left: 42.86%;" title="0.0 ppm/yr (Net Zero)">
+                  <span class="pip-tick major zero"></span>
+                  <span class="pip-label zero">0</span>
+                </div>
+                <div class="slider-pip" data-val="0.5" style="left: 50.00%;" title="+0.5 ppm/yr">
+                  <span class="pip-tick minor"></span>
+                </div>
+                <div class="slider-pip" data-val="1.0" style="left: 57.14%;" title="+1.0 ppm/yr">
+                  <span class="pip-tick major"></span>
+                  <span class="pip-label">+1</span>
+                </div>
+                <div class="slider-pip" data-val="1.5" style="left: 64.29%;" title="+1.5 ppm/yr">
+                  <span class="pip-tick minor"></span>
+                </div>
+                <div class="slider-pip" data-val="2.0" style="left: 71.43%;" title="+2.0 ppm/yr">
+                  <span class="pip-tick major"></span>
+                  <span class="pip-label">+2</span>
+                </div>
+                <div class="slider-pip active" data-val="2.5" style="left: 78.57%;" title="+2.5 ppm/yr">
+                  <span class="pip-tick minor"></span>
+                </div>
+                <div class="slider-pip" data-val="3.0" style="left: 85.71%;" title="+3.0 ppm/yr">
+                  <span class="pip-tick major"></span>
+                  <span class="pip-label">+3</span>
+                </div>
+                <div class="slider-pip" data-val="3.5" style="left: 92.86%;" title="+3.5 ppm/yr">
+                  <span class="pip-tick minor"></span>
+                </div>
+                <div class="slider-pip" data-val="4.0" style="left: 100%;" title="+4.0 ppm/yr">
+                  <span class="pip-tick major"></span>
+                  <span class="pip-label">+4</span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 4px;">
                 <button class="btn btn-secondary rate-preset-btn" id="ratePresetM1" style="font-size: 0.70rem; padding: 6px 2px;" title="Drawdown 1.5 ppm/yr">-1.5 ppm/yr</button>
                 <button class="btn btn-secondary rate-preset-btn" id="ratePreset0" style="font-size: 0.70rem; padding: 6px 2px;" title="Net Zero (0.0 ppm/yr) — any carbon emitted is removed">Net Zero</button>
                 <button class="btn btn-secondary rate-preset-btn" id="ratePreset15" style="font-size: 0.70rem; padding: 6px 2px;" title="Mid 20th Century 1.5 ppm/yr">+1.5 ppm/yr</button>
@@ -5844,6 +5954,11 @@
         if (b15) b15.classList.toggle("active", roundedRate === 1.5);
         if (b25) b25.classList.toggle("active", roundedRate === 2.5);
 
+        document.querySelectorAll(".slider-pip").forEach(pip => {
+          const val = parseFloat(pip.dataset.val);
+          pip.classList.toggle("active", Math.abs(val - roundedRate) < 0.05);
+        });
+
         drawFluxProfile();
 
         document.getElementById("valOLR").innerHTML = `${p.OLR.toFixed(1)} <span style="font-size: 0.8rem; color: #94a3b8;">W/m²</span>`;
@@ -7609,6 +7724,17 @@
         state.rate = 2.5;
         syncUI();
         draw();
+      });
+
+      document.querySelectorAll(".slider-pip").forEach(pip => {
+        pip.addEventListener("click", () => {
+          const val = parseFloat(pip.dataset.val);
+          if (!isNaN(val)) {
+            state.rate = val;
+            syncUI();
+            draw();
+          }
+        });
       });
 
       window.addEventListener("resize", () => {
