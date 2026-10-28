@@ -5591,11 +5591,11 @@
             const tw = ctx.measureText(labelStr).width;
             const bw = tw + 10;
             const bh = 17;
-            const bx = Math.max(tGridLeft + 4, ix - bw - 12);
-            // 1958 is above-left, but 2026 is positioned BELOW-LEFT (iy + 6) of the dot so it has massive clearance from all tipping points (which all sit at >= +1.5°C above the curve)
-            const by = (targetYr === 2026)
-              ? Math.min(tGridBottom - 32, iy + 6)
-              : Math.max(tGridTop + 6, iy - bh - 4);
+            const bx = Math.max(tGridLeft + 4, ix - bw - 10);
+            // Positioned cleanly BELOW the curve (iy + 24 for 1958, iy + 36 for 2026) so they never obscure rising temperature or CO2 lines
+            const by = (targetYr === 1958)
+              ? Math.min(tGridBottom - bh - 6, iy + 24)
+              : Math.min(tGridBottom - bh - 6, iy + 36);
             markerBadgeBoxes.push({ yr: targetYr, ix, iy, bx, by, bw, bh, labelStr });
           }
         });
@@ -5681,11 +5681,11 @@
 
         // 3. Draw historical marker badges (1958 and 2026) with crisp leader lines and 100% opaque badges
         markerBadgeBoxes.forEach(mb => {
-          // Short leader line from right edge of badge to intersection dot
+          // Short leader line connecting from top edge of badge up to intersection dot
           ctx.strokeStyle = "#f59e0b";
           ctx.lineWidth = 1.2;
           ctx.beginPath();
-          ctx.moveTo(mb.bx + mb.bw, mb.by + mb.bh / 2);
+          ctx.moveTo(mb.bx + mb.bw - 4, mb.by);
           ctx.lineTo(mb.ix, mb.iy);
           ctx.stroke();
 
@@ -5775,18 +5775,18 @@
           const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 10 && distTemp <= distCo2;
           const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp;
 
-          // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or left-side orange +0.15°C badge)
+          // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or left-side orange +0.26°C badge)
           const isOverKeeling = (
             (Math.abs(mousePos.x - keelingX) <= 10) ||
             (mousePos.x >= keelingX - 24 && mousePos.x <= keelingX + 6 && mousePos.y >= tGridTop + 30 && mousePos.y <= tGridTop + 140) ||
-            (mousePos.x >= keelingX - 75 && mousePos.x <= keelingX + 6 && mousePos.y >= iy1958 - 26 && mousePos.y <= iy1958 + 10)
+            (mousePos.x >= keelingX - 75 && mousePos.x <= keelingX + 6 && mousePos.y >= iy1958 - 6 && mousePos.y <= iy1958 + 48)
           );
 
-          // Check 2026 Present (dashed line, rotated orange label "2026", or left-side orange +1.26°C badge)
+          // Check 2026 Present (dashed line, rotated orange label "2026", or left-side orange +1.14°C badge)
           const isOver2026 = (
             (Math.abs(mousePos.x - present2026X) <= 10) ||
             (mousePos.x >= present2026X - 24 && mousePos.x <= present2026X + 6 && mousePos.y >= tGridTop + 30 && mousePos.y <= tGridTop + 140) ||
-            (mousePos.x >= present2026X - 75 && mousePos.x <= present2026X + 6 && mousePos.y >= iy2026 - 10 && mousePos.y <= iy2026 + 30)
+            (mousePos.x >= present2026X - 75 && mousePos.x <= present2026X + 6 && mousePos.y >= iy2026 - 6 && mousePos.y <= iy2026 + 60)
           );
 
           // Check Active Simulation Year marker / playhead badge
