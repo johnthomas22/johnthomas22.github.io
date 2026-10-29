@@ -681,9 +681,10 @@
       </div>
       <canvas id="heatCanvas" width="900" height="420"></canvas>
       <div style="font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-        <span>🟡 Yellow rays: Sunshine coming in</span>
-        <span>🔴 Red waves: Trapped heat bouncing back</span>
-        <span>☁️ White puffy duvet: Thickening carbon blanket</span>
+        <span>🟡 Yellow rays: Sunshine warming Earth</span>
+        <span>🔴 Red waves: Trapped heat bouncing under the duvet</span>
+        <span>💨 Blue wisps: Escaping heat (choked off by thick duvet)</span>
+        <span>🛏️ Quilted duvet: Heat-trapping carbon blanket</span>
       </div>
     </div>
 
@@ -918,6 +919,7 @@
   // Particles for visual animation
   const sunRays = [];
   const heatWaves = [];
+  const escapingHeat = [];
   const duvetSmog = [];
 
   function initParticles() {
@@ -928,12 +930,21 @@
         speed: 1.5 + Math.random() * 1.5
       });
     }
-    for (let i = 0; i < 24; i++) {
+    // Trapped heat waves bouncing strictly between Earth's surface and the underside of the duvet
+    for (let i = 0; i < 22; i++) {
+      const x = canvas.width * 0.5 + (Math.random() - 0.5) * 500;
       heatWaves.push({
-        x: canvas.width * 0.5 + (Math.random() - 0.5) * 560,
-        y: canvas.height - 40 - Math.random() * 80,
-        speed: 1.2 + Math.random() * 1.2,
-        trapped: Math.random() < 0.65
+        x: x,
+        y: 180 + Math.random() * 60,
+        speed: (Math.random() > 0.5 ? 1 : -1) * (1.2 + Math.random() * 1.0)
+      });
+    }
+    // Escaping cooling wisps filtering into space
+    for (let i = 0; i < 14; i++) {
+      escapingHeat.push({
+        x: canvas.width * 0.5 + (Math.random() - 0.5) * 550,
+        y: 30 + Math.random() * 90,
+        speed: 0.7 + Math.random() * 0.8
       });
     }
     for (let i = 0; i < 40; i++) {
@@ -1296,37 +1307,76 @@
       ctx.fill();
     });
 
-    // 6. Heat waves (escaping vs trapped and bounced back)
+    // 6. Trapped Heat Waves (Strictly bouncing between Earth's surface and the underside of the duvet)
     heatWaves.forEach(hw => {
-      hw.y -= hw.speed;
+      hw.y -= hw.speed; // speed > 0 moves UP towards duvet, speed < 0 moves DOWN towards Earth
+
       const u = (hw.x - duvetLeft) / duvetSpan;
       const duvetBottom = (u >= 0 && u <= 1) ? (144 - getArch(u) + duvetThickness * 0.5) : 155;
-
-      if (hw.trapped && hw.y < duvetBottom) {
-        // Trapped heat bounces back down toward Earth's surface
-        hw.y = duvetBottom + 4;
-        hw.speed = -Math.abs(hw.speed) * 0.9;
-      }
-      if (hw.y > h - 30 && hw.speed < 0) {
-        // Returned to ground, warms the surface and reradiates
-        hw.y = h - 30;
-        hw.speed = 1.2 + Math.random() * 1.2;
-        hw.trapped = Math.random() < (0.55 + tempT * 0.35);
-      }
-      if (hw.y < 30) {
-        // Escaped through the duvet into deep space
-        hw.y = h - 40;
-        hw.trapped = Math.random() < (0.55 + tempT * 0.35);
+      
+      const dx = hw.x - earthCenterX;
+      let earthSurface = h - 20;
+      if (Math.abs(dx) < earthRadius) {
+        earthSurface = earthCenterY - Math.sqrt(earthRadius * earthRadius - dx * dx);
       }
 
-      ctx.strokeStyle = hw.speed > 0 ? "rgba(244, 63, 94, 0.7)" : "rgba(239, 68, 68, 0.9)";
-      ctx.lineWidth = 2;
+      // Bounce cleanly off the bottom underside of the duvet comforter
+      if (hw.y <= duvetBottom) {
+        hw.y = duvetBottom + 1;
+        hw.speed = -Math.abs(hw.speed); // Reflect back down toward Earth
+      }
+
+      // Bounce / reradiate off Earth's surface
+      if (hw.y >= earthSurface) {
+        hw.y = earthSurface - 1;
+        hw.speed = Math.abs(hw.speed); // Reflect back up toward duvet
+      }
+
+      // Draw as distinct glowing wavy heat ripples
+      ctx.save();
+      const isRising = hw.speed > 0;
+      ctx.strokeStyle = isRising ? "rgba(251, 146, 60, 0.9)" : "rgba(239, 68, 68, 0.95)";
+      ctx.lineWidth = 2.2;
       ctx.beginPath();
-      ctx.arc(hw.x, hw.y, 4, 0, Math.PI * 2);
+      const wavePhase = hw.y * 0.16;
+      ctx.moveTo(hw.x + Math.sin(wavePhase) * 3, hw.y - 7);
+      ctx.quadraticCurveTo(hw.x, hw.y, hw.x - Math.sin(wavePhase) * 3, hw.y + 7);
       ctx.stroke();
+
+      // Glowing heat core
+      ctx.fillStyle = isRising ? "#fed7aa" : "#fca5a5";
+      ctx.beginPath();
+      ctx.arc(hw.x, hw.y, 2.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     });
 
-    // 7. Earth Surface Label
+    // 7. Faint Cool Blue Wisps (Escaping cooling heat into space - choked off as duvet thickens)
+    const maxEscaping = Math.max(0, Math.round(12 * (1 - (state.co2 - 280) / 450)));
+    for (let i = 0; i < maxEscaping && i < escapingHeat.length; i++) {
+      const p = escapingHeat[i];
+      p.y -= p.speed;
+      if (p.y < 20) {
+        p.y = 130 + Math.random() * 20;
+        p.x = canvas.width * 0.5 + (Math.random() - 0.5) * 550;
+      }
+      ctx.save();
+      ctx.strokeStyle = "rgba(147, 197, 253, 0.65)";
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([2, 3]);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y + 8);
+      ctx.lineTo(p.x, p.y - 8);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(186, 230, 253, 0.85)";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y - 8, 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // 8. Earth Surface Label
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 14px system-ui, sans-serif";
     ctx.textAlign = "center";
