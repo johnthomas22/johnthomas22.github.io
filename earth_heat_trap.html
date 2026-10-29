@@ -982,112 +982,153 @@
       ctx.stroke();
     });
 
-    // 3. Earth Horizon curvature (Majestic "Earthrise" arc sweeping across the full width)
+    // 3. The Blue Planet Earth with recognizable continents
+    // Placed in the lower-middle with prominent, vivid royal blue oceans & lush green land
+    const tempT = Math.min(1.0, Math.max(0, (state.temp - 1.0) / 3.0));
     const earthCenterX = w * 0.5;
-    const earthCenterY = h + 680;
-    const earthRadius = 780; // Large gentle planetary curve rising up into view
-    const limbTopY = earthCenterY - earthRadius; // ~h - 100px: broad Earth horizon
+    const earthCenterY = h + 120;
+    const earthRadius = 260; // Clean, round spherical curvature rising out of the lower frame
 
-    // Outer atmospheric limb / blue exosphere haze
-    const limbGrad = ctx.createRadialGradient(earthCenterX, earthCenterY, earthRadius - 28, earthCenterX, earthCenterY, earthRadius + 22);
-    limbGrad.addColorStop(0, "rgba(56, 189, 248, 0.45)");
-    limbGrad.addColorStop(0.5, "rgba(14, 165, 233, 0.25)");
-    limbGrad.addColorStop(1, "rgba(2, 132, 199, 0)");
-    ctx.fillStyle = limbGrad;
+    // Atmospheric rim glow (vivid electric blue exosphere halo)
+    const haloGrad = ctx.createRadialGradient(earthCenterX, earthCenterY, earthRadius - 10, earthCenterX, earthCenterY, earthRadius + 24);
+    haloGrad.addColorStop(0, "rgba(56, 189, 248, 0.65)");
+    haloGrad.addColorStop(0.5, "rgba(14, 165, 233, 0.35)");
+    haloGrad.addColorStop(1, "rgba(2, 132, 199, 0)");
+    ctx.fillStyle = haloGrad;
     ctx.beginPath();
-    ctx.arc(earthCenterX, earthCenterY, earthRadius + 22, 0, Math.PI * 2);
+    ctx.arc(earthCenterX, earthCenterY, earthRadius + 24, 0, Math.PI * 2);
     ctx.fill();
 
-    // Earth globe body based on temperature
-    const tempT = Math.min(1.0, Math.max(0, (state.temp - 1.0) / 3.0));
-    const earthGrad = ctx.createRadialGradient(earthCenterX, earthCenterY, earthRadius - 160, earthCenterX, earthCenterY, earthRadius);
-    if (tempT < 0.25) {
-      // Natural deep ocean blue with luminous cyan/green coastline shelf
-      earthGrad.addColorStop(0, "#082f49");
-      earthGrad.addColorStop(0.5, "#0369a1");
-      earthGrad.addColorStop(0.85, "#0ea5e9");
-      earthGrad.addColorStop(1, "#38bdf8");
-    } else if (tempT < 0.65) {
-      // Stressed/warming ocean with amber heat glow
-      earthGrad.addColorStop(0, "#1c1917");
-      earthGrad.addColorStop(0.5, "#78350f");
-      earthGrad.addColorStop(0.82, "#b45309");
-      earthGrad.addColorStop(1, "#f59e0b");
-    } else {
-      // Scorched overheating globe
-      earthGrad.addColorStop(0, "#450a0a");
-      earthGrad.addColorStop(0.5, "#991b1b");
-      earthGrad.addColorStop(0.82, "#dc2626");
-      earthGrad.addColorStop(1, "#f87171");
-    }
-
+    // Ocean Globe Base (Vibrant Royal Blue Planet)
     ctx.save();
-    ctx.fillStyle = earthGrad;
+    const oceanGrad = ctx.createRadialGradient(earthCenterX - 60, earthCenterY - 140, 40, earthCenterX, earthCenterY, earthRadius);
+    oceanGrad.addColorStop(0, "#0284c7");   // Sunlit brilliant sapphire blue
+    oceanGrad.addColorStop(0.4, "#0369a1"); // Deep blue ocean
+    oceanGrad.addColorStop(0.85, "#075985");
+    oceanGrad.addColorStop(1, "#0c4a6e");   // Deep navy horizon edge
+    ctx.fillStyle = oceanGrad;
     ctx.beginPath();
     ctx.arc(earthCenterX, earthCenterY, earthRadius, 0, Math.PI * 2);
     ctx.fill();
 
-    // Clip to Earth disc to draw continents and cloud swirls inside the planet body
+    // Clip all continents and geography strictly inside the Earth circle
     ctx.clip();
 
-    // Continents & landmass contours (Europe, Africa, Americas style continents)
-    const landColor = tempT < 0.25 
-      ? "rgba(16, 185, 129, 0.62)" 
-      : (tempT < 0.65 ? "rgba(217, 119, 6, 0.65)" : "rgba(185, 28, 28, 0.72)");
-    const landAccent = tempT < 0.25 
-      ? "rgba(5, 150, 105, 0.75)" 
-      : (tempT < 0.65 ? "rgba(180, 83, 9, 0.75)" : "rgba(153, 27, 27, 0.85)");
+    // Continents: Recognizable global landmasses (Eurasia/Africa/Americas)
+    // Rich natural greens, sandy coasts, and mountain relief
+    const landBase = "#15803d";    // Lush continental green
+    const landShade = "#166534";   // Deep forest green
+    const landCoast = "#86efac";   // Continental shallow waters / shelf
+    const desertTan = "#ca8a04";   // Sahara / desert belt
 
-    ctx.fillStyle = landColor;
-    // Left continent (Americas / Atlantic shelf)
+    // Shallow turquoise coastal shelf aura around continents
+    ctx.fillStyle = "rgba(45, 212, 191, 0.28)";
+    // Shelf 1 (Left / Americas)
     ctx.beginPath();
-    ctx.ellipse(w * 0.24, limbTopY + 45, 110, 52, -0.15, 0, Math.PI * 2);
+    ctx.ellipse(earthCenterX - 110, earthCenterY - 120, 85, 120, -0.25, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = landAccent;
+    // Shelf 2 (Central / Europe & Africa)
     ctx.beginPath();
-    ctx.ellipse(w * 0.21, limbTopY + 40, 75, 34, -0.2, 0, Math.PI * 2);
+    ctx.ellipse(earthCenterX + 25, earthCenterY - 95, 80, 115, 0.1, 0, Math.PI * 2);
     ctx.fill();
-
-    // Central & right continent (Eurasia / Africa coast)
-    ctx.fillStyle = landColor;
+    // Shelf 3 (Right / Asia)
     ctx.beginPath();
-    ctx.ellipse(w * 0.68, limbTopY + 48, 175, 58, 0.12, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = landAccent;
-    ctx.beginPath();
-    ctx.ellipse(w * 0.72, limbTopY + 42, 115, 36, 0.08, 0, Math.PI * 2);
+    ctx.ellipse(earthCenterX + 160, earthCenterY - 130, 95, 95, 0.2, 0, Math.PI * 2);
     ctx.fill();
 
-    // Organic swirling weather pattern bands across the oceans (realistic Earth look)
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.38)";
-    ctx.lineWidth = 14;
+    // --- CONTINENT 1: The Americas (Left Hemisphere) ---
+    // North America landmass
+    ctx.fillStyle = landBase;
+    ctx.beginPath();
+    ctx.moveTo(earthCenterX - 165, earthCenterY - 170);
+    ctx.bezierCurveTo(earthCenterX - 140, earthCenterY - 195, earthCenterX - 85, earthCenterY - 180, earthCenterX - 70, earthCenterY - 150);
+    ctx.bezierCurveTo(earthCenterX - 60, earthCenterY - 125, earthCenterX - 80, earthCenterY - 110, earthCenterX - 100, earthCenterY - 105);
+    ctx.bezierCurveTo(earthCenterX - 135, earthCenterY - 100, earthCenterX - 180, earthCenterY - 135, earthCenterX - 165, earthCenterY - 170);
+    ctx.fill();
+
+    // Central & South America
+    ctx.beginPath();
+    ctx.moveTo(earthCenterX - 100, earthCenterY - 105);
+    ctx.bezierCurveTo(earthCenterX - 90, earthCenterY - 80, earthCenterX - 75, earthCenterY - 55, earthCenterX - 85, earthCenterY - 30);
+    ctx.bezierCurveTo(earthCenterX - 105, earthCenterY - 5, earthCenterX - 130, earthCenterY - 20, earthCenterX - 120, earthCenterY - 60);
+    ctx.bezierCurveTo(earthCenterX - 110, earthCenterY - 85, earthCenterX - 115, earthCenterY - 100, earthCenterX - 100, earthCenterY - 105);
+    ctx.fill();
+
+    // --- CONTINENT 2: Europe & Africa (Centre-Right) ---
+    // Europe
+    ctx.fillStyle = landShade;
+    ctx.beginPath();
+    ctx.moveTo(earthCenterX - 10, earthCenterY - 175);
+    ctx.bezierCurveTo(earthCenterX + 15, earthCenterY - 190, earthCenterX + 55, earthCenterY - 175, earthCenterX + 50, earthCenterY - 150);
+    ctx.bezierCurveTo(earthCenterX + 40, earthCenterY - 135, earthCenterX + 0, earthCenterY - 140, earthCenterX - 10, earthCenterY - 155);
+    ctx.closePath();
+    ctx.fill();
+
+    // North Africa & Sahara (distinctive golden-tan desert tone)
+    ctx.fillStyle = desertTan;
+    ctx.beginPath();
+    ctx.moveTo(earthCenterX - 20, earthCenterY - 140);
+    ctx.bezierCurveTo(earthCenterX + 15, earthCenterY - 142, earthCenterX + 60, earthCenterY - 135, earthCenterX + 70, earthCenterY - 110);
+    ctx.bezierCurveTo(earthCenterX + 55, earthCenterY - 95, earthCenterX - 10, earthCenterY - 95, earthCenterX - 25, earthCenterY - 115);
+    ctx.closePath();
+    ctx.fill();
+
+    // Central & Southern Africa (Rich green rainforest & savannah)
+    ctx.fillStyle = landBase;
+    ctx.beginPath();
+    ctx.moveTo(earthCenterX - 25, earthCenterY - 115);
+    ctx.bezierCurveTo(earthCenterX + 10, earthCenterY - 95, earthCenterX + 70, earthCenterY - 110, earthCenterX + 65, earthCenterY - 70);
+    ctx.bezierCurveTo(earthCenterX + 55, earthCenterY - 35, earthCenterX + 25, earthCenterY - 15, earthCenterX + 15, earthCenterY - 45);
+    ctx.bezierCurveTo(earthCenterX + 5, earthCenterY - 70, earthCenterX - 30, earthCenterY - 90, earthCenterX - 25, earthCenterY - 115);
+    ctx.fill();
+
+    // --- CONTINENT 3: Asia / East (Right Hemisphere) ---
+    ctx.fillStyle = landBase;
+    ctx.beginPath();
+    ctx.moveTo(earthCenterX + 65, earthCenterY - 180);
+    ctx.bezierCurveTo(earthCenterX + 120, earthCenterY - 200, earthCenterX + 190, earthCenterY - 165, earthCenterX + 195, earthCenterY - 130);
+    ctx.bezierCurveTo(earthCenterX + 175, earthCenterY - 100, earthCenterX + 125, earthCenterY - 115, earthCenterX + 85, earthCenterY - 140);
+    ctx.closePath();
+    ctx.fill();
+
+    // Polar ice cap at top edge of Earth
+    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+    ctx.beginPath();
+    ctx.ellipse(earthCenterX, earthCenterY - earthRadius + 14, 110, 22, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Whispy natural clouds and weather swirls sweeping across the blue globe
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.52)";
+    ctx.lineWidth = 9;
     ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.moveTo(w * 0.08, limbTopY + 28);
-    ctx.bezierCurveTo(w * 0.28, limbTopY + 54, w * 0.44, limbTopY + 18, w * 0.62, limbTopY + 36);
+    ctx.moveTo(earthCenterX - 180, earthCenterY - 145);
+    ctx.bezierCurveTo(earthCenterX - 120, earthCenterY - 165, earthCenterX - 50, earthCenterY - 120, earthCenterX + 20, earthCenterY - 130);
     ctx.stroke();
 
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 7;
     ctx.beginPath();
-    ctx.moveTo(w * 0.48, limbTopY + 42);
-    ctx.bezierCurveTo(w * 0.66, limbTopY + 68, w * 0.82, limbTopY + 32, w * 0.94, limbTopY + 44);
+    ctx.moveTo(earthCenterX - 40, earthCenterY - 60);
+    ctx.bezierCurveTo(earthCenterX + 30, earthCenterY - 80, earthCenterX + 110, earthCenterY - 40, earthCenterX + 170, earthCenterY - 75);
     ctx.stroke();
 
-    // Inner atmospheric twilight glow on surface horizon
-    const horizonGlow = ctx.createLinearGradient(0, limbTopY, 0, limbTopY + 65);
-    horizonGlow.addColorStop(0, "rgba(255, 255, 255, 0.55)");
-    horizonGlow.addColorStop(0.35, "rgba(56, 189, 248, 0.25)");
-    horizonGlow.addColorStop(1, "rgba(0, 0, 0, 0.35)");
-    ctx.fillStyle = horizonGlow;
-    ctx.fillRect(0, limbTopY, w, 120);
-
-    ctx.restore(); // Exit clip
-
-    // Bright illuminated planetary limb edge line
-    ctx.strokeStyle = "rgba(224, 242, 254, 0.92)";
-    ctx.lineWidth = 2.2;
+    // Globe lighting sphere gradient (realistic 3D sphere shadow giving depth)
+    const sphereShadow = ctx.createRadialGradient(earthCenterX - 80, earthCenterY - 160, 20, earthCenterX, earthCenterY, earthRadius);
+    sphereShadow.addColorStop(0, "rgba(255, 255, 255, 0.15)");
+    sphereShadow.addColorStop(0.65, "rgba(0, 0, 0, 0)");
+    sphereShadow.addColorStop(1, "rgba(2, 6, 23, 0.65)");
+    ctx.fillStyle = sphereShadow;
     ctx.beginPath();
-    ctx.arc(earthCenterX, earthCenterY, earthRadius, Math.PI * 1.28, Math.PI * 1.72);
+    ctx.arc(earthCenterX, earthCenterY, earthRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore(); // Exit Earth clip
+
+    // Crisp planetary horizon edge line
+    ctx.strokeStyle = "rgba(186, 230, 253, 0.95)";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(earthCenterX, earthCenterY, earthRadius, Math.PI * 1.14, Math.PI * 1.86);
     ctx.stroke();
 
     // 4. The Atmospheric "Duvet" Layer (Rendered as a puffy, cloudy, pillowy white duvet)
