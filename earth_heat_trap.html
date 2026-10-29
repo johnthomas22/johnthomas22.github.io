@@ -697,8 +697,8 @@
 
       <div class="gauge-block">
         <div class="gauge-label">Carbon Duvet Thickness</div>
-        <div class="gauge-value" id="co2Gauge" style="color: #c084fc; font-size: 26px;">427 ppm</div>
-        <div class="gauge-subtext" style="color: #cbd5e1;">Was 280 before coal & factories</div>
+        <div class="gauge-value" id="co2Gauge" style="color: #c084fc; font-size: 26px;">+52% Thicker</div>
+        <div class="gauge-subtext" id="co2Subtext" style="color: #cbd5e1;">427 units of smog (was 280 before factories)</div>
       </div>
 
       <!-- DANGER MILESTONES -->
@@ -796,7 +796,7 @@
           <p>Took <strong>10,000 years</strong> to warm up by 4°C. Nature had thousands of years for forests, animals, and rivers to slowly drift and adapt.</p>
         </div>
         <div class="speed-fact">
-          <span>CO₂ in air:</span> <strong>Never topped 300 ppm</strong> in 800,000 years of ice core records.
+          <span>Carbon smog in air:</span> <strong>Never topped 300 units</strong> (low & natural) in 800,000 years of ice core records.
         </div>
       </div>
 
@@ -814,7 +814,7 @@
           <p>Burning coal, oil, and gas warmed Earth by <strong>+1.2°C in just 100 years</strong>. That is over <strong>30 times faster</strong> than natural Ice Age warming!</p>
         </div>
         <div class="speed-fact">
-          <span>CO₂ in air:</span> <strong>Shot straight to 427 ppm</strong> in just our grandparents' lifetimes.
+          <span>Carbon smog in air:</span> <strong>Shot from 280 to 427 units (+52% thicker!)</strong> in just our grandparents' lifetimes.
         </div>
       </div>
     </div>
@@ -1104,7 +1104,8 @@
     ctx.setLineDash([]);
 
     // Clear prominent Duvet Label badge centered over the cloud
-    const labelText = `☁️ THE PUFFY DUVET (${Math.round(state.co2)} ppm CO₂)`;
+    const extraPct = Math.round(((state.co2 - 280) / 280) * 100);
+    const labelText = `☁️ THE PUFFY DUVET (+${extraPct}% Thicker / ${Math.round(state.co2)} units)`;
     ctx.font = "bold 13px system-ui, -apple-system, sans-serif";
     const tw = ctx.measureText(labelText).width;
     const badgeW = tw + 20;
@@ -1204,7 +1205,12 @@
 
   function updateUI() {
     document.getElementById("yearBadge").textContent = `YEAR: ${Math.round(state.year)}`;
-    document.getElementById("co2Gauge").textContent = `${Math.round(state.co2)} ppm`;
+    
+    const extraPct = Math.round(((state.co2 - 280) / 280) * 100);
+    const co2El = document.getElementById("co2Gauge");
+    const co2Sub = document.getElementById("co2Subtext");
+    co2El.textContent = `+${extraPct}% Thicker`;
+    co2Sub.textContent = `${Math.round(state.co2)} units of smog (was 280 before factories)`;
 
     const tEl = document.getElementById("tempGauge");
     const tSub = document.getElementById("tempSubtext");
