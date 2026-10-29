@@ -385,6 +385,122 @@
       flex-direction: column;
       gap: 12px;
     }
+
+    /* Myth Buster Panel */
+    .myth-panel {
+      background: linear-gradient(135deg, #0e192d, #14233f);
+      border: 2px solid #283e6b;
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .myth-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--accent-yellow);
+      color: #000;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .myth-heading {
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+    .myth-intro {
+      font-size: 14px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+    .speed-compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .speed-card {
+      background: #0a1122;
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .speed-card.snail {
+      border: 2px solid #0284c7;
+    }
+    .speed-card.rocket {
+      border: 2px solid var(--accent-rose);
+      box-shadow: 0 0 15px rgba(244, 63, 94, 0.15);
+    }
+    .speed-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .speed-icon {
+      font-size: 26px;
+      line-height: 1;
+    }
+    .speed-card h3 {
+      font-size: 14px;
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .speed-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .speed-stat-box {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12.5px;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .speed-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(2, 132, 199, 0.25);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: ui-monospace, monospace;
+    }
+    .speed-badge.rocket-badge {
+      background: rgba(244, 63, 94, 0.25);
+      color: #fda4af;
+      font-weight: 900;
+    }
+    .speed-fact {
+      font-size: 12px;
+      color: #cbd5e1;
+      padding-top: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .analogy-banner {
+      background: rgba(250, 204, 21, 0.1);
+      border: 1px dashed rgba(250, 204, 21, 0.4);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #fef08a;
+      line-height: 1.45;
+    }
     .fuel-chips {
       display: flex;
       flex-wrap: wrap;
@@ -617,11 +733,62 @@
     <!-- PLAY / PAUSE BUTTONS -->
     <div class="sim-buttons">
       <button class="action-btn action-btn-play" id="btnPlayPause" onclick="togglePlay()">
-        ▶ Start Running Forward
+        ▶ Start Running Forward (to 2250)
       </button>
       <button class="action-btn action-btn-reset" onclick="resetSim()">
         ↺ Reset to Today (2026)
       </button>
+    </div>
+  </div>
+
+  <!-- MYTH BUSTER: DOESN'T CLIMATE ALWAYS CHANGE? -->
+  <div class="myth-panel">
+    <div class="myth-tag">THE BIGGEST CLIMATE MYTH BUSTED</div>
+    <h2 class="myth-heading">"WAIT A MINUTE... DOESN'T THE CLIMATE ALWAYS CHANGE ANYWAY?"</h2>
+    <p class="myth-intro">
+      <strong>Yes—our planet had Ice Ages and warm spells long before humans built factories.</strong> But there is a huge catch: <strong>it has NEVER changed this fast in the last million years.</strong>
+    </p>
+
+    <div class="speed-compare-grid">
+      <!-- Snail Box -->
+      <div class="speed-card snail">
+        <div class="speed-header">
+          <span class="speed-icon">🐌</span>
+          <div>
+            <h3>NATURAL ICE AGE WARMING</h3>
+            <div class="speed-sub">The Past 1,000,000 Years</div>
+          </div>
+        </div>
+        <div class="speed-stat-box">
+          <div class="speed-badge">Speed: ~1 mph (Glacial Pace)</div>
+          <p>Took <strong>10,000 years</strong> to warm up by 4°C. Nature had thousands of years for forests, animals, and rivers to slowly drift and adapt.</p>
+        </div>
+        <div class="speed-fact">
+          <span>CO₂ in air:</span> <strong>Never topped 300 ppm</strong> in 800,000 years of ice core records.
+        </div>
+      </div>
+
+      <!-- Rocket Box -->
+      <div class="speed-card rocket">
+        <div class="speed-header">
+          <span class="speed-icon">🚀</span>
+          <div>
+            <h3>HUMAN-MADE WARMING</h3>
+            <div class="speed-sub">Right Now (Last 100 Years)</div>
+          </div>
+        </div>
+        <div class="speed-stat-box">
+          <div class="speed-badge rocket-badge">Speed: 40+ mph (30× FASTER!)</div>
+          <p>Burning coal, oil, and gas warmed Earth by <strong>+1.2°C in just 100 years</strong>. That is over <strong>30 times faster</strong> than natural Ice Age warming!</p>
+        </div>
+        <div class="speed-fact">
+          <span>CO₂ in air:</span> <strong>Shot straight to 427 ppm</strong> in just our grandparents' lifetimes.
+        </div>
+      </div>
+    </div>
+
+    <div class="analogy-banner">
+      💡 <strong>The Everyday Analogy:</strong> Walking down a flight of stairs takes 2 minutes. Jumping off the roof takes 2 seconds. Both take you down to the ground floor—but only one smashes everything to pieces. <strong>Speed is everything!</strong> Modern human towns, crops, and coastlines cannot move in the blink of an eye.
     </div>
   </div>
 
@@ -882,13 +1049,15 @@
 
   // Simulation physics tick
   function updatePhysics(dtYears) {
-    if (state.year >= 2100) {
+    state.year += dtYears;
+    if (state.year >= 2250) {
+      state.year = 2250;
       state.running = false;
-      document.getElementById("btnPlayPause").textContent = "▶ Finished (Re-run)";
+      document.getElementById("btnPlayPause").textContent = "▶ Finished 2250 (Re-run)";
+      document.getElementById("btnPlayPause").style.background = "var(--accent-green)";
+      updateUI();
       return;
     }
-
-    state.year += dtYears;
 
     // Compound annual emission growth or decline
     state.annualGt *= (1 + state.ratePercent / 100 * dtYears);
@@ -951,8 +1120,8 @@
     lastTime = now;
 
     if (state.running) {
-      // 1 real second = 4 simulation years
-      updatePhysics(elapsedSec * 4);
+      // 1 real second = 6.5 simulation years (smooth ~34s to reach 2250)
+      updatePhysics(elapsedSec * 6.5);
     }
 
     draw();
@@ -993,6 +1162,9 @@
   }
 
   function togglePlay() {
+    if (state.year >= 2250) {
+      resetSim();
+    }
     state.running = !state.running;
     const btn = document.getElementById("btnPlayPause");
     if (state.running) {
@@ -1010,7 +1182,7 @@
     state.temp = 1.20;
     state.annualGt = 37.0;
     state.running = false;
-    document.getElementById("btnPlayPause").textContent = "▶ Start Running Forward";
+    document.getElementById("btnPlayPause").textContent = "▶ Start Running Forward (to 2250)";
     document.getElementById("btnPlayPause").style.background = "var(--accent-green)";
     updateUI();
   }
