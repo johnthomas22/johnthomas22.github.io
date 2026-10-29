@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earth's Heat Trap: Why Our Planet Is Warming & How We Fix It</title>
+  <style>
+    :root {
+      --bg: #0b1320;
+      --card-bg: #111d33;
+      --card-border: #1e3156;
+      --accent-yellow: #facc15;
+      --accent-cyan: #06b6d4;
+      --accent-rose: #f43f5e;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.5;
+      padding: 12px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Top Banner / Tabloid Style */
+    header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 2px solid #334155;
+      border-radius: 12px;
+      padding: 18px 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .badge-live {
+      display: inline-block;
+      background: var(--accent-rose);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #fff;
+      line-height: 1.15;
+      text-transform: uppercase;
+    }
+    h1 span {
+      color: var(--accent-yellow);
+    }
+    .lead-text {
+      font-size: clamp(14px, 2.2vw, 17px);
+      color: #cbd5e1;
+      max-width: 820px;
+      margin: 8px auto 0;
+      font-weight: 500;
+    }
+
+    /* 3 Step Visual Explainer */
+    .duvet-explainer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .duvet-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .duvet-card .icon-box {
+      font-size: 28px;
+      flex-shrink: 0;
+      line-height: 1;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 8px;
+      border-radius: 8px;
+    }
+    .duvet-card h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+    .duvet-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Main Interactive Arena */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 860px) {
+      .main-grid {
+        grid-template-columns: 1.25fr 0.75fr;
+      }
+    }
+
+    .canvas-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .panel-title {
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .year-indicator {
+      font-family: ui-monospace, monospace;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    canvas#heatCanvas {
+      width: 100%;
+      height: 380px;
+      background: radial-gradient(circle at 50% 120%, #172554 0%, #030712 80%);
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+      display: block;
+    }
+
+    /* Gauges and Thermometer Sidebar */
+    .sidebar-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .gauge-block {
+      background: #0b1329;
+      border: 1px solid #1e2d4d;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+    .gauge-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .gauge-value {
+      font-size: 32px;
+      font-weight: 900;
+      font-family: ui-monospace, monospace;
+      line-height: 1.1;
+      margin: 4px 0;
+    }
+    .gauge-subtext {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Danger zones list */
+    .danger-zone-meter {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .zone-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #1e293b;
+      font-size: 12px;
+      background: #0f172a;
+      transition: all 0.2s ease;
+    }
+    .zone-step.active {
+      border-color: var(--accent-rose);
+      background: rgba(244, 63, 94, 0.15);
+      font-weight: 700;
+    }
+    .zone-temp {
+      font-family: ui-monospace, monospace;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .zone-step:nth-child(1) .zone-temp { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .zone-step:nth-child(2) .zone-temp { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .zone-step:nth-child(3) .zone-temp { background: rgba(244, 63, 94, 0.2); color: #f87171; }
+    .zone-step:nth-child(4) .zone-temp { background: rgba(225, 29, 72, 0.3); color: #fda4af; }
+
+    /* Big Chunky Controls */
+    .controls-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .preset-buttons-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .preset-btn {
+      background: #1a2744;
+      border: 2px solid #2a3d66;
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .preset-btn:hover {
+      background: #23355c;
+      border-color: var(--accent-cyan);
+    }
+    .preset-btn.selected {
+      border-color: var(--accent-yellow);
+      background: #253354;
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.25);
+    }
+    .preset-btn strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+    .preset-btn small {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: block;
+      line-height: 1.3;
+    }
+
+    /* Slider Container */
+    .slider-box {
+      background: #0b1329;
+      border: 1px solid #1e2d4d;
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .slider-value-display {
+      font-family: ui-monospace, monospace;
+      font-size: 14px;
+      color: var(--accent-yellow);
+      background: rgba(250, 204, 21, 0.12);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(250, 204, 21, 0.3);
+    }
+
+    input[type=range] {
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+      background: #1e293b;
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent-yellow);
+      border: 3px solid #000;
+      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+      cursor: pointer;
+    }
+
+    .sim-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      flex: 1;
+      min-width: 130px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 800;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-transform: uppercase;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .action-btn-play {
+      background: var(--accent-green);
+      color: #064e3b;
+    }
+    .action-btn-play:hover {
+      background: #34d399;
+    }
+    .action-btn-reset {
+      background: #334155;
+      color: #f1f5f9;
+    }
+    .action-btn-reset:hover {
+      background: #475569;
+    }
+
+    /* Fuel Converter Section */
+    .fuel-converter-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .fuel-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .fuel-chip {
+      background: #1a2744;
+      border: 1px solid #2a3d66;
+      color: #cbd5e1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .fuel-chip:hover {
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+    .fuel-chip.selected {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+    .fuel-result-box {
+      background: #0b1329;
+      border: 1px solid #1e2d4d;
+      border-radius: 10px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .fuel-stat h4 {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .fuel-stat p {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      font-family: ui-monospace, monospace;
+    }
+
+    /* Solutions / Pocket-money playbook */
+    .playbook-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .playbook-header {
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .playbook-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .playbook-card {
+      background: #0f1a30;
+      border: 1px solid #1e2d4d;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .playbook-card h4 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .playbook-card p {
+      font-size: 12.5px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 12px 0 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="badge-live">The Plain-English Climate Guide</div>
+    <h1>EARTH'S <span>HEAT TRAP</span></h1>
+    <p class="lead-text">
+      Think of our atmosphere as a giant duvet. When we burn oil, coal, and gas, we make that duvet thicker. Here is what happens to our heat, our weather, and our bills.
+    </p>
+  </header>
+
+  <!-- 3 SIMPLE STEPS -->
+  <div class="duvet-explainer-grid">
+    <div class="duvet-card">
+      <div class="icon-box">☀️</div>
+      <div>
+        <h3>1. Sunlight Comes In</h3>
+        <p>Warm sunshine passes straight through the clean air and heats the ground, the seas, and our towns.</p>
+      </div>
+    </div>
+    <div class="duvet-card">
+      <div class="icon-box">🛌</div>
+      <div>
+        <h3>2. The Duvet Traps It</h3>
+        <p>Earth tries to shed that heat back out to space. But carbon dioxide acts like extra wool in the duvet, bouncing heat back down.</p>
+      </div>
+    </div>
+    <div class="duvet-card">
+      <div class="icon-box">🔥</div>
+      <div>
+        <h3>3. The Mercury Rises</h3>
+        <p>Because less heat escapes than comes in, the planet must heat up until it can push heat out again. That is global warming.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE PLAYGROUND -->
+  <div class="main-grid">
+
+    <!-- CANVAS VIEW -->
+    <div class="canvas-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>🌍</span> The Heat Trap in Action
+        </div>
+        <div class="year-indicator" id="yearBadge">YEAR: 2026</div>
+      </div>
+      <canvas id="heatCanvas" width="900" height="420"></canvas>
+      <div style="font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+        <span>🟡 Yellow rays: Sunshine coming in</span>
+        <span>🔴 Red waves: Trapped heat bouncing back</span>
+        <span>⚪ Purple band: Atmospheric carbon duvet</span>
+      </div>
+    </div>
+
+    <!-- SIDEBAR THERMOMETER -->
+    <div class="sidebar-panel">
+      <div class="gauge-block">
+        <div class="gauge-label">World Temperature Rise</div>
+        <div class="gauge-value" id="tempGauge" style="color: var(--accent-amber);">+1.20°C</div>
+        <div class="gauge-subtext" id="tempSubtext" style="color: var(--accent-amber);">Already baking in hotter summers</div>
+      </div>
+
+      <div class="gauge-block">
+        <div class="gauge-label">Carbon Duvet Thickness</div>
+        <div class="gauge-value" id="co2Gauge" style="color: #c084fc; font-size: 26px;">427 ppm</div>
+        <div class="gauge-subtext" style="color: #cbd5e1;">Was 280 before coal & factories</div>
+      </div>
+
+      <!-- DANGER MILESTONES -->
+      <div class="danger-zone-meter">
+        <div class="zone-step" id="zone1">
+          <span class="zone-temp">+1.5°C</span>
+          <span>40°C UK heatwaves, regular flash floods</span>
+        </div>
+        <div class="zone-step" id="zone2">
+          <span class="zone-temp">+2.0°C</span>
+          <span>Almost all tropical coral reefs die</span>
+        </div>
+        <div class="zone-step" id="zone3">
+          <span class="zone-temp">+3.0°C</span>
+          <span>Major harvests fail, scorching desert belts</span>
+        </div>
+        <div class="zone-step" id="zone4">
+          <span class="zone-temp">+4.0°C</span>
+          <span>Runaway catastrophe, sea rises swallow coastlines</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTROLS & SCENARIOS -->
+  <div class="controls-panel">
+    <div style="font-size: 15px; font-weight: 800; text-transform: uppercase;">
+      🎮 Choose How The World Acts:
+    </div>
+
+    <!-- PRESETS -->
+    <div class="preset-buttons-row">
+      <button class="preset-btn" id="btnPresetCarryOn" onclick="setScenario('carryon')">
+        <strong style="color: var(--accent-rose);">🔴 Foot Down on Gas</strong>
+        <small>Keep burning coal, oil & gas flat out. Duvet thickens fast.</small>
+      </button>
+
+      <button class="preset-btn selected" id="btnPresetSlow" onclick="setScenario('slow')">
+        <strong style="color: var(--accent-amber);">🟠 Dragging Our Feet</strong>
+        <small>Cutting emissions gently by 2% a year. Still hits dangerous heat.</small>
+      </button>
+
+      <button class="preset-btn" id="btnPresetFast" onclick="setScenario('fast')">
+        <strong style="color: var(--accent-green);">🟢 Clean Green Shift</strong>
+        <small>Massive rollout of cheap British wind, solar & heat pumps.</small>
+      </button>
+    </div>
+
+    <!-- MANUAL SLIDER -->
+    <div class="slider-box">
+      <div class="slider-header">
+        <span>Turn Pollution Tap Up or Down:</span>
+        <span class="slider-value-display" id="rateLabel">Cuts of -2.0% per year</span>
+      </div>
+      <input type="range" id="rateSlider" min="-10" max="4" step="0.5" value="-2.0" oninput="onSliderChange(this.value)">
+      <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
+        <span>🌱 -10%/yr (Super Clean)</span>
+        <span>⚖️ Zero Change (0%)</span>
+        <span>🏭 +4%/yr (Heavy Burning)</span>
+      </div>
+    </div>
+
+    <!-- PLAY / PAUSE BUTTONS -->
+    <div class="sim-buttons">
+      <button class="action-btn action-btn-play" id="btnPlayPause" onclick="togglePlay()">
+        ▶ Start Running Forward
+      </button>
+      <button class="action-btn action-btn-reset" onclick="resetSim()">
+        ↺ Reset to Today (2026)
+      </button>
+    </div>
+  </div>
+
+  <!-- WHAT BURNING FUEL DOES -->
+  <div class="fuel-converter-panel">
+    <div style="font-size: 15px; font-weight: 800; text-transform: uppercase;">
+      ⛽ What Burning Fuel Actually Does
+    </div>
+    <p style="font-size: 13px; color: var(--text-muted);">
+      Pick an everyday amount of fuel to see how much heat-trapping gas it adds to the atmosphere:
+    </p>
+
+    <div class="fuel-chips">
+      <button class="fuel-chip selected" data-fuel="tank" onclick="selectFuel('tank', this)">🚗 1 Petrol Tank (50 Litres)</button>
+      <button class="fuel-chip" data-fuel="flight" onclick="selectFuel('flight', this)">✈️ 1 Flight to Spain</button>
+      <button class="fuel-chip" data-fuel="boiler" onclick="selectFuel('boiler', this)">🏠 1 Year of Home Gas Heating</button>
+      <button class="fuel-chip" data-fuel="ukdaily" onclick="selectFuel('ukdaily', this)">🇬🇧 1 Day of All UK Oil Use</button>
+      <button class="fuel-chip" data-fuel="allreserves" onclick="selectFuel('allreserves', this)">🛢️ All World Proven Oil Reserves</button>
+    </div>
+
+    <div class="fuel-result-box" id="fuelResult">
+      <div class="fuel-stat">
+        <h4>Pollution Added</h4>
+        <p id="fuelCo2">115 kg CO₂</p>
+      </div>
+      <div class="fuel-stat">
+        <h4>How Long It Stays</h4>
+        <p id="fuelLifetime">300 to 1,000 Years</p>
+      </div>
+      <div class="fuel-stat">
+        <h4>Clean Alternative</h4>
+        <p id="fuelAlt">Electric motor (85% efficient)</p>
+      </div>
+      <div class="fuel-stat">
+        <h4>Pocket Impact</h4>
+        <p id="fuelCash">Petrol costs ~3× more per mile</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW WE FIX IT AND SAVE MONEY -->
+  <div class="playbook-panel">
+    <div class="playbook-header">
+      <span>💡</span> How We Fix It & Slash Household Bills
+    </div>
+    <div class="playbook-grid">
+      <div class="playbook-card">
+        <h4>🌬️ Cheap British Wind & Solar</h4>
+        <p>New British wind power is now up to four times cheaper than burning imported gas. Clean power gives us our own reliable energy and stops foreign oil price shocks.</p>
+      </div>
+      <div class="playbook-card">
+        <h4>♨️ Smart Heat Pumps</h4>
+        <p>A heat pump doesn't burn fuel—it moves heat in from outside. It delivers £3 to £4 worth of heat for every £1 of electricity used, replacing noisy, leaky gas boilers.</p>
+      </div>
+      <div class="playbook-card">
+        <h4>🏡 Cosy Home Insulation</h4>
+        <p>Wrapping British homes with cavity wall and loft insulation stops heat escaping like tea in a thermos flask, cutting winter gas bills by up to 40%.</p>
+      </div>
+      <div class="playbook-card">
+        <h4>⚡ Electric Cars & Buses</h4>
+        <p>Petrol engines waste 75% of their energy as useless heat out the exhaust pipe. Electric motors turn 90% of electricity straight into wheel motion, slashing running costs.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Calibrated physics model built on IPCC AR6 climate sensitivity and historical observations. Made for plain-English understanding.
+  </footer>
+
+</div>
+
+<script>
+  // Simple, rigorous physical state
+  const state = {
+    year: 2026,
+    co2: 427.0,
+    temp: 1.20,
+    running: false,
+    ratePercent: -2.0,
+    annualGt: 37.0 // Global fossil CO2 Gt/yr in 2026
+  };
+
+  const canvas = document.getElementById("heatCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // Particles for visual animation
+  const sunRays = [];
+  const heatWaves = [];
+  const duvetSmog = [];
+
+  function initParticles() {
+    for (let i = 0; i < 18; i++) {
+      sunRays.push({
+        x: Math.random() * canvas.width * 0.4 + 40,
+        y: Math.random() * 80,
+        speed: 1.5 + Math.random() * 1.5
+      });
+    }
+    for (let i = 0; i < 20; i++) {
+      heatWaves.push({
+        x: canvas.width * 0.5 + (Math.random() - 0.5) * 300,
+        y: canvas.height - 40 - Math.random() * 80,
+        speed: 1.2 + Math.random() * 1.2,
+        trapped: Math.random() < 0.65
+      });
+    }
+    for (let i = 0; i < 40; i++) {
+      duvetSmog.push({
+        x: canvas.width * 0.5 + (Math.random() - 0.5) * 440,
+        y: canvas.height * 0.42 + (Math.random() - 0.5) * 40,
+        size: 2 + Math.random() * 3,
+        drift: (Math.random() - 0.5) * 0.4
+      });
+    }
+  }
+
+  // Draw Earth, Sun, Duvet, and Heat Rays
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+    // 1. Sun in top-left
+    const sunX = 70;
+    const sunY = 60;
+    const sunGrad = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 60);
+    sunGrad.addColorStop(0, "#fef08a");
+    sunGrad.addColorStop(0.5, "#eab308");
+    sunGrad.addColorStop(1, "rgba(234, 179, 8, 0)");
+    ctx.fillStyle = sunGrad;
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, 60, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#fffbeb";
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, 24, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Sun rays travelling toward Earth
+    ctx.strokeStyle = "rgba(250, 204, 21, 0.4)";
+    ctx.lineWidth = 2.5;
+    sunRays.forEach(ray => {
+      ray.y += ray.speed;
+      ray.x += ray.speed * 1.2;
+      if (ray.y > h * 0.65) {
+        ray.y = 20;
+        ray.x = Math.random() * w * 0.3 + 40;
+      }
+      ctx.beginPath();
+      ctx.moveTo(ray.x, ray.y);
+      ctx.lineTo(ray.x - 14, ray.y - 12);
+      ctx.stroke();
+    });
+
+    // 3. Earth curvature at bottom
+    const earthCenterX = w * 0.5;
+    const earthCenterY = h + 180;
+    const earthRadius = 310;
+
+    // Earth glow based on temperature
+    const tempT = Math.min(1.0, Math.max(0, (state.temp - 1.0) / 3.0));
+    const earthGrad = ctx.createRadialGradient(earthCenterX, earthCenterY, earthRadius - 90, earthCenterX, earthCenterY, earthRadius);
+    if (tempT < 0.25) {
+      earthGrad.addColorStop(0, "#1d4ed8");
+      earthGrad.addColorStop(0.8, "#059669");
+      earthGrad.addColorStop(1, "#0284c7");
+    } else if (tempT < 0.65) {
+      earthGrad.addColorStop(0, "#1e3a8a");
+      earthGrad.addColorStop(0.7, "#d97706");
+      earthGrad.addColorStop(1, "#b45309");
+    } else {
+      earthGrad.addColorStop(0, "#881337");
+      earthGrad.addColorStop(0.7, "#dc2626");
+      earthGrad.addColorStop(1, "#7f1d1d");
+    }
+
+    ctx.fillStyle = earthGrad;
+    ctx.beginPath();
+    ctx.arc(earthCenterX, earthCenterY, earthRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Earth surface border
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(earthCenterX, earthCenterY, earthRadius, Math.PI * 1.15, Math.PI * 1.85);
+    ctx.stroke();
+
+    // 4. The Atmospheric "Duvet" Layer
+    const duvetThickness = 24 + ((state.co2 - 280) / 500) * 45;
+    const duvetY = h * 0.52;
+
+    ctx.save();
+    const duvetGrad = ctx.createLinearGradient(0, duvetY - duvetThickness, 0, duvetY + duvetThickness);
+    duvetGrad.addColorStop(0, "rgba(192, 132, 252, 0.05)");
+    duvetGrad.addColorStop(0.5, `rgba(168, 85, 247, ${0.25 + tempT * 0.35})`);
+    duvetGrad.addColorStop(1, "rgba(192, 132, 252, 0.05)");
+    ctx.fillStyle = duvetGrad;
+    ctx.fillRect(w * 0.1, duvetY - duvetThickness, w * 0.8, duvetThickness * 2);
+
+    // Duvet border label
+    ctx.strokeStyle = `rgba(192, 132, 252, ${0.4 + tempT * 0.4})`;
+    ctx.setLineDash([6, 6]);
+    ctx.strokeRect(w * 0.1, duvetY - duvetThickness, w * 0.8, duvetThickness * 2);
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = "#e9d5ff";
+    ctx.font = "bold 13px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(`THE CARBON DUVET (${Math.round(state.co2)} ppm CO₂)`, w * 0.5, duvetY - duvetThickness + 18);
+    ctx.restore();
+
+    // 5. Smog particles inside duvet
+    ctx.fillStyle = "rgba(216, 180, 254, 0.6)";
+    duvetSmog.forEach(p => {
+      p.x += p.drift;
+      if (p.x < w * 0.12 || p.x > w * 0.88) p.drift *= -1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * (0.8 + tempT * 0.5), 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // 6. Heat waves (escaping vs trapped and bounced back)
+    heatWaves.forEach(hw => {
+      hw.y -= hw.speed;
+      if (hw.trapped && hw.y < duvetY) {
+        // Bounces back down
+        hw.y = duvetY + 10;
+        hw.speed = -hw.speed * 0.9;
+      }
+      if (hw.y > h - 30 && hw.speed < 0) {
+        // Returned to ground
+        hw.y = h - 30;
+        hw.speed = 1.2 + Math.random() * 1.2;
+        hw.trapped = Math.random() < (0.55 + tempT * 0.35);
+      }
+      if (hw.y < 30) {
+        // Escaped to space
+        hw.y = h - 40;
+        hw.trapped = Math.random() < (0.55 + tempT * 0.35);
+      }
+
+      ctx.strokeStyle = hw.speed > 0 ? "rgba(244, 63, 94, 0.7)" : "rgba(239, 68, 68, 0.9)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(hw.x, hw.y, 4, 0, Math.PI * 2);
+      ctx.stroke();
+    });
+
+    // 7. Earth Surface Label
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 14px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("EARTH'S SURFACE (OUR TOWNS, OCEANS & COUNTRYSIDE)", earthCenterX, h - 16);
+  }
+
+  // Simulation physics tick
+  function updatePhysics(dtYears) {
+    if (state.year >= 2100) {
+      state.running = false;
+      document.getElementById("btnPlayPause").textContent = "▶ Finished (Re-run)";
+      return;
+    }
+
+    state.year += dtYears;
+
+    // Compound annual emission growth or decline
+    state.annualGt *= (1 + state.ratePercent / 100 * dtYears);
+    if (state.annualGt < 0) state.annualGt = 0;
+
+    // Atmospheric retention: ~46% of fossil emissions stay in atmosphere
+    // 1 ppm CO2 ≈ 7.8 Gt CO2
+    const addedPpm = (state.annualGt * 0.46 / 7.8) * dtYears;
+    state.co2 += addedPpm;
+
+    // Radiative forcing equation: ΔF = 5.35 * ln(C / C0)
+    const C0 = 280.0;
+    const forcing = 5.35 * Math.log(state.co2 / C0);
+
+    // Equilibrium temperature response with ocean thermal lag
+    const eqTemp = forcing * 0.80; // Climate sensitivity ~3.0°C per doubling
+    state.temp += (eqTemp - state.temp) * 0.08 * dtYears;
+
+    updateUI();
+  }
+
+  function updateUI() {
+    document.getElementById("yearBadge").textContent = `YEAR: ${Math.round(state.year)}`;
+    document.getElementById("co2Gauge").textContent = `${Math.round(state.co2)} ppm`;
+
+    const tEl = document.getElementById("tempGauge");
+    const tSub = document.getElementById("tempSubtext");
+    tEl.textContent = `+${state.temp.toFixed(2)}°C`;
+
+    // Color and warning text
+    if (state.temp < 1.5) {
+      tEl.style.color = "var(--accent-yellow)";
+      tSub.style.color = "var(--accent-yellow)";
+      tSub.textContent = "Close to Paris target (+1.5°C limit)";
+    } else if (state.temp < 2.0) {
+      tEl.style.color = "var(--accent-amber)";
+      tSub.style.color = "var(--accent-amber)";
+      tSub.textContent = "Severe UK heatwaves and coastal flood risk";
+    } else if (state.temp < 3.0) {
+      tEl.style.color = "var(--accent-rose)";
+      tSub.style.color = "var(--accent-rose)";
+      tSub.textContent = "High danger: tropical coral reefs wiped out";
+    } else {
+      tEl.style.color = "#ef4444";
+      tSub.style.color = "#ef4444";
+      tSub.textContent = "Runaway heat: breadbaskets and ecosystems fail";
+    }
+
+    // Update danger zone indicators
+    document.getElementById("zone1").classList.toggle("active", state.temp >= 1.5);
+    document.getElementById("zone2").classList.toggle("active", state.temp >= 2.0);
+    document.getElementById("zone3").classList.toggle("active", state.temp >= 3.0);
+    document.getElementById("zone4").classList.toggle("active", state.temp >= 4.0);
+  }
+
+  // Animation Loop
+  let lastTime = performance.now();
+  function loop(now) {
+    const elapsedSec = (now - lastTime) / 1000;
+    lastTime = now;
+
+    if (state.running) {
+      // 1 real second = 4 simulation years
+      updatePhysics(elapsedSec * 4);
+    }
+
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  // Presets
+  function setScenario(type) {
+    document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("selected"));
+    const slider = document.getElementById("rateSlider");
+
+    if (type === "carryon") {
+      document.getElementById("btnPresetCarryOn").classList.add("selected");
+      slider.value = 1.5;
+    } else if (type === "slow") {
+      document.getElementById("btnPresetSlow").classList.add("selected");
+      slider.value = -2.0;
+    } else if (type === "fast") {
+      document.getElementById("btnPresetFast").classList.add("selected");
+      slider.value = -7.0;
+    }
+    onSliderChange(slider.value);
+  }
+
+  function onSliderChange(val) {
+    state.ratePercent = parseFloat(val);
+    const label = document.getElementById("rateLabel");
+    if (state.ratePercent > 0) {
+      label.textContent = `Pollution Growing: +${state.ratePercent.toFixed(1)}% per year`;
+      label.style.color = "var(--accent-rose)";
+    } else if (state.ratePercent === 0) {
+      label.textContent = "Pollution Frozen: 0.0% change";
+      label.style.color = "var(--accent-yellow)";
+    } else {
+      label.textContent = `Cuts of ${state.ratePercent.toFixed(1)}% per year`;
+      label.style.color = "var(--accent-green)";
+    }
+  }
+
+  function togglePlay() {
+    state.running = !state.running;
+    const btn = document.getElementById("btnPlayPause");
+    if (state.running) {
+      btn.textContent = "⏸ Pause Simulation";
+      btn.style.background = "var(--accent-amber)";
+    } else {
+      btn.textContent = "▶ Resume Simulation";
+      btn.style.background = "var(--accent-green)";
+    }
+  }
+
+  function resetSim() {
+    state.year = 2026;
+    state.co2 = 427.0;
+    state.temp = 1.20;
+    state.annualGt = 37.0;
+    state.running = false;
+    document.getElementById("btnPlayPause").textContent = "▶ Start Running Forward";
+    document.getElementById("btnPlayPause").style.background = "var(--accent-green)";
+    updateUI();
+  }
+
+  // Fuel Converter logic
+  const fuelData = {
+    tank: {
+      co2: "115 kg CO₂",
+      life: "300 to 1,000 Years",
+      alt: "Electric motor (85% efficient)",
+      cash: "Home EV charging costs ~3× less per mile"
+    },
+    flight: {
+      co2: "450 kg CO₂ per seat",
+      life: "Poured directly into upper atmosphere",
+      alt: "High-speed electric rail",
+      cash: "Rail avoids jet fuel and airport taxes"
+    },
+    boiler: {
+      co2: "2,500 kg (2.5 tonnes) CO₂",
+      life: "Traps heat for centuries",
+      alt: "Air-to-water heat pump",
+      cash: "Delivers £3–£4 of heat per £1 of electricity"
+    },
+    ukdaily: {
+      co2: "170,000 tonnes CO₂ / day",
+      life: "Permanent addition to Earth's blanket",
+      alt: "Electrified logistics and rail freight",
+      cash: "Keeps billions in UK instead of foreign oil"
+    },
+    allreserves: {
+      co2: "752 Billion tonnes CO₂",
+      life: "Would blow 1.5°C carbon budget 4 times over",
+      alt: "Leave in ground; wind & solar baseload",
+      cash: "Sun & wind fuels are 100% free forever"
+    }
+  };
+
+  function selectFuel(type, btnEl) {
+    document.querySelectorAll(".fuel-chip").forEach(c => c.classList.remove("selected"));
+    const target = btnEl || document.querySelector(`.fuel-chip[data-fuel="${type}"]`);
+    if (target) target.classList.add("selected");
+
+    const data = fuelData[type];
+    if (!data) return;
+    document.getElementById("fuelCo2").textContent = data.co2;
+    document.getElementById("fuelLifetime").textContent = data.life;
+    document.getElementById("fuelAlt").textContent = data.alt;
+    document.getElementById("fuelCash").textContent = data.cash;
+  }
+
+  // Initial startup
+  initParticles();
+  updateUI();
+  requestAnimationFrame(loop);
+</script>
+</body>
+</html>
