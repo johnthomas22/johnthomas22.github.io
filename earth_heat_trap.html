@@ -684,7 +684,7 @@
         <span>🟡 Yellow rays: Sunshine warming Earth</span>
         <span>🔴 Red waves: Trapped heat bouncing under the duvet</span>
         <span>💨 Blue wisps: Escaping heat (choked off by thick duvet)</span>
-        <span>🛏️ Quilted duvet: Heat-trapping carbon blanket</span>
+        <span>🛏️ Soft down duvet: Heat-trapping carbon blanket</span>
       </div>
     </div>
 
@@ -964,11 +964,6 @@
     const w = canvas.width;
     const h = canvas.height;
 
-    // Arch function matching planet curvature
-    function getArch(u) {
-      return (1 - 4 * (u - 0.5) * (u - 0.5)) * 18;
-    }
-
     // 1. Sun in top-left
     const sunX = 70;
     const sunY = 60;
@@ -1063,205 +1058,177 @@
     ctx.arc(earthCenterX, earthCenterY, earthRadius, Math.PI * 1.15, Math.PI * 1.85);
     ctx.stroke();
 
-    // 4. The Atmospheric "Duvet" Layer (Authentic Stitched Baffle-Box Quilt / Bedding)
-    const duvetThickness = 34 + ((state.co2 - 280) / 500) * 44;
-    const duvetLeft = w * 0.08;
-    const duvetRight = w * 0.92;
+    // 4. The Atmospheric "Duvet" Layer (Soft, Draped Feather-Down Bed Quilt)
+    const duvetThickness = 32 + ((state.co2 - 280) / 500) * 42;
+    const duvetLeft = w * 0.09;
+    const duvetRight = w * 0.91;
     const duvetSpan = duvetRight - duvetLeft;
     const tintWarmth = Math.min(1.0, (state.temp - 1.0) / 2.5);
 
+    // Cascading blanket drape: arches softly over Earth and drapes gently on flanks
+    function getDuvetSpine(u) {
+      return 120 + 52 * Math.pow(2 * (u - 0.5), 4);
+    }
+
+    const numChannels = 10;
+    const channelW = duvetSpan / numChannels;
+    const puffH = duvetThickness * 0.18; // Soft billowy down puff
+
+    function getDuvetBottom(x) {
+      const u = (x - duvetLeft) / duvetSpan;
+      if (u < 0 || u > 1) return 175;
+      const c = Math.max(0, Math.min(numChannels - 1, Math.floor(u * numChannels)));
+      const uInChan = (u * numChannels) - c;
+      const puff = Math.sin(uInChan * Math.PI) * puffH;
+      return getDuvetSpine(u) + duvetThickness * 0.5 + puff;
+    }
+
     ctx.save();
 
-    const cols = 11;
-    const rows = 2;
-    const colW = duvetSpan / cols;
-    const rowH = duvetThickness / rows;
-
-    // A. Soft under-quilt drop shadow
-    ctx.fillStyle = "rgba(15, 23, 42, 0.35)";
+    // A. Soft Under-Duvet Ambient Drop Shadow
+    ctx.fillStyle = "rgba(15, 23, 42, 0.3)";
     ctx.beginPath();
-    for (let i = 0; i <= 40; i++) {
-      const u = i / 40;
+    for (let i = 0; i <= 50; i++) {
+      const u = i / 50;
       const x = duvetLeft + u * duvetSpan;
-      const y = 144 - getArch(u) + duvetThickness * 0.5 + 4;
+      const y = getDuvetSpine(u) + duvetThickness * 0.5 + 6;
       if (i === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     }
-    for (let i = 40; i >= 0; i--) {
-      const u = i / 40;
+    for (let i = 50; i >= 0; i--) {
+      const u = i / 50;
       const x = duvetLeft + u * duvetSpan;
-      const y = 144 - getArch(u) + duvetThickness * 0.5 - 2;
+      const y = getDuvetSpine(u) + duvetThickness * 0.5;
       ctx.lineTo(x, y);
     }
     ctx.closePath();
     ctx.fill();
 
-    // B. Draw Individual Baffle-Box Padded Quilt Pockets
-    for (let c = 0; c < cols; c++) {
-      const x1 = duvetLeft + c * colW;
-      const uMid = (x1 + colW * 0.5 - duvetLeft) / duvetSpan;
-      const colCenterY = 144 - getArch(uMid);
+    // B. Draw Continuous Billowy Down Channels (Fluffy Quilt Pockets)
+    for (let c = 0; c < numChannels; c++) {
+      const x1 = duvetLeft + c * channelW;
+      const x2 = x1 + channelW;
+      const xMid = (x1 + x2) * 0.5;
+      const u1 = (x1 - duvetLeft) / duvetSpan;
+      const u2 = (x2 - duvetLeft) / duvetSpan;
+      const uMid = (xMid - duvetLeft) / duvetSpan;
 
-      for (let r = 0; r < rows; r++) {
-        const cellY = colCenterY - duvetThickness * 0.5 + r * rowH;
-        const cx = x1 + colW * 0.5;
-        const cy = cellY + rowH * 0.5;
+      const ySpine1 = getDuvetSpine(u1);
+      const ySpine2 = getDuvetSpine(u2);
+      const ySpineMid = getDuvetSpine(uMid);
 
-        // Pillowed 3D cushion gradient for each baffle box pocket
-        const pGrad = ctx.createRadialGradient(cx - colW * 0.15, cy - rowH * 0.15, 2, cx, cy, colW * 0.55);
-        if (tintWarmth < 0.25) {
-          pGrad.addColorStop(0, "rgba(255, 255, 255, 0.98)");
-          pGrad.addColorStop(0.55, "rgba(248, 250, 252, 0.92)");
-          pGrad.addColorStop(1, "rgba(203, 213, 225, 0.65)");
-        } else if (tintWarmth < 0.65) {
-          pGrad.addColorStop(0, "rgba(255, 253, 245, 0.98)");
-          pGrad.addColorStop(0.55, "rgba(254, 243, 199, 0.94)");
-          pGrad.addColorStop(1, "rgba(251, 191, 36, 0.60)");
-        } else {
-          pGrad.addColorStop(0, "rgba(255, 241, 242, 0.98)");
-          pGrad.addColorStop(0.55, "rgba(254, 205, 211, 0.95)");
-          pGrad.addColorStop(1, "rgba(244, 63, 94, 0.65)");
-        }
+      const yTop1 = ySpine1 - duvetThickness * 0.5;
+      const yTop2 = ySpine2 - duvetThickness * 0.5;
+      const yTopMid = ySpineMid - duvetThickness * 0.5 - puffH;
 
-        ctx.fillStyle = pGrad;
+      const yBot1 = ySpine1 + duvetThickness * 0.5;
+      const yBot2 = ySpine2 + duvetThickness * 0.5;
+      const yBotMid = ySpineMid + duvetThickness * 0.5 + puffH;
+
+      // Soft billowy channel cushion path
+      ctx.beginPath();
+      ctx.moveTo(x1, yTop1);
+      ctx.quadraticCurveTo(xMid, yTopMid, x2, yTop2);
+      ctx.lineTo(x2, yBot2);
+      ctx.quadraticCurveTo(xMid, yBotMid, x1, yBot1);
+      ctx.closePath();
+
+      // Soft feather-down shading gradient
+      const pGrad = ctx.createRadialGradient(xMid, ySpineMid - puffH * 0.5, 4, xMid, ySpineMid, channelW * 0.65);
+      if (tintWarmth < 0.25) {
+        pGrad.addColorStop(0, "rgba(255, 255, 255, 0.98)");
+        pGrad.addColorStop(0.55, "rgba(245, 245, 244, 0.94)");
+        pGrad.addColorStop(1, "rgba(214, 211, 209, 0.65)");
+      } else if (tintWarmth < 0.65) {
+        pGrad.addColorStop(0, "rgba(255, 253, 245, 0.98)");
+        pGrad.addColorStop(0.55, "rgba(254, 243, 199, 0.95)");
+        pGrad.addColorStop(1, "rgba(251, 191, 36, 0.60)");
+      } else {
+        pGrad.addColorStop(0, "rgba(255, 241, 242, 0.98)");
+        pGrad.addColorStop(0.55, "rgba(254, 205, 211, 0.95)");
+        pGrad.addColorStop(1, "rgba(244, 63, 94, 0.65)");
+      }
+
+      ctx.fillStyle = pGrad;
+      ctx.fill();
+
+      // Delicate fabric sheen stroke around each puffy billow
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Running dashed stitch along the seam between channels (NO mattress buttons!)
+      if (c > 0) {
+        ctx.setLineDash([3, 2.5]);
+        ctx.strokeStyle = "rgba(120, 113, 108, 0.65)";
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.roundRect(x1 + 1.5, cellY + 1.5, colW - 3, rowH - 3, 5);
-        ctx.fill();
-
-        // Delicate inner fabric sheen border
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
-        ctx.lineWidth = 1;
+        ctx.moveTo(x1, yTop1);
+        ctx.lineTo(x1, yBot1);
         ctx.stroke();
+        ctx.setLineDash([]);
       }
     }
 
-    // C. Quilted Seam Stitching (Running Dashed Thread Lines)
-    // 1. Horizontal center seam between top and bottom pocket rows
-    ctx.setLineDash([4, 3]);
-    ctx.strokeStyle = "rgba(71, 85, 105, 0.85)";
-    ctx.lineWidth = 1.6;
-    ctx.beginPath();
-    for (let i = 0; i <= cols * 4; i++) {
-      const u = i / (cols * 4);
-      const x = duvetLeft + u * duvetSpan;
-      const y = 144 - getArch(u);
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    // 2. Vertical seams between each baffle box column
-    for (let c = 1; c < cols; c++) {
-      const x = duvetLeft + c * colW;
-      const u = (x - duvetLeft) / duvetSpan;
-      const yMid = 144 - getArch(u);
-      const yTop = yMid - duvetThickness * 0.5;
-      const yBottom = yMid + duvetThickness * 0.5;
-
-      ctx.beginPath();
-      ctx.moveTo(x, yTop + 2);
-      ctx.lineTo(x, yBottom - 2);
-      ctx.stroke();
-    }
-
-    // D. Tufted Cross-Stitch Buttons (+) at every seam intersection
-    ctx.setLineDash([]);
-    ctx.strokeStyle = "rgba(15, 23, 42, 0.85)";
+    // C. Soft Outer Finished Hem Binding (Continuous cloth hem, NOT rigid mattress tape)
+    ctx.strokeStyle = tintWarmth > 0.5 ? "rgba(251, 146, 60, 0.85)" : "rgba(226, 232, 240, 0.85)";
     ctx.lineWidth = 1.8;
-    for (let c = 1; c < cols; c++) {
-      const x = duvetLeft + c * colW;
-      const u = (x - duvetLeft) / duvetSpan;
-      const y = 144 - getArch(u);
 
-      ctx.beginPath();
-      ctx.moveTo(x - 3.5, y);
-      ctx.lineTo(x + 3.5, y);
-      ctx.moveTo(x, y - 3.5);
-      ctx.lineTo(x, y + 3.5);
-      ctx.stroke();
-
-      // Stitch knot dot
-      ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
-      ctx.beginPath();
-      ctx.arc(x, y, 1.2, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // E. Sewn Fabric Hem / Piping Border Tape (Top and Bottom Perimeter)
-    const hemColor = tintWarmth > 0.5 ? "rgba(251, 146, 60, 0.95)" : "rgba(226, 232, 240, 0.95)";
-    ctx.strokeStyle = hemColor;
-    ctx.lineWidth = 3.2;
-
-    // Top hem tape
+    // Top hem contour
     ctx.beginPath();
-    for (let i = 0; i <= cols * 4; i++) {
-      const u = i / (cols * 4);
-      const x = duvetLeft + u * duvetSpan;
-      const y = 144 - getArch(u) - duvetThickness * 0.5;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+    for (let c = 0; c < numChannels; c++) {
+      const x1 = duvetLeft + c * channelW;
+      const x2 = x1 + channelW;
+      const xMid = (x1 + x2) * 0.5;
+      const uMid = (xMid - duvetLeft) / duvetSpan;
+      const yTopMid = getDuvetSpine(uMid) - duvetThickness * 0.5 - puffH;
+      const u2 = (x2 - duvetLeft) / duvetSpan;
+      const yTop2 = getDuvetSpine(u2) - duvetThickness * 0.5;
+
+      if (c === 0) ctx.moveTo(x1, getDuvetSpine(0) - duvetThickness * 0.5);
+      ctx.quadraticCurveTo(xMid, yTopMid, x2, yTop2);
     }
     ctx.stroke();
 
-    // Bottom hem tape
+    // Bottom hem contour
     ctx.beginPath();
-    for (let i = 0; i <= cols * 4; i++) {
-      const u = i / (cols * 4);
-      const x = duvetLeft + u * duvetSpan;
-      const y = 144 - getArch(u) + duvetThickness * 0.5;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+    for (let c = 0; c < numChannels; c++) {
+      const x1 = duvetLeft + c * channelW;
+      const x2 = x1 + channelW;
+      const xMid = (x1 + x2) * 0.5;
+      const uMid = (xMid - duvetLeft) / duvetSpan;
+      const yBotMid = getDuvetSpine(uMid) + duvetThickness * 0.5 + puffH;
+      const u2 = (x2 - duvetLeft) / duvetSpan;
+      const yBot2 = getDuvetSpine(u2) + duvetThickness * 0.5;
+
+      if (c === 0) ctx.moveTo(x1, getDuvetSpine(0) + duvetThickness * 0.5);
+      ctx.quadraticCurveTo(xMid, yBotMid, x2, yBot2);
     }
     ctx.stroke();
 
-    // Left and right sewn finished edges
+    // Left and right soft draped blanket edges
     ctx.beginPath();
-    ctx.moveTo(duvetLeft, 144 - getArch(0) - duvetThickness * 0.5);
-    ctx.lineTo(duvetLeft, 144 - getArch(0) + duvetThickness * 0.5);
-    ctx.moveTo(duvetRight, 144 - getArch(1) - duvetThickness * 0.5);
-    ctx.lineTo(duvetRight, 144 - getArch(1) + duvetThickness * 0.5);
+    ctx.moveTo(duvetLeft, getDuvetSpine(0) - duvetThickness * 0.5);
+    ctx.quadraticCurveTo(duvetLeft - 6, getDuvetSpine(0), duvetLeft, getDuvetSpine(0) + duvetThickness * 0.5);
+    ctx.moveTo(duvetRight, getDuvetSpine(1) - duvetThickness * 0.5);
+    ctx.quadraticCurveTo(duvetRight + 6, getDuvetSpine(1), duvetRight, getDuvetSpine(1) + duvetThickness * 0.5);
     ctx.stroke();
 
-    // Inner running stitch along top and bottom hem tapes
-    ctx.setLineDash([3, 2.5]);
-    ctx.strokeStyle = "rgba(71, 85, 105, 0.75)";
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    for (let i = 0; i <= cols * 4; i++) {
-      const u = i / (cols * 4);
-      const x = duvetLeft + u * duvetSpan;
-      const y = 144 - getArch(u) - duvetThickness * 0.5 + 4;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    ctx.beginPath();
-    for (let i = 0; i <= cols * 4; i++) {
-      const u = i / (cols * 4);
-      const x = duvetLeft + u * duvetSpan;
-      const y = 144 - getArch(u) + duvetThickness * 0.5 - 4;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // F. Authentic Woven Duvet Care Label / Tog Rating Badge
+    // D. Soft Cloth Care Ribbon / Tog Rating Tag (Pinned to the quilt)
     const togRating = 10.0 + ((state.co2 - 280) / 280) * 8.5;
     const extraPct = Math.round(((state.co2 - 280) / 280) * 100);
-    const labelTitle = "🛏️ THE ATMOSPHERIC DUVET (BAFFLE-BOX QUILT)";
-    const labelSub = `TOG ${togRating.toFixed(1)} HEAVY WINTER QUILT • +${extraPct}% THICKER (${Math.round(state.co2)} UNITS OF SMOG)`;
+    const labelTitle = "🛏️ THE ATMOSPHERIC DUVET (DOWN QUILT)";
+    const labelSub = `TOG ${togRating.toFixed(1)} HEAVY WINTER DUVET • +${extraPct}% THICKER (${Math.round(state.co2)} UNITS OF SMOG)`;
 
     ctx.font = "bold 12px system-ui, -apple-system, sans-serif";
     const tw = Math.max(ctx.measureText(labelTitle).width, ctx.measureText(labelSub).width);
     const badgeW = tw + 28;
     const badgeH = 34;
     const badgeX = w * 0.5 - badgeW / 2;
-    const centerArch = getArch(0.5);
-    const badgeY = 144 - centerArch - duvetThickness * 0.5 - badgeH - 6;
+    const spineCenter = getDuvetSpine(0.5);
+    const badgeY = spineCenter - duvetThickness * 0.5 - puffH - badgeH - 6;
 
-    // Hanging fabric tab stitched to the top of the comforter
+    // Hanging cloth ribbon tag pinned to the top of the quilt
     ctx.fillStyle = "rgba(30, 41, 59, 0.95)";
     ctx.strokeStyle = tintWarmth > 0.5 ? "var(--accent-rose)" : "rgba(255, 255, 255, 0.85)";
     ctx.lineWidth = 1.6;
@@ -1298,9 +1265,9 @@
       p.x += p.drift;
       if (p.x < duvetLeft + 15 || p.x > duvetRight - 15) p.drift *= -1;
       const u = (p.x - duvetLeft) / duvetSpan;
-      const colCenterY = 144 - getArch(Math.max(0, Math.min(1, u)));
-      if (Math.abs(p.y - colCenterY) > duvetThickness * 0.4) {
-        p.y = colCenterY + (Math.random() - 0.5) * duvetThickness * 0.7;
+      const colCenterY = getDuvetSpine(Math.max(0, Math.min(1, u)));
+      if (Math.abs(p.y - colCenterY) > duvetThickness * 0.38) {
+        p.y = colCenterY + (Math.random() - 0.5) * duvetThickness * 0.6;
       }
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size * (0.8 + tempT * 0.5), 0, Math.PI * 2);
@@ -1311,8 +1278,7 @@
     heatWaves.forEach(hw => {
       hw.y -= hw.speed; // speed > 0 moves UP towards duvet, speed < 0 moves DOWN towards Earth
 
-      const u = (hw.x - duvetLeft) / duvetSpan;
-      const duvetBottom = (u >= 0 && u <= 1) ? (144 - getArch(u) + duvetThickness * 0.5) : 155;
+      const duvetBottom = getDuvetBottom(hw.x);
       
       const dx = hw.x - earthCenterX;
       let earthSurface = h - 20;
