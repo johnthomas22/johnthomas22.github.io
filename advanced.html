@@ -2701,7 +2701,7 @@
                   <span class="badge badge-cyan" style="margin-left: 8px;">IPCC AR6 Calibrated 2-Box EBM</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), parameter calibration, historical hindcast integration from 1750 unforced equilibrium, and harmonization with the standard 1850–1900 observational baseline (+0.12°C offset).
+                  Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), IPCC AR6 parameter calibration, empirical verification showing how the model tracks observed warming from 1958 to today, and baseline harmonization (1750 vs. 1850–1900).
                 </div>
               </li>
               <li>
@@ -3034,6 +3034,27 @@
             <li><strong>Physical Radiative & Ocean Integration:</strong> Solved forward from the unforced 1750 equilibrium (Δ<i>T</i> = 0, EEI = 0) with zero artificial initialization fudge factors.</li>
             <li><strong>500-Year Trajectory & Tipping Points:</strong> Rendered directly on the standard <strong>1850–1900 IPCC baseline</strong> (with 1750 starting at -0.12 °C and 2026 at +1.14 °C), ensuring all curves, grid lines, and threshold crossing dates (e.g. Greenland Ice Sheet, Coral Reefs) align 1:1 with published empirical science (IPCC AR6; Armstrong McKay et al. 2022).</li>
           </ul>
+
+          <h4 style="margin-top: 22px;">The 1958 Keeling Era & Empirical Verification: Following IPCC AR6 Maths to Match Observed Warming</h4>
+          <p>
+            A central benchmark of the simulator is whether its mathematical formulation accurately reproduces real-world climate observations. <strong>It does:</strong> from 1958 to the present day, the simulator integrates standard IPCC AR6 mathematics to closely match the observed global instrumental temperature rise.
+          </p>
+          <div style="background: rgba(255,255,255,0.03); border-left: 3px solid var(--cyan); padding: 14px 18px; margin: 14px 0; border-radius: 0 8px 8px 0;">
+            <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;">
+              <li>
+                <strong style="color: #fff;">1. Standard IPCC AR6 Physics:</strong> The model computes forced warming directly from the coupled Two-Layer Ocean Energy Balance Model (Held et al. 2010; Geoffroy et al. 2013) using parameter values calibrated to <strong>IPCC AR6 Working Group I (Chapter 7)</strong>: effective radiative forcing &Delta;<i>F</i><sub>2&times;</sub> = 3.93 W/m², Equilibrium Climate Sensitivity ECS = 3.00 °C, climate feedback parameter &lambda; = 1.310 W/m²/K, mixed-layer heat capacity <i>C</i><sub>m</sub> = 7.3 W·yr/m²/K, deep-ocean heat capacity <i>C</i><sub>d</sub> = 106.0 W·yr/m²/K, and heat uptake efficiency &gamma; = 0.73 W/m²/K.
+              </li>
+              <li>
+                <strong style="color: #fff;">2. Why 1958 (The Keeling Era):</strong> 1958 marks the start of the gold-standard continuous instrumental atmospheric CO₂ record founded by Charles David Keeling at the Mauna Loa Observatory (315 ppm). The dynamic simulation begins in 1958, initialized with the prior 1750–1958 historical ocean thermal uptake so that the mixed-layer and deep-ocean heat reservoirs already carry the authentic pre-existing thermal inertia.
+              </li>
+              <li>
+                <strong style="color: #fff;">3. Empirical Match to Observed Temperatures:</strong> As the simulation steps forward from 1958 through 2026 driven by actual measured Mauna Loa CO₂ (rising from 315 to 427 ppm), the simulated temperature trajectory (the rose curve) closely traces the empirical instrumental historical record (the amber curve), rising from +0.04 °C in 1958 to +1.14 °C / +1.26 °C today (relative to 1850–1900).
+              </li>
+              <li>
+                <strong style="color: #fff;">4. Forced Multi-Decadal Signal vs. Weather Noise:</strong> The simulator evaluates the pure deterministic thermodynamic response to greenhouse gas forcing. It does not synthesize chaotic annual weather noise—such as individual El Niño spikes (e.g. 1998, 2023–2024) or volcanic aerosol cooling dips (e.g. Mount Pinatubo in 1991). Consequently, the simulator tracks the <strong>multi-decadal running mean</strong> of the climate system, which is precisely how the IPCC, WMO, and Paris Agreement scientifically define global warming.
+              </li>
+            </ul>
+          </div>
 
           <h4 style="margin-top: 20px;">Transient Warming vs. Instant Ocean Equilibrium (Committed Warming)</h4>
           <p>
