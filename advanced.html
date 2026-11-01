@@ -5667,7 +5667,7 @@
           return state.history[state.history.length - 1].co2 || 427.0;
         }
 
-        // 1. Prepare temperature change callout badges at intersections with the orange dashed marker lines (linked from the LEFT)
+        // 1. Prepare temperature change callout badges at intersections with the orange dashed marker lines (extending to the RIGHT of the pointer line)
         const markerBadgeBoxes = [];
         [1958, 2026].forEach(targetYr => {
           const dtVal = getHistoricalDeltaAt(targetYr);
@@ -5675,13 +5675,13 @@
             const ix = yrToX(targetYr);
             const iy = dtToY(dtVal);
 
-            // Label text: temperature change anomaly positioned to the LEFT of the intersection
+            // Label text: temperature change anomaly positioned to the RIGHT of the intersection
             const labelStr = `+${dtVal.toFixed(2)}°C`;
             ctx.font = "bold 10px ui-monospace, monospace";
             const tw = ctx.measureText(labelStr).width;
             const bw = tw + 10;
             const bh = 17;
-            const bx = Math.max(tGridLeft + 4, ix - bw - 10);
+            const bx = Math.min(tGridRight - bw - 4, ix + 10);
             // Positioned cleanly BELOW the curve (iy + 24 for 1958, iy + 36 for 2026) so they never obscure rising temperature or CO2 lines
             const by = (targetYr === 1958)
               ? Math.min(tGridBottom - bh - 6, iy + 24)
@@ -5783,11 +5783,11 @@
 
         // 3. Draw historical marker badges (1958 and 2026) with crisp leader lines and 100% opaque badges
         markerBadgeBoxes.forEach(mb => {
-          // Short leader line connecting from top edge of badge up to intersection dot
+          // Short leader line connecting from top-left of badge up to intersection dot
           ctx.strokeStyle = "#f59e0b";
           ctx.lineWidth = 1.2;
           ctx.beginPath();
-          ctx.moveTo(mb.bx + mb.bw - 4, mb.by);
+          ctx.moveTo(mb.bx + 4, mb.by);
           ctx.lineTo(mb.ix, mb.iy);
           ctx.stroke();
 
