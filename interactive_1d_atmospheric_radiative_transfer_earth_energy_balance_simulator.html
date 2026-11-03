@@ -693,25 +693,35 @@
       gap: 6px;
     }
 
-    .top-sim-row {
+    /* Simulator Mode: Left Sidebar Metrics & Radiative Flux Card */
+    .sim-stats-grid {
       display: grid;
-      grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) minmax(320px, 1.45fr);
-      gap: 12px;
-      align-items: stretch;
-      margin-bottom: 14px;
-    }
-    .stat-col {
-      display: flex;
-      flex-direction: column;
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
     }
-    .stat-col .stat-card {
-      flex: 1;
+    .sim-stats-grid .stat-card {
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 10px 14px;
+      justify-content: space-between;
     }
+    .sim-stats-grid .stat-header {
+      font-size: 0.68rem;
+    }
+    .sim-stats-grid .stat-value {
+      font-size: 1.35rem;
+      margin: 3px 0;
+    }
+    .sim-stats-grid .stat-sub {
+      font-size: 0.68rem;
+      line-height: 1.25;
+    }
+    @media (max-width: 480px) {
+      .sim-stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .radiative-flux-card {
       margin: 0;
       padding: 10px 14px;
@@ -722,7 +732,7 @@
     .flux-canvas-container {
       position: relative;
       width: 100%;
-      flex: 1;
+      height: 155px;
       min-height: 145px;
     }
     .flux-canvas-container canvas {
@@ -730,26 +740,6 @@
       inset: 0;
       width: 100%;
       height: 100%;
-    }
-    @media (max-width: 960px) {
-      .top-sim-row {
-        grid-template-columns: 1fr 1fr;
-      }
-      .radiative-flux-card {
-        grid-column: 1 / -1;
-      }
-    }
-    @media (max-width: 550px) {
-      .top-sim-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .app-wrapper.simple-mode .top-sim-row,
-    .app-wrapper.budgets-mode .top-sim-row,
-    .app-wrapper.sources-mode .top-sim-row,
-    .app-wrapper.solutions-mode .top-sim-row {
-      display: none !important;
     }
 
     .app-wrapper:not(.simple-mode) .speech-pin,
@@ -1631,45 +1621,6 @@
       </div>
     </div>
 
-    <!-- Advanced Simulator Mode: Top Metrics & Radiative Flux Strip -->
-    <div class="top-sim-row">
-      <div class="stat-col">
-        <div class="stat-card">
-          <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber has-tooltip" data-tooltip="Absorbed Solar Radiation (ASR): Sunlight absorbed by Earth after reflection from clouds and surface albedo (~239 W/m²)" title="Absorbed Solar Radiation (ASR)">ASR</span></div>
-          <div class="stat-value" id="valASR" style="color: var(--amber);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-          <div class="stat-sub">Sunlight absorbed post-albedo (~30%)</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald has-tooltip" id="badgeEEI" data-tooltip="Earth's Energy Imbalance (EEI = ASR − OLR): Net heating or cooling rate driving global warming" title="Earth's Energy Imbalance (EEI)">Balanced</span></div>
-          <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-          <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
-        </div>
-      </div>
-
-      <div class="stat-col">
-        <div class="stat-card">
-          <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan has-tooltip" data-tooltip="Outbound Longwave Radiation / Infrared (OLR): Thermal heat emitted upward from Earth and its atmosphere out to space" title="Outbound Longwave Radiation / Infrared (OLR)">OLR</span></div>
-          <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-          <div class="stat-sub" id="subOLR">Escaping at <abbr class="has-tooltip" data-tooltip="Top of Atmosphere (~100 km boundary where heat radiates into space)" title="Top of Atmosphere">TOA</abbr> · Δ: 0.0 W/m²</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose has-tooltip" data-tooltip="Surface temperature anomaly relative to the 1750 pre-industrial baseline" title="Surface Warming (1750 Baseline)">ΔT</span></div>
-          <div class="stat-value" id="valDeltaT" style="color: var(--rose);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">°C</span></div>
-          <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (-0.12 °C rel. 1850–1900)</div>
-        </div>
-      </div>
-
-      <div class="card radiative-flux-card" id="radiativeFluxCard">
-        <div class="card-title-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-          <div class="card-title" style="margin-bottom: 0; font-size: 0.78rem;">How Heat Escapes into Space</div>
-          <span class="badge badge-cyan" id="fluxZeffBadge" style="font-size: 0.68rem;">Escape Height: ~5,200m</span>
-        </div>
-        <div class="flux-canvas-container">
-          <canvas id="fluxCanvas"></canvas>
-        </div>
-      </div>
-    </div>
-
     <div class="main-grid">
 
       <div class="controls-panel">
@@ -1761,6 +1712,41 @@
           <div class="sim-controls-row">
             <button class="btn btn-start" id="btnPlayPause">▶ Start Simulation</button>
             <button class="btn btn-secondary" id="btnReset">↺ Reset</button>
+          </div>
+        </div>
+
+        <!-- Energy Imbalance & Warming Metrics -->
+        <div class="sim-stats-grid">
+          <div class="stat-card">
+            <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber has-tooltip" data-tooltip="Absorbed Solar Radiation (ASR): Sunlight absorbed by Earth after reflection from clouds and surface albedo (~239 W/m²)" title="Absorbed Solar Radiation (ASR)">ASR</span></div>
+            <div class="stat-value" id="valASR" style="color: var(--amber);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+            <div class="stat-sub">Sunlight absorbed post-albedo (~30%)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan has-tooltip" data-tooltip="Outbound Longwave Radiation / Infrared (OLR): Thermal heat emitted upward from Earth and its atmosphere out to space" title="Outbound Longwave Radiation / Infrared (OLR)">OLR</span></div>
+            <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+            <div class="stat-sub" id="subOLR">Escaping at <abbr class="has-tooltip" data-tooltip="Top of Atmosphere (~100 km boundary where heat radiates into space)" title="Top of Atmosphere">TOA</abbr> · Δ: 0.0 W/m²</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald has-tooltip" id="badgeEEI" data-tooltip="Earth's Energy Imbalance (EEI = ASR − OLR): Net heating or cooling rate driving global warming" title="Earth's Energy Imbalance (EEI)">Balanced</span></div>
+            <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+            <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><span>Warming (1750)</span><span class="badge badge-rose has-tooltip" data-tooltip="Surface temperature anomaly relative to the 1750 pre-industrial baseline" title="Surface Warming (1750 Baseline)">ΔT</span></div>
+            <div class="stat-value" id="valDeltaT" style="color: var(--rose);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">°C</span></div>
+            <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (-0.12 °C rel. 1850–1900)</div>
+          </div>
+        </div>
+
+        <!-- Radiative Flux Profile Card -->
+        <div class="card radiative-flux-card" id="radiativeFluxCard">
+          <div class="card-title-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <div class="card-title" style="margin-bottom: 0; font-size: 0.78rem;">How Heat Escapes into Space</div>
+            <span class="badge badge-cyan" id="fluxZeffBadge" style="font-size: 0.68rem;">Escape Height: ~5,200m</span>
+          </div>
+          <div class="flux-canvas-container">
+            <canvas id="fluxCanvas"></canvas>
           </div>
         </div>
 
@@ -7921,6 +7907,9 @@
       });
 
       window.addEventListener("resize", () => {
+        if (!appWrapper.classList.contains("budgets-mode") && !appWrapper.classList.contains("sources-mode") && !appWrapper.classList.contains("solutions-mode")) {
+          draw();
+        }
         if (bubbleCard.style.display === "block") {
           showSpeechBubble(currentStep);
         }
