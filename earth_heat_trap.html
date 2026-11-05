@@ -532,22 +532,35 @@
       background: #0b1329;
       border: 1px solid #1e2d4d;
       border-radius: 10px;
-      padding: 14px;
+      padding: 14px 16px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
+      grid-template-columns: 0.72fr 0.92fr 1.46fr 1.50fr;
+      gap: 16px;
     }
     .fuel-stat h4 {
       font-size: 11px;
       color: var(--text-muted);
       text-transform: uppercase;
-      margin-bottom: 2px;
+      letter-spacing: 0.03em;
+      margin-bottom: 3px;
     }
     .fuel-stat p {
-      font-size: 16px;
-      font-weight: 800;
+      font-size: 14.5px;
+      font-weight: 700;
       color: #fff;
-      font-family: ui-monospace, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      line-height: 1.35;
+    }
+    @media (max-width: 820px) {
+      .fuel-result-box {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+    }
+    @media (max-width: 480px) {
+      .fuel-result-box {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* Solutions / Pocket-money playbook */
@@ -1610,7 +1623,7 @@
       co2: "115 kg CO₂",
       life: "300 to 1,000 Years",
       alt: "Electric motor (85% efficient)",
-      cash: "Home EV charging costs 3× less per mile"
+      cash: "Petrol costs 3× more per mile"
     },
     flight: {
       co2: "450 kg CO₂ per seat",
