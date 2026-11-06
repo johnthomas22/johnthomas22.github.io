@@ -854,6 +854,17 @@
       font-weight: 700 !important;
       box-shadow: 0 0 8px rgba(0, 229, 255, 0.25) !important;
     }
+    #ratePresetNZ50.active {
+      background: rgba(16, 185, 129, 0.22) !important;
+      border-color: var(--emerald) !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.35) !important;
+    }
+    #ratePresetNZ50:hover {
+      border-color: var(--emerald);
+      color: #ffffff;
+    }
 
     .slider-group { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
     .slider-labels { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 600; }
@@ -1700,11 +1711,17 @@
                   <span class="pip-label">+4</span>
                 </div>
               </div>
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 4px;">
-                <button class="btn btn-secondary rate-preset-btn" id="ratePresetM1" style="font-size: 0.70rem; padding: 6px 2px;" title="Drawdown 1.5 ppm/yr">-1.5 ppm/yr</button>
-                <button class="btn btn-secondary rate-preset-btn" id="ratePreset0" style="font-size: 0.70rem; padding: 6px 2px;" title="Net Zero (0.0 ppm/yr) — any carbon emitted is removed">Net Zero</button>
-                <button class="btn btn-secondary rate-preset-btn" id="ratePreset15" style="font-size: 0.70rem; padding: 6px 2px;" title="Mid 20th Century 1.5 ppm/yr">+1.5 ppm/yr</button>
-                <button class="btn btn-secondary rate-preset-btn active" id="ratePreset25" style="font-size: 0.70rem; padding: 6px 2px;" title="Today, 2.5 ppm/yr">+2.5 ppm/yr</button>
+              <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
+                <button class="btn btn-secondary rate-preset-btn" id="ratePresetNZ50" style="font-size: 0.72rem; padding: 6px 8px; width: 100%; display: flex; justify-content: space-between; align-items: center;" title="IPCC Paris Agreement Target: Smooth ramp down from +2.5 ppm/yr today to 0.0 ppm/yr (Net Zero) by 2050">
+                  <span>🌱 <strong>Net Zero by 2050</strong> (Paris Target)</span>
+                  <span style="font-size: 0.68rem; opacity: 0.9; font-family: ui-monospace, monospace;">+2.5 → 0 ppm/yr</span>
+                </button>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+                  <button class="btn btn-secondary rate-preset-btn" id="ratePresetM1" style="font-size: 0.70rem; padding: 6px 2px;" title="Drawdown 1.5 ppm/yr">-1.5 ppm/yr</button>
+                  <button class="btn btn-secondary rate-preset-btn" id="ratePreset0" style="font-size: 0.70rem; padding: 6px 2px;" title="Net Zero overnight (0.0 ppm/yr) from 2026">0.0 (Instant)</button>
+                  <button class="btn btn-secondary rate-preset-btn" id="ratePreset15" style="font-size: 0.70rem; padding: 6px 2px;" title="Mid 20th Century 1.5 ppm/yr">+1.5 ppm/yr</button>
+                  <button class="btn btn-secondary rate-preset-btn active" id="ratePreset25" style="font-size: 0.70rem; padding: 6px 2px;" title="Today, 2.5 ppm/yr">+2.5 ppm/yr</button>
+                </div>
               </div>
             </div>
           </div>
@@ -4209,6 +4226,7 @@
       let state = {
         co2: BASELINE_1958_PT.co2,
         rate: 2.5,
+        isNZ2050: false,
         deltaTs: BASELINE_1958_PT.deltaTs,
         deltaTd: BASELINE_1958_PT.deltaTd,
         year: 1958,
@@ -5532,6 +5550,26 @@
         ctx.fillText("2026", 0, 0);
         ctx.restore();
 
+        // 2050 Net Zero Target Boundary Marker (Shown when Net Zero 2050 pathway is active)
+        if (state.isNZ2050) {
+          const nz2050X = yrToX(2050);
+          ctx.strokeStyle = "rgba(16, 185, 129, 0.65)";
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(nz2050X, tGridTop);
+          ctx.lineTo(nz2050X, tGridBottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.save();
+          ctx.translate(nz2050X - 5, tGridTop + 38);
+          ctx.rotate(Math.PI / 2);
+          ctx.fillStyle = "#10b981";
+          ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+          ctx.fillText("2050 Net Zero", 0, 0);
+          ctx.restore();
+        }
+
         // Plot Accumulated History: Static Historical Baseline (1750–2026) vs Dynamic Simulation (1958–2250)
         // 1. Static 1750–2026 Historical Record (Always displayed on chart as ground truth: "that's what happened")
         ctx.strokeStyle = "#c084fc";
@@ -5674,25 +5712,30 @@
           return state.history[state.history.length - 1].co2 || 427.0;
         }
 
-        // 1. Prepare temperature change callout badges at intersections with the orange dashed marker lines (extending to the RIGHT of the pointer line)
+        // 1. Prepare temperature change callout badges at intersections with marker lines
         const markerBadgeBoxes = [];
-        [1958, 2026].forEach(targetYr => {
-          const dtVal = getHistoricalDeltaAt(targetYr);
+        const markerYears = (state.isNZ2050 && state.year >= 2050) ? [1958, 2026, 2050] : [1958, 2026];
+        markerYears.forEach(targetYr => {
+          const dtVal = (targetYr === 2050) ? getSimulatedDeltaAt(2050) : getHistoricalDeltaAt(targetYr);
           if (dtVal !== null) {
             const ix = yrToX(targetYr);
             const iy = dtToY(dtVal);
 
-            // Label text: temperature change anomaly positioned to the RIGHT of the intersection
+            // Label text: temperature change anomaly
             const labelStr = `+${dtVal.toFixed(2)}°C`;
             ctx.font = "bold 10px ui-monospace, monospace";
             const tw = ctx.measureText(labelStr).width;
             const bw = tw + 10;
             const bh = 17;
-            const bx = Math.min(tGridRight - bw - 4, ix + 10);
-            // Positioned cleanly BELOW the curve (iy + 24 for 1958, iy + 36 for 2026) so they never obscure rising temperature or CO2 lines
+            // 2050 placed to the LEFT of the line (Rule 3); 1958/2026 to the right
+            const bx = (targetYr === 2050)
+              ? Math.max(tGridLeft + 4, ix - bw - 8)
+              : Math.min(tGridRight - bw - 4, ix + 10);
             const by = (targetYr === 1958)
               ? Math.min(tGridBottom - bh - 6, iy + 24)
-              : Math.min(tGridBottom - bh - 6, iy + 36);
+              : (targetYr === 2026
+                  ? Math.min(tGridBottom - bh - 6, iy + 36)
+                  : Math.min(tGridBottom - bh - 6, iy + 24));
             markerBadgeBoxes.push({ yr: targetYr, ix, iy, bx, by, bw, bh, labelStr });
           }
         });
@@ -5788,18 +5831,20 @@
           }
         });
 
-        // 3. Draw historical marker badges (1958 and 2026) with crisp leader lines and 100% opaque badges
+        // 3. Draw marker badges (1958, 2026, and 2050 if active) with crisp leader lines and 100% opaque badges
         markerBadgeBoxes.forEach(mb => {
-          // Short leader line connecting from top-left of badge up to intersection dot
-          ctx.strokeStyle = "#f59e0b";
+          const badgeColor = mb.yr === 2050 ? "#10b981" : "#f59e0b";
+          // Leader line connecting from badge to intersection dot
+          ctx.strokeStyle = badgeColor;
           ctx.lineWidth = 1.2;
           ctx.beginPath();
-          ctx.moveTo(mb.bx + 4, mb.by);
+          const startX = mb.yr === 2050 ? (mb.bx + mb.bw - 4) : (mb.bx + 4);
+          ctx.moveTo(startX, mb.by);
           ctx.lineTo(mb.ix, mb.iy);
           ctx.stroke();
 
           // Glowing intersection ring point
-          ctx.fillStyle = "#f59e0b";
+          ctx.fillStyle = badgeColor;
           ctx.beginPath();
           ctx.arc(mb.ix, mb.iy, 4.5, 0, Math.PI * 2);
           ctx.fill();
@@ -5809,14 +5854,14 @@
           ctx.fill();
 
           ctx.fillStyle = "#070d17";
-          ctx.strokeStyle = "#f59e0b";
+          ctx.strokeStyle = badgeColor;
           ctx.lineWidth = 1.2;
           ctx.beginPath();
           ctx.roundRect(mb.bx, mb.by, mb.bw, mb.bh, 3);
           ctx.fill();
           ctx.stroke();
 
-          ctx.fillStyle = "#f59e0b";
+          ctx.fillStyle = badgeColor;
           ctx.font = "bold 10px ui-monospace, monospace";
           ctx.fillText(mb.labelStr, mb.bx + 5, mb.by + 12);
         });
@@ -6099,29 +6144,61 @@
           sCO2.value = sliderVal;
         }
         const sRate = document.getElementById("sliderRate");
-        if (sRate) sRate.value = state.rate.toFixed(1);
         const rDisp = document.getElementById("rateDisplay");
-        if (rDisp) {
-          const rateVal = Math.round(state.rate * 10) / 10;
-          rDisp.textContent = Math.abs(rateVal) < 0.05
-            ? "0.0 ppm/yr (Net Zero)"
-            : `${rateVal > 0 ? "+" : ""}${rateVal.toFixed(1)} ppm/yr`;
-        }
-
-        const roundedRate = Math.round(state.rate * 10) / 10;
+        const bNZ50 = document.getElementById("ratePresetNZ50");
         const bM1 = document.getElementById("ratePresetM1");
         const b0 = document.getElementById("ratePreset0");
         const b15 = document.getElementById("ratePreset15");
         const b25 = document.getElementById("ratePreset25");
-        if (bM1) bM1.classList.toggle("active", roundedRate === -1.5);
-        if (b0) b0.classList.toggle("active", roundedRate === 0.0);
-        if (b15) b15.classList.toggle("active", roundedRate === 1.5);
-        if (b25) b25.classList.toggle("active", roundedRate === 2.5);
 
-        document.querySelectorAll(".slider-pip").forEach(pip => {
-          const val = parseFloat(pip.dataset.val);
-          pip.classList.toggle("active", Math.abs(val - roundedRate) < 0.05);
-        });
+        if (state.isNZ2050) {
+          if (bNZ50) bNZ50.classList.add("active");
+          if (bM1) bM1.classList.remove("active");
+          if (b0) b0.classList.remove("active");
+          if (b15) b15.classList.remove("active");
+          if (b25) b25.classList.remove("active");
+
+          const effectiveRate = state.year < 2026
+            ? 2.5
+            : (state.year < 2050 ? Math.max(0, 2.5 * (2050 - state.year) / 24.0) : 0.0);
+
+          if (sRate) sRate.value = effectiveRate.toFixed(1);
+
+          if (rDisp) {
+            if (state.year < 2026) {
+              rDisp.textContent = "🌱 NZ 2050 (+2.5 → 0 ppm/yr)";
+            } else if (state.year < 2050) {
+              rDisp.textContent = `🌱 NZ 2050 (+${effectiveRate.toFixed(1)} ppm/yr)`;
+            } else {
+              rDisp.textContent = "🌱 Net Zero Reached (0.0 ppm/yr)";
+            }
+          }
+
+          document.querySelectorAll(".slider-pip").forEach(pip => {
+            const val = parseFloat(pip.dataset.val);
+            pip.classList.toggle("active", Math.abs(val - effectiveRate) < 0.25);
+          });
+        } else {
+          if (bNZ50) bNZ50.classList.remove("active");
+          if (sRate) sRate.value = state.rate.toFixed(1);
+          if (rDisp) {
+            const rateVal = Math.round(state.rate * 10) / 10;
+            rDisp.textContent = Math.abs(rateVal) < 0.05
+              ? "0.0 ppm/yr (Net Zero)"
+              : `${rateVal > 0 ? "+" : ""}${rateVal.toFixed(1)} ppm/yr`;
+          }
+
+          const roundedRate = Math.round(state.rate * 10) / 10;
+          if (bM1) bM1.classList.toggle("active", roundedRate === -1.5);
+          if (b0) b0.classList.toggle("active", roundedRate === 0.0);
+          if (b15) b15.classList.toggle("active", roundedRate === 1.5);
+          if (b25) b25.classList.toggle("active", roundedRate === 2.5);
+
+          document.querySelectorAll(".slider-pip").forEach(pip => {
+            const val = parseFloat(pip.dataset.val);
+            pip.classList.toggle("active", Math.abs(val - roundedRate) < 0.05);
+          });
+        }
 
         drawFluxProfile();
 
@@ -6186,6 +6263,11 @@
             if (state.year < 2026) {
               // ALWAYS follow calibrated historical data (Law Dome ice core & Mauna Loa Keeling) up to 2026
               state.co2 = getHistoricalCO2(state.year + dt);
+            } else if (state.isNZ2050) {
+              // Net Zero by 2050 pathway:
+              // Emissions ramp down linearly from +2.5 ppm/yr in 2026 to 0.0 ppm/yr in 2050
+              const currentRate = state.year < 2050 ? Math.max(0, 2.5 * (2050 - state.year) / 24.0) : 0.0;
+              state.co2 += currentRate * dt;
             } else if (state.rate !== 0) {
               // Beyond 2026, advance based on the chosen future scenario rate
               if (state.rate < 0) {
@@ -6213,7 +6295,7 @@
             state.deltaTd += dTd * dt;
 
             // Prevent drawdown from plunging below zero increase since 1750
-            if (state.deltaTs <= 0.0 && state.rate <= 0 && state.year >= 2026) {
+            if (state.deltaTs <= 0.0 && state.rate <= 0 && state.year >= 2026 && !state.isNZ2050) {
               state.deltaTs = 0.0;
               state.rate = 0.0;
               state.running = false;
@@ -7868,28 +7950,43 @@
         });
       });
 
+      const btnNZ50 = document.getElementById("ratePresetNZ50");
+      if (btnNZ50) {
+        btnNZ50.addEventListener("click", () => {
+          state.isNZ2050 = true;
+          state.rate = 2.5;
+          syncUI();
+          draw();
+        });
+      }
+
       document.getElementById("sliderRate").addEventListener("input", e => {
+        state.isNZ2050 = false;
         state.rate = parseFloat(e.target.value);
         syncUI();
         draw();
       });
 
       document.getElementById("ratePresetM1").addEventListener("click", () => {
+        state.isNZ2050 = false;
         state.rate = -1.5;
         syncUI();
         draw();
       });
       document.getElementById("ratePreset0").addEventListener("click", () => {
+        state.isNZ2050 = false;
         state.rate = 0.0;
         syncUI();
         draw();
       });
       document.getElementById("ratePreset15").addEventListener("click", () => {
+        state.isNZ2050 = false;
         state.rate = 1.5;
         syncUI();
         draw();
       });
       document.getElementById("ratePreset25").addEventListener("click", () => {
+        state.isNZ2050 = false;
         state.rate = 2.5;
         syncUI();
         draw();
@@ -7899,6 +7996,7 @@
         pip.addEventListener("click", () => {
           const val = parseFloat(pip.dataset.val);
           if (!isNaN(val)) {
+            state.isNZ2050 = false;
             state.rate = val;
             syncUI();
             draw();
@@ -8071,6 +8169,9 @@
             simYr += step;
             if (simYr <= 2026) {
               simC = getHistoricalCO2(simYr);
+            } else if (state.isNZ2050) {
+              const r = simYr < 2050 ? Math.max(0, 2.5 * (2050 - simYr) / 24.0) : 0.0;
+              simC += r * step;
             } else if (futureRate < 0) {
               simC = Math.max(CO2_BASE, simC + futureRate * step);
             } else if (futureRate > 0) {
