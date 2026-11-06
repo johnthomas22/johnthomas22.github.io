@@ -2645,6 +2645,7 @@
         <button class="modal-tab-btn" data-page="page-carbon-budgets">Page 6: Carbon Budgets & Reserves</button>
         <button class="modal-tab-btn" data-page="page-sources-owid">Page 7: Emissions Sources (OWID)</button>
         <button class="modal-tab-btn" data-page="page-solutions-storage">Page 8: Solutions & Grid Storage</button>
+        <button class="modal-tab-btn" data-page="page-wind-payback">Page 9: Wind Carbon Payback (Scotland)</button>
         <button class="modal-tab-btn" data-page="page-addendum">Addendum: 2026 Warming vs. +1.5°C Breach</button>
       </div>
 
@@ -2742,6 +2743,15 @@
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
                   The physical mathematics of replacing 41 Gt/yr of fossil energy. Explains the "Electrification Efficiency Dividend": why 135,000 TWh of fossil primary energy (combustion loss >60%) only requires ~75,000 TWh/yr of clean useful electricity. Examines the generation mix (Solar, Wind, Nuclear baseload, Hydro, Geothermal) and evaluates six grid storage technologies across their governing physical laws: Chemical Batteries (Li/Na/Flow), Pumped Hydro (m·g·h), Compressed Air (P·dV), Gravity Storage, Flywheels (½·I·ω²), and Hydrogen seasonal storage.
+                </div>
+              </li>
+              <li>
+                <a class="toc-link" data-target="page-wind-payback">
+                  <span>🌬️</span> <strong>Page 9: Embodied Carbon, Civil Engineering & Payback Time — Onshore Wind in Scotland (Concrete, Roads & Peat)</strong>
+                  <span class="badge badge-cyan" style="margin-left: 8px;">Scottish Gov Carbon Calculator / Peer-Reviewed LCA</span>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  Full life-cycle carbon accounting (cradle-to-grave) for onshore wind deployed in Scotland. Details the exact engineering carbon debts per 4.2 MW turbine: concrete foundations (450–650 m³ / 1,200 tonnes concrete + 70t rebar), heavy access tracks (floating roads over peat with geogrids vs. cut-and-fill, borrow pit aggregates), and peatland carbon dynamics (drainage oxidation vs. habitat restoration). Uses the statutory Scottish Government Carbon Calculator (Nayak et al. 2008, 2010; ClimateXChange) to demonstrate empirical carbon payback times of <b>4 to 12 months</b> (up to 1.8 years on deep peat) against a 30-year operational life, yielding an EROI of 25:1 to 35:1 and lifecycle intensity of ~8–15 g CO₂e/kWh (vs. 420–490 g for gas and 820–1,050 g for coal).
                 </div>
               </li>
               <li>
@@ -4014,6 +4024,278 @@
             <li><strong>100% Renewables:</strong> Relying purely on wind (26,000 TWh) and solar (38,000 TWh) alongside existing hydro (6,500 TWh). Because wind and solar output fluctuate with daylight and multi-week weather systems (<em>Dunkelflaute</em>), this scenario requires massive overbuilding of generation and ~91 TWh of long-duration and seasonal grid storage (hydrogen, pumped hydro, CAES) to eliminate outage risks.</li>
             <li><strong>High Nuclear Baseload:</strong> Heavy buildout of firm, weather-independent nuclear fission (20,000 TWh / ~2,500 GW) paired with moderate renewables. Because continuous 24/7 firm baseload matches the bulk of baseline industrial and residential demand, required grid storage drops to ~30 TWh and land surface footprint is minimized.</li>
             <li><strong>Balanced (Solar/Wind + Baseload):</strong> Combines ultra-low-cost variable wind (16,000 TWh) and solar (22,000 TWh) for bulk energy with dispatchable 24/7 firm clean baseload (10,000 TWh nuclear, 6,000 TWh hydro, 3,000 TWh geothermal/biomass). By supplying the "last 15% to 20%" of inflexible demand from firm baseload, the system cuts required long-duration storage by ~50% compared to a pure variable renewable architecture while avoiding over-reliance on any single technology.</li>
+          </ul>
+        </div>
+
+        <!-- PAGE 9: EMBODIED CARBON & WIND TURBINE PAYBACK TIME (SCOTLAND) -->
+        <div class="doc-page" id="page-wind-payback">
+          <h3>Page 9: Embodied Carbon, Civil Engineering & Carbon Payback Time — Onshore Wind in Scotland</h3>
+          <p>
+            A persistent talking point in public debates regarding renewable energy is the assertion that:
+            <em>"Wind turbines consume so much energy, steel, diesel, and carbon-intensive concrete — and tear up so much carbon-storing peat bog for access roads — that they never truly pay back their environmental footprint during their operational lifetime."</em>
+          </p>
+          <p>
+            This chapter examines the <strong>cradle-to-grave Life-Cycle Assessment (LCA)</strong> of modern onshore wind energy, focusing directly on the engineering reality of deploying multi-megawatt turbines on land in <strong>Scotland</strong>, where developments frequently interact with carbon-rich peat moorlands.
+          </p>
+
+          <h4>1. Siting on Peatlands: The Scottish Statutory & Environmental Context</h4>
+          <p>
+            Scotland possesses one of Europe's most energetic wind climates, where modern onshore wind farms routinely achieve annual capacity factors of <strong>32% to 42%</strong> (compared to a global onshore average of ~25%–28%). However, much of the windiest terrain in the Scottish Highlands, Southern Uplands, and Islands is blanket bog — an organic soil composed of partially decomposed plant matter that acts as a vital terrestrial carbon sink.
+          </p>
+          <p>
+            Because undisturbed peat stores immense volumes of carbon (roughly 50% carbon by dry weight), the Scottish Government introduced statutory regulations requiring developers submitting Section 36 consent applications to submit a standardized carbon assessment using the official <strong>Scottish Government Windfarm Carbon Calculator</strong> (originally formulated by <em>Nayak et al., 2008, 2010</em> at the University of Aberdeen, and maintained by <em>ClimateXChange</em>).
+          </p>
+          <p>
+            The calculator rigorously balances every gram of carbon emitted during manufacturing, civil engineering, transport, and peat disturbance against the fossil fuel emissions displaced on the electricity transmission grid over the project's lifetime.
+          </p>
+
+          <h4>2. Engineering & Material Carbon Breakdown (Per 4.2 MW Turbine)</h4>
+          <p>
+            To evaluate the complete carbon debt, we analyze a standard modern onshore turbine deployed in Scotland: a <strong>4.2 MW machine</strong> (e.g., Vestas V136/V150 or Siemens Gamesa SG 4.5-145) on a 105 m tubular steel tower with a 25- to 30-year design life:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Lifecycle Component</th>
+                <th>Physical Material Inventory</th>
+                <th>Embodied Carbon Debt</th>
+                <th>Engineering Mitigation & Practical Mechanics</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Concrete Foundation (Gravity Base)</strong></td>
+                <td>
+                  <strong>500 – 650 m³ concrete</strong><br>(~1,200 – 1,550 tonnes)<br>
+                  <strong>60 – 80 tonnes</strong> high-tensile steel rebar
+                </td>
+                <td><strong>180 – 280 t CO₂e</strong><br>(~12% of total debt)</td>
+                <td>
+                  Octagonal gravity base (~18–22 m diameter, 2.5–3.5 m deep at center). Using standard CEM I Portland cement emits ~320 kg CO₂/m³. Modern Scottish practice frequently blends <strong>Ground Granulated Blast-Furnace Slag (GGBS)</strong> or pulverized ash, replacing 40%–60% of clinker and cutting foundation embodied carbon to 120–160 t CO₂e.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>2. Access Tracks & Crane Pads</strong></td>
+                <td>
+                  <strong>300 – 600 m track</strong> per turbine<br>(4.5–5.0 m running width)<br>
+                  ~1,200 – 1,800 tonnes crushed aggregate per km
+                </td>
+                <td><strong>45 – 90 t CO₂e</strong><br>(~4% of total debt)</td>
+                <td>
+                  Heavy delivery vehicles (70 m blade lifters, 750 t crawler cranes) require robust roads. Across deep peat (>1 m), developers are legally required under <em>NatureScot</em> guidelines to construct <strong>"floating roads"</strong> using multi-axial polymeric geogrids and non-woven geotextile separating membranes. This eliminates peat excavation and maintains the water table. Aggregates are quarried from <strong>on-site borrow pits</strong>, eliminating thousands of heavy HGV road-miles.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>3. Peatland Disturbance & Drainage</strong></td>
+                <td>
+                  Localized excavation for base, crane hardstanding, and track verges
+                </td>
+                <td><strong>150 – 500 t CO₂e</strong><br>(Variable; ~15%–25% of debt)</td>
+                <td>
+                  Drying peat exposes organic matter to oxygen, accelerating microbial respiration and CO₂ release. Early theoretical models assumed drainage ditches lowered the water table 50 m outward. Extensive empirical field research by Aberdeen University and NatureScot demonstrates that in dense blanket peat (catotelm), lateral hydraulic conductivity is extremely low, limiting effective drainage drawdown to <strong>2 to 5 metres</strong>.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>4. Turbine Manufacturing & Transport</strong></td>
+                <td>
+                  <strong>250 – 320 t</strong> structural steel tower<br>
+                  <strong>90 – 130 t</strong> nacelle (iron, copper, magnets)<br>
+                  <strong>55 – 70 t</strong> composite blades (fiberglass/epoxy)
+                </td>
+                <td><strong>1,100 – 1,500 t CO₂e</strong><br>(~65% of total debt)</td>
+                <td>
+                  Blast-furnace steel manufacturing, composite vacuum infusion, copper coil windings, and maritime shipping from European fabrication hubs to Scottish ports.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>5. Habitat Management Offsets (HMP)</strong></td>
+                <td>
+                  Bog rewetting across 100 – 500 hectares of degraded historical peatland
+                </td>
+                <td><strong>-200 to -800 t CO₂e</strong><br>(Net carbon credit)</td>
+                <td>
+                  As a planning condition, Scottish wind farms implement Habitat Management Plans: blocking artificial Victorian drainage ditches, removing derelict commercial forestry, and re-establishing <i>Sphagnum</i> moss carpets. Restored bog sequesters 1.5 to 3.5 t CO₂e/hectare/year, frequently canceling out the construction peat debt entirely.
+                </td>
+              </tr>
+              <tr style="background: rgba(0, 229, 255, 0.08); font-weight: 700;">
+                <td><strong>TOTAL EMBODIED CARBON DEBT</strong></td>
+                <td><strong>Complete Cradle-to-Grave Infrastructure</strong></td>
+                <td><strong>1,400 – 2,400 t CO₂e</strong><br>(Central: ~1,850 t CO₂e)</td>
+                <td>
+                  Total lifetime emissions to build, deliver, erect, maintain for 30 years, and fully decommission one 4.2 MW Scottish onshore wind turbine.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>3. The Counterfactual: Displaced Fossil Fuel Generation</h4>
+          <p>
+            To compute payback time, the initial carbon investment must be divided by the emissions prevented each year when the turbine generates electricity instead of burning fossil fuels.
+          </p>
+          <div class="code-box">
+            <b>Annual Electricity Generation per 4.2 MW Turbine:</b><br>
+            • Rated Nameplate Capacity: 4.2 MW (4,200 kW)<br>
+            • Scottish Capacity Factor: 35% (conservative average; high-elevation sites reach 38%–42%)<br>
+            • Annual Energy Output: 4.2 MW × 8,760 hours/yr × 0.35 = <b>12,877,200 kWh/year (12.88 GWh/year)</b><br><br>
+            <b>Annual Emissions Displaced (Prevented):</b><br>
+            • <b>Displacing Marginal Fossil Gas (CCGT @ 420 g CO₂/kWh):</b> 12,877,200 kWh × 0.420 kg = <b>5,408 tonnes CO₂/year</b><br>
+            • <b>Displacing UK Grid Average Mix (~180 g CO₂/kWh):</b>       12,877,200 kWh × 0.180 kg = <b>2,318 tonnes CO₂/year</b><br>
+            • <b>Displacing Legacy Coal Generation (900 g CO₂/kWh):</b>        12,877,200 kWh × 0.900 kg = <b>11,589 tonnes CO₂/year</b>
+          </div>
+
+          <h4>4. Carbon Payback Time: Mathematical Proof & Results</h4>
+          <p>
+            The carbon payback time is given by the governing equation from <em>Nayak et al. (2008, 2010)</em>:
+          </p>
+          <div class="code-box" style="text-align: center; font-size: 0.95rem;">
+            $$\text{Carbon Payback Period (Years)} = \frac{\text{Total Embodied Carbon Debt (t CO}_2\text{e)}}{\text{Annual Displaced Generation Emissions (t CO}_2\text{e/year})}$$
+          </div>
+          <p>
+            Evaluating this across four typical project scenarios reveals the true empirical payback timeline:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Site Characteristics & Soil Conditions</th>
+                <th>Total Embodied Debt</th>
+                <th>Payback vs. Fossil Gas (CCGT)</th>
+                <th>Payback vs. UK Grid Average</th>
+                <th>30-Year Net Carbon Savings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Scenario 1: Mineral / Agricultural Soil</strong><br>(No peat; standard concrete bases & gravel roads)</td>
+                <td>~1,450 t CO₂e</td>
+                <td><strong>3.2 Months</strong><br>(0.27 years)</td>
+                <td><strong>7.5 Months</strong><br>(0.63 years)</td>
+                <td><strong>+160,800 t CO₂</strong><br>(99.1% net clean power)</td>
+              </tr>
+              <tr>
+                <td><strong>Scenario 2: Typical Scottish Peatland</strong><br>(Floating roads on deep peat; on-site borrow pits; bog restoration)</td>
+                <td>~1,850 t CO₂e</td>
+                <td><strong>4.1 Months</strong><br>(0.34 years)</td>
+                <td><strong>9.6 Months</strong><br>(0.80 years)</td>
+                <td><strong>+160,400 t CO₂</strong><br>(98.9% net clean power)</td>
+              </tr>
+              <tr>
+                <td><strong>Scenario 3: Complex Peat Site (Moderate Depth)</strong><br>(Cut-and-fill tracks; moderate drainage; zero bog restoration)</td>
+                <td>~3,100 t CO₂e</td>
+                <td><strong>6.9 Months</strong><br>(0.57 years)</td>
+                <td><strong>16.0 Months</strong><br>(1.34 years)</td>
+                <td><strong>+159,100 t CO₂</strong><br>(98.1% net clean power)</td>
+              </tr>
+              <tr>
+                <td><strong>Scenario 4: Severe Peat Disturbance (Worst-Case)</strong><br>(Deep unmitigated peat drainage; high forestry felling)</td>
+                <td>~5,200 t CO₂e</td>
+                <td><strong>11.5 Months</strong><br>(0.96 years)</td>
+                <td><strong>26.9 Months</strong><br>(2.24 years)</td>
+                <td><strong>+157,000 t CO₂</strong><br>(96.8% net clean power)</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <strong>The Bottom Line:</strong> Even under suboptimal, deep-peat conditions with massive concrete foundations and extensive internal access roads, an onshore wind turbine in Scotland completely pays off its entire cradle-to-grave carbon debt in <strong>less than 1 to 2.3 years</strong>.
+          </p>
+          <p>
+            Because modern turbines operate for <strong>25 to 30 years</strong>, the turbine spends over <strong>96% to 99% of its operational life generating 100% net emissions-free electricity</strong>. Over its lifetime, each 4.2 MW turbine prevents the emission of over <strong>160,000 tonnes of CO₂</strong> that would otherwise have entered the atmosphere from burning natural gas or coal.
+          </p>
+
+          <h4>5. Life-Cycle Carbon Intensity Across All Power Generation Sources</h4>
+          <p>
+            When total cradle-to-grave emissions (mining, refining, concrete, manufacturing, transport, civil works, and fuel supply chains) are divided by total lifetime electricity produced, wind power ranks among the lowest-carbon energy sources known to engineering:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Generation Technology</th>
+                <th>Median Life-Cycle Emissions</th>
+                <th>Interquartile Range</th>
+                <th>Primary Source of Life-Cycle Carbon</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Onshore Wind (Scotland — incl. peat & roads)</strong></td>
+                <td><strong>11 g CO₂e / kWh</strong></td>
+                <td>8 – 16 g / kWh</td>
+                <td>Turbine steel tower, foundation concrete, access road quarrying.</td>
+              </tr>
+              <tr>
+                <td><strong>Nuclear Fission (PWR / SMR)</strong></td>
+                <td><strong>12 g CO₂e / kWh</strong></td>
+                <td>9 – 15 g / kWh</td>
+                <td>Uranium centrifugal enrichment and reactor containment concrete.</td>
+              </tr>
+              <tr>
+                <td><strong>Offshore Wind</strong></td>
+                <td><strong>13 g CO₂e / kWh</strong></td>
+                <td>10 – 18 g / kWh</td>
+                <td>Steel monopile foundation fabrication and heavy marine jack-up vessel fuel.</td>
+              </tr>
+              <tr>
+                <td><strong>Hydroelectric (Run-of-River / Highland)</strong></td>
+                <td><strong>24 g CO₂e / kWh</strong></td>
+                <td>11 – 35 g / kWh</td>
+                <td>Dam wall concrete mass; reservoir flooded biogenic vegetation decay.</td>
+              </tr>
+              <tr>
+                <td><strong>Solar Photovoltaic (Utility Silicon)</strong></td>
+                <td><strong>38 g CO₂e / kWh</strong></td>
+                <td>25 – 55 g / kWh</td>
+                <td>High-temperature polysilicon smelting and quartz reduction furnaces.</td>
+              </tr>
+              <tr>
+                <td><strong>Natural Gas (Combined Cycle CCGT)</strong></td>
+                <td><strong>486 g CO₂e / kWh</strong></td>
+                <td>410 – 550 g / kWh</td>
+                <td>Continuous fuel methane combustion + upstream drilling venting & fugitive leakage.</td>
+              </tr>
+              <tr>
+                <td><strong>Coal (Supercritical Thermal)</strong></td>
+                <td><strong>920 g CO₂e / kWh</strong></td>
+                <td>820 – 1,150 g / kWh</td>
+                <td>Direct smokestack combustion of carbon + coal mine methane venting.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Generating power from natural gas emits <strong>~44× more carbon per kilowatt-hour</strong> than Scottish onshore wind; burning coal emits <strong>~84× more</strong>. The claim that wind turbines do not save carbon is completely refuted by physical stoichiometry, civil engineering life-cycle data, and statutory Scottish government assessments.
+          </p>
+
+          <h4>6. Authoritative Academic & Statutory References</h4>
+          <ul style="margin-left: 20px; font-size: 0.84rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px;">
+            <li>
+              <strong>Scottish Government Energy Consents Unit / Nayak et al. (2008, updated 2010):</strong><br>
+              <em>"Calculating carbon savings, emissions and energy payback times for wind farms on Scottish peatlands."</em> University of Aberdeen & Scottish Government Rural and Environment Science and Analytical Services (RESAS).<br>
+              <a href="https://www.gov.scot/publications/carbon-calculator-for-wind-farms-on-scottish-peatlands-factsheet/" target="_blank" rel="noopener noreferrer">https://www.gov.scot/publications/carbon-calculator-for-wind-farms-on-scottish-peatlands-factsheet/</a>
+            </li>
+            <li>
+              <strong>ClimateXChange / University of Edinburgh & University of Aberdeen (2016, 2021):</strong><br>
+              <em>"Review of the Scottish Government Carbon Calculator for Wind Farms on Peat."</em> Research report evaluating empirical drainage distances and peat carbon restoration.<br>
+              <a href="https://www.climatexchange.org.uk/research/projects/carbon-calculator-for-wind-farms-on-scottish-peatlands/" target="_blank" rel="noopener noreferrer">https://www.climatexchange.org.uk/research/projects/carbon-calculator-for-wind-farms-on-scottish-peatlands/</a>
+            </li>
+            <li>
+              <strong>NatureScot (formerly Scottish Natural Heritage) & Forestry Commission Scotland (2010, updated 2015):</strong><br>
+              <em>"Floating Roads on Peat: Good Practice Guide."</em> Joint engineering guidelines on geotextile geogrids, drainage avoidance, and preserving blanket bog hydrology.<br>
+              <a href="https://www.nature.scot/doc/floating-roads-peat" target="_blank" rel="noopener noreferrer">https://www.nature.scot/doc/floating-roads-peat</a>
+            </li>
+            <li>
+              <strong>Intergovernmental Panel on Climate Change (IPCC AR6 Working Group III, 2022):</strong><br>
+              <em>"Climate Change 2022: Mitigation of Climate Change."</em> Chapter 6 (Energy Systems) and Annex III (Technology-specific cost and life-cycle greenhouse gas emission metrics). Cambridge University Press.
+            </li>
+            <li>
+              <strong>United Nations Economic Commission for Europe (UNECE, 2021):</strong><br>
+              <em>"Life Cycle Assessment of Electricity Generation Options."</em> Comprehensive cradle-to-grave comparative LCA across coal, gas, nuclear, hydro, solar, and wind technologies.
+            </li>
+            <li>
+              <strong>Thomson, R.C. & Harrison, G.P. (2015):</strong><br>
+              <em>"Life cycle costs and carbon footprints of onshore wind farms in the UK."</em> <i>Renewable Energy</i>, Vol. 83, pp. 1143–1153. Detailed embodied carbon audit of 20 operational UK onshore wind farms.
+            </li>
+            <li>
+              <strong>Smith, P., Nayak, D.R. et al. (2014):</strong><br>
+              <em>"How much carbon does a wind farm on peat really emit?"</em> <i>Soil Use and Management</i>, 30(1), 152–159. Demonstrating that good construction practice limits drainage drawdown to under 5 m, ensuring carbon payback times under 2 years.
+            </li>
           </ul>
         </div>
 
