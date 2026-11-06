@@ -854,16 +854,38 @@
       font-weight: 700 !important;
       box-shadow: 0 0 8px rgba(0, 229, 255, 0.25) !important;
     }
-    #ratePresetNZ50.active {
-      background: rgba(16, 185, 129, 0.22) !important;
-      border-color: var(--emerald) !important;
-      color: #ffffff !important;
-      font-weight: 700 !important;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.35) !important;
+    #ratePresetNZ50 {
+      background: rgba(16, 185, 129, 0.16) !important;
+      border: 1.5px solid rgba(16, 185, 129, 0.6) !important;
+      color: #34d399 !important;
+      border-radius: 6px !important;
+      padding: 8px 12px !important;
+      cursor: pointer !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.25) !important;
+      transition: all 0.2s ease !important;
     }
     #ratePresetNZ50:hover {
-      border-color: var(--emerald);
-      color: #ffffff;
+      background: rgba(16, 185, 129, 0.28) !important;
+      border-color: #10b981 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.45) !important;
+      transform: translateY(-1px);
+    }
+    #ratePresetNZ50.active {
+      background: #10b981 !important;
+      border-color: #34d399 !important;
+      color: #022c22 !important;
+      font-weight: 800 !important;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.7) !important;
+    }
+    #ratePresetNZ50.active .nz-badge {
+      background: rgba(2, 44, 34, 0.25) !important;
+      border-color: rgba(2, 44, 34, 0.5) !important;
+      color: #022c22 !important;
+      font-weight: 800 !important;
     }
 
     .slider-group { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
@@ -1711,10 +1733,17 @@
                   <span class="pip-label">+4</span>
                 </div>
               </div>
-              <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
-                <button class="btn btn-secondary rate-preset-btn" id="ratePresetNZ50" style="font-size: 0.72rem; padding: 6px 8px; width: 100%; display: flex; justify-content: space-between; align-items: center;" title="IPCC Paris Agreement Target: Smooth ramp down from +2.5 ppm/yr today to 0.0 ppm/yr (Net Zero) by 2050">
-                  <span>🌱 <strong>Net Zero by 2050</strong> (Paris Target)</span>
-                  <span style="font-size: 0.68rem; opacity: 0.9; font-family: ui-monospace, monospace;">+2.5 → 0 ppm/yr</span>
+              <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px;">
+                <div style="font-size: 0.68rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; display: flex; justify-content: space-between; align-items: center;">
+                  <span>Preset Pathways &amp; Rates:</span>
+                  <span style="font-size: 0.65rem; color: #64748b; font-weight: 500;">Click to select scenario</span>
+                </div>
+                <button class="btn rate-preset-btn" id="ratePresetNZ50" type="button" title="IPCC Paris Agreement Target: Smooth ramp down from +2.5 ppm/yr today to 0.0 ppm/yr (Net Zero) by 2050">
+                  <span style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 1.05rem;">🌱</span>
+                    <span style="font-size: 0.78rem; font-weight: 800;">Net Zero by 2050</span>
+                  </span>
+                  <span class="nz-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; background: rgba(16, 185, 129, 0.25); border: 1px solid rgba(16, 185, 129, 0.6); padding: 2px 7px; border-radius: 4px; color: #6ee7b7; font-weight: 700;">Paris Target (+2.5 → 0 ppm/yr)</span>
                 </button>
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
                   <button class="btn btn-secondary rate-preset-btn" id="ratePresetM1" style="font-size: 0.70rem; padding: 6px 2px;" title="Drawdown 1.5 ppm/yr">-1.5 ppm/yr</button>
@@ -5550,25 +5579,24 @@
         ctx.fillText("2026", 0, 0);
         ctx.restore();
 
-        // 2050 Net Zero Target Boundary Marker (Shown when Net Zero 2050 pathway is active)
-        if (state.isNZ2050) {
-          const nz2050X = yrToX(2050);
-          ctx.strokeStyle = "rgba(16, 185, 129, 0.65)";
-          ctx.setLineDash([3, 3]);
-          ctx.beginPath();
-          ctx.moveTo(nz2050X, tGridTop);
-          ctx.lineTo(nz2050X, tGridBottom);
-          ctx.stroke();
-          ctx.setLineDash([]);
+        // 2050 Paris Net Zero Target Boundary Marker
+        const nz2050X = yrToX(2050);
+        ctx.strokeStyle = state.isNZ2050 ? "rgba(16, 185, 129, 0.85)" : "rgba(16, 185, 129, 0.28)";
+        ctx.lineWidth = state.isNZ2050 ? 1.5 : 1;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(nz2050X, tGridTop);
+        ctx.lineTo(nz2050X, tGridBottom);
+        ctx.stroke();
+        ctx.setLineDash([]);
 
-          ctx.save();
-          ctx.translate(nz2050X - 5, tGridTop + 38);
-          ctx.rotate(Math.PI / 2);
-          ctx.fillStyle = "#10b981";
-          ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
-          ctx.fillText("2050 Net Zero", 0, 0);
-          ctx.restore();
-        }
+        ctx.save();
+        ctx.translate(nz2050X - 5, tGridTop + 38);
+        ctx.rotate(Math.PI / 2);
+        ctx.fillStyle = state.isNZ2050 ? "#10b981" : "rgba(16, 185, 129, 0.5)";
+        ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+        ctx.fillText("2050 Net Zero", 0, 0);
+        ctx.restore();
 
         // Plot Accumulated History: Static Historical Baseline (1750–2026) vs Dynamic Simulation (1958–2250)
         // 1. Static 1750–2026 Historical Record (Always displayed on chart as ground truth: "that's what happened")
@@ -6165,6 +6193,9 @@
           if (sRate) sRate.value = effectiveRate.toFixed(1);
 
           if (rDisp) {
+            rDisp.style.background = "rgba(16, 185, 129, 0.2)";
+            rDisp.style.borderColor = "#10b981";
+            rDisp.style.color = "#34d399";
             if (state.year < 2026) {
               rDisp.textContent = "🌱 NZ 2050 (+2.5 → 0 ppm/yr)";
             } else if (state.year < 2050) {
@@ -6182,6 +6213,9 @@
           if (bNZ50) bNZ50.classList.remove("active");
           if (sRate) sRate.value = state.rate.toFixed(1);
           if (rDisp) {
+            rDisp.style.background = "";
+            rDisp.style.borderColor = "";
+            rDisp.style.color = "";
             const rateVal = Math.round(state.rate * 10) / 10;
             rDisp.textContent = Math.abs(rateVal) < 0.05
               ? "0.0 ppm/yr (Net Zero)"
