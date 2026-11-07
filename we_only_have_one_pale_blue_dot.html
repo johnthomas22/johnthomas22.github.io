@@ -96,6 +96,7 @@
     .brand-title span {
       background: linear-gradient(135deg, #38bdf8, #818cf8);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .brand-sub {
@@ -169,6 +170,121 @@
       border: 1px solid rgba(245, 158, 11, 0.3);
       padding: 2px 8px;
       border-radius: 4px;
+    }
+
+    /* VOYAGER PALE BLUE DOT STORY CARD */
+    .voyager-story-card {
+      background: linear-gradient(135deg, rgba(8, 14, 28, 0.95), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .voyager-story-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+    .voyager-story-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #e0f2fe;
+    }
+    .pulse-pixel {
+      width: 8px;
+      height: 8px;
+      background: #38bdf8;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #38bdf8, 0 0 18px #38bdf8;
+      animation: pulseGlow 2s infinite ease-in-out;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .voyager-dist-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+    .voyager-story-body {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+    @media (max-width: 640px) {
+      .voyager-story-body {
+        grid-template-columns: 1fr;
+      }
+    }
+    .voyager-beam-visual {
+      height: 84px;
+      background: radial-gradient(circle at 50% 50%, #030712, #000);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .beam-diagonal {
+      position: absolute;
+      top: -30%;
+      left: 20%;
+      width: 28px;
+      height: 160%;
+      background: linear-gradient(90deg, transparent, rgba(254, 240, 138, 0.18), rgba(254, 240, 138, 0.38), rgba(254, 240, 138, 0.18), transparent);
+      transform: rotate(26deg);
+      pointer-events: none;
+    }
+    .earth-subpixel {
+      position: relative;
+      z-index: 2;
+      width: 5px;
+      height: 5px;
+      background: #7dd3fc;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #38bdf8, 0 0 12px #38bdf8, 0 0 20px #0284c7;
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+    .beam-caption {
+      position: absolute;
+      bottom: 4px;
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      color: #94a3b8;
+      text-align: center;
+      width: 100%;
+    }
+    .voyager-story-text {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+    .voyager-story-text p {
+      margin: 0 0 6px 0;
+    }
+    .voyager-story-text p:last-child {
+      margin: 0;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.35); }
     }
 
     /* MAIN DISPLAY GRID */
@@ -636,6 +752,7 @@
       border-radius: 3px;
       outline: none;
       -webkit-appearance: none;
+      appearance: none;
       cursor: pointer;
     }
     .range-input::-webkit-slider-thumb {
@@ -781,6 +898,32 @@
         <div class="quote-author">
           <span>— Carl Sagan, <em>Pale Blue Dot: A Vision of the Human Future in Space</em> (1994)</span>
           <span class="scope-pill">⚠️ Fossil fuels explicitly excluded: Focuses strictly on renewable biological, hydrological & mineral biocapacity</span>
+        </div>
+      </div>
+
+      <!-- VOYAGER 1 PALE BLUE DOT STORY -->
+      <div class="voyager-story-card">
+        <div class="voyager-story-header">
+          <div class="voyager-story-title">
+            <span class="pulse-pixel"></span>
+            <span>🛰️ The Photograph: Earth Captured as a Single Pixel from Beyond Neptune (Feb 14, 1990)</span>
+          </div>
+          <span class="voyager-dist-badge">6,054,587,000 km (40.5 AU) away</span>
+        </div>
+        <div class="voyager-story-body">
+          <div class="voyager-beam-visual">
+            <div class="beam-diagonal"></div>
+            <div class="earth-subpixel" title="Earth: 0.12 of a single pixel"></div>
+            <div class="beam-caption">Earth = 0.12 pixel</div>
+          </div>
+          <div class="voyager-story-text">
+            <p>
+              On <strong>Valentine's Day 1990</strong>, having completed its primary planetary mission and hurtling past the orbit of <strong>Neptune</strong> at ~61,000 km/h, NASA's <strong>Voyager 1</strong> received a command championed by astronomer Carl Sagan. Before permanently shutting down its cameras to save power for its journey into interstellar space, Voyager turned 180° back toward home to capture the 60-frame <em>Solar System Family Portrait</em>.
+            </p>
+            <p>
+              Across 6 billion kilometres of empty space, our entire world appeared as a pale blue speck occupying a mere <strong>0.12 of a single pixel</strong>, caught inside a scattered sunbeam diffracted across the spacecraft's optics. Every human who ever lived, every forest, ocean, and civilization existed entirely on that sub-pixel. There is no planet B: our living resources must fit sustainably within this one lonely dot.
+            </p>
+          </div>
         </div>
       </div>
     </header>
@@ -1098,6 +1241,19 @@
           </p>
           <p>
             The Kunming-Montreal Global Biodiversity Framework set a target of conserving <strong>30% of land and seas by 2030 (30x30)</strong>. Biologist E.O. Wilson demonstrated that reserving <strong>50% of the planet's surface for wild nature (Half-Earth)</strong> protects approximately 85% of all living species from extinction.
+          </p>
+        </div>
+
+        <div class="doc-item">
+          <h4>🛰️ The 0.12-Pixel Reality: Voyager 1 Beyond Neptune</h4>
+          <p>
+            On February 14, 1990, NASA's <em>Voyager 1</em> spacecraft reached 40.5 AU (over 6 billion km) from the Sun, having crossed the orbit of <strong>Neptune</strong>. At the request of Carl Sagan, flight controllers rotated the probe back toward the inner solar system and took the historic <em>Pale Blue Dot</em> image using its 1500mm narrow-angle camera.
+          </p>
+          <p>
+            In that final image, Earth spans just <strong>0.12 of a single pixel</strong>, illuminated by a ray of sunlight scattered inside the camera barrel. That tiny fraction of a pixel holds the totality of human history, culture, biodiversity, and regenerative biocapacity.
+          </p>
+          <p>
+            When economic or consumption models demand 1.34 or 1.5 Earths, they demand something that physical reality cannot supply. There is nowhere else to offload humanity's ecological debt: living within 1.0 Planet Earth is our only viable future.
           </p>
         </div>
 
