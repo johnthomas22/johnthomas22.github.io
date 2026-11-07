@@ -418,6 +418,125 @@
       color: var(--text-muted);
     }
 
+    /* SUSTAINABLE(ISH) PODCAST SECTION */
+    .podcast-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+    .podcast-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+    .podcast-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .podcast-intro {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .podcast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .podcast-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      transition: all 0.2s ease;
+    }
+    .podcast-card:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+    .podcast-ep-tag {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .podcast-card-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+    .podcast-card-guest {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+    .podcast-card-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .podcast-card-desc ul {
+      margin: 8px 0 0 16px;
+      padding: 0;
+    }
+    .podcast-card-desc li {
+      margin-bottom: 5px;
+    }
+    .podcast-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: auto;
+    }
+    .btn-podcast {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 7px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-podcast:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
+    }
+
     /* FIVE CRITICAL TAKEAWAYS */
     .takeaways-panel {
       background: var(--panel-bg);
@@ -875,7 +994,84 @@
 
     </div>
 
-    <!-- THE FIVE CORE DEMANDS / TAKEAWAYS -->
+    <!-- FEATURED SUSTAINABLE(ISH) PODCAST CONVERSATIONS -->
+    <div class="podcast-panel">
+      <div class="podcast-header">
+        <div>
+          <div class="podcast-title">
+            <span>🎧</span> In-Depth Conversations: Jen Gale's Sustainable(ish) Podcast
+          </div>
+          <div class="podcast-intro" style="margin-top: 4px;">
+            Extended, candid audio discussions delving into the genesis of the National Emergency Briefing, breaking through climate silence, and mobilizing clinical and civic action. Hosted by environmental author &amp; campaigner <strong>Jen Gale</strong>.
+          </div>
+        </div>
+        <a href="https://www.asustainablelife.co.uk/the-sustainableish-podcast/" target="_blank" rel="noopener noreferrer" class="btn-podcast" style="font-size: 0.8rem; padding: 6px 12px;">
+          🎙️ All Sustainable(ish) Episodes
+        </a>
+      </div>
+
+      <div class="podcast-grid">
+        <!-- Episode 186: Nick Oldridge -->
+        <div class="podcast-card">
+          <div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+              <span class="podcast-ep-tag">Episode 186 · Inside The Briefing</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">54 mins</span>
+            </div>
+            <div class="podcast-card-title">
+              The National Emergency Briefing with Nick Oldridge
+            </div>
+            <div class="podcast-card-guest">
+              <strong>Guest: Nick Oldridge</strong> — Co-Founder, <em>National Emergency Briefing</em> &amp; Founder, <em>Climate Science Breakthrough</em>
+            </div>
+            <div class="podcast-card-desc" style="margin-top: 10px;">
+              Jen Gale speaks with Nick Oldridge about the urgent catalyst that led to convening the National Emergency Briefing at Westminster Central Hall:
+              <ul>
+                <li><strong>The COVID Precedent:</strong> Why the emergency response requires daily, televised chief-scientist briefings modeled on pandemic communication—cutting through political evasion with unvarnished data.</li>
+                <li><strong>Climate Science Translated:</strong> Partnering world-leading climate scientists with top comedians (including Jonathan Pie, Nish Kumar, and Jo Brand) to strip away jargon, expose absurdities, and engage millions of ordinary citizens.</li>
+                <li><strong>The People's Emergency Briefing:</strong> Equipping community groups, workplaces, faith organizations, and schools to host local watch parties and demand emergency cross-party governance.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="podcast-footer">
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Hosted by Jen Gale</span>
+            <a href="https://www.asustainablelife.co.uk/the-sustainableish-podcast/" target="_blank" rel="noopener noreferrer" class="btn-podcast">
+              ▶️ Listen to Episode 186
+            </a>
+          </div>
+        </div>
+
+        <!-- Episode 203: Prof. Hugh Montgomery OBE -->
+        <div class="podcast-card">
+          <div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+              <span class="podcast-ep-tag" style="color: #f43f5e; background: rgba(244, 63, 94, 0.12); border-color: rgba(244, 63, 94, 0.3);">Episode 203 · Clinical Realities</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">58 mins</span>
+            </div>
+            <div class="podcast-card-title">
+              7 Acts to Save the World with Prof. Hugh Montgomery
+            </div>
+            <div class="podcast-card-guest">
+              <strong>Guest: Prof. Hugh Montgomery OBE</strong> — Professor of Intensive Care Medicine at UCL; Co-Chair, <em>The Lancet Countdown on Health &amp; Climate Change</em>
+            </div>
+            <div class="podcast-card-desc" style="margin-top: 10px;">
+              A bracing, compassionate masterclass connecting acute medicine, human bodily limits, and seven high-impact levers to break climate paralysis:
+              <ul>
+                <li><strong>The Physiology of Extreme Heat:</strong> What happens inside human organs when wet-bulb temperatures exceed thermal limits, and why ICU beds cannot cope with compounding heatwaves.</li>
+                <li><strong>Dispelling Climate Anxiety:</strong> Converting existential dread and guilt into collective, razor-sharp purpose and courage.</li>
+                <li><strong>The 7 Systemic Acts:</strong> From switching personal and institutional pensions away from fossil fuel expansion, to reshaping diets, installing domestic solar/heat pumps, active democratic agitation, and community resilience.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="podcast-footer">
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Hosted by Jen Gale</span>
+            <a href="https://www.asustainablelife.co.uk/the-sustainableish-podcast/" target="_blank" rel="noopener noreferrer" class="btn-podcast" style="color: #f43f5e; border-color: rgba(244, 63, 94, 0.35); background: rgba(244, 63, 94, 0.12);">
+              ▶️ Listen to Episode 203
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="takeaways-panel">
       <div class="takeaways-title">
         <span>📋</span> The Core Demands of the National Emergency Briefing
@@ -968,3 +1164,4 @@
   </script>
 </body>
 </html>
+
