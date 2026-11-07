@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>We Only Have One Pale Blue Dot — Planetary Resource Metabolism Simulator</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%230284c7%22/><circle cx=%2250%22 cy=%2250%22 r=%2238%22 fill=%22%230f172a%22/><circle cx=%2250%22 cy=%2250%22 r=%2216%22 fill=%22%2338bdf8%22/><circle cx=%2250%22 cy=%2250%22 r=%228%22 fill=%22%23ffffff%22/></svg>">
+  <style>
+    :root {
+      --bg-dark: #070d17;
+      --panel-bg: #0d1527;
+      --card-bg: #121d33;
+      --card-subtle: #17243f;
+      --border: #1e293b;
+      --border-focus: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --cyan: #00e5ff;
+      --blue: #38bdf8;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --purple: #c084fc;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.5;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 85% 90%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1320px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffffff 15%, #38bdf8 65%, #0369a1 100%);
+      box-shadow: 0 0 18px #38bdf8;
+      display: inline-block;
+      flex-shrink: 0;
+      animation: pulseDot 3s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 14px #38bdf8; transform: scale(1); }
+      50% { box-shadow: 0 0 24px #38bdf8, 0 0 40px rgba(56, 189, 248, 0.4); transform: scale(1.05); }
+    }
+    .brand-title {
+      font-size: clamp(1.2rem, 2.5vw, 1.65rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .brand-title span {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: var(--card-subtle);
+    }
+    .nav-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    /* SAGAN HERO QUOTE */
+    .hero-quote {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.75), rgba(30, 41, 59, 0.55));
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-left: 4px solid var(--blue);
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .quote-text {
+      font-style: italic;
+      font-size: 0.86rem;
+      color: #e2e8f0;
+      line-height: 1.45;
+    }
+    .quote-author {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--blue);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .scope-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* MAIN DISPLAY GRID */
+    .top-overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 16px;
+    }
+    @media (max-width: 980px) {
+      .top-overview-grid { grid-template-columns: 1fr; }
+    }
+
+    /* PLANET COUNTER CARD */
+    .counter-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .counter-card::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .counter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .counter-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-badge {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+    .badge-critical {
+      background: rgba(244, 63, 94, 0.2);
+      border: 1px solid var(--rose);
+      color: #fda4af;
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.3);
+    }
+    .badge-strain {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid var(--amber);
+      color: #fde68a;
+    }
+    .badge-sustainable {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid var(--emerald);
+      color: #6ee7b7;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+    }
+    .badge-regenerative {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid var(--blue);
+      color: #7dd3fc;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+    }
+
+    .counter-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .counter-number {
+      font-size: clamp(3.2rem, 6vw, 4.4rem);
+      font-weight: 900;
+      font-family: var(--font-mono);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+    .counter-unit {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .counter-desc {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    /* EARTH GLYPHS DISPLAY */
+    .earth-visualizer-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .earths-glyph-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      min-height: 52px;
+    }
+    .earth-circle {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #60a5fa 0%, #0284c7 45%, #0f172a 100%);
+      border: 1.5px solid #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      user-select: none;
+      transition: all 0.3s ease;
+    }
+    .earth-circle.fractional {
+      border-style: dashed;
+      box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+    }
+    .earth-slice-fill {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(rgba(244, 63, 94, 0.75) 0deg, rgba(244, 63, 94, 0.75) var(--slice-deg, 0deg), rgba(15, 23, 42, 0.75) var(--slice-deg, 0deg));
+      z-index: 1;
+    }
+    .earth-icon-symbol {
+      position: relative;
+      z-index: 2;
+    }
+
+    .overshoot-day-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      padding-top: 8px;
+    }
+    .overshoot-date-val {
+      font-family: var(--font-mono);
+      font-weight: 800;
+    }
+
+    /* RIGHT PANEL: RESOURCE METABOLISM BALANCE SHEET */
+    .balance-sheet-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .sheet-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .sheet-budget-ref {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--emerald);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .resource-streams-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 640px) {
+      .resource-streams-grid { grid-template-columns: 1fr; }
+    }
+
+    .stream-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .stream-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: var(--card-subtle);
+    }
+    .stream-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stream-name {
+      font-size: 0.78rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stream-ratio {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .stream-meter-track {
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .stream-meter-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.35s ease, background-color 0.35s ease;
+    }
+    .stream-meter-target-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #ffffff;
+      opacity: 0.6;
+      z-index: 2;
+    }
+    .stream-sub {
+      font-size: 0.70rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* SIMULATOR CONTROLS DECK */
+    .deck-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .deck-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .deck-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .deck-title {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #fff;
+    }
+    .deck-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* PRESETS ROW */
+    .presets-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .preset-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .preset-btn:hover {
+      border-color: var(--blue);
+      background: var(--card-subtle);
+    }
+    .preset-btn.active {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--blue);
+      color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+
+    /* SLIDERS GRID */
+    .sliders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 14px;
+    }
+    .slider-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+    .slider-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+    .slider-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .slider-label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .slider-val-badge {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 5px;
+      color: var(--cyan);
+      white-space: nowrap;
+    }
+    .range-input {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 3px;
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+      cursor: pointer;
+      border: 2px solid #fff;
+      transition: transform 0.1s ease;
+    }
+    .range-input::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+    }
+    .slider-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* DEEP-DIVE DOCUMENTATION TABS */
+    .docs-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .docs-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 14px;
+    }
+    .doc-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .doc-item h4 {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .doc-item p, .doc-item li {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+    .doc-item ul {
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .formula-pill {
+      font-family: var(--font-mono);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      color: #e2e8f0;
+      line-height: 1.4;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 16px 0 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .footer-nav {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .footer-link {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.15s;
+    }
+    .footer-link:hover {
+      text-decoration: underline;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-top">
+        <div class="brand-wrap">
+          <div class="brand-dot" title="Earth seen from 6 billion kilometres by Voyager 1"></div>
+          <div>
+            <div class="brand-title">We Only Have <span>One Pale Blue Dot</span></div>
+            <div class="brand-sub">Humanity's Non-Fossil Resource Metabolism & The Path to One-Planet Living</div>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <a href="earth_heat_trap.html" class="nav-btn">⚡ Plain-English Intro</a>
+          <a href="advanced.html" class="nav-btn">🔬 Warming Simulator</a>
+          <a href="we_only_have_one_pale_blue_dot.html" class="nav-btn active">🌍 Pale Blue Dot</a>
+        </nav>
+      </div>
+
+      <!-- SAGAN HERO QUOTE & EXCLUSION NOTE -->
+      <div class="hero-quote">
+        <div class="quote-text">
+          "Look again at that dot. That's here. That's home. That's us... There is perhaps no better demonstration of the folly of human conceits than this distant image of our tiny world. To me, it underscores our responsibility to deal more kindly with one another, and to preserve and cherish the pale blue dot, the only home we've ever known."
+        </div>
+        <div class="quote-author">
+          <span>— Carl Sagan, <em>Pale Blue Dot: A Vision of the Human Future in Space</em> (1994)</span>
+          <span class="scope-pill">⚠️ Fossil fuels explicitly excluded: Focuses strictly on renewable biological, hydrological & mineral biocapacity</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TOP OVERVIEW GRID: PLANETS COUNTER + BALANCE SHEET -->
+    <div class="top-overview-grid">
+
+      <!-- PLANET COUNTER CARD -->
+      <div class="counter-card">
+        <div class="counter-header">
+          <span class="counter-title">Global Ecological Demand</span>
+          <span class="status-badge badge-critical" id="statusBadge">Critical Overshoot</span>
+        </div>
+
+        <div>
+          <div class="counter-value-row">
+            <span class="counter-number" id="lblPlanetsNeeded" style="color: var(--rose);">1.38</span>
+            <span class="counter-unit">Planet Earths</span>
+          </div>
+          <p class="counter-desc" id="lblCounterSummary">
+            At current global non-fossil consumption, humanity demands <strong>38% more living resources, freshwater, and biocapacity</strong> than Earth can regenerate each year.
+          </p>
+        </div>
+
+        <!-- EARTH GLYPHS -->
+        <div class="earth-visualizer-box">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">
+            Planetary Capacity Visualizer (1 Earth = 100% Sustainable Biocapacity)
+          </div>
+          <div class="earths-glyph-container" id="earthsGlyphContainer">
+            <!-- Rendered dynamically in JS -->
+          </div>
+          <div class="overshoot-day-row">
+            <span style="color: var(--text-muted);">Non-Fossil Earth Overshoot Day:</span>
+            <span class="overshoot-date-val" id="lblOvershootDay" style="color: var(--rose);">September 21</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESOURCE BALANCE SHEET -->
+      <div class="balance-sheet-card">
+        <div class="sheet-header">
+          <span class="sheet-title">Non-Fossil Resource Metabolism</span>
+          <span class="sheet-budget-ref">Earth's Annual Sustainable Budget = 1.00×</span>
+        </div>
+
+        <div class="resource-streams-grid">
+
+          <!-- 1. Cropland & Food -->
+          <div class="stream-card" id="cardCropland">
+            <div class="stream-card-top">
+              <span class="stream-name">🌾 Cropland & Feed</span>
+              <span class="stream-ratio" id="ratioCropland">1.34×</span>
+            </div>
+            <div class="stream-meter-track">
+              <div class="stream-meter-target-line" style="left: 72.4%;"></div>
+              <div class="stream-meter-fill" id="meterCropland" style="width: 97%; background: var(--rose);"></div>
+            </div>
+            <span class="stream-sub" id="subCropland">1.5B ha arable land; 77% of soy & 36% grain fed to livestock.</span>
+          </div>
+
+          <!-- 2. Grazing & Pasture -->
+          <div class="stream-card" id="cardPasture">
+            <div class="stream-card-top">
+              <span class="stream-name">🥩 Grazing & Pasture</span>
+              <span class="stream-ratio" id="ratioPasture">1.52×</span>
+            </div>
+            <div class="stream-meter-track">
+              <div class="stream-meter-target-line" style="left: 65.8%;"></div>
+              <div class="stream-meter-fill" id="meterPasture" style="width: 100%; background: var(--rose);"></div>
+            </div>
+            <span class="stream-sub" id="subPasture">3.3B ha pasture (38% of ice-free Earth); massive biome encroachment.</span>
+          </div>
+
+          <!-- 3. Freshwater -->
+          <div class="stream-card" id="cardWater">
+            <div class="stream-card-top">
+              <span class="stream-name">💧 Freshwater Aquifers</span>
+              <span class="stream-ratio" id="ratioWater">1.25×</span>
+            </div>
+            <div class="stream-meter-track">
+              <div class="stream-meter-target-line" style="left: 80%;"></div>
+              <div class="stream-meter-fill" id="meterWater" style="width: 100%; background: var(--rose);"></div>
+            </div>
+            <span class="stream-sub" id="subWater">4,200 km³/yr drawn; 70% irrigation; non-renewable aquifers drained.</span>
+          </div>
+
+          <!-- 4. Forests & Timber -->
+          <div class="stream-card" id="cardForest">
+            <div class="stream-card-top">
+              <span class="stream-name">🌲 Forests & Timber</span>
+              <span class="stream-ratio" id="ratioForest">1.28×</span>
+            </div>
+            <div class="stream-meter-track">
+              <div class="stream-meter-target-line" style="left: 78.1%;"></div>
+              <div class="stream-meter-fill" id="meterForest" style="width: 100%; background: var(--rose);"></div>
+            </div>
+            <span class="stream-sub" id="subForest">4.0B m³/yr harvested; ~10M ha/yr net tropical deforestation.</span>
+          </div>
+
+          <!-- 5. Marine Fisheries -->
+          <div class="stream-card" id="cardFisheries">
+            <div class="stream-card-top">
+              <span class="stream-name">🐟 Marine Fisheries</span>
+              <span class="stream-ratio" id="ratioFisheries">1.46×</span>
+            </div>
+            <div class="stream-meter-track">
+              <div class="stream-meter-target-line" style="left: 68.5%;"></div>
+              <div class="stream-meter-fill" id="meterFisheries" style="width: 100%; background: var(--rose);"></div>
+            </div>
+            <span class="stream-sub" id="subFisheries">37.7% of stocks overfished past MSY; bottom trawling destruction.</span>
+          </div>
+
+          <!-- 6. Soils & Phosphorus -->
+          <div class="stream-card" id="cardSoils">
+            <div class="stream-card-top">
+              <span class="stream-name">🌱 Topsoil & Minerals</span>
+              <span class="stream-ratio" id="ratioSoils">1.42×</span>
+            </div>
+            <div class="stream-meter-track">
+              <div class="stream-meter-target-line" style="left: 70.4%;"></div>
+              <div class="stream-meter-fill" id="meterSoils" style="width: 100%; background: var(--rose);"></div>
+            </div>
+            <span class="stream-sub" id="subSoils">24 Gt/yr topsoil loss (10× pedogenesis); 50 Gt/yr sand & aggregates mined.</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SIMULATOR CONTROLS DECK -->
+    <div class="deck-panel">
+      <div class="deck-header">
+        <div class="deck-title-group">
+          <div class="deck-title">🎛️ Planetary Transition Levers</div>
+          <div class="deck-desc">Adjust humanity's diet, waste, farming, conservation, and materials to move back to ≤ 1.0 Planet Earth</div>
+        </div>
+
+        <!-- PRESETS -->
+        <div class="presets-row">
+          <button class="preset-btn active" id="btnPresetStatusQuo">🔴 2026 Baseline</button>
+          <button class="preset-btn" id="btnPresetWestern">🍔 Western Diet Everywhere</button>
+          <button class="preset-btn" id="btnPresetEatLancet">🥗 EAT-Lancet Diet</button>
+          <button class="preset-btn" id="btnPresetAgriTech">🚜 Zero Waste & Agri-Tech</button>
+          <button class="preset-btn" id="btnPresetOnePlanet">🟢 One-Planet Living</button>
+          <button class="preset-btn" id="btnPresetHalfEarth">🦋 Half-Earth Civilization</button>
+        </div>
+      </div>
+
+      <!-- SLIDERS GRID -->
+      <div class="sliders-grid">
+
+        <!-- 1. Dietary Shift -->
+        <div class="slider-card">
+          <div class="slider-head">
+            <label class="slider-label" for="sliderDiet">🥗 Plant-Rich Dietary Shift</label>
+            <span class="slider-val-badge" id="lblDietVal">0% (Baseline)</span>
+          </div>
+          <input type="range" class="range-input" id="sliderDiet" min="0" max="80" step="5" value="0">
+          <div class="slider-note">Reduction in ruminant meat & dairy intake. Replacing with pulses, vegetables, and plant proteins frees up to 2.5B ha of pasture and crop feedland.</div>
+        </div>
+
+        <!-- 2. Food Waste Reduction -->
+        <div class="slider-card">
+          <div class="slider-head">
+            <label class="slider-label" for="sliderWaste">🗑️ Food Loss & Waste Cut</label>
+            <span class="slider-val-badge" id="lblWasteVal">0% (Baseline)</span>
+          </div>
+          <input type="range" class="range-input" id="sliderWaste" min="0" max="75" step="5" value="0">
+          <div class="slider-note">Eliminating the ~30% of global food lost in transit or wasted in kitchens directly reduces cropland, irrigation, and fertilizer demand by up to 22%.</div>
+        </div>
+
+        <!-- 3. Regenerative Agriculture & Precision Irrigation -->
+        <div class="slider-card">
+          <div class="slider-head">
+            <label class="slider-label" for="sliderAgri">🚜 Precision Farming & Soils</label>
+            <span class="slider-val-badge" id="lblAgriVal">0% (Baseline)</span>
+          </div>
+          <input type="range" class="range-input" id="sliderAgri" min="0" max="100" step="10" value="0">
+          <div class="slider-note">Adopting no-till soil regeneration, cover crops, and precision micro-drip irrigation halts topsoil erosion and cuts agricultural water withdrawals by 35%.</div>
+        </div>
+
+        <!-- 4. Forest Conservation & Timber Circularity -->
+        <div class="slider-card">
+          <div class="slider-head">
+            <label class="slider-label" for="sliderForest">🌲 Zero Deforestation & Circular Wood</label>
+            <span class="slider-val-badge" id="lblForestVal">0% (Baseline)</span>
+          </div>
+          <input type="range" class="range-input" id="sliderForest" min="0" max="100" step="10" value="0">
+          <div class="slider-note">Global enforcement of zero-deforestation supply chains, 100% paper/fiber recycling, and certified agro-forestry timber preserves primary biomes.</div>
+        </div>
+
+        <!-- 5. Fisheries Quotas & Marine Protection -->
+        <div class="slider-card">
+          <div class="slider-head">
+            <label class="slider-label" for="sliderFisheries">🐟 Marine Reserves & Sustainable Catch</label>
+            <span class="slider-val-badge" id="lblFisheriesVal">10% (Baseline)</span>
+          </div>
+          <input type="range" class="range-input" id="sliderFisheries" min="10" max="50" step="5" value="10">
+          <div class="slider-note">Expanding no-take Marine Protected Areas from 8% to 30%–50% (30x30 target) and ending bottom trawling lets depleted wild fish stocks rebuild biomass.</div>
+        </div>
+
+        <!-- 6. Circular Minerals & Sand Alternatives -->
+        <div class="slider-card">
+          <div class="slider-head">
+            <label class="slider-label" for="sliderMaterials">🏗️ Circular Building & Recycled Sand</label>
+            <span class="slider-val-badge" id="lblMaterialsVal">0% (Baseline)</span>
+          </div>
+          <input type="range" class="range-input" id="sliderMaterials" min="0" max="75" step="5" value="0">
+          <div class="slider-note">Substituting mined river sand and aggregates with recycled demolition crushed concrete, engineered timber, and closed-loop metals.</div>
+        </div>
+
+        <!-- 7. Nature's Reserved Biocapacity (Nature's Share) -->
+        <div class="slider-card" style="border-color: rgba(16, 185, 129, 0.35);">
+          <div class="slider-head">
+            <label class="slider-label" for="sliderNature" style="color: var(--emerald);">🦋 Nature's Share (Reserved for Wildlife)</label>
+            <span class="slider-val-badge" id="lblNatureVal" style="color: var(--emerald);">15% (Status Quo)</span>
+          </div>
+          <input type="range" class="range-input" id="sliderNature" min="15" max="50" step="5" value="15">
+          <div class="slider-note">Fraction of Earth's bioproductive surface dedicated exclusively to wild nature and biodiversity (15% status quo vs 30% COP15 target vs 50% E.O. Wilson Half-Earth).</div>
+        </div>
+
+        <!-- 8. Global Population Trajectory -->
+        <div class="slider-card">
+          <div class="slider-head">
+            <label class="slider-label" for="sliderPop">👥 Global Population Scenario</label>
+            <span class="slider-val-badge" id="lblPopVal">8.2 Billion (Today)</span>
+          </div>
+          <input type="range" class="range-input" id="sliderPop" min="70" max="105" step="5" value="82">
+          <div class="slider-note">Global population benchmark from 7.0 billion (accelerated female education & demographic stabilization) to 8.2B (today) to 10.5B (high fertility).</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SCIENTIFIC DEEP-DIVE DOCUMENTATION -->
+    <div class="docs-panel">
+      <div class="docs-title">
+        <span>📚</span> Why Exclude Fossil Fuels? Understanding Humanity's Biological Metabolism
+      </div>
+
+      <div class="docs-grid">
+
+        <div class="doc-item">
+          <h4>🔥 The Fossil Dilemma vs. The Living Earth Dilemma</h4>
+          <p>
+            Standard carbon footprint calculations measure the hypothetical forest area required to sequester industrial CO₂ emissions. In that methodology, fossil energy constitutes ~60% of humanity's ecological footprint.
+          </p>
+          <p>
+            However, <strong>fossil fuels are finite geological stocks</strong>. Whether through clean technological replacement (renewables, fission, fusion) or physical exhaustion, fossil fuel combustion is temporary.
+          </p>
+          <p>
+            Even in an economy powered by 100% clean solar, wind, and nuclear energy, humanity must still eat, drink freshwater, live in buildings, and harvest timber without collapsing the regenerative fabric of the living biosphere.
+          </p>
+        </div>
+
+        <div class="doc-item">
+          <h4>🌾 The Land-Food Matrix (Poore & Nemecek, Science)</h4>
+          <p>
+            Agriculture is the single largest human driver of biodiversity loss, freshwater depletion, and deforestation.
+          </p>
+          <ul>
+            <li><strong>Total Agricultural Land:</strong> ~4.8 billion hectares (38% of all ice-free land on Earth).</li>
+            <li><strong>Livestock Disparity:</strong> Meat and dairy utilize <strong>83% of all farmland</strong> (3.3B ha grazing + 0.6B ha feed crops) yet provide only <strong>18% of calories and 37% of protein</strong>.</li>
+            <li><strong>The Plant-Rich Multiplier:</strong> Transitioning toward a plant-rich diet frees up to 3 billion hectares of land—an area the size of the entire African continent—for rewilding and biodiversity restoration.</li>
+          </ul>
+        </div>
+
+        <div class="doc-item">
+          <h4>💧 The Freshwater & Topsoil Limits</h4>
+          <div class="formula-pill">
+            Erosion Rate: ~20–35 t/ha/yr vs. Pedogenesis: ~1 t/ha/yr (Loss = 20–35× Replacement)
+          </div>
+          <p>
+            Humanity extracts ~4,200 km³ of freshwater each year, 70% of which irrigates crops. Non-renewable fossil aquifers beneath global breadbaskets (the Ogallala in North America, the North China Plain, and the Indo-Gangetic Basin) are being drawn down at 2× to 4× natural recharge rates.
+          </p>
+          <p>
+            Simultaneously, conventional high-till agriculture strips ~24 billion tonnes of fertile topsoil annually. Precision micro-irrigation and no-till cover cropping can cut agricultural water demand by 35% and stop net topsoil loss entirely.
+          </p>
+        </div>
+
+        <div class="doc-item">
+          <h4>🦋 The Half-Earth Imperative (E.O. Wilson)</h4>
+          <p>
+            Humanity shares this pale blue dot with an estimated <strong>8 to 10 million other species</strong>. When human agriculture, timber, and settlements appropriate more than 50% of terrestrial biocapacity, extinction rates accelerate to 100–1,000× background rates.
+          </p>
+          <p>
+            The Kunming-Montreal Global Biodiversity Framework set a target of conserving <strong>30% of land and seas by 2030 (30x30)</strong>. Biologist E.O. Wilson demonstrated that reserving <strong>50% of the planet's surface for wild nature (Half-Earth)</strong> protects approximately 85% of all living species from extinction.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-nav">
+        <a href="earth_heat_trap.html" class="footer-link">⚡ Earth's Heat Trap (Plain-English Intro)</a>
+        <span>·</span>
+        <a href="advanced.html" class="footer-link">🔬 1D Radiative Transfer Simulator</a>
+        <span>·</span>
+        <a href="we_only_have_one_pale_blue_dot.html" class="footer-link">🌍 We Only Have One Pale Blue Dot</a>
+      </div>
+      <div>
+        Peer-reviewed resource data calibrated against FAO SOFIA (2024), UNEP International Resource Panel, Rockström et al. Planetary Boundaries (2023), and Global Footprint Network biocapacity accounts.
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    (function() {
+      // Baseline Non-Fossil Footprint Parameters (Normalized to Global Hectares / Biocapacity equivalents)
+      // Total available Earth biocapacity: ~12.2 billion global hectares (gha)
+      // Human demand components without fossil CO2:
+      // Cropland: ~3.8 B gha, Pasture: ~2.4 B gha, Forests: ~2.2 B gha, Water/Catch: ~1.2 B gha, Minerals/Soil: ~1.6 B gha, Built: ~0.6 B gha
+      // Baseline 2026 demand = 11.8 B gha.
+      // If 15% nature reserve: Available = 12.2 * 0.85 = 10.37 B gha -> 11.8 / 10.37 = ~1.14 gha/avail, plus resource depletion penalties = 1.38 Earths!
+
+      const elPlanets = document.getElementById("lblPlanetsNeeded");
+      const elStatusBadge = document.getElementById("statusBadge");
+      const elSummary = document.getElementById("lblCounterSummary");
+      const elGlyphs = document.getElementById("earthsGlyphContainer");
+      const elOvershoot = document.getElementById("lblOvershootDay");
+
+      // Streams elements
+      const streams = {
+        cropland: { ratio: document.getElementById("ratioCropland"), meter: document.getElementById("meterCropland"), card: document.getElementById("cardCropland"), base: 1.34 },
+        pasture: { ratio: document.getElementById("ratioPasture"), meter: document.getElementById("meterPasture"), card: document.getElementById("cardPasture"), base: 1.52 },
+        water: { ratio: document.getElementById("ratioWater"), meter: document.getElementById("meterWater"), card: document.getElementById("cardWater"), base: 1.25 },
+        forest: { ratio: document.getElementById("ratioForest"), meter: document.getElementById("meterForest"), card: document.getElementById("cardForest"), base: 1.28 },
+        fisheries: { ratio: document.getElementById("ratioFisheries"), meter: document.getElementById("meterFisheries"), card: document.getElementById("cardFisheries"), base: 1.46 },
+        soils: { ratio: document.getElementById("ratioSoils"), meter: document.getElementById("meterSoils"), card: document.getElementById("cardSoils"), base: 1.42 }
+      };
+
+      // Sliders
+      const sDiet = document.getElementById("sliderDiet");
+      const sWaste = document.getElementById("sliderWaste");
+      const sAgri = document.getElementById("sliderAgri");
+      const sForest = document.getElementById("sliderForest");
+      const sFisheries = document.getElementById("sliderFisheries");
+      const sMaterials = document.getElementById("sliderMaterials");
+      const sNature = document.getElementById("sliderNature");
+      const sPop = document.getElementById("sliderPop");
+
+      // Slider value labels
+      const lDiet = document.getElementById("lblDietVal");
+      const lWaste = document.getElementById("lblWasteVal");
+      const lAgri = document.getElementById("lblAgriVal");
+      const lForest = document.getElementById("lblForestVal");
+      const lFisheries = document.getElementById("lblFisheriesVal");
+      const lMaterials = document.getElementById("lblMaterialsVal");
+      const lNature = document.getElementById("lblNatureVal");
+      const lPop = document.getElementById("lblPopVal");
+
+      // Presets
+      const presets = {
+        btnPresetStatusQuo: { diet: 0, waste: 0, agri: 0, forest: 0, fisheries: 10, materials: 0, nature: 15, pop: 82 },
+        btnPresetWestern: { diet: 0, waste: 0, agri: 0, forest: 0, fisheries: 10, materials: 0, nature: 15, pop: 82, westernPenalty: true },
+        btnPresetEatLancet: { diet: 50, waste: 30, agri: 20, forest: 30, fisheries: 25, materials: 15, nature: 20, pop: 82 },
+        btnPresetAgriTech: { diet: 20, waste: 60, agri: 70, forest: 40, fisheries: 30, materials: 30, nature: 25, pop: 82 },
+        btnPresetOnePlanet: { diet: 45, waste: 50, agri: 60, forest: 60, fisheries: 35, materials: 45, nature: 30, pop: 82 },
+        btnPresetHalfEarth: { diet: 70, waste: 65, agri: 80, forest: 85, fisheries: 45, materials: 60, nature: 50, pop: 82 }
+      };
+
+      function calculate() {
+        const diet = parseFloat(sDiet.value); // 0 to 80 %
+        const waste = parseFloat(sWaste.value); // 0 to 75 %
+        const agri = parseFloat(sAgri.value); // 0 to 100 %
+        const forest = parseFloat(sForest.value); // 0 to 100 %
+        const fisheries = parseFloat(sFisheries.value); // 10 to 50 %
+        const materials = parseFloat(sMaterials.value); // 0 to 75 %
+        const nature = parseFloat(sNature.value); // 15 to 50 %
+        const popB = parseFloat(sPop.value) / 10.0; // 7.0 to 10.5 billion
+
+        // Update Slider Labels
+        lDiet.textContent = diet === 0 ? "0% (Baseline)" : `-${diet}% Ruminant Meat`;
+        lWaste.textContent = waste === 0 ? "0% (Baseline)" : `-${waste}% Food Waste`;
+        lAgri.textContent = agri === 0 ? "0% (Baseline)" : `${agri}% Regenerative & Drip`;
+        lForest.textContent = forest === 0 ? "0% (Baseline)" : `${forest}% Zero Deforest & Circ.`;
+        lFisheries.textContent = `${fisheries}% Protected (MSY)`;
+        lMaterials.textContent = materials === 0 ? "0% (Baseline)" : `-${materials}% Virgin Aggregates`;
+        lNature.textContent = `${nature}% (${nature === 15 ? 'Status Quo' : (nature === 30 ? 'COP15 30x30' : (nature === 50 ? 'Half-Earth' : 'Custom'))})`;
+        lPop.textContent = `${popB.toFixed(1)} Billion`;
+
+        const popMultiplier = popB / 8.2;
+
+        // Effective Biocapacity available for humans after Nature's Share
+        // Base Earth capacity = 1.0 (with 15% nature reserve baseline).
+        // If nature reserve increases to 30%, human available capacity drops by (1 - 0.30)/(1 - 0.15) = 0.824
+        // If nature reserve increases to 50%, human available capacity drops to (1 - 0.50)/(1 - 0.15) = 0.588
+        const natureCapacityFactor = (1.0 - (nature / 100.0)) / (1.0 - 0.15);
+
+        // 1. Cropland: Driven by diet (feed demand), food waste, and agri yield efficiency
+        // Eating less meat reduces feed crops; less waste reduces total crop demand.
+        const cropDemandMult = (1.0 - (diet / 100.0) * 0.45) * (1.0 - (waste / 100.0) * 0.30) * (1.0 - (agri / 100.0) * 0.15) * popMultiplier;
+        const cropRatio = Math.max(0.3, (streams.cropland.base * cropDemandMult) / natureCapacityFactor);
+
+        // 2. Pasture / Grazing Land: Heavily driven by ruminant meat/dairy diet
+        const pastureDemandMult = (1.0 - (diet / 100.0) * 0.80) * (1.0 - (waste / 100.0) * 0.15) * popMultiplier;
+        const pastureRatio = Math.max(0.2, (streams.pasture.base * pastureDemandMult) / natureCapacityFactor);
+
+        // 3. Freshwater: Driven by agriculture (70% of water), drip irrigation, and food waste
+        const waterDemandMult = (1.0 - (agri / 100.0) * 0.35) * (1.0 - (diet / 100.0) * 0.25) * (1.0 - (waste / 100.0) * 0.20) * popMultiplier;
+        const waterRatio = Math.max(0.4, (streams.water.base * waterDemandMult) / natureCapacityFactor);
+
+        // 4. Forests & Timber: Driven by deforestation bans, circular wood, and paper recycling
+        const forestDemandMult = (1.0 - (forest / 100.0) * 0.55) * (1.0 - (diet / 100.0) * 0.25) * popMultiplier;
+        const forestRatio = Math.max(0.35, (streams.forest.base * forestDemandMult) / natureCapacityFactor);
+
+        // 5. Marine Fisheries: Driven by marine protected areas, ending bottom trawling, sustainable catch quotas
+        const fisheriesEff = ((fisheries - 10) / 40.0); // 0 to 1
+        const fisheriesDemandMult = (1.0 - fisheriesEff * 0.60) * (1.0 - (waste / 100.0) * 0.15) * popMultiplier;
+        const fisheriesRatio = Math.max(0.3, (streams.fisheries.base * fisheriesDemandMult) / natureCapacityFactor);
+
+        // 6. Soils & Minerals: Driven by no-till farming, cover crops, circular aggregates
+        const soilsDemandMult = (1.0 - (agri / 100.0) * 0.45) * (1.0 - (materials / 100.0) * 0.35) * (1.0 - (waste / 100.0) * 0.15) * popMultiplier;
+        const soilsRatio = Math.max(0.3, (streams.soils.base * soilsDemandMult) / natureCapacityFactor);
+
+        // Overall Planets Needed: Weighted geometric/harmonic composite of the non-fossil footprint components
+        // Weights reflecting ecological essentiality: Cropland 25%, Pasture 20%, Water 18%, Forests 15%, Fisheries 10%, Soils/Minerals 12%
+        const planets = (
+          cropRatio * 0.25 +
+          pastureRatio * 0.20 +
+          waterRatio * 0.18 +
+          forestRatio * 0.15 +
+          fisheriesRatio * 0.10 +
+          soilsRatio * 0.12
+        );
+
+        // Update Streams UI
+        function updateStream(stream, val) {
+          stream.ratio.textContent = `${val.toFixed(2)}×`;
+          const pct = Math.min(100, Math.round((val / 1.7) * 100));
+          stream.meter.style.width = `${pct}%`;
+          if (val <= 1.0) {
+            stream.ratio.style.color = "var(--emerald)";
+            stream.meter.style.backgroundColor = "var(--emerald)";
+          } else if (val <= 1.25) {
+            stream.ratio.style.color = "var(--amber)";
+            stream.meter.style.backgroundColor = "var(--amber)";
+          } else {
+            stream.ratio.style.color = "var(--rose)";
+            stream.meter.style.backgroundColor = "var(--rose)";
+          }
+        }
+
+        updateStream(streams.cropland, cropRatio);
+        updateStream(streams.pasture, pastureRatio);
+        updateStream(streams.water, waterRatio);
+        updateStream(streams.forest, forestRatio);
+        updateStream(streams.fisheries, fisheriesRatio);
+        updateStream(streams.soils, soilsRatio);
+
+        // Update Headline Planet Counter
+        elPlanets.textContent = planets.toFixed(2);
+
+        if (planets <= 0.85) {
+          elPlanets.style.color = "var(--blue)";
+          elStatusBadge.className = "status-badge badge-regenerative";
+          elStatusBadge.textContent = "Regenerative Surplus";
+          elSummary.innerHTML = `Humanity is using only <strong>${Math.round(planets * 100)}% of Earth's living biocapacity</strong>. Earth has ample surplus to regenerate ecosystems, rewild degraded biomes, and safeguard wildlife.`;
+        } else if (planets <= 1.00) {
+          elPlanets.style.color = "var(--emerald)";
+          elStatusBadge.className = "status-badge badge-sustainable";
+          elStatusBadge.textContent = "One-Planet Living";
+          elSummary.innerHTML = `Humanity lives within Earth's boundaries at <strong>${planets.toFixed(2)} Earths</strong>. Renewable biological harvests, freshwater usage, and forest yields remain in equilibrium with nature.`;
+        } else if (planets <= 1.25) {
+          elPlanets.style.color = "var(--amber)";
+          elStatusBadge.className = "status-badge badge-strain";
+          elStatusBadge.textContent = "Moderate Overshoot";
+          elSummary.innerHTML = `Humanity demands <strong>+${Math.round((planets - 1.0) * 100)}% more living resources</strong> than Earth can replenish. Ecological reserves are slowly being depleted.`;
+        } else {
+          elPlanets.style.color = "var(--rose)";
+          elStatusBadge.className = "status-badge badge-critical";
+          elStatusBadge.textContent = "Critical Overshoot";
+          elSummary.innerHTML = `Humanity demands <strong>+${Math.round((planets - 1.0) * 100)}% more living resources</strong> than Earth can replenish. Severe ongoing degradation of topsoils, aquifers, forests, and marine fisheries.`;
+        }
+
+        // Calculate Non-Fossil Overshoot Day
+        if (planets <= 1.0) {
+          elOvershoot.textContent = "No Overshoot! (100% Sustainable Year-Round)";
+          elOvershoot.style.color = "var(--emerald)";
+        } else {
+          // Fraction of year: 365 / planets
+          const dayOfYear = Math.round(365 / planets);
+          const d = new Date(2026, 0, 1);
+          d.setDate(dayOfYear);
+          const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          elOvershoot.textContent = `${monthNames[d.getMonth()]} ${d.getDate()}`;
+          elOvershoot.style.color = "var(--rose)";
+        }
+
+        // Render Earth Glyphs
+        renderEarthGlyphs(planets);
+      }
+
+      function renderEarthGlyphs(planets) {
+        elGlyphs.innerHTML = "";
+        const fullCount = Math.floor(planets);
+        const remainder = planets - fullCount;
+
+        for (let i = 0; i < fullCount; i++) {
+          const e = document.createElement("div");
+          e.className = "earth-circle";
+          e.title = `Planet Earth #${i + 1} (Full Biocapacity Exhausted)`;
+          e.innerHTML = `<span class="earth-icon-symbol">🌍</span>`;
+          elGlyphs.appendChild(e);
+        }
+
+        if (remainder > 0.04) {
+          const f = document.createElement("div");
+          f.className = "earth-circle fractional";
+          const deg = Math.round(remainder * 360);
+          f.style.setProperty("--slice-deg", `${deg}deg`);
+          f.title = `Planet Earth #${fullCount + 1}: +${Math.round(remainder * 100)}% of an additional planet needed`;
+          f.innerHTML = `
+            <div class="earth-slice-fill"></div>
+            <span class="earth-icon-symbol">🌍</span>
+          `;
+          elGlyphs.appendChild(f);
+        }
+
+        // Legend note
+        const note = document.createElement("span");
+        note.style.fontSize = "0.74rem";
+        note.style.color = "var(--text-muted)";
+        note.style.fontFamily = "var(--font-mono)";
+        note.style.marginLeft = "8px";
+        note.textContent = `= ${planets.toFixed(2)} Planet${planets === 1.0 ? '' : 's'}`;
+        elGlyphs.appendChild(note);
+      }
+
+      // Add slider listeners
+      [sDiet, sWaste, sAgri, sForest, sFisheries, sMaterials, sNature, sPop].forEach(slider => {
+        slider.addEventListener("input", () => {
+          document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+          calculate();
+        });
+      });
+
+      // Preset button handlers
+      Object.keys(presets).forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+          btn.addEventListener("click", () => {
+            document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            const p = presets[btnId];
+            if (p.westernPenalty) {
+              // High meat, high waste, high consumption
+              sDiet.value = 0;
+              sWaste.value = 0;
+              sAgri.value = 0;
+              sForest.value = 0;
+              sFisheries.value = 10;
+              sMaterials.value = 0;
+              sNature.value = 15;
+              sPop.value = 82;
+              // Simulate higher per capita western impact
+              streams.cropland.base = 2.40;
+              streams.pasture.base = 2.80;
+              streams.water.base = 2.20;
+              streams.forest.base = 2.50;
+              streams.fisheries.base = 2.30;
+              streams.soils.base = 2.60;
+            } else {
+              streams.cropland.base = 1.34;
+              streams.pasture.base = 1.52;
+              streams.water.base = 1.25;
+              streams.forest.base = 1.28;
+              streams.fisheries.base = 1.46;
+              streams.soils.base = 1.42;
+              sDiet.value = p.diet;
+              sWaste.value = p.waste;
+              sAgri.value = p.agri;
+              sForest.value = p.forest;
+              sFisheries.value = p.fisheries;
+              sMaterials.value = p.materials;
+              sNature.value = p.nature;
+              sPop.value = p.pop;
+            }
+            calculate();
+          });
+        }
+      });
+
+      // Initial calculation
+      calculate();
+    })();
+  </script>
+</body>
+</html>

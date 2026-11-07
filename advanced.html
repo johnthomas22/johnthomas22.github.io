@@ -693,25 +693,35 @@
       gap: 6px;
     }
 
-    .top-sim-row {
+    /* Simulator Mode: Left Sidebar Metrics & Radiative Flux Card */
+    .sim-stats-grid {
       display: grid;
-      grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) minmax(320px, 1.45fr);
-      gap: 12px;
-      align-items: stretch;
-      margin-bottom: 14px;
-    }
-    .stat-col {
-      display: flex;
-      flex-direction: column;
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
     }
-    .stat-col .stat-card {
-      flex: 1;
+    .sim-stats-grid .stat-card {
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 10px 14px;
+      justify-content: space-between;
     }
+    .sim-stats-grid .stat-header {
+      font-size: 0.68rem;
+    }
+    .sim-stats-grid .stat-value {
+      font-size: 1.35rem;
+      margin: 3px 0;
+    }
+    .sim-stats-grid .stat-sub {
+      font-size: 0.68rem;
+      line-height: 1.25;
+    }
+    @media (max-width: 480px) {
+      .sim-stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .radiative-flux-card {
       margin: 0;
       padding: 10px 14px;
@@ -722,7 +732,7 @@
     .flux-canvas-container {
       position: relative;
       width: 100%;
-      flex: 1;
+      height: 155px;
       min-height: 145px;
     }
     .flux-canvas-container canvas {
@@ -730,26 +740,6 @@
       inset: 0;
       width: 100%;
       height: 100%;
-    }
-    @media (max-width: 960px) {
-      .top-sim-row {
-        grid-template-columns: 1fr 1fr;
-      }
-      .radiative-flux-card {
-        grid-column: 1 / -1;
-      }
-    }
-    @media (max-width: 550px) {
-      .top-sim-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .app-wrapper.simple-mode .top-sim-row,
-    .app-wrapper.budgets-mode .top-sim-row,
-    .app-wrapper.sources-mode .top-sim-row,
-    .app-wrapper.solutions-mode .top-sim-row {
-      display: none !important;
     }
 
     .app-wrapper:not(.simple-mode) .speech-pin,
@@ -852,6 +842,14 @@
       cursor: pointer;
       font-weight: 600;
       transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.15;
+      min-height: 38px;
+      font-size: 0.69rem;
+      padding: 4px 2px;
     }
     .rate-preset-btn:hover {
       border-color: var(--cyan);
@@ -1042,6 +1040,23 @@
       text-decoration: none;
       white-space: nowrap;
     }
+    #btnZoomKeeling.chart-bottom-btn {
+      border-color: rgba(0, 229, 255, 0.45);
+      color: var(--cyan);
+      background: rgba(0, 229, 255, 0.10);
+    }
+    #btnZoomKeeling.chart-bottom-btn:hover {
+      background: rgba(0, 229, 255, 0.22);
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+      color: #fff;
+    }
+    #btnZoomKeeling.chart-bottom-btn.active {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.5);
+    }
     #btnMillionYear.chart-bottom-btn {
       border-color: rgba(0, 229, 255, 0.45);
       color: var(--cyan);
@@ -1063,7 +1078,8 @@
       box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
       color: #fff;
     }
-    .app-wrapper.simple-mode .chart-actions-bottom {
+    .app-wrapper.simple-mode .chart-actions-bottom,
+    .app-wrapper.simple-mode #btnZoomKeeling {
       display: none !important;
     }
     @media (max-width: 600px) {
@@ -1402,6 +1418,173 @@
       text-decoration: underline;
     }
 
+    /* Interactive Measured Temperature Curve Popover */
+    .measured-temp-popover {
+      display: none;
+      position: fixed;
+      z-index: 2500;
+      width: 360px;
+      max-width: calc(100vw - 24px);
+      background: #070d17;
+      border: 1.5px solid var(--amber);
+      border-radius: 9px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.95), 0 0 18px rgba(245, 158, 11, 0.28);
+      pointer-events: auto;
+    }
+    .measured-temp-popover .mt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.35);
+      padding-bottom: 5px;
+    }
+    .measured-temp-popover .mt-title {
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .measured-temp-popover .mt-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .measured-temp-popover .mt-close:hover {
+      color: #fff;
+    }
+    .measured-temp-popover .mt-stats {
+      font-family: ui-monospace, monospace;
+      font-size: 0.76rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 5px;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+    }
+    .measured-temp-popover .mt-note {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-bottom: 9px;
+      line-height: 1.4;
+    }
+    .measured-temp-popover .mt-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      justify-content: center;
+      padding: 6px 10px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1.2px solid var(--amber);
+      color: #fbbf24;
+      font-weight: 700;
+      font-size: 0.76rem;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .measured-temp-popover .mt-link-btn:hover {
+      background: var(--amber);
+      color: #000;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+    }
+
+    /* Interactive 350 ppm Safe Level Popover */
+    .safe-350-popover {
+      display: none;
+      position: fixed;
+      z-index: 2500;
+      width: 365px;
+      max-width: calc(100vw - 24px);
+      background: #061510;
+      border: 1.5px solid #10b981;
+      border-radius: 9px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.95), 0 0 18px rgba(16, 185, 129, 0.28);
+      pointer-events: auto;
+    }
+    .safe-350-popover .s350-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(16, 185, 129, 0.35);
+      padding-bottom: 5px;
+    }
+    .safe-350-popover .s350-title {
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .safe-350-popover .s350-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .safe-350-popover .s350-close:hover {
+      color: #fff;
+    }
+    .safe-350-popover .s350-stats {
+      font-family: ui-monospace, monospace;
+      font-size: 0.76rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      border-radius: 5px;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+    }
+    .safe-350-popover .s350-note {
+      font-size: 0.73rem;
+      color: #cbd5e1;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .safe-350-popover .s350-link-btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #34d399;
+      font-weight: 700;
+      font-size: 0.76rem;
+      padding: 7px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .safe-350-popover .s350-link-btn:hover {
+      background: #10b981;
+      color: #042f2e;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.45);
+    }
+
     /* Modal Documentation & Tabs */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88);
@@ -1419,9 +1602,62 @@
       display: flex; justify-content: space-between; align-items: center;
     }
     .modal-title { font-size: 1.15rem; font-weight: 700; color: var(--cyan); }
+    .modal-nav-bar {
+      display: flex;
+      background: #080d19;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 18px;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-nav-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .modal-nav-info strong {
+      color: var(--cyan);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .btn-toggle-modal-nav {
+      background: rgba(0, 229, 255, 0.12);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      color: var(--cyan);
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-toggle-modal-nav:hover {
+      background: var(--cyan);
+      color: #000;
+    }
     .modal-nav {
       display: flex; flex-wrap: wrap; background: #080d1a; border-bottom: 1px solid var(--border);
       padding: 8px 16px; gap: 8px;
+      transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.2s ease;
+      max-height: 600px;
+      opacity: 1;
+      overflow: hidden;
+    }
+    .modal-nav.collapsed {
+      max-height: 0 !important;
+      opacity: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      border-bottom: none !important;
+      pointer-events: none;
     }
     .modal-tab-btn {
       background: var(--card-inner); border: 1px solid var(--border); color: var(--text-muted);
@@ -1594,7 +1830,10 @@
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
         </div>
-        <button class="btn-modal" id="openModalBtn">📖 Guide & Proofs</button>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <a href="we_only_have_one_pale_blue_dot.html" class="btn btn-secondary" style="font-size: 0.78rem; padding: 6px 12px; text-decoration: none; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);" title="We Only Have One Pale Blue Dot (Resource Overshoot Simulator)">🌍 Pale Blue Dot</a>
+          <button class="btn-modal" id="openModalBtn">📖 Guide & Proofs</button>
+        </div>
       </div>
       <div class="header-nav-row">
         <div class="mode-switch-group" role="group" aria-label="View Mode">
@@ -1603,6 +1842,7 @@
           <button class="mode-switch-btn" id="btnModeBudgets">🛢️ Carbon Budgets</button>
           <button class="mode-switch-btn" id="btnModeSources">🏭 Greenhouse Gas Sources</button>
           <button class="mode-switch-btn" id="btnModeSolutions">💡 Energy Solutions</button>
+          <a href="we_only_have_one_pale_blue_dot.html" class="mode-switch-btn" style="text-decoration: none; color: #38bdf8;" title="We Only Have One Pale Blue Dot — Resource Overshoot Simulator">🌍 Pale Blue Dot</a>
         </div>
       </div>
     </header>
@@ -1628,45 +1868,6 @@
         </div>
         <button class="btn btn-start" id="btnIntroPlayPause" style="padding: 6px 12px;">▶ Start</button>
         <button class="btn btn-secondary" id="btnIntroReset2026" style="padding: 6px 10px;">↺ Restart (1958)</button>
-      </div>
-    </div>
-
-    <!-- Advanced Simulator Mode: Top Metrics & Radiative Flux Strip -->
-    <div class="top-sim-row">
-      <div class="stat-col">
-        <div class="stat-card">
-          <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber has-tooltip" data-tooltip="Absorbed Solar Radiation (ASR): Sunlight absorbed by Earth after reflection from clouds and surface albedo (~239 W/m²)" title="Absorbed Solar Radiation (ASR)">ASR</span></div>
-          <div class="stat-value" id="valASR" style="color: var(--amber);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-          <div class="stat-sub">Sunlight absorbed post-albedo (~30%)</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald has-tooltip" id="badgeEEI" data-tooltip="Earth's Energy Imbalance (EEI = ASR − OLR): Net heating or cooling rate driving global warming" title="Earth's Energy Imbalance (EEI)">Balanced</span></div>
-          <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-          <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
-        </div>
-      </div>
-
-      <div class="stat-col">
-        <div class="stat-card">
-          <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan has-tooltip" data-tooltip="Outbound Longwave Radiation / Infrared (OLR): Thermal heat emitted upward from Earth and its atmosphere out to space" title="Outbound Longwave Radiation / Infrared (OLR)">OLR</span></div>
-          <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
-          <div class="stat-sub" id="subOLR">Escaping at <abbr class="has-tooltip" data-tooltip="Top of Atmosphere (~100 km boundary where heat radiates into space)" title="Top of Atmosphere">TOA</abbr> · Δ: 0.0 W/m²</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header"><span>Warming (1750 Baseline)</span><span class="badge badge-rose has-tooltip" data-tooltip="Surface temperature anomaly relative to the 1750 pre-industrial baseline" title="Surface Warming (1750 Baseline)">ΔT</span></div>
-          <div class="stat-value" id="valDeltaT" style="color: var(--rose);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">°C</span></div>
-          <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (-0.12 °C rel. 1850–1900)</div>
-        </div>
-      </div>
-
-      <div class="card radiative-flux-card" id="radiativeFluxCard">
-        <div class="card-title-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-          <div class="card-title" style="margin-bottom: 0; font-size: 0.78rem;">How Heat Escapes into Space</div>
-          <span class="badge badge-cyan" id="fluxZeffBadge" style="font-size: 0.68rem;">Escape Height: ~5,200m</span>
-        </div>
-        <div class="flux-canvas-container">
-          <canvas id="fluxCanvas"></canvas>
-        </div>
       </div>
     </div>
 
@@ -1749,11 +1950,12 @@
                   <span class="pip-label">+4</span>
                 </div>
               </div>
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 4px;">
-                <button class="btn btn-secondary rate-preset-btn" id="ratePresetM1" style="font-size: 0.70rem; padding: 6px 2px;" title="Drawdown 1.5 ppm/yr">-1.5 ppm/yr</button>
-                <button class="btn btn-secondary rate-preset-btn" id="ratePreset0" style="font-size: 0.70rem; padding: 6px 2px;" title="Net Zero (0.0 ppm/yr) — any carbon emitted is removed">Net Zero</button>
-                <button class="btn btn-secondary rate-preset-btn" id="ratePreset15" style="font-size: 0.70rem; padding: 6px 2px;" title="Mid 20th Century 1.5 ppm/yr">+1.5 ppm/yr</button>
-                <button class="btn btn-secondary rate-preset-btn active" id="ratePreset25" style="font-size: 0.70rem; padding: 6px 2px;" title="Today, 2.5 ppm/yr">+2.5 ppm/yr</button>
+              <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 6px;">
+                <button class="btn btn-secondary rate-preset-btn" id="ratePresetM1" title="Drawdown 1.5 ppm/yr">-1.5 ppm/yr</button>
+                <button class="btn btn-secondary rate-preset-btn" id="ratePreset0" title="Net Zero overnight (0.0 ppm/yr) from 2026">0.0 (Instant)</button>
+                <button class="btn btn-secondary rate-preset-btn" id="ratePresetNZ50" title="IPCC Paris Agreement Target: Smooth ramp down from +2.5 ppm/yr today to 0.0 ppm/yr (Net Zero) by 2050">Net Zero by 2050</button>
+                <button class="btn btn-secondary rate-preset-btn" id="ratePreset15" title="Mid 20th Century 1.5 ppm/yr">+1.5 ppm/yr</button>
+                <button class="btn btn-secondary rate-preset-btn active" id="ratePreset25" title="Today, 2.5 ppm/yr">+2.5 ppm/yr</button>
               </div>
             </div>
           </div>
@@ -1761,6 +1963,41 @@
           <div class="sim-controls-row">
             <button class="btn btn-start" id="btnPlayPause">▶ Start Simulation</button>
             <button class="btn btn-secondary" id="btnReset">↺ Reset</button>
+          </div>
+        </div>
+
+        <!-- Energy Imbalance & Warming Metrics -->
+        <div class="sim-stats-grid">
+          <div class="stat-card">
+            <div class="stat-header"><span>Inbound Solar</span><span class="badge badge-amber has-tooltip" data-tooltip="Absorbed Solar Radiation (ASR): Sunlight absorbed by Earth after reflection from clouds and surface albedo (~239 W/m²)" title="Absorbed Solar Radiation (ASR)">ASR</span></div>
+            <div class="stat-value" id="valASR" style="color: var(--amber);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+            <div class="stat-sub">Sunlight absorbed post-albedo (~30%)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><span>Outbound Thermal</span><span class="badge badge-cyan has-tooltip" data-tooltip="Outbound Longwave Radiation / Infrared (OLR): Thermal heat emitted upward from Earth and its atmosphere out to space" title="Outbound Longwave Radiation / Infrared (OLR)">OLR</span></div>
+            <div class="stat-value" id="valOLR" style="color: var(--cyan);">239.0 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+            <div class="stat-sub" id="subOLR">Escaping at <abbr class="has-tooltip" data-tooltip="Top of Atmosphere (~100 km boundary where heat radiates into space)" title="Top of Atmosphere">TOA</abbr> · Δ: 0.0 W/m²</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><span>Net Imbalance</span><span class="badge badge-emerald has-tooltip" id="badgeEEI" data-tooltip="Earth's Energy Imbalance (EEI = ASR − OLR): Net heating or cooling rate driving global warming" title="Earth's Energy Imbalance (EEI)">Balanced</span></div>
+            <div class="stat-value" id="valEEI" style="color: var(--emerald);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">W/m²</span></div>
+            <div class="stat-sub" id="subEEI">Steady radiative equilibrium</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><span>Warming (1750)</span><span class="badge badge-rose has-tooltip" data-tooltip="Surface temperature anomaly relative to the 1750 pre-industrial baseline" title="Surface Warming (1750 Baseline)">ΔT</span></div>
+            <div class="stat-value" id="valDeltaT" style="color: var(--rose);">+0.00 <span style="font-size: 0.8rem; color: var(--text-muted);">°C</span></div>
+            <div class="stat-sub" id="subDeltaT">Ts = 13.85 °C (-0.12 °C rel. 1850–1900)</div>
+          </div>
+        </div>
+
+        <!-- Radiative Flux Profile Card -->
+        <div class="card radiative-flux-card" id="radiativeFluxCard">
+          <div class="card-title-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <div class="card-title" style="margin-bottom: 0; font-size: 0.78rem;">How Heat Escapes into Space</div>
+            <span class="badge badge-cyan" id="fluxZeffBadge" style="font-size: 0.68rem;">Escape Height: ~5,200m</span>
+          </div>
+          <div class="flux-canvas-container">
+            <canvas id="fluxCanvas"></canvas>
           </div>
         </div>
 
@@ -1799,6 +2036,9 @@
 
         <!-- Action Buttons Below 500-Year Warming Chart (Side by Side) -->
         <div class="chart-actions-bottom" id="chartActionsBottom">
+          <button type="button" class="chart-bottom-btn" id="btnZoomKeeling" title="Zoom in to 1958–Today (Keeling Instrumental Era) vs. full 500-year view">
+            <span>🔎</span> <strong id="lblZoomKeeling">Zoom: 1958–Today (Keeling Era)</strong>
+          </button>
           <button type="button" class="chart-bottom-btn" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
             <span>🔍</span> 1-Million-Year Comparison
           </button>
@@ -2200,7 +2440,33 @@
                 <div class="playbook-header" role="button" tabindex="0">
                   <div class="playbook-title-wrap">
                     <span class="playbook-bullet">•</span>
-                    <strong class="playbook-title">Building Heating (17.5% of GHG)</strong>
+                    <strong class="playbook-title">Air Transport / Aviation (1.9% CO₂ · ~3.5% Net Warming)</strong>
+                  </div>
+                  <span class="playbook-badge-btn">(+)</span>
+                </div>
+                <div class="playbook-body" style="display: none;">
+                  Sustainable Aviation Fuel (SAF) via e-kerosene (green H₂ + DAC CO₂), operational contrail-avoidance flight re-routing (diverting 2,000 ft cuts contrails by >50%), and battery-electric for short-haul (&lt;500 km).
+                </div>
+              </div>
+
+              <div class="playbook-item">
+                <div class="playbook-header" role="button" tabindex="0">
+                  <div class="playbook-title-wrap">
+                    <span class="playbook-bullet">•</span>
+                    <strong class="playbook-title">Data Centres &amp; Hyperscale AI (1.0% today · doubling by 2030)</strong>
+                  </div>
+                  <span class="playbook-badge-btn">(+)</span>
+                </div>
+                <div class="playbook-body" style="display: none;">
+                  Guaranteed 24/7 Carbon-Free Energy (hourly matching, avoiding fossil gas peakers), dedicated nuclear restarts (e.g. Three Mile Island Unit 1 / Crane 835 MW; Palisades 800 MW), next-gen SMRs (Kairos, X-energy), and enhanced geothermal (Fervo Energy).
+                </div>
+              </div>
+
+              <div class="playbook-item">
+                <div class="playbook-header" role="button" tabindex="0">
+                  <div class="playbook-title-wrap">
+                    <span class="playbook-bullet">•</span>
+                    <strong class="playbook-title">Building Heating (16.5% of GHG)</strong>
                   </div>
                   <span class="playbook-badge-btn">(+)</span>
                 </div>
@@ -2640,7 +2906,18 @@
         <button id="closeModalBtn" style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">&times;</button>
       </div>
 
-      <div class="modal-nav">
+      <!-- Collapsible Chapter Navigation Bar for Mobile -->
+      <div class="modal-nav-bar" id="modalNavBar">
+        <div class="modal-nav-info">
+          <span>📖 Chapter:</span>
+          <strong id="modalActiveTabName">Table of Contents</strong>
+        </div>
+        <button type="button" class="btn-toggle-modal-nav" id="btnToggleModalNav" aria-expanded="true">
+          Chapters &#x25BE;
+        </button>
+      </div>
+
+      <div class="modal-nav" id="modalNav">
         <button class="modal-tab-btn active" data-page="page-toc">Table of Contents</button>
         <button class="modal-tab-btn" data-page="page-proofs">Page 1: Mathematical Proofs & Derivations</button>
         <button class="modal-tab-btn" data-page="page-transfer">Page 2: Radiative Transfer & Saturation Refuted</button>
@@ -2650,6 +2927,7 @@
         <button class="modal-tab-btn" data-page="page-carbon-budgets">Page 6: Carbon Budgets & Reserves</button>
         <button class="modal-tab-btn" data-page="page-sources-owid">Page 7: Emissions Sources (OWID)</button>
         <button class="modal-tab-btn" data-page="page-solutions-storage">Page 8: Solutions & Grid Storage</button>
+        <button class="modal-tab-btn" data-page="page-wind-payback">Page 9: Wind Carbon Payback (Scotland)</button>
         <button class="modal-tab-btn" data-page="page-addendum">Addendum: 2026 Warming vs. +1.5°C Breach</button>
       </div>
 
@@ -2701,7 +2979,7 @@
                   <span class="badge badge-cyan" style="margin-left: 8px;">IPCC AR6 Calibrated 2-Box EBM</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), IPCC AR6 parameter calibration, empirical verification showing how the model tracks observed warming from 1958 to today, and baseline harmonization (1750 vs. 1850–1900).
+                  Governing differential equations (Held et al. 2010; Geoffroy et al. 2013), IPCC AR6 parameter calibration, empirical verification showing how the model tracks observed warming from 1958 to today, baseline harmonization (1750 vs. 1850–1900), and why measured temperatures sat below the CO₂ prediction during mid-century aerosol masking and volcanic eruptions.
                 </div>
               </li>
               <li>
@@ -2724,20 +3002,20 @@
               </li>
               <li>
                 <a class="toc-link" data-target="page-carbon-budgets">
-                  <span>📉</span> <strong>Page 6: Global Carbon Budgets & The "Unburnable Carbon" Reality</strong>
-                  <span class="badge badge-rose" style="margin-left: 8px;">IPCC AR6 / TCRE / Paris Limits</span>
+                  <span>📉</span> <strong>Page 6: Global Carbon Budgets, "Unburnable Carbon" & The 350 ppm Safe Boundary</strong>
+                  <span class="badge badge-rose" style="margin-left: 8px;">IPCC AR6 / Hansen 350 ppm / Paris</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  The Transient Climate Response to Cumulative Emissions (TCRE ≈ 0.45 °C per 1,000 Gt CO₂), remaining carbon budgets for +1.5 °C (~200 Gt CO₂) and +2.0 °C (~1,150 Gt CO₂), translating budgets into remaining years of current extraction, and comparing finite atmospheric absorptive capacity against the ~3,400 Gt CO₂ of proven fossil reserves (the "Unburnable Carbon" paradox where >90% of reserves must stay unextracted).
+                  The Transient Climate Response to Cumulative Emissions (TCRE ≈ 0.45 °C per 1,000 Gt CO₂), remaining carbon budgets for +1.5 °C (~200 Gt CO₂) and +2.0 °C (~1,150 Gt CO₂), translating budgets into remaining years of current extraction, comparing finite atmospheric absorptive capacity against the ~3,400 Gt CO₂ of proven fossil reserves (the "Unburnable Carbon" paradox where >90% of reserves must stay unextracted), and the paleoclimate & planetary boundary justification for 350 ppm as the safe Holocene upper limit (Hansen et al. 2008, Rockström et al. 2009).
                 </div>
               </li>
                             <li>
                 <a class="toc-link" data-target="page-sources-owid">
-                  <span>🏭</span> <strong>Page 7: Global Emissions Anatomy — Sectors, Fuels & The Methane Problem (Our World in Data)</strong>
-                  <span class="badge badge-cyan" style="margin-left: 8px;">OWID / Climate Watch / GCP</span>
+                  <span>🏭</span> <strong>Page 7: Global Emissions Anatomy — Sectors, Air Transport, Data Centres & Methane (Our World in Data)</strong>
+                  <span class="badge badge-cyan" style="margin-left: 8px;">OWID / Aviation Contrails / AI Power</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Complete quantitative breakdown of global annual emissions (54.6 Gt CO₂e total, ~40.9 Gt CO₂). Analyzes the 4 primary economic sectors: Energy (73.2%), Agriculture & Land Use (AFOLU, 18.4%), Direct Industrial Processes (5.2%), and Waste (3.2%). Maps fossil fuels by source (Coal 41%, Oil 33%, Gas 21%) and pairs each emission category with its direct technological replacement. Explores the atmospheric physics of methane (CH₄): why its 84× 20-year warming potency (GWP₂₀), 11.8-year hydroxyl radical (•OH) lifetime, and +0.5 °C present warming contribution make methane abatement humanity's fastest near-term cooling brake.
+                  Complete quantitative breakdown of global annual emissions (54.6 Gt CO₂e total, ~40.9 Gt CO₂). Analyzes the 4 primary economic sectors: Energy (73.2%), Agriculture & Land Use (AFOLU, 18.4%), Direct Industrial Processes (5.2%), and Waste (3.2%). Breaks out Air Transport (1.9% CO₂, but ~3.5% of net warming due to high-altitude contrail cirrus; Lee et al. 2021) and Data Centres & Hyperscale AI computing (~460 TWh today). Evaluates the dramatic 2030 hyperscale explosion (800–1,050 TWh) under two divergent paths: with guaranteed zero-carbon power (24/7 CFE, nuclear restarts, SMRs, enhanced geothermal; <0.1 Gt) vs. without (fossil gas peaker lock-in; 1.2–1.8 Gt). Analyzes methane (CH₄) atmospheric physics, 20-year warming potency (GWP₂₀ ≈ 84×), and the 10:1 trophic calorie inefficiency of livestock.
                 </div>
               </li>
               <li>
@@ -2750,12 +3028,30 @@
                 </div>
               </li>
               <li>
+                <a class="toc-link" data-target="page-wind-payback">
+                  <span>🌬️</span> <strong>Page 9: Embodied Carbon, Civil Engineering & Payback Time — Onshore Wind in Scotland (Concrete, Roads & Peat)</strong>
+                  <span class="badge badge-cyan" style="margin-left: 8px;">Scottish Gov Carbon Calculator / Peer-Reviewed LCA</span>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  Full life-cycle carbon accounting (cradle-to-grave) for onshore wind deployed in Scotland. Details the exact engineering carbon debts per 4.2 MW turbine: concrete foundations (450–650 m³ / 1,200 tonnes concrete + 70t rebar), heavy access tracks (floating roads over peat with geogrids vs. cut-and-fill, borrow pit aggregates), and peatland carbon dynamics (drainage oxidation vs. habitat restoration). Uses the statutory Scottish Government Carbon Calculator (Nayak et al. 2008, 2010; ClimateXChange) to demonstrate empirical carbon payback times of <b>4 to 12 months</b> (up to 1.8 years on deep peat) against a 30-year operational life, yielding an EROI of 25:1 to 35:1 and lifecycle intensity of ~8–15 g CO₂e/kWh (vs. 420–490 g for gas and 820–1,050 g for coal).
+                </div>
+              </li>
+              <li>
                 <a class="toc-link" data-target="page-addendum">
                   <span>🌡️</span> <strong>Addendum: Present-Day Forced Warming (+1.26°C) vs. Headlines Reporting +1.5°C Breached</strong>
                   <span class="badge badge-amber" style="margin-left: 8px;">Climate Benchmark Clarification</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
                   Why the simulator models +1.26°C of forced warming for 2026 while news media reported 2023–2024 breached +1.5°C. Details the scientific distinction between single-year weather spikes (El Niño, solar maximum) and the multi-decadal forced climate response (IPCC AR6 standard), pre-industrial baseline differences (1750 vs. 1850–1900), and ocean heat uptake inertia.
+                </div>
+              </li>
+              <li>
+                <a href="we_only_have_one_pale_blue_dot.html" class="toc-link" style="text-decoration: none;">
+                  <span>🌍</span> <strong>Companion Simulator: We Only Have One Pale Blue Dot</strong>
+                  <span class="badge badge-cyan" style="margin-left: 8px;">Planetary Resource Metabolism</span>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  Excluding fossil fuels, how many planet Earths does humanity require to sustain our non-fossil biological, hydrological, and mineral metabolism? Explore interactive levers for diet, food waste, regenerative farming, and 30x30 nature reserves to live within One Planet.
                 </div>
               </li>
             </ul>
@@ -3054,6 +3350,58 @@
                 <strong style="color: #fff;">4. Forced Multi-Decadal Signal vs. Weather Noise:</strong> The simulator evaluates the pure deterministic thermodynamic response to greenhouse gas forcing. It does not synthesize chaotic annual weather noise—such as individual El Niño spikes (e.g. 1998, 2023–2024) or volcanic aerosol cooling dips (e.g. Mount Pinatubo in 1991). Consequently, the simulator tracks the <strong>multi-decadal running mean</strong> of the climate system, which is precisely how the IPCC, WMO, and Paris Agreement scientifically define global warming.
               </li>
             </ul>
+          </div>
+
+          <h4 id="sec-aerosol-masking" style="margin-top: 22px;">Why Measured Warming Sat Below the CO₂ Prediction (1958–1995): Aerosols, Volcanoes & The Unmasking Surge</h4>
+          <p>
+            When examining the high-resolution instrumental era (1958–2026), users frequently ask why the measured thermometer record (HadCRUT5 / Berkeley Earth) sat slightly below the pure greenhouse-gas simulation trajectory for much of the 1960s, 70s, and 80s:
+          </p>
+
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 14px 18px; margin: 14px 0;">
+            <div style="font-weight: 700; color: var(--amber); margin-bottom: 8px;">
+              🔍 Is the 1958 Starting Anchor Mathematically & Empirically Correct?
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; margin: 0 0 10px 0;">
+              <strong>Yes, it is an exact physical match:</strong> In 1958 (when Charles David Keeling began continuous flask sampling at Mauna Loa), atmospheric CO₂ was <strong>315 ppm</strong> (compared to 278 ppm pre-industrial). The Two-Layer EBM calculates an accumulated forced warming from 1750 of <strong>+0.38 °C</strong>. Relative to the standard 1850–1900 meteorological baseline (+0.12 °C above 1750), the model projects:
+            </p>
+            <div class="code-box" style="margin: 8px 0; font-size: 0.88rem;">
+              Δ<i>T</i><sub>s</sub>(1958 rel. 1850–1900) = +0.38 °C &minus; 0.12 °C = <strong>+0.26 °C</strong>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; margin: 8px 0 0 0;">
+              The measured surface temperature anomaly in HadCRUT5 for 1958 is identically <strong>+0.26 °C</strong>. Both curves start at the exact same temperature anchor.
+            </p>
+          </div>
+
+          <p>
+            The divergence observed over subsequent decades between the pure CO₂-forced trajectory and thermometer measurements is caused by three well-documented physical mechanisms:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 12px; margin: 14px 0;">
+            <div style="background: rgba(245, 158, 11, 0.04); border-left: 3px solid #f59e0b; padding: 12px 16px; border-radius: 0 8px 8px 0;">
+              <strong style="color: #f59e0b;">1. Anthropogenic Sulfate Aerosol Masking ("Global Dimming"):</strong>
+              <div style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-top: 4px;">
+                The post-WWII industrial expansion (1950s–1980s) burned vast quantities of high-sulfur coal and heavy fuel oil without flue-gas desulfurization (scrubbers). The resulting sulfur dioxide (SO₂) oxidized into reflective tropospheric sulfate aerosols (SO₄²⁻), reflecting incoming solar shortwave radiation directly and brightening clouds (the Twomey / indirect aerosol effect). According to <strong>IPCC AR6 Working Group I (Chapter 7)</strong>, peak anthropogenic aerosol effective radiative forcing reached <strong>-1.1 to -1.3 W/m²</strong> during the 1970s and 1980s—cancelling out nearly half of total greenhouse gas forcing and producing the famous mid-20th-century temperature plateau (1945–1975). Because our EBM models the pure greenhouse thermodynamic response, it shows the warming trajectory that would have occurred without dirty sulfur masking.
+              </div>
+            </div>
+
+            <div style="background: rgba(239, 68, 68, 0.04); border-left: 3px solid #ef4444; padding: 12px 16px; border-radius: 0 8px 8px 0;">
+              <strong style="color: #ef4444;">2. Volcanic Stratospheric Aerosol Eruptions:</strong>
+              <div style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-top: 4px;">
+                Major explosive volcanic eruptions periodically injected tens of millions of tonnes of SO₂ directly into the stratosphere, forming long-lived reflective haze layers that caused worldwide multi-year cooling dips:
+                <ul style="margin: 6px 0 0 16px; padding: 0;">
+                  <li><strong>Mount Agung (1963):</strong> Depressed global temperatures down to +0.06 °C to +0.07 °C in 1964–1965.</li>
+                  <li><strong>El Chichón (1982):</strong> Suppressed global temperatures to +0.21 °C to +0.24 °C in 1984–1985.</li>
+                  <li><strong>Mount Pinatubo (1991):</strong> Injected 20 Mt of SO₂, driving global temperatures down sharply to +0.31 °C in 1992–1993 despite atmospheric CO₂ surpassing 355 ppm.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.04); border-left: 3px solid #10b981; padding: 12px 16px; border-radius: 0 8px 8px 0;">
+              <strong style="color: #10b981;">3. The Unmasking Surge (1995–Present):</strong>
+              <div style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-top: 4px;">
+                Beginning in the late 1980s and 1990s, the US Clean Air Act Amendments, European UNECE protocols, and modern power-plant scrubbers drastically cut industrial SO₂ emissions to solve acid rain. As the reflective sulfate aerosol blanket washed out of the atmosphere (aerosol tropospheric lifetime is only ~1–2 weeks, whereas CO₂ persists for centuries), the "latent" greenhouse heating was rapidly unmasked. Observed temperatures accelerated sharply, catching up to and matching the pure CO₂ model projection by the 2000s and surging beyond +1.1 °C to +1.3 °C in the 2020s.
+              </div>
+            </div>
           </div>
 
           <h4 style="margin-top: 20px;">Transient Warming vs. Instant Ocean Equilibrium (Committed Warming)</h4>
@@ -3687,8 +4035,81 @@
             </li>
           </ul>
 
-          <h4>6. Key References & Authoritative Scientific Sources</h4>
+          <h4 id="sec-safe-350ppm" style="scroll-margin-top: 14px; border-left: 3px solid #10b981; padding-left: 8px; color: #34d399;">
+            6. The 350 ppm Boundary: Scientific Basis & Planetary Stability
+          </h4>
+          <p>
+            On this simulator's trajectory chart, a horizontal emerald boundary line marks <strong>350 ppm of atmospheric CO₂</strong>. Why is 350 ppm considered the physical ceiling for a stable, habitable planet, and how does it compare to today's level of ~427 ppm?
+          </p>
+
+          <p><strong>A. Radiative Transfer & Equilibrium Warming at 350 ppm:</strong></p>
+          <p>
+            Using the IPCC AR6 logarithmic radiative forcing equation evaluated in this simulator (pre-industrial baseline <i>C</i>₀ = 278 ppm):
+          </p>
+          <div class="code-box">
+            Δ<i>F</i>₃₅₀ = 5.35 · ln(350 / 278) ≈ <b>+1.23 W/m²</b> (Effective Radiative Forcing)<br>
+            Committed Equilibrium Warming (ECS = 3.0 °C, net feedback λ = 1.31 W/m²/K):<br>
+            Δ<i>T</i><sub>eq</sub> = 1.23 W/m² / 1.31 W/m²/K = <b>+0.94 °C above 1750 (+0.82 °C above 1850–1900)</b>
+          </div>
+          <p>
+            At 350 ppm, the planet's equilibrium surface warming stabilizes at roughly <strong>+1.0 °C</strong>. In contrast, at today's ~427 ppm, CO₂ radiative forcing alone is <b>+2.30 W/m²</b>, committing Earth to <b>+1.75 °C</b> of equilibrium warming (even before slow ice-albedo and vegetation feedbacks unfold).
+          </p>
+
+          <p style="margin-top: 10px;"><strong>B. Paleoclimate Ice Sheet Stability & Sea Level (Hansen et al. 2008):</strong></p>
+          <p>
+            The landmark paper establishing 350 ppm was published by <strong>James Hansen and colleagues in 2008</strong> (<em>The Open Atmospheric Science Journal</em>: "Target Atmospheric CO₂: Where Should Humanity Aim?"). Hansen's team combined high-resolution Cenozoic paleoclimate sediment records, Antarctic ice cores, and physical cryosphere modeling:
+          </p>
+          <ul style="margin: 8px 0 10px 22px; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              <strong>The Holocene Baseline (260–280 ppm):</strong> For the entire 11,700-year Holocene epoch—the climatic regime under which human agriculture, cities, and coastal civilizations arose—atmospheric CO₂ remained stably bounded between 260 and 280 ppm, maintaining global sea levels within ±0.5 metres.
+            </li>
+            <li>
+              <strong>Crossing the Threshold in 1988 CE:</strong> Atmospheric CO₂ passed 350 ppm in early <strong>1988 CE</strong>. Prior to 1988, Earth's radiative imbalance was small enough that polar ice sheet mass loss and mountain glacier retreat were minimal.
+            </li>
+            <li>
+              <strong>Cenozoic Glacial Inception (~34 Million Years Ago):</strong> Continental glaciation in Antarctica first occurred during the Eocene-Oligocene transition (~34 Ma) when atmospheric CO₂ fell below ~450 ppm (with long-term stability requiring ≤350 ppm). Hansen et al. demonstrated that maintaining CO₂ above 350 ppm for centuries melts mountain glaciers worldwide and destabilizes the marine-grounded portions of the West Antarctic and Greenland ice sheets, committing the planet to <strong>15 to 25 metres of eventual sea level rise</strong>.
+            </li>
+            <li>
+              <strong>Earth System Sensitivity (ESS):</strong> Standard climate sensitivity (ECS ≈ 3.0 °C) accounts only for fast feedbacks (water vapor, clouds, lapse rate, sea ice). Over centuries, slow feedbacks (continental ice sheet albedo, boreal forest expansion, permafrost carbon release) double Earth's warming response to ESS ≈ 4.5–6.0 °C per doubling. At 427 ppm, slow feedbacks make ice-free poles the thermodynamic equilibrium state.
+            </li>
+          </ul>
+
+          <p style="margin-top: 10px;"><strong>C. The Planetary Boundaries Framework (Rockström et al. Nature 2009; Steffen et al. Science 2015; Richardson et al. Sci Adv 2023):</strong></p>
+          <p>
+            In 2009, an international consortium of 29 Earth system scientists led by Johan Rockström and the Stockholm Resilience Centre defined <strong>Planetary Boundaries</strong> to demarcate a "safe operating space for humanity":
+          </p>
+          <div class="code-box">
+            • <b>Safe Operating Zone:</b> &le; 350 ppm CO₂ (Δ<i>F</i> &le; +1.0 W/m² relative to pre-industrial)<br>
+            • <b>Zone of Increasing Risk / Uncertainty:</b> 350 ppm to 450 ppm (Δ<i>F</i> = +1.0 to +1.5 W/m²)<br>
+            • <b>High-Risk Zone (Catastrophic Tipping Commitments):</b> &gt; 450 ppm (Δ<i>F</i> &gt; +1.5 W/m²)<br>
+            • <b>Current Reality (2026 CE):</b> <b>~427 ppm CO₂ (Δ<i>F</i> ≈ +2.30 W/m² for CO₂ alone; +2.91 W/m² total well-mixed GHGs)</b>
+          </div>
+          <p>
+            Earth crossed out of the "Safe Zone" in 1988 and is now deep inside the "Zone of Increasing Risk", accelerating toward critical cryospheric tipping points (Greenland ice sheet collapse, West Antarctic ice sheet collapse, and low-latitude coral reef mortality).
+          </p>
+
+          <p style="margin-top: 10px;"><strong>D. The Critical Policy Implication: Stopping Emissions (Net Zero) is Not Enough</strong></p>
+          <p>
+            Reaching <strong>Net Zero emissions</strong> stops temperature from rising further (via ZEC ≈ 0.0 °C), but it leaves atmospheric concentration frozen at whatever elevated peak humanity reaches (~430–450 ppm). Because that elevated concentration leaves Earth Energy Imbalance positive (<i>EEI</i> &gt; 0) for centuries, the cryosphere continues to melt.
+          </p>
+          <p>
+            Therefore, <strong>the ultimate goal of climate stabilization cannot end at Net Zero emissions</strong>: humanity must transition into a sustained era of net-negative emissions (Carbon Dioxide Removal, CDR) to draw atmospheric carbon back down from &gt;420 ppm to <strong>350 ppm</strong>.
+          </p>
+
+          <h4>7. Key References & Authoritative Scientific Sources</h4>
           <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              <strong>Hansen et al. (2008), <em>The Open Atmospheric Science Journal</em> — Target Atmospheric CO₂: Where Should Humanity Aim?:</strong><br>
+              <a href="https://pubs.giss.nasa.gov/abs/ha00410c.html" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://pubs.giss.nasa.gov/abs/ha00410c.html ↗</a>
+            </li>
+            <li>
+              <strong>Rockström et al. (2009), <em>Nature</em> — A safe operating space for humanity (Planetary Boundaries framework):</strong><br>
+              <a href="https://www.nature.com/articles/461472a" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.nature.com/articles/461472a ↗</a>
+            </li>
+            <li>
+              <strong>Steffen et al. (2015), <em>Science</em> & Richardson et al. (2023), <em>Science Advances</em> — Earth beyond six of nine planetary boundaries:</strong><br>
+              <a href="https://www.science.org/doi/10.1126/sciadv.adh2458" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.science.org/doi/10.1126/sciadv.adh2458 ↗</a>
+            </li>
             <li>
               <strong>IPCC AR6 Working Group I, Chapter 5 (Global Carbon and Other Biogeochemical Cycles and Feedbacks):</strong><br>
               <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-5/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-5/ ↗</a>
@@ -3752,13 +4173,15 @@
                 <td>40.0 Gt CO₂e</td>
                 <td>
                   <strong>Industry Energy (24.2%):</strong> Steel blast furnaces, chemical heat, paper/pulp.<br>
-                  <strong>Energy in Buildings (17.5%):</strong> Residential & commercial space heating, boilers, cooking.<br>
-                  <strong>Transport (16.2%):</strong> Road cars & trucks (11.9%), aviation (1.9%), shipping (1.7%).<br>
+                  <strong>Buildings Energy (16.5%):</strong> Residential & commercial space heating, boilers, lighting.<br>
+                  <strong>Road, Rail & Shipping (14.3%):</strong> Road cars & trucks (11.9%), shipping (1.7%), rail (0.4%), pipelines (0.3%).<br>
+                  <strong>✈️ Air Transport / Aviation (1.9%):</strong> Passenger (81%) & freight (19%); high-altitude contrail cirrus elevates net warming to ~3.5%.<br>
+                  <strong>🖥️ Data Centres &amp; AI (1.0%):</strong> ~460 TWh/yr today (~0.45 Gt CO₂e); projected to double to 800–1,050 TWh by 2030.<br>
                   <strong>Fugitive Energy (5.8%):</strong> Oil/gas venting & flaring (3.9%), coal mine methane (1.9%).<br>
-                  <strong>Other Combustion (9.5%):</strong> Tractors, fishing, unallocated.
+                  <strong>Other Combustion (9.5%):</strong> Tractors, fishing, unallocated fuel combustion.
                 </td>
                 <td>
-                  Clean electricity generation (Solar, Wind, Nuclear, Hydro); grid storage; heat pumps for buildings; battery electric vehicles (BEVs) for road; green hydrogen for steelmaking (H₂-DRI).
+                  Clean electricity (Solar, Wind, Nuclear, Hydro); 24/7 Carbon-Free Energy (hourly matching) for hyperscale data centres; heat pumps for buildings; battery EVs for road; SAF e-kerosene for aviation; green H₂ for steel.
                 </td>
               </tr>
               <tr>
@@ -3908,6 +4331,137 @@
               </tr>
             </tbody>
           </table>
+
+          <h4 id="sec-aviation-datacentres" style="scroll-margin-top: 14px; border-left: 3px solid var(--cyan); padding-left: 8px; color: var(--cyan); margin-top: 24px;">
+            6. Deep Dives: Air Transport (Aviation) & Hyperscale Data Centres (AI Growth Scenarios)
+          </h4>
+          <p>
+            Two sectors under the global Energy umbrella receive outsized public scrutiny and face unique physical decarbonization hurdles: <strong>commercial aviation</strong> (due to high-altitude atmospheric radiative physics) and <strong>hyperscale data centres</strong> (due to exponential electricity demand growth from artificial intelligence).
+          </p>
+
+          <h5 style="color: #38bdf8; margin-top: 16px; margin-bottom: 6px;">
+            Part A: Air Transport (Aviation) — Direct CO₂ vs. The 2× Contrail Climate Multiplier
+          </h5>
+          <p>
+            Commercial passenger aviation (81%) and freight cargo (19%) burn approximately <strong>~330–360 billion litres of Jet A-1 kerosene per year</strong>, emitting <strong>~1.04 Gt CO₂</strong> (1.9% of all greenhouse gas emissions and ~2.5% of energy CO₂). However, citing only aviation's fuel CO₂ significantly underestimates its true planetary heating impact:
+          </p>
+          <div class="code-box">
+            • <b>Direct Fossil CO₂ Emissions:</b> <b>1.04 Gt CO₂ / yr</b> (1.9% of global GHG; 2.5% of energy CO₂)<br>
+            • <b>The Non-CO₂ Warming Multiplier:</b> When burning jet fuel at cruise altitudes (9,000–12,000 m / 30,000–40,000 ft in the cold upper troposphere), exhaust soot and water vapor trigger persistent <b>contrail cirrus clouds</b> in ice-supersaturated regions (ISSRs).<br>
+            • <b>Net Effective Radiative Forcing (ERF = +100.9 mW/m²):</b> According to the authoritative international synthesis by <strong>Lee et al. (2021, <i>Atmospheric Environment</i>)</strong>, contrail cirrus (+57.4 mW/m²) and high-altitude NOₓ-induced ozone chemistry (+17.5 mW/m²) roughly <b>double aviation's net climate impact to ~3.5% of all anthropogenic warming</b> since pre-industrial times.
+          </div>
+
+          <p style="margin-top: 10px;"><strong>The Engineering Constraints of Aviation Decarbonization:</strong></p>
+          <ul style="margin: 8px 0 10px 22px; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; color: var(--text-muted);">
+            <li>
+              <strong>Gravimetric Energy Density Penalty:</strong> Kerosene jet fuel packs <strong>~43 MJ/kg (~12,000 Wh/kg)</strong>. State-of-the-art automotive lithium-ion battery cells deliver only <strong>~250 to 300 Wh/kg</strong> (a 40× deficit). Even accounting for electric motor efficiency (~90% vs 35% for turbofans), battery weight restricts pure battery-electric flight to light commuter aircraft (&lt;9–19 passengers) on routes under <strong>400–500 km</strong>.
+            </li>
+            <li>
+              <strong>Liquid Hydrogen (LH₂) Challenges:</strong> Hydrogen has superior gravimetric energy density (120 MJ/kg, 3× jet fuel), but requires cryogenic storage at <strong>20 K (−253 °C)</strong> and suffers a <strong>4× volumetric penalty</strong> (four times larger fuel tanks). Redesigning airframes for hydrogen combustion or fuel cells will require decades of regulatory certification, meaning LH₂ cannot significantly abate emissions before the 2040s.
+            </li>
+            <li>
+              <strong>Sustainable Aviation Fuels (SAF) & E-Kerosene:</strong> The primary near-to-medium-term physical solution for long-haul flight is drop-in SAF—specifically <strong>Power-to-Liquid (PtL) e-kerosene</strong> synthesized via Fischer-Tropsch from green electrolytic hydrogen (H₂) and captured carbon dioxide (DAC CO₂). When combusted, e-kerosene only re-releases carbon previously scrubbed from the atmosphere, achieving net-zero chemical lifecycle emissions.
+            </li>
+            <li>
+              <strong>Contrail Avoidance via Tactical Flight Planning:</strong> Atmospheric modeling indicates that just <strong>~2% to 3% of flights cause ~80% of all contrail warming</strong>, because persistent contrails only form in thin layers of ice-supersaturated air. Diverting flights up or down by 2,000 feet (600 m) based on modern weather forecasts can eliminate over 50% of contrail warming with less than a <strong>0.5%–1.0% fuel penalty</strong>, representing the fastest, lowest-cost climate win in aviation.
+            </li>
+          </ul>
+
+          <h5 style="color: #c084fc; margin-top: 20px; margin-bottom: 6px;">
+            Part B: Hyperscale Data Centres & AI — The 2024 Baseline vs. 2030 Explosion
+          </h5>
+          <p>
+            In 2024, the International Energy Agency (IEA <em>Electricity 2024</em> & <em>Energy and AI</em>) estimated that global data centres, cloud computing, and cryptocurrency consumed approximately <strong>460 TWh of electricity</strong> (~1.4% to 2.0% of all global electricity generation). This translated to roughly <strong>0.45 Gt CO₂e of direct Scope 1 and indirect Scope 2 emissions</strong> (~1.0% of global energy emissions).
+          </p>
+          <p>
+            However, the transition from general-purpose CPU computing to dense artificial intelligence (AI) accelerator clusters (GPUs and TPUs) is fundamentally reshaping electricity grids:
+          </p>
+          <div class="code-box">
+            • <b>Compute Density Escalation:</b> Traditional enterprise server racks draw <b>5 to 10 kW</b> per rack. Modern high-density AI clusters (such as NVIDIA Blackwell NVL72 architecture) draw <b>100 to 120 kW per rack</b>, requiring specialized direct-to-chip liquid cooling.<br>
+            • <b>Electricity Demand Doubling:</b> The IEA projects global data centre power consumption will reach <b>800 to 1,050+ TWh by 2026–2030</b>—an increase equivalent to adding the entire national electricity consumption of Germany or Japan to the grid.<br>
+            • <b>Regional Grid Concentration:</b> In the United States, data centre power demand is projected by the Electric Power Research Institute (EPRI 2024) to surge from ~4% of national electricity demand to <b>9% to 12% by 2030</b>, with localized concentrations reaching 25%–40% in key interconnection hubs (e.g., Northern Virginia's "Data Center Alley" in the PJM interconnection, ERCOT in Texas, and Georgia).
+          </div>
+
+          <h5 style="color: #c084fc; margin-top: 18px; margin-bottom: 6px;">
+            Part C: The Critical Fork: With vs. Without Guaranteed Zero-Carbon Generation
+          </h5>
+          <p>
+            Because data centres require continuous, non-interruptible 24/7/365 power with 99.999% uptime ("five nines"), their rapid growth leads to two radically divergent climate futures depending entirely on procurement architecture:
+          </p>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th>Scenario A: WITHOUT Guaranteed Zero-Carbon Power<br><span style="color: #f43f5e; font-weight: normal;">(Fossil Gas Peakers & Unconstrained Grid Load)</span></th>
+                <th>Scenario B: WITH Guaranteed Zero-Carbon Power<br><span style="color: #34d399; font-weight: normal;">(24/7 Hourly CFE, Nuclear PPAs & Dedicated SMRs)</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Procurement Method</strong></td>
+                <td>
+                  <strong>Annual "Paper" RECs:</strong> Matching annual megawatt-hours on paper with cheap midday solar credits, while relying on fossil gas and coal during evening and night hours.
+                </td>
+                <td>
+                  <strong>Hourly 24/7 Carbon-Free Energy (CFE):</strong> Matching consumption with clean power every single hour of the year on the local regional grid (0% unhedged fossil backup).
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Grid Impact</strong></td>
+                <td>
+                  <strong>Fossil Life Extension:</strong> Utilities delay planned retirements of legacy coal plants and permit hundreds of new open-cycle and combined-cycle natural gas turbines (CCGT) to handle firm base load.
+                </td>
+                <td>
+                  <strong>Clean Firm Additionality:</strong> Tech hyperscalers directly fund and underwrite capital for brand-new clean baseload: restarting idled nuclear reactors, next-gen SMRs, and enhanced geothermal.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Commercial Precedents</strong></td>
+                <td>
+                  Behind-the-meter natural gas reciprocating internal combustion engines (RICE) and pipeline peakers installed directly on data centre campuses (common in Virginia and Texas).
+                </td>
+                <td>
+                  • <b>Nuclear Fleet Restarts:</b> Microsoft & Constellation 835 MW restart of Three Mile Island Unit 1 (Crane Clean Energy Center); Holtec Palisades 800 MW restart in Michigan.<br>
+                  • <b>Small Modular Reactors (SMRs):</b> Google 500 MW order with Kairos Power (molten-salt cooled SMRs); Amazon investments in X-energy high-temperature gas reactors.<br>
+                  • <b>Next-Gen Geothermal:</b> Google partnership with Fervo Energy in Nevada (hydraulic stimulation of hot crystalline basement rock for continuous firm clean power).
+                </td>
+              </tr>
+              <tr>
+                <td><strong>2030–2035 Emissions</strong></td>
+                <td>
+                  <strong style="color: #f43f5e;">1.2 to 1.8 Gt CO₂e / yr</strong><br>
+                  Emissions multiply 3× to 4×, locking in new fossil gas infrastructure that operates through 2050 and surpassing the entire emissions of global commercial aviation.
+                </td>
+                <td>
+                  <strong style="color: #34d399;">&lt; 0.10 Gt CO₂e / yr</strong><br>
+                  Operational Scope 2 emissions remain near zero (&gt;90% abatement). Hyperscale capital accelerates commercialization of first-of-a-kind clean firm tech for the broader grid.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h5 style="color: var(--cyan); margin-top: 18px; margin-bottom: 6px;">
+            Key References & Authoritative Technical Sources
+          </h5>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: var(--text-muted);">
+            <li>
+              <strong>Lee et al. (2021), <em>Atmospheric Environment</em> — The contribution of global aviation to anthropogenic climate forcing for 2000 to 2018:</strong><br>
+              <a href="https://doi.org/10.1016/j.atmosenv.2020.117834" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://doi.org/10.1016/j.atmosenv.2020.117834 ↗</a>
+            </li>
+            <li>
+              <strong>International Energy Agency (IEA, 2024) — Electricity 2024: Analysis and forecast to 2026 (Focus on Data Centres and AI):</strong><br>
+              <a href="https://www.iea.org/reports/electricity-2024" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.iea.org/reports/electricity-2024 ↗</a>
+            </li>
+            <li>
+              <strong>Electric Power Research Institute (EPRI, 2024) — Powering Intelligence: Analyzing Artificial Intelligence and Data Center Energy Consumption:</strong><br>
+              <a href="https://www.epri.com/research/products/000000003002028905" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.epri.com/research/products/000000003002028905 ↗</a>
+            </li>
+            <li>
+              <strong>UN Sustainable Energy for All (SEforALL) / Google (2023) — 24/7 Carbon-Free Energy Compact:</strong><br>
+              <a href="https://www.un.org/en/energy-compacts/page/247-carbon-free-energy-compact" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.un.org/en/energy-compacts/page/247-carbon-free-energy-compact ↗</a>
+            </li>
+          </ul>
         </div>
 
 
@@ -3980,7 +4534,7 @@
                 <td><strong>$0.07 – $0.14 / kWh-cycle</strong></td>
                 <td><strong>55% – 70%</strong><br>(adiabatic thermal recovery)</td>
                 <td>6 – 24 hours</td>
-                <td>Large-scale intraday bulk storage in salt caverns without rare battery metals. High cycling endurance with deep depth of discharge. (<i>W</i> = ∫<i>P\,dV</i>)</td>
+                <td>Large-scale intraday bulk storage in salt caverns without rare battery metals. High cycling endurance with deep depth of discharge. (<i>W</i> = ∫<i>P</i> · <i>dV</i>)</td>
               </tr>
               <tr>
                 <td><strong>4. Gravity Energy Storage</strong></td>
@@ -4019,6 +4573,282 @@
             <li><strong>100% Renewables:</strong> Relying purely on wind (26,000 TWh) and solar (38,000 TWh) alongside existing hydro (6,500 TWh). Because wind and solar output fluctuate with daylight and multi-week weather systems (<em>Dunkelflaute</em>), this scenario requires massive overbuilding of generation and ~91 TWh of long-duration and seasonal grid storage (hydrogen, pumped hydro, CAES) to eliminate outage risks.</li>
             <li><strong>High Nuclear Baseload:</strong> Heavy buildout of firm, weather-independent nuclear fission (20,000 TWh / ~2,500 GW) paired with moderate renewables. Because continuous 24/7 firm baseload matches the bulk of baseline industrial and residential demand, required grid storage drops to ~30 TWh and land surface footprint is minimized.</li>
             <li><strong>Balanced (Solar/Wind + Baseload):</strong> Combines ultra-low-cost variable wind (16,000 TWh) and solar (22,000 TWh) for bulk energy with dispatchable 24/7 firm clean baseload (10,000 TWh nuclear, 6,000 TWh hydro, 3,000 TWh geothermal/biomass). By supplying the "last 15% to 20%" of inflexible demand from firm baseload, the system cuts required long-duration storage by ~50% compared to a pure variable renewable architecture while avoiding over-reliance on any single technology.</li>
+          </ul>
+        </div>
+
+        <!-- PAGE 9: EMBODIED CARBON & WIND TURBINE PAYBACK TIME (SCOTLAND) -->
+        <div class="doc-page" id="page-wind-payback">
+          <h3>Page 9: Embodied Carbon, Civil Engineering & Carbon Payback Time — Onshore Wind in Scotland</h3>
+          <p>
+            A persistent talking point in public debates regarding renewable energy is the assertion that:
+            <em>"Wind turbines consume so much energy, steel, diesel, and carbon-intensive concrete — and tear up so much carbon-storing peat bog for access roads — that they never truly pay back their environmental footprint during their operational lifetime."</em>
+          </p>
+          <p>
+            This chapter examines the <strong>cradle-to-grave Life-Cycle Assessment (LCA)</strong> of modern onshore wind energy, focusing directly on the engineering reality of deploying multi-megawatt turbines on land in <strong>Scotland</strong>, where developments frequently interact with carbon-rich peat moorlands.
+          </p>
+
+          <h4>1. Siting on Peatlands: The Scottish Statutory & Environmental Context</h4>
+          <p>
+            Scotland possesses one of Europe's most energetic wind climates, where modern onshore wind farms routinely achieve annual capacity factors of <strong>32% to 42%</strong> (compared to a global onshore average of ~25%–28%). However, much of the windiest terrain in the Scottish Highlands, Southern Uplands, and Islands is blanket bog — an organic soil composed of partially decomposed plant matter that acts as a vital terrestrial carbon sink.
+          </p>
+          <p>
+            Because undisturbed peat stores immense volumes of carbon (roughly 50% carbon by dry weight), the Scottish Government introduced statutory regulations requiring developers submitting Section 36 consent applications to submit a standardized carbon assessment using the official <strong>Scottish Government Windfarm Carbon Calculator</strong> (originally formulated by <em>Nayak et al., 2008, 2010</em> at the University of Aberdeen, and maintained by <em>ClimateXChange</em>).
+          </p>
+          <p>
+            The calculator rigorously balances every gram of carbon emitted during manufacturing, civil engineering, transport, and peat disturbance against the fossil fuel emissions displaced on the electricity transmission grid over the project's lifetime.
+          </p>
+
+          <h4>2. Engineering & Material Carbon Breakdown (Per 4.2 MW Turbine)</h4>
+          <p>
+            To evaluate the complete carbon debt, we analyze a standard modern onshore turbine deployed in Scotland: a <strong>4.2 MW machine</strong> (e.g., Vestas V136/V150 or Siemens Gamesa SG 4.5-145) on a 105 m tubular steel tower with a 25- to 30-year design life:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Lifecycle Component</th>
+                <th>Physical Material Inventory</th>
+                <th>Embodied Carbon Debt</th>
+                <th>Engineering Mitigation & Practical Mechanics</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Concrete Foundation (Gravity Base)</strong></td>
+                <td>
+                  <strong>500 – 650 m³ concrete</strong><br>(~1,200 – 1,550 tonnes)<br>
+                  <strong>60 – 80 tonnes</strong> high-tensile steel rebar
+                </td>
+                <td><strong>180 – 280 t CO₂e</strong><br>(~12% of total debt)</td>
+                <td>
+                  Octagonal gravity base (~18–22 m diameter, 2.5–3.5 m deep at center). Using standard CEM I Portland cement emits ~320 kg CO₂/m³. Modern Scottish practice frequently blends <strong>Ground Granulated Blast-Furnace Slag (GGBS)</strong> or pulverized ash, replacing 40%–60% of clinker and cutting foundation embodied carbon to 120–160 t CO₂e.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>2. Access Tracks & Crane Pads</strong></td>
+                <td>
+                  <strong>300 – 600 m track</strong> per turbine<br>(4.5–5.0 m running width)<br>
+                  ~1,200 – 1,800 tonnes crushed aggregate per km
+                </td>
+                <td><strong>45 – 90 t CO₂e</strong><br>(~4% of total debt)</td>
+                <td>
+                  Heavy delivery vehicles (70 m blade lifters, 750 t crawler cranes) require robust roads. Across deep peat (>1 m), developers are legally required under <em>NatureScot</em> guidelines to construct <strong>"floating roads"</strong> using multi-axial polymeric geogrids and non-woven geotextile separating membranes. This eliminates peat excavation and maintains the water table. Aggregates are quarried from <strong>on-site borrow pits</strong>, eliminating thousands of heavy HGV road-miles.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>3. Peatland Disturbance & Drainage</strong></td>
+                <td>
+                  Localized excavation for base, crane hardstanding, and track verges
+                </td>
+                <td><strong>150 – 500 t CO₂e</strong><br>(Variable; ~15%–25% of debt)</td>
+                <td>
+                  Drying peat exposes organic matter to oxygen, accelerating microbial respiration and CO₂ release. Early theoretical models assumed drainage ditches lowered the water table 50 m outward. Extensive empirical field research by Aberdeen University and NatureScot demonstrates that in dense blanket peat (catotelm), lateral hydraulic conductivity is extremely low, limiting effective drainage drawdown to <strong>2 to 5 metres</strong>.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>4. Turbine Manufacturing & Transport</strong></td>
+                <td>
+                  <strong>250 – 320 t</strong> structural steel tower<br>
+                  <strong>90 – 130 t</strong> nacelle (iron, copper, magnets)<br>
+                  <strong>55 – 70 t</strong> composite blades (fiberglass/epoxy)
+                </td>
+                <td><strong>1,100 – 1,500 t CO₂e</strong><br>(~65% of total debt)</td>
+                <td>
+                  Blast-furnace steel manufacturing, composite vacuum infusion, copper coil windings, and maritime shipping from European fabrication hubs to Scottish ports.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>5. Habitat Management Offsets (HMP)</strong></td>
+                <td>
+                  Bog rewetting across 100 – 500 hectares of degraded historical peatland
+                </td>
+                <td><strong>-200 to -800 t CO₂e</strong><br>(Net carbon credit)</td>
+                <td>
+                  As a planning condition, Scottish wind farms implement Habitat Management Plans: blocking artificial Victorian drainage ditches, removing derelict commercial forestry, and re-establishing <i>Sphagnum</i> moss carpets. Restored bog sequesters 1.5 to 3.5 t CO₂e/hectare/year, frequently canceling out the construction peat debt entirely.
+                </td>
+              </tr>
+              <tr style="background: rgba(0, 229, 255, 0.08); font-weight: 700;">
+                <td><strong>TOTAL EMBODIED CARBON DEBT</strong></td>
+                <td><strong>Complete Cradle-to-Grave Infrastructure</strong></td>
+                <td><strong>1,400 – 2,400 t CO₂e</strong><br>(Central: ~1,850 t CO₂e)</td>
+                <td>
+                  Total lifetime emissions to build, deliver, erect, maintain for 30 years, and fully decommission one 4.2 MW Scottish onshore wind turbine.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>3. The Counterfactual: Displaced Fossil Fuel Generation</h4>
+          <p>
+            To compute payback time, the initial carbon investment must be divided by the emissions prevented each year when the turbine generates electricity instead of burning fossil fuels.
+          </p>
+          <div class="code-box">
+            <b>Annual Electricity Generation per 4.2 MW Turbine:</b><br>
+            • Rated Nameplate Capacity: 4.2 MW (4,200 kW)<br>
+            • Scottish Capacity Factor: 35% (conservative average; high-elevation sites reach 38%–42%)<br>
+            • Annual Energy Output: 4.2 MW × 8,760 hours/yr × 0.35 = <b>12,877,200 kWh/year (12.88 GWh/year)</b><br><br>
+            <b>Annual Emissions Displaced (Prevented):</b><br>
+            • <b>Displacing Marginal Fossil Gas (CCGT @ 420 g CO₂/kWh):</b> 12,877,200 kWh × 0.420 kg = <b>5,408 tonnes CO₂/year</b><br>
+            • <b>Displacing UK Grid Average Mix (~180 g CO₂/kWh):</b>       12,877,200 kWh × 0.180 kg = <b>2,318 tonnes CO₂/year</b><br>
+            • <b>Displacing Legacy Coal Generation (900 g CO₂/kWh):</b>        12,877,200 kWh × 0.900 kg = <b>11,589 tonnes CO₂/year</b>
+          </div>
+
+          <h4>4. Carbon Payback Time: Mathematical Proof & Results</h4>
+          <p>
+            The carbon payback time is given by the governing equation from <em>Nayak et al. (2008, 2010)</em>:
+          </p>
+          <div class="code-box" style="display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 0.95rem; padding: 16px; flex-wrap: wrap;">
+            <span><strong>Carbon Payback Period (Years)</strong> &nbsp;=&nbsp;</span>
+            <span style="display: inline-flex; flex-direction: column; align-items: center; text-align: center;">
+              <span style="border-bottom: 1.5px solid var(--text); padding: 0 8px 3px 8px; font-weight: 700; color: #fff;">Total Embodied Carbon Debt (t CO₂e)</span>
+              <span style="padding: 3px 8px 0 8px; font-weight: 700; color: var(--cyan);">Annual Displaced Generation Emissions (t CO₂e/year)</span>
+            </span>
+          </div>
+          <p>
+            Evaluating this across four typical project scenarios reveals the true empirical payback timeline:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Site Characteristics & Soil Conditions</th>
+                <th>Total Embodied Debt</th>
+                <th>Payback vs. Fossil Gas (CCGT)</th>
+                <th>Payback vs. UK Grid Average</th>
+                <th>30-Year Net Carbon Savings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Scenario 1: Mineral / Agricultural Soil</strong><br>(No peat; standard concrete bases & gravel roads)</td>
+                <td>~1,450 t CO₂e</td>
+                <td><strong>3.2 Months</strong><br>(0.27 years)</td>
+                <td><strong>7.5 Months</strong><br>(0.63 years)</td>
+                <td><strong>+160,800 t CO₂</strong><br>(99.1% net clean power)</td>
+              </tr>
+              <tr>
+                <td><strong>Scenario 2: Typical Scottish Peatland</strong><br>(Floating roads on deep peat; on-site borrow pits; bog restoration)</td>
+                <td>~1,850 t CO₂e</td>
+                <td><strong>4.1 Months</strong><br>(0.34 years)</td>
+                <td><strong>9.6 Months</strong><br>(0.80 years)</td>
+                <td><strong>+160,400 t CO₂</strong><br>(98.9% net clean power)</td>
+              </tr>
+              <tr>
+                <td><strong>Scenario 3: Complex Peat Site (Moderate Depth)</strong><br>(Cut-and-fill tracks; moderate drainage; zero bog restoration)</td>
+                <td>~3,100 t CO₂e</td>
+                <td><strong>6.9 Months</strong><br>(0.57 years)</td>
+                <td><strong>16.0 Months</strong><br>(1.34 years)</td>
+                <td><strong>+159,100 t CO₂</strong><br>(98.1% net clean power)</td>
+              </tr>
+              <tr>
+                <td><strong>Scenario 4: Severe Peat Disturbance (Worst-Case)</strong><br>(Deep unmitigated peat drainage; high forestry felling)</td>
+                <td>~5,200 t CO₂e</td>
+                <td><strong>11.5 Months</strong><br>(0.96 years)</td>
+                <td><strong>26.9 Months</strong><br>(2.24 years)</td>
+                <td><strong>+157,000 t CO₂</strong><br>(96.8% net clean power)</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <strong>The Bottom Line:</strong> Even under suboptimal, deep-peat conditions with massive concrete foundations and extensive internal access roads, an onshore wind turbine in Scotland completely pays off its entire cradle-to-grave carbon debt in <strong>less than 1 to 2.3 years</strong>.
+          </p>
+          <p>
+            Because modern turbines operate for <strong>25 to 30 years</strong>, the turbine spends over <strong>96% to 99% of its operational life generating 100% net emissions-free electricity</strong>. Over its lifetime, each 4.2 MW turbine prevents the emission of over <strong>160,000 tonnes of CO₂</strong> that would otherwise have entered the atmosphere from burning natural gas or coal.
+          </p>
+
+          <h4>5. Life-Cycle Carbon Intensity Across All Power Generation Sources</h4>
+          <p>
+            When total cradle-to-grave emissions (mining, refining, concrete, manufacturing, transport, civil works, and fuel supply chains) are divided by total lifetime electricity produced, wind power ranks among the lowest-carbon energy sources known to engineering:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Generation Technology</th>
+                <th>Median Life-Cycle Emissions</th>
+                <th>Interquartile Range</th>
+                <th>Primary Source of Life-Cycle Carbon</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Onshore Wind (Scotland — incl. peat & roads)</strong></td>
+                <td><strong>11 g CO₂e / kWh</strong></td>
+                <td>8 – 16 g / kWh</td>
+                <td>Turbine steel tower, foundation concrete, access road quarrying.</td>
+              </tr>
+              <tr>
+                <td><strong>Nuclear Fission (PWR / SMR)</strong></td>
+                <td><strong>12 g CO₂e / kWh</strong></td>
+                <td>9 – 15 g / kWh</td>
+                <td>Uranium centrifugal enrichment and reactor containment concrete.</td>
+              </tr>
+              <tr>
+                <td><strong>Offshore Wind</strong></td>
+                <td><strong>13 g CO₂e / kWh</strong></td>
+                <td>10 – 18 g / kWh</td>
+                <td>Steel monopile foundation fabrication and heavy marine jack-up vessel fuel.</td>
+              </tr>
+              <tr>
+                <td><strong>Hydroelectric (Run-of-River / Highland)</strong></td>
+                <td><strong>24 g CO₂e / kWh</strong></td>
+                <td>11 – 35 g / kWh</td>
+                <td>Dam wall concrete mass; reservoir flooded biogenic vegetation decay.</td>
+              </tr>
+              <tr>
+                <td><strong>Solar Photovoltaic (Utility Silicon)</strong></td>
+                <td><strong>38 g CO₂e / kWh</strong></td>
+                <td>25 – 55 g / kWh</td>
+                <td>High-temperature polysilicon smelting and quartz reduction furnaces.</td>
+              </tr>
+              <tr>
+                <td><strong>Natural Gas (Combined Cycle CCGT)</strong></td>
+                <td><strong>486 g CO₂e / kWh</strong></td>
+                <td>410 – 550 g / kWh</td>
+                <td>Continuous fuel methane combustion + upstream drilling venting & fugitive leakage.</td>
+              </tr>
+              <tr>
+                <td><strong>Coal (Supercritical Thermal)</strong></td>
+                <td><strong>920 g CO₂e / kWh</strong></td>
+                <td>820 – 1,150 g / kWh</td>
+                <td>Direct smokestack combustion of carbon + coal mine methane venting.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Generating power from natural gas emits <strong>~44× more carbon per kilowatt-hour</strong> than Scottish onshore wind; burning coal emits <strong>~84× more</strong>. The claim that wind turbines do not save carbon is completely refuted by physical stoichiometry, civil engineering life-cycle data, and statutory Scottish government assessments.
+          </p>
+
+          <h4>6. Authoritative Academic & Statutory References</h4>
+          <ul style="margin-left: 20px; font-size: 0.84rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px;">
+            <li>
+              <strong>Scottish Government Energy Consents Unit / Nayak et al. (2008, updated 2010):</strong><br>
+              <em>"Calculating carbon savings, emissions and energy payback times for wind farms on Scottish peatlands."</em> University of Aberdeen & Scottish Government Rural and Environment Science and Analytical Services (RESAS).<br>
+              <a href="https://www.gov.scot/publications/carbon-calculator-for-wind-farms-on-scottish-peatlands-factsheet/" target="_blank" rel="noopener noreferrer">https://www.gov.scot/publications/carbon-calculator-for-wind-farms-on-scottish-peatlands-factsheet/</a>
+            </li>
+            <li>
+              <strong>ClimateXChange / University of Edinburgh & University of Aberdeen (2016, 2021):</strong><br>
+              <em>"Review of the Scottish Government Carbon Calculator for Wind Farms on Peat."</em> Research report evaluating empirical drainage distances and peat carbon restoration.<br>
+              <a href="https://www.climatexchange.org.uk/research/projects/carbon-calculator-for-wind-farms-on-scottish-peatlands/" target="_blank" rel="noopener noreferrer">https://www.climatexchange.org.uk/research/projects/carbon-calculator-for-wind-farms-on-scottish-peatlands/</a>
+            </li>
+            <li>
+              <strong>NatureScot (formerly Scottish Natural Heritage) & Forestry Commission Scotland (2010, updated 2015):</strong><br>
+              <em>"Floating Roads on Peat: Good Practice Guide."</em> Joint engineering guidelines on geotextile geogrids, drainage avoidance, and preserving blanket bog hydrology.<br>
+              <a href="https://www.nature.scot/doc/floating-roads-peat" target="_blank" rel="noopener noreferrer">https://www.nature.scot/doc/floating-roads-peat</a>
+            </li>
+            <li>
+              <strong>Intergovernmental Panel on Climate Change (IPCC AR6 Working Group III, 2022):</strong><br>
+              <em>"Climate Change 2022: Mitigation of Climate Change."</em> Chapter 6 (Energy Systems) and Annex III (Technology-specific cost and life-cycle greenhouse gas emission metrics). Cambridge University Press.
+            </li>
+            <li>
+              <strong>United Nations Economic Commission for Europe (UNECE, 2021):</strong><br>
+              <em>"Life Cycle Assessment of Electricity Generation Options."</em> Comprehensive cradle-to-grave comparative LCA across coal, gas, nuclear, hydro, solar, and wind technologies.
+            </li>
+            <li>
+              <strong>Thomson, R.C. & Harrison, G.P. (2015):</strong><br>
+              <em>"Life cycle costs and carbon footprints of onshore wind farms in the UK."</em> <i>Renewable Energy</i>, Vol. 83, pp. 1143–1153. Detailed embodied carbon audit of 20 operational UK onshore wind farms.
+            </li>
+            <li>
+              <strong>Smith, P., Nayak, D.R. et al. (2014):</strong><br>
+              <em>"How much carbon does a wind farm on peat really emit?"</em> <i>Soil Use and Management</i>, 30(1), 152–159. Demonstrating that good construction practice limits drainage drawdown to under 5 m, ensuring carbon payback times under 2 years.
+            </li>
           </ul>
         </div>
 
@@ -4146,6 +4976,45 @@
     </div>
   </div>
 
+  <!-- MEASURED TEMPERATURE CURVE POPOVER TOOLTIP WITH GUIDE LINK -->
+  <div class="measured-temp-popover" id="measTempPopover">
+    <div class="mt-header">
+      <div class="mt-title">📈 Measured Temp vs. CO₂ Model</div>
+      <button class="mt-close" id="measTempCloseBtn" title="Close">&times;</button>
+    </div>
+    <div class="mt-stats" id="measTempStats"></div>
+    <div class="mt-note" id="measTempNote">
+      During the mid-20th century (1958–1995), post-WWII industrial sulfate aerosols ("global dimming") and volcanic eruptions temporarily masked ~50% of greenhouse warming until Clean Air Acts unmasked it.
+    </div>
+    <button type="button" class="mt-link-btn" id="measTempLinkBtn">
+      📖 Why Measured &lt; Model? Read Guide Page 3 →
+    </button>
+  </div>
+
+  <!-- SAFE 350 PPM PLANETARY BOUNDARY POPOVER TOOLTIP WITH GUIDE LINK -->
+  <div class="safe-350-popover" id="safe350Popover">
+    <div class="s350-header">
+      <div class="s350-title">🌿 Safe Boundary: 350 ppm CO₂</div>
+      <button class="s350-close" id="safe350CloseBtn" title="Close">&times;</button>
+    </div>
+    <div class="s350-stats" id="safe350Stats">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+        <span>Boundary: <strong style="color: #34d399;">350.0 ppm</strong></span>
+        <span style="color: #94a3b8;">Crossed: <strong style="color: #f59e0b;">~1988 CE</strong></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted);">
+        <span>Rad. Forcing: +1.23 W/m²</span>
+        <span>Equil. Warming: <strong style="color: #34d399;">~+1.0 °C</strong></span>
+      </div>
+    </div>
+    <div class="s350-note" id="safe350Note">
+      To preserve a habitable planet similar to that on which human civilization developed, paleoclimate records show CO₂ must not exceed 350 ppm to avoid irreversible polar ice sheet loss and 15–25m sea level rise.
+    </div>
+    <button type="button" class="s350-link-btn" id="safe350LinkBtn">
+      📖 Why is 350 ppm Safe? Read Guide Page 6 →
+    </button>
+  </div>
+
   <script>
     (function () {
       "use strict";
@@ -4220,9 +5089,89 @@
       const pts1850_1900 = STATIC_HISTORICAL_RUN.filter(p => p.year >= 1850 && p.year <= 1900);
       const OFFSET_1850_1900 = pts1850_1900.reduce((acc, p) => acc + p.deltaTs, 0) / pts1850_1900.length;
 
+      // Measured Annual Surface Temperature Anomalies from 1958 (Start of Keeling) to 2026
+      // Source: HadCRUT5 / Berkeley Earth instrumental observations relative to 1850–1900 baseline (°C)
+      const OBSERVED_TEMP_1958_2026 = [
+        { y: 1958, t: 0.26 }, { y: 1959, t: 0.24 }, { y: 1960, t: 0.20 },
+        { y: 1961, t: 0.24 }, { y: 1962, t: 0.21 }, { y: 1963, t: 0.22 },
+        { y: 1964, t: 0.07 }, { y: 1965, t: 0.06 }, { y: 1966, t: 0.13 },
+        { y: 1967, t: 0.14 }, { y: 1968, t: 0.08 }, { y: 1969, t: 0.23 },
+        { y: 1970, t: 0.19 }, { y: 1971, t: 0.08 }, { y: 1972, t: 0.19 },
+        { y: 1973, t: 0.31 }, { y: 1974, t: 0.06 }, { y: 1975, t: 0.11 },
+        { y: 1976, t: 0.04 }, { y: 1977, t: 0.30 }, { y: 1978, t: 0.21 },
+        { y: 1979, t: 0.29 }, { y: 1980, t: 0.38 }, { y: 1981, t: 0.42 },
+        { y: 1982, t: 0.24 }, { y: 1983, t: 0.41 }, { y: 1984, t: 0.23 },
+        { y: 1985, t: 0.21 }, { y: 1986, t: 0.29 }, { y: 1987, t: 0.42 },
+        { y: 1988, t: 0.47 }, { y: 1989, t: 0.37 }, { y: 1990, t: 0.54 },
+        { y: 1991, t: 0.50 }, { y: 1992, t: 0.31 }, { y: 1993, t: 0.33 },
+        { y: 1994, t: 0.41 }, { y: 1995, t: 0.55 }, { y: 1996, t: 0.44 },
+        { y: 1997, t: 0.60 }, { y: 1998, t: 0.73 }, { y: 1999, t: 0.50 },
+        { y: 2000, t: 0.49 }, { y: 2001, t: 0.64 }, { y: 2002, t: 0.71 },
+        { y: 2003, t: 0.70 }, { y: 2004, t: 0.64 }, { y: 2005, t: 0.74 },
+        { y: 2006, t: 0.72 }, { y: 2007, t: 0.71 }, { y: 2008, t: 0.62 },
+        { y: 2009, t: 0.73 }, { y: 2010, t: 0.81 }, { y: 2011, t: 0.68 },
+        { y: 2012, t: 0.73 }, { y: 2013, t: 0.77 }, { y: 2014, t: 0.84 },
+        { y: 2015, t: 1.00 }, { y: 2016, t: 1.11 }, { y: 2017, t: 1.00 },
+        { y: 2018, t: 0.94 }, { y: 2019, t: 1.05 }, { y: 2020, t: 1.12 },
+        { y: 2021, t: 0.99 }, { y: 2022, t: 1.00 }, { y: 2023, t: 1.28 },
+        { y: 2024, t: 1.35 }, { y: 2025, t: 1.25 }, { y: 2026, t: 1.14 }
+      ];
+
+      function getMeasuredObservedDeltaAt(yr) {
+        if (yr < 1958) {
+          const pt = STATIC_HISTORICAL_RUN.find(p => Math.abs(p.year - yr) < 0.6);
+          return pt ? pt.deltaTs - OFFSET_1850_1900 : 0.0;
+        }
+        if (yr >= 2026) return 1.14;
+        const entry = OBSERVED_TEMP_1958_2026.find(p => p.y === Math.round(yr));
+        if (entry) return entry.t;
+        for (let i = 0; i < OBSERVED_TEMP_1958_2026.length - 1; i++) {
+          const p1 = OBSERVED_TEMP_1958_2026[i];
+          const p2 = OBSERVED_TEMP_1958_2026[i + 1];
+          if (yr >= p1.y && yr <= p2.y) {
+            const f = (yr - p1.y) / (p2.y - p1.y);
+            return p1.t + f * (p2.t - p1.t);
+          }
+        }
+        return 1.14;
+      }
+
+      // 5-Year Smoothed Running Average for Clean Main 500-Year Trajectory
+      const OBSERVED_TEMP_5YR_SMOOTHED = OBSERVED_TEMP_1958_2026.map((pt, idx, arr) => {
+        let sum = 0, count = 0;
+        for (let k = -2; k <= 2; k++) {
+          const neighbor = arr[idx + k];
+          if (neighbor) {
+            sum += neighbor.t;
+            count++;
+          }
+        }
+        if (idx === 0) return { y: pt.y, t: 0.26 };
+        if (idx === arr.length - 1) return { y: pt.y, t: 1.14 };
+        return { y: pt.y, t: parseFloat((sum / count).toFixed(3)) };
+      });
+
+      function getMeasuredObserved5YrSmoothedAt(yr) {
+        if (yr < 1958) return getHistoricalDeltaAt(yr);
+        if (yr >= 2026) return 1.14;
+        const entry = OBSERVED_TEMP_5YR_SMOOTHED.find(p => p.y === Math.round(yr));
+        if (entry) return entry.t;
+        for (let i = 0; i < OBSERVED_TEMP_5YR_SMOOTHED.length - 1; i++) {
+          const p1 = OBSERVED_TEMP_5YR_SMOOTHED[i];
+          const p2 = OBSERVED_TEMP_5YR_SMOOTHED[i + 1];
+          if (yr >= p1.y && yr <= p2.y) {
+            const f = (yr - p1.y) / (p2.y - p1.y);
+            return p1.t + f * (p2.t - p1.t);
+          }
+        }
+        return 1.14;
+      }
+
       let state = {
         co2: BASELINE_1958_PT.co2,
         rate: 2.5,
+        isNZ2050: false,
+        isZoomed: false, // Instrumental Keeling Era zoom view (1958–2026)
         deltaTs: BASELINE_1958_PT.deltaTs,
         deltaTd: BASELINE_1958_PT.deltaTd,
         year: 1958,
@@ -4244,6 +5193,11 @@
         mousePos.active = false;
         isHoveringMainTpBadge = false;
         scheduleHideTippingPointCard(150);
+        scheduleHideMeasTempPopover(150);
+        scheduleHideSafe350Popover(150);
+        activeMeasHitbox = null;
+        active350Hitbox = false;
+        isHovering350Line = false;
       });
 
       // Stationary Greenhouse Gas Molecules (Density decreases exponentially with altitude, +100% density)
@@ -4836,6 +5790,180 @@
       let mainChartTpHitboxes = [];
       let paleoChartTpHitboxes = [];
 
+      // Measured Temperature Line Interactive Tooltip & Guide Link
+      const measTempPopoverEl = document.getElementById("measTempPopover");
+      const measTempStatsEl = document.getElementById("measTempStats");
+      const measTempCloseBtn = document.getElementById("measTempCloseBtn");
+      const measTempLinkBtn = document.getElementById("measTempLinkBtn");
+      let measTempHideTimer = null;
+      let isHoveringMeasTemp = false;
+      let isHoveringMeasLine = false;
+      let activeMeasHitbox = null;
+
+      function cancelHideMeasTempPopover() {
+        if (measTempHideTimer) {
+          clearTimeout(measTempHideTimer);
+          measTempHideTimer = null;
+        }
+      }
+
+      function scheduleHideMeasTempPopover(delay = 140) {
+        if (isHoveringMeasTemp || isHoveringMeasLine) return;
+        if (measTempHideTimer) return;
+        measTempHideTimer = setTimeout(() => {
+          measTempHideTimer = null;
+          if (!isHoveringMeasTemp && !isHoveringMeasLine) {
+            if (measTempPopoverEl) measTempPopoverEl.style.display = "none";
+            activeMeasHitbox = null;
+          }
+        }, delay);
+      }
+
+      function showMeasTempPopover(yr, measVal, simVal, clientX, clientY) {
+        cancelHideMeasTempPopover();
+        if (!measTempPopoverEl || !measTempStatsEl) return;
+
+        const diff = simVal !== null ? (simVal - measVal) : 0;
+        const diffSign = diff >= 0 ? "+" : "";
+        const roundYr = Math.round(yr);
+
+        measTempStatsEl.innerHTML = `
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Year: <strong style="color: #fff;">${roundYr} CE</strong></span>
+            <span style="color: var(--amber);">Measured: <strong>+${measVal.toFixed(2)} °C</strong></span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted);">
+            <span>CO₂ Model: +${simVal !== null ? simVal.toFixed(2) : "--"} °C</span>
+            <span>Diff: <strong style="color: ${diff > 0.05 ? '#00e5ff' : '#fff'};">${diffSign}${diff.toFixed(2)} °C</strong></span>
+          </div>
+        `;
+
+        measTempPopoverEl.style.display = "block";
+        const cardW = measTempPopoverEl.offsetWidth || 360;
+        const cardH = measTempPopoverEl.offsetHeight || 190;
+        const pad = 12;
+
+        let left = clientX - cardW / 2;
+        let top = clientY - cardH - 14;
+
+        if (left < pad) left = pad;
+        if (left + cardW > window.innerWidth - pad) left = window.innerWidth - cardW - pad;
+        if (top < pad) {
+          top = clientY + 16;
+        }
+
+        measTempPopoverEl.style.left = `${Math.round(left)}px`;
+        measTempPopoverEl.style.top = `${Math.round(top)}px`;
+      }
+
+      if (measTempPopoverEl) {
+        measTempPopoverEl.addEventListener("mouseenter", () => {
+          isHoveringMeasTemp = true;
+          cancelHideMeasTempPopover();
+        });
+        measTempPopoverEl.addEventListener("mouseleave", () => {
+          isHoveringMeasTemp = false;
+          scheduleHideMeasTempPopover(120);
+        });
+      }
+
+      if (measTempCloseBtn) {
+        measTempCloseBtn.addEventListener("click", () => {
+          isHoveringMeasTemp = false;
+          isHoveringMeasLine = false;
+          cancelHideMeasTempPopover();
+          if (measTempPopoverEl) measTempPopoverEl.style.display = "none";
+          activeMeasHitbox = null;
+        });
+      }
+
+      if (measTempLinkBtn) {
+        measTempLinkBtn.addEventListener("click", () => {
+          if (typeof openGuideToAerosolSection === "function") {
+            openGuideToAerosolSection();
+          }
+        });
+      }
+
+      // Interactive 350 ppm Safe Boundary Popover Elements & State
+      const safe350PopoverEl = document.getElementById("safe350Popover");
+      const safe350CloseBtn = document.getElementById("safe350CloseBtn");
+      const safe350LinkBtn = document.getElementById("safe350LinkBtn");
+      let safe350HideTimer = null;
+      let isHoveringSafe350 = false;
+      let isHovering350Line = false;
+      let active350Hitbox = false;
+
+      function cancelHideSafe350Popover() {
+        if (safe350HideTimer) {
+          clearTimeout(safe350HideTimer);
+          safe350HideTimer = null;
+        }
+      }
+
+      function scheduleHideSafe350Popover(delay = 140) {
+        if (isHoveringSafe350 || isHovering350Line) return;
+        if (safe350HideTimer) return;
+        safe350HideTimer = setTimeout(() => {
+          safe350HideTimer = null;
+          if (!isHoveringSafe350 && !isHovering350Line) {
+            if (safe350PopoverEl) safe350PopoverEl.style.display = "none";
+            active350Hitbox = false;
+          }
+        }, delay);
+      }
+
+      function showSafe350Popover(clientX, clientY) {
+        cancelHideSafe350Popover();
+        if (!safe350PopoverEl) return;
+
+        safe350PopoverEl.style.display = "block";
+        const cardW = safe350PopoverEl.offsetWidth || 365;
+        const cardH = safe350PopoverEl.offsetHeight || 195;
+        const pad = 12;
+
+        let left = clientX - cardW / 2;
+        let top = clientY - cardH - 14;
+
+        if (left < pad) left = pad;
+        if (left + cardW > window.innerWidth - pad) left = window.innerWidth - cardW - pad;
+        if (top < pad) {
+          top = clientY + 16;
+        }
+
+        safe350PopoverEl.style.left = `${Math.round(left)}px`;
+        safe350PopoverEl.style.top = `${Math.round(top)}px`;
+      }
+
+      if (safe350PopoverEl) {
+        safe350PopoverEl.addEventListener("mouseenter", () => {
+          isHoveringSafe350 = true;
+          cancelHideSafe350Popover();
+        });
+        safe350PopoverEl.addEventListener("mouseleave", () => {
+          isHoveringSafe350 = false;
+          scheduleHideSafe350Popover(120);
+        });
+      }
+
+      if (safe350CloseBtn) {
+        safe350CloseBtn.addEventListener("click", () => {
+          isHoveringSafe350 = false;
+          isHovering350Line = false;
+          cancelHideSafe350Popover();
+          if (safe350PopoverEl) safe350PopoverEl.style.display = "none";
+          active350Hitbox = false;
+        });
+      }
+
+      if (safe350LinkBtn) {
+        safe350LinkBtn.addEventListener("click", () => {
+          if (typeof openGuideTo350Section === "function") {
+            openGuideTo350Section();
+          }
+        });
+      }
+
       function renderTippingPointCardContent(grp, selectedIdx) {
         const idx = Math.max(0, Math.min(grp.items.length - 1, selectedIdx || 0));
         const key = grp.thresholdC.toFixed(2);
@@ -4976,6 +6104,20 @@
         activeTpGroupKey = null;
       });
       document.addEventListener("mousedown", e => {
+        if (safe350PopoverEl && safe350PopoverEl.style.display === "block" && !safe350PopoverEl.contains(e.target) && e.target !== canvas) {
+          isHoveringSafe350 = false;
+          isHovering350Line = false;
+          cancelHideSafe350Popover();
+          safe350PopoverEl.style.display = "none";
+          active350Hitbox = false;
+        }
+        if (measTempPopoverEl && measTempPopoverEl.style.display === "block" && !measTempPopoverEl.contains(e.target) && e.target !== canvas) {
+          isHoveringMeasTemp = false;
+          isHoveringMeasLine = false;
+          cancelHideMeasTempPopover();
+          measTempPopoverEl.style.display = "none";
+          activeMeasHitbox = null;
+        }
         if (tpCardEl.style.display === "block" && !tpCardEl.contains(e.target) && e.target !== canvas && e.target !== paleoCompareCanvas) {
           tpCardPinned = false;
           tpHoveringCard = false;
@@ -4998,6 +6140,18 @@
         const rect = canvas.getBoundingClientRect();
         const mx = e.clientX - rect.left;
         const my = e.clientY - rect.top;
+        if (active350Hitbox) {
+          if (typeof openGuideTo350Section === "function") {
+            openGuideTo350Section();
+          }
+          return;
+        }
+        if (activeMeasHitbox) {
+          if (typeof openGuideToAerosolSection === "function") {
+            openGuideToAerosolSection();
+          }
+          return;
+        }
         for (const hb of mainChartTpHitboxes) {
           if (mx >= hb.x1 && mx <= hb.x2 && my >= hb.y1 && my <= hb.y2) {
             openTippingPointCard(hb.grp, hb.crossYr, rect.left + hb.anchorX, rect.top + hb.anchorY, true, hb.itemIdx);
@@ -5408,8 +6562,8 @@
 
         const tGridTop = 18;
         const tGridBottom = h - 26;
-        const tGridLeft = isMobileNarrow ? 28 : 36;
-        const tGridRight = w - (isMobileNarrow ? 36 : 46);
+        const tGridLeft = state.isZoomed ? (isMobileNarrow ? 34 : 44) : (isMobileNarrow ? 28 : 36);
+        const tGridRight = w - (state.isZoomed ? (isMobileNarrow ? 40 : 54) : (isMobileNarrow ? 36 : 46));
         const tGridH = tGridBottom - tGridTop;
         const tGridW = tGridRight - tGridLeft;
 
@@ -5422,41 +6576,70 @@
         const titleFontSize = tGridW < 400 ? 13 : 16;
         ctx.fillStyle = "rgba(255, 255, 255, 0.92)";
         ctx.font = `bold ${titleFontSize}px system-ui, -apple-system, sans-serif`;
-        ctx.fillText("500-YEAR WARMING TRAJECTORY (1750–2250 CE)", tGridLeft + 8, tGridTop + (titleFontSize + 4));
+        const chartTitle = state.isZoomed
+          ? "INSTRUMENTAL ERA ZOOM (1958–2026 CE) · KEELING OBSERVATIONAL ERA"
+          : "500-YEAR WARMING TRAJECTORY (1750–2250 CE)";
+        ctx.fillText(chartTitle, tGridLeft + 8, tGridTop + (titleFontSize + 4));
 
-        // Subtitle legend for Temperature vs CO2: Single-row horizontal layout below headline (zero overlap with threshold lines or curves)
+        // Subtitle legend for Temperature vs CO2
         ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
         const legLeft = tGridLeft + 8;
         const legY = tGridTop + titleFontSize + 19;
 
-        ctx.fillStyle = "#f59e0b";
-        ctx.fillText("■ Actual Observed History (1750–2026)", legLeft, legY);
-        const dtHistLegendW = ctx.measureText("■ Actual Observed History (1750–2026)").width;
+        if (state.isZoomed) {
+          ctx.fillStyle = "#f59e0b";
+          ctx.fillText("■ Measured Temperature (HadCRUT5)", legLeft, legY);
+          const dtMeasW = ctx.measureText("■ Measured Temperature (HadCRUT5)").width;
 
-        ctx.fillStyle = "#f43f5e";
-        const dtSimLegendX = legLeft + dtHistLegendW + 14;
-        ctx.fillText("■ Simulated Warming (1958–2250)", dtSimLegendX, legY);
-        const dtSimLegendW = ctx.measureText("■ Simulated Warming (1958–2250)").width;
+          ctx.fillStyle = "#f43f5e";
+          const dtSimX = legLeft + dtMeasW + 14;
+          ctx.fillText("■ Simulated Warming (Two-Layer EBM)", dtSimX, legY);
+          const dtSimW = ctx.measureText("■ Simulated Warming (Two-Layer EBM)").width;
 
-        ctx.fillStyle = "#c084fc";
-        const co2LegendX = dtSimLegendX + dtSimLegendW + 14;
-        ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
-        const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+          ctx.fillStyle = "#c084fc";
+          const co2X = dtSimX + dtSimW + 14;
+          ctx.fillText("■ Atmospheric CO₂ (ppm)", co2X, legY);
+        } else {
+          ctx.fillStyle = "#f59e0b";
+          ctx.fillText("■ Actual Observed History (1750–2026, 5-yr smoothed)", legLeft, legY);
+          const dtHistLegendW = ctx.measureText("■ Actual Observed History (1750–2026, 5-yr smoothed)").width;
 
-        if (tGridW > 920) {
-          ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
-          ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
-          ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 14, legY);
+          ctx.fillStyle = "#f43f5e";
+          const dtSimLegendX = legLeft + dtHistLegendW + 14;
+          ctx.fillText("■ Simulated Warming (1958–2250)", dtSimLegendX, legY);
+          const dtSimLegendW = ctx.measureText("■ Simulated Warming (1958–2250)").width;
+
+          ctx.fillStyle = "#c084fc";
+          const co2LegendX = dtSimLegendX + dtSimLegendW + 14;
+          ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
+          const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+
+          if (tGridW > 960) {
+            ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
+            ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
+            ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 14, legY);
+          }
         }
 
-        function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
-        // Scaled to 6.5°C span (-0.5°C to +6.0°C) so trajectories up to +5.5°C comfortably sit with head room (relative to 1850–1900)
-        function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.5)) / 6.5) * tGridH; }
-        // CO2 Scale: 200 ppm to 1050 ppm fitted across the 500-Year chart height
-        function co2ToY(c) { return tGridBottom - ((c - 200) / 850) * tGridH; }
+        const yrStart = state.isZoomed ? 1958 : 1750;
+        const yrEnd = state.isZoomed ? 2026 : 2250;
+        const yrSpan = yrEnd - yrStart;
 
-        // Right-hand Y-Axis Labels for CO2 in Purple (280, 400, 600, 800, 1000 ppm)
-        [280, 400, 600, 800, 1000].forEach(cVal => {
+        const tempMin = state.isZoomed ? 0.0 : -0.5;
+        const tempMax = state.isZoomed ? 1.6 : 6.0;
+        const tempSpan = tempMax - tempMin;
+
+        const co2Min = state.isZoomed ? 300 : 200;
+        const co2Max = state.isZoomed ? 440 : 1050;
+        const co2Span = co2Max - co2Min;
+
+        function yrToX(yr) { return tGridLeft + ((yr - yrStart) / yrSpan) * tGridW; }
+        function dtToY(dTemp) { return tGridBottom - ((dTemp - tempMin) / tempSpan) * tGridH; }
+        function co2ToY(c) { return tGridBottom - ((c - co2Min) / co2Span) * tGridH; }
+
+        // Right-hand Y-Axis Labels for CO2 in Purple
+        const co2Ticks = state.isZoomed ? [320, 340, 360, 380, 400, 420] : [280, 400, 600, 800, 1000];
+        co2Ticks.forEach(cVal => {
           const cy = co2ToY(cVal);
           if (cy >= tGridTop && cy <= tGridBottom) {
             ctx.strokeStyle = "rgba(192, 132, 252, 0.22)";
@@ -5475,111 +6658,235 @@
           }
         });
 
-        // 25-Year Interval Marks Along X-Axis (12px year labels placed OUTSIDE below the axis line)
-        const yearStep = tGridW < 550 ? 50 : 25;
-        for (let yr = 1750; yr <= 2250; yr += 25) {
-          const x = yrToX(yr);
-          const isMajor = yr % yearStep === 0;
-          ctx.strokeStyle = isMajor ? "rgba(148, 163, 184, 0.45)" : "rgba(148, 163, 184, 0.2)";
+        // Safe Planetary Boundary for Atmospheric CO2: 350 ppm (Hansen et al. 2008, Rockström et al. 2009)
+        const y350 = co2ToY(350);
+        if (y350 >= tGridTop && y350 <= tGridBottom) {
+          ctx.save();
+          ctx.strokeStyle = "rgba(16, 185, 129, 0.70)"; // Emerald-500
+          ctx.lineWidth = 1.4;
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath();
+          ctx.moveTo(tGridLeft, y350);
+          ctx.lineTo(tGridRight, y350);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Right-hand CO2 label in emerald green
+          ctx.fillStyle = "#10b981";
+          ctx.font = "bold 9px ui-monospace, monospace";
+          ctx.textAlign = "right";
+          ctx.fillText("350 ppm", tGridRight - 4, y350 - 3);
+
+          // Left-hand Safe Level badge / text
+          ctx.textAlign = "left";
+          ctx.font = "bold 10px ui-sans-serif, system-ui, sans-serif";
+          const badgeText = "🌿 350 ppm Safe Level";
+          const badgeW = ctx.measureText(badgeText).width + 10;
+          ctx.fillStyle = "rgba(6, 78, 59, 0.78)";
+          ctx.strokeStyle = "rgba(16, 185, 129, 0.65)";
           ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.moveTo(x, tGridBottom);
-          ctx.lineTo(x, tGridBottom + (isMajor ? 5 : 3));
+          ctx.roundRect(tGridLeft + 6, y350 - 15, badgeW, 14, 3);
+          ctx.fill();
           ctx.stroke();
 
-          if (isMajor && yr >= 1750 && yr <= 2250) {
-            ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
-            ctx.font = "11px ui-monospace, monospace";
-            ctx.textAlign = "center";
-            ctx.fillText(yr.toString(), x, tGridBottom + 16);
-            ctx.textAlign = "left";
+          ctx.fillStyle = "#34d399";
+          ctx.fillText(badgeText, tGridLeft + 11, y350 - 4);
+          ctx.restore();
+        }
+
+        // X-Axis Marks and Labels
+        if (state.isZoomed) {
+          for (let yr = 1958; yr <= 2026; yr++) {
+            const x = yrToX(yr);
+            const is5Yr = (yr % 5 === 0) || yr === 1958 || yr === 2026;
+            const isLabeled = (tGridW > 600) ? is5Yr : ((yr % 10 === 0) || yr === 1958 || yr === 2026);
+            ctx.strokeStyle = isLabeled ? "rgba(148, 163, 184, 0.45)" : "rgba(148, 163, 184, 0.18)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x, tGridBottom);
+            ctx.lineTo(x, tGridBottom + (isLabeled ? 5 : 2.5));
+            ctx.stroke();
+
+            if (isLabeled) {
+              ctx.fillStyle = (yr === 1958 || yr === 2026) ? "#f59e0b" : "rgba(148, 163, 184, 0.85)";
+              ctx.font = (yr === 1958 || yr === 2026) ? "bold 11px ui-monospace, monospace" : "11px ui-monospace, monospace";
+              ctx.textAlign = "center";
+              ctx.fillText(yr.toString(), x, tGridBottom + 16);
+              ctx.textAlign = "left";
+            }
+          }
+        } else {
+          const yearStep = tGridW < 550 ? 50 : 25;
+          for (let yr = 1750; yr <= 2250; yr += 25) {
+            const x = yrToX(yr);
+            const isMajor = yr % yearStep === 0;
+            ctx.strokeStyle = isMajor ? "rgba(148, 163, 184, 0.45)" : "rgba(148, 163, 184, 0.2)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x, tGridBottom);
+            ctx.lineTo(x, tGridBottom + (isMajor ? 5 : 3));
+            ctx.stroke();
+
+            if (isMajor && yr >= 1750 && yr <= 2250) {
+              ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
+              ctx.font = "11px ui-monospace, monospace";
+              ctx.textAlign = "center";
+              ctx.fillText(yr.toString(), x, tGridBottom + 16);
+              ctx.textAlign = "left";
+            }
           }
         }
 
         // Threshold Reference Lines (Evaluated directly on standard 1850–1900 baseline)
-        [0.0, 1.5, 2.0, 3.0, 4.0, 5.0].forEach(th => {
+        const tempThresholds = state.isZoomed ? [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.5] : [0.0, 1.5, 2.0, 3.0, 4.0, 5.0];
+        tempThresholds.forEach(th => {
           const y = dtToY(th);
-          ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (th === 1.5 ? "rgba(245,158,11,0.4)" : "rgba(244,63,94,0.4)");
+          const isParis = th === 1.5;
+          ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (isParis ? "rgba(245,158,11,0.55)" : "rgba(148, 163, 184, 0.16)");
+          if (isParis) ctx.setLineDash([3, 3]);
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
-          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (th === 1.5 ? "#f59e0b" : "#f43f5e");
+          if (isParis) ctx.setLineDash([]);
+          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (isParis ? "#f59e0b" : "#94a3b8");
           ctx.font = "bold 9px ui-monospace, monospace";
-          const label = th === 0.0 ? "0.0°C (Baseline)" : `+${th.toFixed(1)}°C`;
+          const label = th === 0.0 ? "0.0°C (Baseline)" : (isParis ? "+1.5°C (Paris)" : `+${th.toFixed(1)}°C`);
           ctx.fillText(label, tGridLeft + 3, y - 2);
         });
 
-        // 1958 Keeling Boundary Marker (Vertical dashed line)
+        // 1958 Keeling Boundary Marker
         const keelingX = yrToX(1958);
-        ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
-        ctx.setLineDash([3, 3]);
-        ctx.beginPath();
-        ctx.moveTo(keelingX, tGridTop);
-        ctx.lineTo(keelingX, tGridBottom);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // 1958 Keeling Label rotated 90 degrees clockwise on the LEFT of the dashed line
         const keelingFontSize = tGridW < 400 ? 10 : 12;
-        ctx.save();
-        ctx.translate(keelingX - 5, tGridTop + 38);
-        ctx.rotate(Math.PI / 2);
-        ctx.fillStyle = "#f59e0b";
-        ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
-        ctx.fillText("1958 Keeling", 0, 0);
-        ctx.restore();
+        if (!state.isZoomed) {
+          ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(keelingX, tGridTop);
+          ctx.lineTo(keelingX, tGridBottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
 
-        // 2026 Present-Day Static Boundary Marker (Orange vertical dashed line like Keeling)
+          ctx.save();
+          ctx.translate(keelingX - 5, tGridTop + 38);
+          ctx.rotate(Math.PI / 2);
+          ctx.fillStyle = "#f59e0b";
+          ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+          ctx.fillText("1958 Keeling", 0, 0);
+          ctx.restore();
+        }
+
+        // 2026 Present-Day Static Boundary Marker
         const present2026X = yrToX(2026);
-        ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
-        ctx.setLineDash([3, 3]);
-        ctx.beginPath();
-        ctx.moveTo(present2026X, tGridTop);
-        ctx.lineTo(present2026X, tGridBottom);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        if (!state.isZoomed) {
+          ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(present2026X, tGridTop);
+          ctx.lineTo(present2026X, tGridBottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
 
-        // 2026 Label rotated 90 degrees clockwise on the LEFT of the dashed line
-        ctx.save();
-        ctx.translate(present2026X - 5, tGridTop + 38);
-        ctx.rotate(Math.PI / 2);
-        ctx.fillStyle = "#f59e0b";
-        ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
-        ctx.fillText("2026", 0, 0);
-        ctx.restore();
+          ctx.save();
+          ctx.translate(present2026X - 5, tGridTop + 38);
+          ctx.rotate(Math.PI / 2);
+          ctx.fillStyle = "#f59e0b";
+          ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+          ctx.fillText("2026", 0, 0);
+          ctx.restore();
+        }
 
-        // Plot Accumulated History: Static Historical Baseline (1750–2026) vs Dynamic Simulation (1958–2250)
-        // 1. Static 1750–2026 Historical Record (Always displayed on chart as ground truth: "that's what happened")
+        // 2050 Paris Net Zero Target Boundary Marker
+        const nz2050X = yrToX(2050);
+        if (!state.isZoomed) {
+          ctx.strokeStyle = state.isNZ2050 ? "rgba(16, 185, 129, 0.85)" : "rgba(16, 185, 129, 0.28)";
+          ctx.lineWidth = state.isNZ2050 ? 1.5 : 1;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(nz2050X, tGridTop);
+          ctx.lineTo(nz2050X, tGridBottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.save();
+          ctx.translate(nz2050X - 5, tGridTop + 38);
+          ctx.rotate(Math.PI / 2);
+          ctx.fillStyle = state.isNZ2050 ? "#10b981" : "rgba(16, 185, 129, 0.5)";
+          ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+          ctx.fillText("2050 Net Zero", 0, 0);
+          ctx.restore();
+        }
+
+        // Plot Accumulated History: Static Historical Baseline vs Dynamic Simulation
+        // 1. Atmospheric CO2 Curve (Purple #c084fc)
         ctx.strokeStyle = "#c084fc";
         ctx.lineWidth = 1.8;
         ctx.beginPath();
-        STATIC_HISTORICAL_RUN.forEach((pt, i) => {
+        let co2Started = false;
+        const ptsForCO2 = state.isZoomed ? STATIC_HISTORICAL_RUN.filter(p => p.year >= 1958 && p.year <= 2026) : STATIC_HISTORICAL_RUN;
+        ptsForCO2.forEach(pt => {
           const cx = yrToX(pt.year);
           const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, co2ToY(pt.co2)));
-          if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          if (!co2Started) { ctx.moveTo(cx, cy); co2Started = true; } else { ctx.lineTo(cx, cy); }
         });
         ctx.stroke();
 
-        ctx.strokeStyle = "#f59e0b";
-        ctx.lineWidth = 2.0;
+        // 2. Two-Layer Ocean EBM Simulated Curve (Rose #f43f5e)
+        ctx.strokeStyle = "#f43f5e";
+        ctx.lineWidth = 2.2;
         ctx.beginPath();
-        STATIC_HISTORICAL_RUN.forEach((pt, i) => {
+        let simStarted = false;
+        const ptsForSim = state.isZoomed
+          ? STATIC_HISTORICAL_RUN.filter(p => p.year >= 1958 && p.year <= 2026)
+          : STATIC_HISTORICAL_RUN.filter(p => p.year >= 1958);
+        ptsForSim.forEach(pt => {
           const cx = yrToX(pt.year);
           const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.deltaTs - OFFSET_1850_1900)));
-          if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          if (!simStarted) { ctx.moveTo(cx, cy); simStarted = true; } else { ctx.lineTo(cx, cy); }
         });
         ctx.stroke();
 
-        // 2. Dynamic Simulation Trajectory starting from 1958 Keeling
+        // 4. Measured Observed History Curve (Amber #f59e0b)
+        ctx.strokeStyle = "#f59e0b";
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        if (state.isZoomed) {
+          OBSERVED_TEMP_1958_2026.forEach((pt, i) => {
+            const cx = yrToX(pt.y);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.t)));
+            if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          });
+        } else {
+          // On main 500-year chart: smooth measured historical line to 5-year intervals for clean visual trend
+          let obsStarted = false;
+          STATIC_HISTORICAL_RUN.forEach(pt => {
+            const cx = yrToX(pt.year);
+            const val = pt.year >= 1958 ? getMeasuredObserved5YrSmoothedAt(pt.year) : (pt.deltaTs - OFFSET_1850_1900);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(val)));
+            if (!obsStarted) { ctx.moveTo(cx, cy); obsStarted = true; } else { ctx.lineTo(cx, cy); }
+          });
+        }
+        ctx.stroke();
+
+        // In zoomed mode, draw circular markers on the measured points
+        if (state.isZoomed) {
+          OBSERVED_TEMP_1958_2026.forEach(pt => {
+            const cx = yrToX(pt.y);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.t)));
+            ctx.fillStyle = "#f59e0b";
+            ctx.beginPath();
+            ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+
+        // 5. Dynamic Simulation Trajectory starting from 1958 Keeling
         if (state.history && state.history.length > 0) {
-          // Dynamic simulated temperature line starting from 1958 Keeling (rose #f43f5e)
-          // Between 1958 and 2026, it closely traces the amber historical curve, demonstrating model fidelity
-          // Beyond 2026, it projects future warming according to the chosen scenario rate
           ctx.strokeStyle = "#f43f5e";
           ctx.lineWidth = 2.4;
           ctx.beginPath();
           let tDynStarted = false;
           for (let i = 0; i < state.history.length; i++) {
             const pt = state.history[i];
-            if (pt.year >= 1958) {
+            if (pt.year >= 1958 && (!state.isZoomed || pt.year <= 2026)) {
               const cx = yrToX(pt.year);
               const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.deltaTs - OFFSET_1850_1900)));
               if (!tDynStarted) { ctx.moveTo(cx, cy); tDynStarted = true; } else { ctx.lineTo(cx, cy); }
@@ -5587,8 +6894,8 @@
           }
           if (tDynStarted) ctx.stroke();
 
-          // Projected CO2 curve into the future beyond 2026 in purple (#c084fc)
-          if (state.year > 2026) {
+          // Projected CO2 curve into future beyond 2026
+          if (!state.isZoomed && state.year > 2026) {
             ctx.strokeStyle = "#c084fc";
             ctx.lineWidth = 1.8;
             ctx.beginPath();
@@ -5605,7 +6912,7 @@
             if (co2DynStarted) ctx.stroke();
           }
 
-          // Active Simulation Leading-Edge Point Indicator (Pulsing Dot at active state.year)
+          // Active Simulation Leading-Edge Point Indicator
           const curHeadX = yrToX(state.year);
           const curHeadY = dtToY(state.deltaTs - OFFSET_1850_1900);
           if (curHeadX >= tGridLeft && curHeadX <= tGridRight && curHeadY >= tGridTop && curHeadY <= tGridBottom) {
@@ -5688,25 +6995,81 @@
           return state.history[state.history.length - 1].co2 || 427.0;
         }
 
-        // 1. Prepare temperature change callout badges at intersections with the orange dashed marker lines (extending to the RIGHT of the pointer line)
+        // 1. Prepare temperature change callout badges with Error annotations
         const markerBadgeBoxes = [];
-        [1958, 2026].forEach(targetYr => {
-          const dtVal = getHistoricalDeltaAt(targetYr);
+        let markerTargets = [];
+        if (state.isZoomed) {
+          markerTargets = [
+            { yr: 1958 },
+            { yr: 1992 },
+            { yr: 1998 },
+            { yr: 2016 },
+            { yr: 2024 },
+            { yr: 2026 }
+          ];
+        } else {
+          markerTargets = (state.isNZ2050 && state.year >= 2050)
+            ? [{ yr: 1958 }, { yr: 2026 }, { yr: 2050 }]
+            : [{ yr: 1958 }, { yr: 2026 }];
+        }
+
+        markerTargets.forEach(tgt => {
+          const targetYr = tgt.yr;
+          const measDt = (targetYr === 2050) ? null : getMeasuredObservedDeltaAt(targetYr);
+          const simDt = (targetYr === 2050) ? getSimulatedDeltaAt(2050) : (getSimulatedDeltaAt(targetYr) || getHistoricalDeltaAt(targetYr));
+          const dtVal = measDt !== null ? measDt : simDt;
+
           if (dtVal !== null) {
             const ix = yrToX(targetYr);
             const iy = dtToY(dtVal);
 
-            // Label text: temperature change anomaly positioned to the RIGHT of the intersection
-            const labelStr = `+${dtVal.toFixed(2)}°C`;
+            let labelStr = "";
+            let bx = 0;
+            let by = 0;
+
+            if (state.isZoomed) {
+              const err = simDt - measDt;
+              const errSign = err >= 0 ? "+" : "";
+              labelStr = `${targetYr}: +${measDt.toFixed(2)}°C (Err: ${errSign}${err.toFixed(2)}°C)`;
+            } else {
+              labelStr = `+${dtVal.toFixed(2)}°C`;
+            }
+
             ctx.font = "bold 10px ui-monospace, monospace";
             const tw = ctx.measureText(labelStr).width;
             const bw = tw + 10;
             const bh = 17;
-            const bx = Math.min(tGridRight - bw - 4, ix + 10);
-            // Positioned cleanly BELOW the curve (iy + 24 for 1958, iy + 36 for 2026) so they never obscure rising temperature or CO2 lines
-            const by = (targetYr === 1958)
-              ? Math.min(tGridBottom - bh - 6, iy + 24)
-              : Math.min(tGridBottom - bh - 6, iy + 36);
+
+            if (state.isZoomed) {
+              // In zoomed view: 1958 is at left margin (place to right), 2026 is at right margin (place to left)
+              if (targetYr === 1958) {
+                bx = ix + 10;
+                by = Math.min(tGridBottom - bh - 6, iy + 24);
+              } else if (targetYr === 2026) {
+                bx = Math.max(tGridLeft + 4, ix - bw - 8);
+                by = Math.min(tGridBottom - bh - 6, iy + 24);
+              } else if (targetYr === 1992) {
+                bx = ix - bw - 8; by = iy + 16;
+              } else if (targetYr === 1998) {
+                bx = ix - bw - 8; by = iy - 22;
+              } else if (targetYr === 2016) {
+                bx = ix - bw - 8; by = iy - 20;
+              } else if (targetYr === 2024) {
+                bx = ix - bw - 8; by = iy - 22;
+              }
+            } else {
+              // Main 500-Year chart: Move labels for 1958 and today back to below and to the right!
+              if (targetYr === 2050) {
+                bx = Math.max(tGridLeft + 4, ix - bw - 8);
+                by = Math.min(tGridBottom - bh - 6, iy + 24);
+              } else {
+                bx = Math.min(tGridRight - bw - 4, ix + 10);
+                by = (targetYr === 1958)
+                  ? Math.min(tGridBottom - bh - 6, iy + 24)
+                  : Math.min(tGridBottom - bh - 6, iy + 36);
+              }
+            }
+
             markerBadgeBoxes.push({ yr: targetYr, ix, iy, bx, by, bw, bh, labelStr });
           }
         });
@@ -5802,18 +7165,20 @@
           }
         });
 
-        // 3. Draw historical marker badges (1958 and 2026) with crisp leader lines and 100% opaque badges
+        // 3. Draw marker badges (1958, 2026, and 2050 if active) with crisp leader lines and 100% opaque badges
         markerBadgeBoxes.forEach(mb => {
-          // Short leader line connecting from top-left of badge up to intersection dot
-          ctx.strokeStyle = "#f59e0b";
+          const badgeColor = mb.yr === 2050 ? "#10b981" : "#f59e0b";
+          // Leader line connecting from badge to intersection dot
+          ctx.strokeStyle = badgeColor;
           ctx.lineWidth = 1.2;
           ctx.beginPath();
-          ctx.moveTo(mb.bx + 4, mb.by);
+          const startX = (mb.bx < mb.ix) ? (mb.bx + mb.bw - 4) : (mb.bx + 4);
+          ctx.moveTo(startX, mb.by);
           ctx.lineTo(mb.ix, mb.iy);
           ctx.stroke();
 
           // Glowing intersection ring point
-          ctx.fillStyle = "#f59e0b";
+          ctx.fillStyle = badgeColor;
           ctx.beginPath();
           ctx.arc(mb.ix, mb.iy, 4.5, 0, Math.PI * 2);
           ctx.fill();
@@ -5823,14 +7188,14 @@
           ctx.fill();
 
           ctx.fillStyle = "#070d17";
-          ctx.strokeStyle = "#f59e0b";
+          ctx.strokeStyle = badgeColor;
           ctx.lineWidth = 1.2;
           ctx.beginPath();
           ctx.roundRect(mb.bx, mb.by, mb.bw, mb.bh, 3);
           ctx.fill();
           ctx.stroke();
 
-          ctx.fillStyle = "#f59e0b";
+          ctx.fillStyle = badgeColor;
           ctx.font = "bold 10px ui-monospace, monospace";
           ctx.fillText(mb.labelStr, mb.bx + 5, mb.by + 12);
         });
@@ -5872,6 +7237,8 @@
         let activeTip = null;
         let isPointerHover = false;
         let hoveredMainTp = null;
+        let isOverMeasLine = false;
+        let isOverSafe350 = false;
 
         const dtVal1958 = getHistoricalDeltaAt(1958);
         const dtVal2026 = getHistoricalDeltaAt(2026);
@@ -5887,15 +7254,20 @@
           }
 
           // Check proximity to the Temperature (ΔT) and CO2 (ppm) trajectory lines at the cursor's year
-          const hoverYr = 1750 + ((mousePos.x - tGridLeft) / tGridW) * 500;
-          const hoverDt = getHistoricalDeltaAt(hoverYr);
-          const simDt = getSimulatedDeltaAt(hoverYr);
+          const hoverYr = yrStart + ((mousePos.x - tGridLeft) / tGridW) * yrSpan;
+          const measDt = getMeasuredObservedDeltaAt(hoverYr);
+          const hoverDt = measDt !== null ? measDt : getHistoricalDeltaAt(hoverYr);
+          const simDt = getSimulatedDeltaAt(hoverYr) !== null ? getSimulatedDeltaAt(hoverYr) : getHistoricalDeltaAt(hoverYr);
           const hoverCo2 = getHistoricalCO2At(hoverYr);
           const tempLineY = (simDt !== null && hoverYr >= 1958) ? dtToY(simDt) : (hoverDt !== null ? dtToY(hoverDt) : -999);
+          const measLineY = (measDt !== null && hoverYr >= 1958) ? dtToY(measDt) : tempLineY;
           const co2LineY = hoverCo2 !== null ? co2ToY(hoverCo2) : -999;
-          const distTemp = Math.abs(mousePos.y - tempLineY);
+          const distMeas = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026) ? Math.abs(mousePos.y - measLineY) : 999;
+          const distSim = (simDt !== null && hoverYr >= 1958) ? Math.abs(mousePos.y - tempLineY) : 999;
+          const distTemp = Math.min(distMeas, distSim, (hoverDt !== null ? Math.abs(mousePos.y - dtToY(hoverDt)) : 999));
           const distCo2 = Math.abs(mousePos.y - co2LineY);
-          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 10 && distTemp <= distCo2;
+          isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2);
+          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2;
           const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp;
 
           // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or left-side orange +0.26°C badge)
@@ -5929,12 +7301,27 @@
             }
           });
 
+          // Check proximity to 350 ppm Safe Boundary line and badge
+          const y350 = co2ToY(350);
+          const has350Line = (y350 >= tGridTop && y350 <= tGridBottom);
+          const isOver350Line = has350Line && (Math.abs(mousePos.y - y350) <= 8 && mousePos.x >= tGridLeft && mousePos.x <= tGridRight);
+          const isOver350Badge = has350Line && (mousePos.x >= tGridLeft && mousePos.x <= tGridLeft + 165 && Math.abs(mousePos.y - (y350 - 8)) <= 11);
+          isOverSafe350 = (isOver350Badge || isOver350Line);
+
           isHoveringMainTpBadge = !!hoveredMainTp;
           if (hoveredMainTp) {
             isPointerHover = true;
+            scheduleHideMeasTempPopover(100);
+            scheduleHideSafe350Popover(100);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
             openTippingPointCard(hoveredMainTp.grp, hoveredMainTp.crossYr, rect.left + hoveredMainTp.anchorX, rect.top + hoveredMainTp.anchorY, false, hoveredMainTp.itemIdx);
           } else if (hoveredThreshold && hoveredThreshold.isOverLabel) {
             isPointerHover = true;
+            scheduleHideMeasTempPopover(100);
+            scheduleHideSafe350Popover(100);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
             const thValStr = hoveredThreshold.th === 0.0 ? "0.0°C" : `+${hoveredThreshold.th.toFixed(1)}°C`;
             const thStroke = hoveredThreshold.th === 0.0 ? "#94a3b8" : (hoveredThreshold.th === 1.5 ? "#f59e0b" : "#f43f5e");
             activeTip = {
@@ -5944,14 +7331,61 @@
               pointX: Math.max(tGridLeft + 25, mousePos.x),
               pointY: hoveredThreshold.lineY
             };
+          } else if (isOverSafe350 && (!isOverMeasLine || isOver350Badge)) {
+            isPointerHover = true;
+            isHovering350Line = true;
+            active350Hitbox = true;
+            scheduleHideMeasTempPopover(100);
+            activeMeasHitbox = null;
+            showSafe350Popover(rect.left + mousePos.x, rect.top + y350);
+
+            // Glowing emerald indicator dot on 350 ppm line
+            ctx.fillStyle = "rgba(16, 185, 129, 0.40)";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, y350, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#10b981";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, y350, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, y350, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (isOverMeasLine) {
+            scheduleHideSafe350Popover(100);
+            active350Hitbox = false;
+            isPointerHover = true;
+            isHoveringMeasLine = true;
+            activeMeasHitbox = { hoverYr, measDt, simDt };
+            showMeasTempPopover(hoverYr, measDt, simDt, rect.left + mousePos.x, rect.top + measLineY);
+
+            // Glowing amber indicator dot on measured curve
+            ctx.fillStyle = "rgba(245, 158, 11, 0.40)";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, measLineY, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#f59e0b";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, measLineY, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, measLineY, 1.5, 0, Math.PI * 2);
+            ctx.fill();
           } else if (isOverTempLine) {
+            scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             let tipText = "";
             let tipStroke = "#f59e0b";
-            if (hoverYr >= 1958 && hoverYr <= 2026 && simDt !== null) {
-              tipText = `${Math.round(hoverYr)} CE · Observed: +${hoverDt.toFixed(2)}°C · Simulated: +${simDt.toFixed(2)}°C`;
-              tipStroke = "#f43f5e";
-            } else if (hoverYr > 2026 && simDt !== null) {
+            if (hoverYr > 2026 && simDt !== null) {
               tipText = `${Math.round(hoverYr)} CE · Projected ΔT: +${simDt.toFixed(2)}°C`;
               tipStroke = "#f43f5e";
             } else {
@@ -5963,9 +7397,13 @@
               stroke: tipStroke,
               compact: true,
               pointX: mousePos.x,
-              pointY: tempLineY
+              pointY: Math.min(tempLineY, measLineY)
             };
           } else if (isOverCo2Line) {
+            scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             activeTip = {
               text: `${Math.round(hoverYr)} CE · CO₂: ${Math.round(hoverCo2)} ppm`,
@@ -5975,18 +7413,30 @@
               pointY: co2LineY
             };
           } else if (isOverKeeling) {
+            scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             activeTip = {
               text: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.",
               stroke: "#f59e0b"
             };
           } else if (isOver2026) {
+            scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             activeTip = {
               text: "Present-day observational benchmark (+1.14°C anomaly rel. 1850–1900 / +1.26°C rel. 1750, 427 ppm CO2), dividing instrumental history from future warming trajectories.",
               stroke: "#f59e0b"
             };
           } else if (isOverActiveYr) {
+            scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             const curObsDt = state.deltaTs - OFFSET_1850_1900;
             activeTip = {
@@ -5994,6 +7444,10 @@
               stroke: "#00e5ff"
             };
           } else if (hoveredThreshold && !hoveredThreshold.isOverLabel) {
+            scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             const thValStr = hoveredThreshold.th === 0.0 ? "0.0°C" : `+${hoveredThreshold.th.toFixed(1)}°C`;
             const thStroke = hoveredThreshold.th === 0.0 ? "#94a3b8" : (hoveredThreshold.th === 1.5 ? "#f59e0b" : "#f43f5e");
@@ -6010,6 +7464,16 @@
         if (!hoveredMainTp && (!paleoModalOverlay || paleoModalOverlay.style.display !== "flex")) {
           isHoveringMainTpBadge = false;
           scheduleHideTippingPointCard(180);
+        }
+        if (!isOverMeasLine) {
+          isHoveringMeasLine = false;
+          activeMeasHitbox = null;
+          scheduleHideMeasTempPopover(140);
+        }
+        if (!isOverSafe350) {
+          isHovering350Line = false;
+          active350Hitbox = false;
+          scheduleHideSafe350Popover(140);
         }
 
         if (activeTip) {
@@ -6113,29 +7577,61 @@
           sCO2.value = sliderVal;
         }
         const sRate = document.getElementById("sliderRate");
-        if (sRate) sRate.value = state.rate.toFixed(1);
         const rDisp = document.getElementById("rateDisplay");
-        if (rDisp) {
-          const rateVal = Math.round(state.rate * 10) / 10;
-          rDisp.textContent = Math.abs(rateVal) < 0.05
-            ? "0.0 ppm/yr (Net Zero)"
-            : `${rateVal > 0 ? "+" : ""}${rateVal.toFixed(1)} ppm/yr`;
-        }
-
-        const roundedRate = Math.round(state.rate * 10) / 10;
+        const bNZ50 = document.getElementById("ratePresetNZ50");
         const bM1 = document.getElementById("ratePresetM1");
         const b0 = document.getElementById("ratePreset0");
         const b15 = document.getElementById("ratePreset15");
         const b25 = document.getElementById("ratePreset25");
-        if (bM1) bM1.classList.toggle("active", roundedRate === -1.5);
-        if (b0) b0.classList.toggle("active", roundedRate === 0.0);
-        if (b15) b15.classList.toggle("active", roundedRate === 1.5);
-        if (b25) b25.classList.toggle("active", roundedRate === 2.5);
 
-        document.querySelectorAll(".slider-pip").forEach(pip => {
-          const val = parseFloat(pip.dataset.val);
-          pip.classList.toggle("active", Math.abs(val - roundedRate) < 0.05);
-        });
+        if (state.isNZ2050) {
+          if (bNZ50) bNZ50.classList.add("active");
+          if (bM1) bM1.classList.remove("active");
+          if (b0) b0.classList.remove("active");
+          if (b15) b15.classList.remove("active");
+          if (b25) b25.classList.remove("active");
+
+          const effectiveRate = state.year < 2026
+            ? 2.5
+            : (state.year < 2050 ? Math.max(0, 2.5 * (2050 - state.year) / 24.0) : 0.0);
+
+          if (sRate) sRate.value = effectiveRate.toFixed(1);
+
+          if (rDisp) {
+            if (state.year < 2026) {
+              rDisp.textContent = "NZ 2050 (+2.5 → 0 ppm/yr)";
+            } else if (state.year < 2050) {
+              rDisp.textContent = `NZ 2050 (+${effectiveRate.toFixed(1)} ppm/yr)`;
+            } else {
+              rDisp.textContent = "Net Zero (0.0 ppm/yr)";
+            }
+          }
+
+          document.querySelectorAll(".slider-pip").forEach(pip => {
+            const val = parseFloat(pip.dataset.val);
+            pip.classList.toggle("active", Math.abs(val - effectiveRate) < 0.25);
+          });
+        } else {
+          if (bNZ50) bNZ50.classList.remove("active");
+          if (sRate) sRate.value = state.rate.toFixed(1);
+          if (rDisp) {
+            const rateVal = Math.round(state.rate * 10) / 10;
+            rDisp.textContent = Math.abs(rateVal) < 0.05
+              ? "0.0 ppm/yr (Net Zero)"
+              : `${rateVal > 0 ? "+" : ""}${rateVal.toFixed(1)} ppm/yr`;
+          }
+
+          const roundedRate = Math.round(state.rate * 10) / 10;
+          if (bM1) bM1.classList.toggle("active", roundedRate === -1.5);
+          if (b0) b0.classList.toggle("active", roundedRate === 0.0);
+          if (b15) b15.classList.toggle("active", roundedRate === 1.5);
+          if (b25) b25.classList.toggle("active", roundedRate === 2.5);
+
+          document.querySelectorAll(".slider-pip").forEach(pip => {
+            const val = parseFloat(pip.dataset.val);
+            pip.classList.toggle("active", Math.abs(val - roundedRate) < 0.05);
+          });
+        }
 
         drawFluxProfile();
 
@@ -6200,6 +7696,11 @@
             if (state.year < 2026) {
               // ALWAYS follow calibrated historical data (Law Dome ice core & Mauna Loa Keeling) up to 2026
               state.co2 = getHistoricalCO2(state.year + dt);
+            } else if (state.isNZ2050) {
+              // Net Zero by 2050 pathway:
+              // Emissions ramp down linearly from +2.5 ppm/yr in 2026 to 0.0 ppm/yr in 2050
+              const currentRate = state.year < 2050 ? Math.max(0, 2.5 * (2050 - state.year) / 24.0) : 0.0;
+              state.co2 += currentRate * dt;
             } else if (state.rate !== 0) {
               // Beyond 2026, advance based on the chosen future scenario rate
               if (state.rate < 0) {
@@ -6227,7 +7728,7 @@
             state.deltaTd += dTd * dt;
 
             // Prevent drawdown from plunging below zero increase since 1750
-            if (state.deltaTs <= 0.0 && state.rate <= 0 && state.year >= 2026) {
+            if (state.deltaTs <= 0.0 && state.rate <= 0 && state.year >= 2026 && !state.isNZ2050) {
               state.deltaTs = 0.0;
               state.rate = 0.0;
               state.running = false;
@@ -6495,6 +7996,30 @@
           }
         }
 
+        if (measTempPopoverEl && measTempPopoverEl.style.display === "block") {
+          const mRect = measTempPopoverEl.getBoundingClientRect();
+          const inMeas = e.clientX >= mRect.left && e.clientX <= mRect.right && e.clientY >= mRect.top && e.clientY <= mRect.bottom;
+          if (inMeas) {
+            isHoveringMeasTemp = true;
+            cancelHideMeasTempPopover();
+          } else if (!isHoveringMeasLine) {
+            isHoveringMeasTemp = false;
+            scheduleHideMeasTempPopover(120);
+          }
+        }
+
+        if (safe350PopoverEl && safe350PopoverEl.style.display === "block") {
+          const sRect = safe350PopoverEl.getBoundingClientRect();
+          const inS350 = e.clientX >= sRect.left && e.clientX <= sRect.right && e.clientY >= sRect.top && e.clientY <= sRect.bottom;
+          if (inS350) {
+            isHoveringSafe350 = true;
+            cancelHideSafe350Popover();
+          } else if (!isHovering350Line) {
+            isHoveringSafe350 = false;
+            scheduleHideSafe350Popover(120);
+          }
+        }
+
         if (bubbleCard && bubbleCard.style.display === "block") {
           const bRect = bubbleCard.getBoundingClientRect();
           const inBubble = e.clientX >= bRect.left && e.clientX <= bRect.right && e.clientY >= bRect.top && e.clientY <= bRect.bottom;
@@ -6515,8 +8040,14 @@
         isHoveringSpeechPin = false;
         isHoveringMainTpBadge = false;
         isHoveringPaleoTpBadge = false;
+        isHoveringMeasTemp = false;
+        isHoveringMeasLine = false;
+        isHoveringSafe350 = false;
+        isHovering350Line = false;
         scheduleHideTippingPointCard(120);
         scheduleHideBubbleCard(120);
+        scheduleHideMeasTempPopover(120);
+        scheduleHideSafe350Popover(120);
       });
 
       document.getElementById("bubbleCloseBtn").addEventListener("click", () => {
@@ -6584,6 +8115,26 @@
           tpHoveringCard = false;
           tpCardEl.style.display = "none";
           activeTpGroupKey = null;
+        }
+        if (isSimple && measTempPopoverEl) {
+          isHoveringMeasTemp = false;
+          measTempPopoverEl.style.display = "none";
+          activeMeasHitbox = null;
+        }
+        if (isSimple && safe350PopoverEl) {
+          isHoveringSafe350 = false;
+          safe350PopoverEl.style.display = "none";
+          active350Hitbox = false;
+        }
+        if (isSimple && state.isZoomed) {
+          state.isZoomed = false;
+          const mainGrid = document.querySelector(".main-grid");
+          if (mainGrid) mainGrid.classList.remove("chart-zoomed");
+          appWrapper.classList.remove("chart-zoomed");
+          const lbl = document.getElementById("lblZoomKeeling");
+          const btnBottom = document.getElementById("btnZoomKeeling");
+          if (lbl) lbl.textContent = "Zoom: 1958–Today (Keeling Era)";
+          if (btnBottom) btnBottom.classList.remove("active");
         }
         bubbleCard.style.display = "none";
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
@@ -6694,8 +8245,13 @@
 
         document.getElementById("statPpmRate").innerHTML = `+${netPpmRate.toFixed(2)} <span style="font-size: 0.8rem; color: var(--text-muted);">ppm/yr</span>`;
 
-        document.getElementById("statWarmingRate").innerHTML = `+${committedRate.toFixed(3)} <span style="font-size: 0.8rem; color: var(--text-muted);">°C / yr</span>`;
-        document.getElementById("statWarmingRate").nextElementSibling.textContent = `+${(committedRate * 10).toFixed(2)} °C / decade (+0.010 °C per ppm locked in)`;
+        const elWarming = document.getElementById("statWarmingRate");
+        if (elWarming) {
+          elWarming.innerHTML = `+${committedRate.toFixed(3)} <span style="font-size: 0.8rem; color: var(--text-muted);">°C / yr</span>`;
+          if (elWarming.nextElementSibling) {
+            elWarming.nextElementSibling.textContent = `+${(committedRate * 10).toFixed(2)} °C / decade (+0.010 °C per ppm locked in)`;
+          }
+        }
 
         const badge15 = document.getElementById("budgetsBadge15");
         const stat15Val = document.getElementById("statDepletionClock");
@@ -7133,7 +8689,11 @@
 
         updateBudgetsCalculations();
       }
-      initBudgetsView();
+      try {
+        initBudgetsView();
+      } catch (err) {
+        console.error("Error initializing Budgets view:", err);
+      }
 
       // ==========================================
       // SOURCES OF CARBON & EMISSIONS ENGINE (OWID)
@@ -7157,12 +8717,34 @@
             desc: "Burning coal, oil, and natural gas for power, heating, mobility, and industrial processing.",
             subsectors: [
               { name: "Energy in Industry", pct: 24.2, gt: 13.2, detail: "Iron & steel (7.2%), chemicals & petrochemicals (3.6%), non-ferrous metals (0.7%), machinery, paper/pulp." },
-              { name: "Transport", pct: 16.2, gt: 8.8, detail: "Road vehicles (11.9% — cars & vans 7.2%, trucks & buses 4.7%), aviation (1.9%), shipping (1.7%), rail (0.4%), pipelines (0.3%)." },
-              { name: "Energy in Buildings", pct: 17.5, gt: 9.6, detail: "Residential space heating, cooking & lighting (10.9%); commercial buildings, offices, schools & hospitals (6.6%)." },
+              { name: "Road, Shipping & Rail Transport", pct: 14.3, gt: 7.8, detail: "Road passenger cars & vans (7.2%), freight trucks & buses (4.7%), maritime shipping (1.7%), rail (0.4%), pipelines (0.3%)." },
+              { name: "Air Transport (Aviation)", pct: 1.9, gt: 1.04, detail: "Commercial passenger flights (81%) and freight/cargo (19%). Note: high-altitude contrail cirrus & NOₓ roughly double net radiative forcing to ~3.5% of all warming." },
+              { name: "Buildings (Residential & Commercial)", pct: 16.5, gt: 9.0, detail: "Residential space heating, cooking & lighting (10.9%); commercial buildings, offices, schools, retail & hospitals (5.6%, excluding dedicated hyperscale data centers)." },
+              { name: "Data Centres & Hyperscale Computing", pct: 1.0, gt: 0.55, detail: "Global cloud infrastructure, AI training/inference clusters, and cooling. Consumes ~460 TWh/yr (~1.5–2% global electricity), projected to more than double by 2030." },
               { name: "Fugitive Emissions from Fuel Extraction", pct: 5.8, gt: 3.2, detail: "Oil & gas flaring, venting, and pipeline methane leaks (3.9%); coal mine methane venting (1.9%)." },
               { name: "Other Energy & Agriculture Machinery", pct: 9.5, gt: 5.2, detail: "Tractors, harvesters, fishing trawlers, diesel generators, unallocated fuel combustion." }
             ],
-            cleanSolution: "Electrify with Solar, Wind, Nuclear & Hydro; replace gas boilers with Heat Pumps (COP 3–4); replace petrol/diesel vehicles with Battery EVs; deploy Grid Storage."
+            cleanSolution: "Electrify with Solar, Wind, Nuclear & Hydro; 24/7 Carbon-Free Energy (CFE) for data centres; heat pumps for buildings; battery EVs for road transport; SAF e-kerosene for aviation.",
+            deepDives: [
+              {
+                icon: "✈️",
+                title: "Air Transport: Direct CO₂ vs. The 2× Contrail Climate Multiplier",
+                badge: "1.9% CO₂ · ~3.5% Net Warming",
+                color: "#38bdf8",
+                bg: "rgba(56, 189, 248, 0.06)",
+                border: "rgba(56, 189, 248, 0.28)",
+                content: `Direct kerosene combustion accounts for <strong>~1.04 Gt CO₂/yr (1.9% of global GHGs)</strong>. However, because aircraft fly in the cold upper troposphere (30,000–40,000 ft), water vapor and soot particles trigger persistent <strong>contrail cirrus clouds</strong> in ice-supersaturated regions (ISSRs). These artificial cirrus clouds trap outgoing terrestrial thermal infrared heat.<br><br>According to the landmark atmospheric assessment by <strong>Lee et al. (2021, <em>Atmospheric Environment</em>)</strong>, non-CO₂ effects (contrail cirrus +57 mW/m² and net NOₓ-ozone forcing) roughly <strong>double aviation's net effective radiative forcing (ERF) to ~3.5% of total anthropogenic warming</strong>.<br><br><strong style="color: #38bdf8;">Abatement & Intervention:</strong> Batteries are gravimetrically restricted to commuter flights &lt;500 km (jet fuel stores ~12,000 Wh/kg vs ~250 Wh/kg for Li-ion). Long-haul flights require <strong>Sustainable Aviation Fuels (SAF)</strong> via Power-to-Liquid e-kerosene (green H₂ + direct air captured CO₂). Critically, because just <strong>~2% of flights cause ~80% of contrail warming</strong>, operational flight altitude re-routing (diverting 2,000 ft around supersaturated air) can eliminate &gt;50% of contrail warming with &lt;1% fuel penalty.`
+              },
+              {
+                icon: "🖥️",
+                title: "Hyperscale Data Centres & AI Trajectory: With vs. Without Zero-Carbon Power",
+                badge: "IEA & EPRI 2024 Analysis",
+                color: "#c084fc",
+                bg: "rgba(192, 132, 252, 0.07)",
+                border: "rgba(192, 132, 252, 0.32)",
+                content: `<div style="margin-bottom: 6px;"><strong>2024 Baseline:</strong> Global data centres, AI clusters, and cryptocurrency consume <strong>~460 TWh/yr</strong> (~1.4%–2% of global electricity), emitting <strong>~0.45 Gt CO₂e/yr</strong> (~1.0% of energy emissions).</div><div style="margin-bottom: 6px;"><strong>The 2030 Explosion:</strong> Driven by generative AI training clusters and real-time inference, global data centre power demand is projected to surge to <strong>800 to 1,050+ TWh/yr by 2030</strong> (IEA 2024; EPRI 2024), rising from ~4% to <strong>9%–12% of total US electricity demand</strong>.</div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;"><div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 5px; padding: 7px 9px;"><strong style="color: #f43f5e; display: block; margin-bottom: 3px;">❌ WITHOUT Guaranteed Zero Carbon</strong><span style="font-size: 0.73rem; color: #cbd5e1; line-height: 1.35; display: block;">• Interconnects to fossil grids; builds on-site gas peakers & reciprocating engines for 24/7 uptime.<br>• Coal retirements delayed in PJM, MISO, and Southeast US.<br>• Emissions swell to <strong>1.2 to 1.8 Gt CO₂e/yr by 2030–2035</strong> (surpassing all commercial aviation).</span></div><div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 5px; padding: 7px 9px;"><strong style="color: #34d399; display: block; margin-bottom: 3px;">✅ WITH Guaranteed Zero Carbon (24/7 CFE)</strong><span style="font-size: 0.73rem; color: #cbd5e1; line-height: 1.35; display: block;">• Shifts from paper RECs to <strong>Hourly 24/7 Carbon-Free Energy</strong> matching.<br>• Long-term PPAs finance dedicated firm clean power: <strong>Nuclear restarts</strong> (Three Mile Island Crane 835 MW; Palisades 800 MW), <strong>SMRs</strong> (Kairos, X-energy), and <strong>Enhanced Geothermal</strong> (Fervo Energy).<br>• Scope 2 emissions kept at <strong>&lt;0.10 Gt CO₂e/yr</strong>.</span></div></div>`
+              }
+            ]
           },
           {
             id: "afolu",
@@ -7285,6 +8867,17 @@
                 <div style="background: rgba(0, 229, 255, 0.04); border-left: 3px solid ${sec.color}; padding: 8px 12px; border-radius: 4px; font-size: 0.78rem; line-height: 1.4; color: #cbd5e1;">
                   <strong style="color: ${sec.color};">Clean Abatement Solutions:</strong> ${sec.cleanSolution}
                 </div>
+                ${sec.deepDives ? sec.deepDives.map(dd => `
+                  <div style="background: ${dd.bg || 'rgba(0, 229, 255, 0.05)'}; border: 1px solid ${dd.border || 'rgba(0, 229, 255, 0.25)'}; border-left: 3px solid ${dd.color || 'var(--cyan)'}; border-radius: 6px; padding: 10px 12px; font-size: 0.77rem; line-height: 1.45; color: #cbd5e1; margin-top: 8px;">
+                    <div style="font-weight: 700; color: ${dd.color || 'var(--cyan)'}; margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+                      <div style="display: flex; align-items: center; gap: 6px;">
+                        <span>${dd.icon}</span> <span>${dd.title}</span>
+                      </div>
+                      ${dd.badge ? `<span class="badge" style="background: rgba(255,255,255,0.08); color: ${dd.color}; font-size: 0.7rem;">${dd.badge}</span>` : ""}
+                    </div>
+                    <div>${dd.content}</div>
+                  </div>
+                `).join("") : ""}
                 ${sec.specialNote ? `
                   <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 3px solid var(--emerald); border-radius: 6px; padding: 10px 12px; font-size: 0.77rem; line-height: 1.45; color: #cbd5e1; margin-top: 6px;">
                     <div style="font-weight: 700; color: var(--emerald); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
@@ -7832,8 +9425,16 @@
         updateSolutionsCalculations();
       }
 
-      initSourcesView();
-      initSolutionsView();
+      try {
+        initSourcesView();
+      } catch (err) {
+        console.error("Error initializing Sources view:", err);
+      }
+      try {
+        initSolutionsView();
+      } catch (err) {
+        console.error("Error initializing Solutions view:", err);
+      }
 
       // Simulation Controls
       function togglePlayPause() {
@@ -7882,28 +9483,43 @@
         });
       });
 
+      const btnNZ50 = document.getElementById("ratePresetNZ50");
+      if (btnNZ50) {
+        btnNZ50.addEventListener("click", () => {
+          state.isNZ2050 = true;
+          state.rate = 2.5;
+          syncUI();
+          draw();
+        });
+      }
+
       document.getElementById("sliderRate").addEventListener("input", e => {
+        state.isNZ2050 = false;
         state.rate = parseFloat(e.target.value);
         syncUI();
         draw();
       });
 
       document.getElementById("ratePresetM1").addEventListener("click", () => {
+        state.isNZ2050 = false;
         state.rate = -1.5;
         syncUI();
         draw();
       });
       document.getElementById("ratePreset0").addEventListener("click", () => {
+        state.isNZ2050 = false;
         state.rate = 0.0;
         syncUI();
         draw();
       });
       document.getElementById("ratePreset15").addEventListener("click", () => {
+        state.isNZ2050 = false;
         state.rate = 1.5;
         syncUI();
         draw();
       });
       document.getElementById("ratePreset25").addEventListener("click", () => {
+        state.isNZ2050 = false;
         state.rate = 2.5;
         syncUI();
         draw();
@@ -7913,6 +9529,7 @@
         pip.addEventListener("click", () => {
           const val = parseFloat(pip.dataset.val);
           if (!isNaN(val)) {
+            state.isNZ2050 = false;
             state.rate = val;
             syncUI();
             draw();
@@ -7921,13 +9538,35 @@
       });
 
       window.addEventListener("resize", () => {
+        if (!appWrapper.classList.contains("budgets-mode") && !appWrapper.classList.contains("sources-mode") && !appWrapper.classList.contains("solutions-mode")) {
+          draw();
+        }
         if (bubbleCard.style.display === "block") {
           showSpeechBubble(currentStep);
         }
       });
 
-      // Modal Tabs & Navigation Handlers
+      // Modal Tabs & Navigation Handlers (with Mobile Minimise Support)
       const modalOverlay = document.getElementById("modalOverlay");
+      const modalNav = document.getElementById("modalNav");
+      const btnToggleModalNav = document.getElementById("btnToggleModalNav");
+      const modalActiveTabName = document.getElementById("modalActiveTabName");
+      const modalBody = document.querySelector(".modal-body");
+
+      function updateModalNavToggleText() {
+        if (!btnToggleModalNav || !modalNav) return;
+        const isCollapsed = modalNav.classList.contains("collapsed");
+        btnToggleModalNav.innerHTML = isCollapsed ? "Chapters &#x25BE;" : "Hide Chapters &#x25B4;";
+        btnToggleModalNav.setAttribute("aria-expanded", !isCollapsed);
+      }
+
+      if (btnToggleModalNav) {
+        btnToggleModalNav.addEventListener("click", () => {
+          modalNav.classList.toggle("collapsed");
+          updateModalNavToggleText();
+        });
+      }
+
       document.getElementById("openModalBtn").addEventListener("click", () => {
         modalOverlay.style.display = "flex";
       });
@@ -7939,12 +9578,57 @@
       });
 
       function setDocPage(pageId) {
+        let activeTitle = "";
         document.querySelectorAll(".modal-tab-btn").forEach(b => {
-          b.classList.toggle("active", b.dataset.page === pageId);
+          const isActive = b.dataset.page === pageId;
+          b.classList.toggle("active", isActive);
+          if (isActive) activeTitle = b.textContent.trim();
         });
         document.querySelectorAll(".doc-page").forEach(p => {
           p.classList.toggle("active", p.id === pageId);
         });
+
+        if (modalActiveTabName && activeTitle) {
+          modalActiveTabName.textContent = activeTitle;
+        }
+
+        // Auto-minimise contents links unconditionally when a link is pressed (clean reading pane on all screen widths)
+        if (modalNav) {
+          modalNav.classList.add("collapsed");
+          updateModalNavToggleText();
+        }
+
+        if (modalBody) {
+          modalBody.scrollTop = 0;
+        }
+      }
+
+      function openGuideToAerosolSection() {
+        if (measTempPopoverEl) measTempPopoverEl.style.display = "none";
+        isHoveringMeasTemp = false;
+        if (modalOverlay) modalOverlay.style.display = "flex";
+        setDocPage("page-ebm");
+        setTimeout(() => {
+          const targetSec = document.getElementById("sec-aerosol-masking");
+          if (targetSec) {
+            targetSec.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 80);
+      }
+
+      function openGuideTo350Section() {
+        if (safe350PopoverEl) safe350PopoverEl.style.display = "none";
+        isHoveringSafe350 = false;
+        isHovering350Line = false;
+        active350Hitbox = false;
+        if (modalOverlay) modalOverlay.style.display = "flex";
+        setDocPage("page-carbon-budgets");
+        setTimeout(() => {
+          const targetSec = document.getElementById("sec-safe-350ppm");
+          if (targetSec) {
+            targetSec.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 80);
       }
 
       document.querySelectorAll(".modal-tab-btn").forEach(btn => {
@@ -7953,6 +9637,32 @@
       document.querySelectorAll(".toc-link").forEach(link => {
         link.addEventListener("click", () => setDocPage(link.dataset.target));
       });
+
+      // Instrumental Keeling Era (1958–Today) Zoom Engine
+      function toggleZoomKeeling() {
+        state.isZoomed = !state.isZoomed;
+        const mainGrid = document.querySelector(".main-grid");
+        const appWrapper = document.getElementById("appWrapper");
+        if (mainGrid) mainGrid.classList.toggle("chart-zoomed", state.isZoomed);
+        if (appWrapper) appWrapper.classList.toggle("chart-zoomed", state.isZoomed);
+
+        const lbl = document.getElementById("lblZoomKeeling");
+        const btnBottom = document.getElementById("btnZoomKeeling");
+
+        if (lbl) {
+          lbl.textContent = state.isZoomed ? "Reset 500-Year View (1750–2250)" : "Zoom: 1958–Today (Keeling Era)";
+        }
+        if (btnBottom) {
+          btnBottom.classList.toggle("active", state.isZoomed);
+        }
+
+        requestAnimationFrame(() => {
+          draw();
+        });
+      }
+
+      const btnZoomKeeling = document.getElementById("btnZoomKeeling");
+      if (btnZoomKeeling) btnZoomKeeling.addEventListener("click", toggleZoomKeeling);
 
       // =========================================================================
       // POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR ENGINE
@@ -8082,6 +9792,9 @@
             simYr += step;
             if (simYr <= 2026) {
               simC = getHistoricalCO2(simYr);
+            } else if (state.isNZ2050) {
+              const r = simYr < 2050 ? Math.max(0, 2.5 * (2050 - simYr) / 24.0) : 0.0;
+              simC += r * step;
             } else if (futureRate < 0) {
               simC = Math.max(CO2_BASE, simC + futureRate * step);
             } else if (futureRate > 0) {

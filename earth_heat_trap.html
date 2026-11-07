@@ -651,7 +651,13 @@
 
   <!-- HEADER -->
   <header>
-    <div class="badge-live">The Plain-English Climate Guide</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+      <div class="badge-live">The Plain-English Climate Guide</div>
+      <nav style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="advanced.html" style="font-size: 12px; font-weight: 700; color: #38bdf8; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.08);">🔬 Warming Simulator →</a>
+        <a href="we_only_have_one_pale_blue_dot.html" style="font-size: 12px; font-weight: 700; color: #34d399; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.08);">🌍 Pale Blue Dot →</a>
+      </nav>
+    </div>
     <h1>EARTH'S <span>HEAT TRAP</span></h1>
     <p class="lead-text">
       Think of our atmosphere as a giant duvet. When we burn oil, coal, and gas, we make that duvet thicker. Here is what happens to our heat, our weather, and our bills.
@@ -905,9 +911,14 @@
   <footer>
     <div class="footer-content">
       <span>Calibrated physics model built on IPCC AR6 climate sensitivity and historical observations. Made for plain-English understanding.</span>
-      <a href="advanced.html" class="btn-advanced-link" id="btnAdvancedVersion">
-        🔬 Open Full 1D Physics Simulator (Advanced Version) →
-      </a>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px;">
+        <a href="advanced.html" class="btn-advanced-link" id="btnAdvancedVersion">
+          🔬 Open Full 1D Physics Simulator (Advanced Version) →
+        </a>
+        <a href="we_only_have_one_pale_blue_dot.html" class="btn-advanced-link" style="border-color: #38bdf8; color: #38bdf8;" id="btnPaleBlueDotLink">
+          🌍 We Only Have One Pale Blue Dot (Resource Overshoot) →
+        </a>
+      </div>
     </div>
   </footer>
 
