@@ -1479,7 +1479,7 @@
     }
     .modal-title { font-size: 1.15rem; font-weight: 700; color: var(--cyan); }
     .modal-nav-bar {
-      display: none;
+      display: flex;
       background: #080d19;
       border-bottom: 1px solid var(--border);
       padding: 10px 18px;
@@ -1522,25 +1522,18 @@
     .modal-nav {
       display: flex; flex-wrap: wrap; background: #080d1a; border-bottom: 1px solid var(--border);
       padding: 8px 16px; gap: 8px;
+      transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.2s ease;
+      max-height: 600px;
+      opacity: 1;
+      overflow: hidden;
     }
-    @media (max-width: 768px) {
-      .modal-nav-bar {
-        display: flex;
-      }
-      .modal-nav {
-        transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.2s ease;
-        max-height: 600px;
-        opacity: 1;
-        overflow: hidden;
-      }
-      .modal-nav.collapsed {
-        max-height: 0 !important;
-        opacity: 0 !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        border-bottom: none !important;
-        pointer-events: none;
-      }
+    .modal-nav.collapsed {
+      max-height: 0 !important;
+      opacity: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      border-bottom: none !important;
+      pointer-events: none;
     }
     .modal-tab-btn {
       background: var(--card-inner); border: 1px solid var(--border); color: var(--text-muted);
@@ -8708,8 +8701,8 @@
           modalActiveTabName.textContent = activeTitle;
         }
 
-        // On mobile phone screens, auto-minimise contents links when a link is pressed
-        if (window.innerWidth <= 768 && modalNav) {
+        // Auto-minimise contents links unconditionally when a link is pressed (clean reading pane on all screen widths)
+        if (modalNav) {
           modalNav.classList.add("collapsed");
           updateModalNavToggleText();
         }
