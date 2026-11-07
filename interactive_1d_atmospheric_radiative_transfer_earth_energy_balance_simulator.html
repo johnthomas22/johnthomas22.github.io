@@ -5441,22 +5441,30 @@
       const measTempLinkBtn = document.getElementById("measTempLinkBtn");
       let measTempHideTimer = null;
       let isHoveringMeasTemp = false;
+      let isHoveringMeasLine = false;
       let activeMeasHitbox = null;
 
-      function scheduleHideMeasTempPopover(delayMs) {
-        if (measTempHideTimer) clearTimeout(measTempHideTimer);
-        measTempHideTimer = setTimeout(() => {
-          if (!isHoveringMeasTemp && measTempPopoverEl) {
-            measTempPopoverEl.style.display = "none";
-          }
-        }, delayMs || 150);
-      }
-
-      function showMeasTempPopover(yr, measVal, simVal, clientX, clientY) {
+      function cancelHideMeasTempPopover() {
         if (measTempHideTimer) {
           clearTimeout(measTempHideTimer);
           measTempHideTimer = null;
         }
+      }
+
+      function scheduleHideMeasTempPopover(delay = 140) {
+        if (isHoveringMeasTemp || isHoveringMeasLine) return;
+        if (measTempHideTimer) return;
+        measTempHideTimer = setTimeout(() => {
+          measTempHideTimer = null;
+          if (!isHoveringMeasTemp && !isHoveringMeasLine) {
+            if (measTempPopoverEl) measTempPopoverEl.style.display = "none";
+            activeMeasHitbox = null;
+          }
+        }, delay);
+      }
+
+      function showMeasTempPopover(yr, measVal, simVal, clientX, clientY) {
+        cancelHideMeasTempPopover();
         if (!measTempPopoverEl || !measTempStatsEl) return;
 
         const diff = simVal !== null ? (simVal - measVal) : 0;
@@ -5495,10 +5503,7 @@
       if (measTempPopoverEl) {
         measTempPopoverEl.addEventListener("mouseenter", () => {
           isHoveringMeasTemp = true;
-          if (measTempHideTimer) {
-            clearTimeout(measTempHideTimer);
-            measTempHideTimer = null;
-          }
+          cancelHideMeasTempPopover();
         });
         measTempPopoverEl.addEventListener("mouseleave", () => {
           isHoveringMeasTemp = false;
@@ -5509,7 +5514,10 @@
       if (measTempCloseBtn) {
         measTempCloseBtn.addEventListener("click", () => {
           isHoveringMeasTemp = false;
+          isHoveringMeasLine = false;
+          cancelHideMeasTempPopover();
           if (measTempPopoverEl) measTempPopoverEl.style.display = "none";
+          activeMeasHitbox = null;
         });
       }
 
@@ -5661,6 +5669,13 @@
         activeTpGroupKey = null;
       });
       document.addEventListener("mousedown", e => {
+        if (measTempPopoverEl && measTempPopoverEl.style.display === "block" && !measTempPopoverEl.contains(e.target) && e.target !== canvas) {
+          isHoveringMeasTemp = false;
+          isHoveringMeasLine = false;
+          cancelHideMeasTempPopover();
+          measTempPopoverEl.style.display = "none";
+          activeMeasHitbox = null;
+        }
         if (tpCardEl.style.display === "block" && !tpCardEl.contains(e.target) && e.target !== canvas && e.target !== paleoCompareCanvas) {
           tpCardPinned = false;
           tpHoveringCard = false;
@@ -6821,6 +6836,7 @@
             };
           } else if (isOverMeasLine) {
             isPointerHover = true;
+            isHoveringMeasLine = true;
             activeMeasHitbox = { hoverYr, measDt, simDt };
             showMeasTempPopover(hoverYr, measDt, simDt, rect.left + mousePos.x, rect.top + measLineY);
 
@@ -6916,8 +6932,9 @@
           scheduleHideTippingPointCard(180);
         }
         if (!isOverMeasLine) {
+          isHoveringMeasLine = false;
           activeMeasHitbox = null;
-          scheduleHideMeasTempPopover(180);
+          scheduleHideMeasTempPopover(140);
         }
 
         if (activeTip) {
@@ -7440,6 +7457,18 @@
           }
         }
 
+        if (measTempPopoverEl && measTempPopoverEl.style.display === "block") {
+          const mRect = measTempPopoverEl.getBoundingClientRect();
+          const inMeas = e.clientX >= mRect.left && e.clientX <= mRect.right && e.clientY >= mRect.top && e.clientY <= mRect.bottom;
+          if (inMeas) {
+            isHoveringMeasTemp = true;
+            cancelHideMeasTempPopover();
+          } else if (!isHoveringMeasLine) {
+            isHoveringMeasTemp = false;
+            scheduleHideMeasTempPopover(120);
+          }
+        }
+
         if (bubbleCard && bubbleCard.style.display === "block") {
           const bRect = bubbleCard.getBoundingClientRect();
           const inBubble = e.clientX >= bRect.left && e.clientX <= bRect.right && e.clientY >= bRect.top && e.clientY <= bRect.bottom;
@@ -7460,8 +7489,11 @@
         isHoveringSpeechPin = false;
         isHoveringMainTpBadge = false;
         isHoveringPaleoTpBadge = false;
+        isHoveringMeasTemp = false;
+        isHoveringMeasLine = false;
         scheduleHideTippingPointCard(120);
         scheduleHideBubbleCard(120);
+        scheduleHideMeasTempPopover(120);
       });
 
       document.getElementById("bubbleCloseBtn").addEventListener("click", () => {
