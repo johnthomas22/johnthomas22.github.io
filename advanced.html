@@ -9,6 +9,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="authorship-verification" content="sha256:2308c58eff8d7bacfcbfcb553eb4985f25abf8dc1a55234c163a31a5b243d02f">
   <title>Earth Energy Imbalance & Radiative Transfer Simulator</title>
+
+  <!-- Progressive Web App (PWA) Meta & Manifest -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#070d17">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ClimateSim">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <style>
     :root {
       --bg: #090e17;
@@ -10380,6 +10390,17 @@
       resetSimulation(false);
       requestAnimationFrame(update);
     })();
+  </script>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.warn('PWA ServiceWorker registration failed:', err);
+        });
+      });
+    }
   </script>
 </body>
 </html>
