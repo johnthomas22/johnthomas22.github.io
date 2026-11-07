@@ -336,6 +336,83 @@
       font-weight: 800;
     }
 
+    /* PLANETARY ALLOCATION BREAKDOWN BAR */
+    .allocation-breakdown-box {
+      background: rgba(0, 0, 0, 0.32);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .allocation-bar-track {
+      width: 100%;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .allocation-bar-human {
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #0284c7);
+      transition: width 0.35s ease;
+    }
+    .allocation-bar-nature {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #059669);
+      transition: width 0.35s ease;
+    }
+    .allocation-bar-boundary {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 66.67%; /* 1.00 planet boundary on a 1.5 max scale */
+      width: 2px;
+      background: #ffffff;
+      box-shadow: 0 0 8px #ffffff;
+      z-index: 3;
+    }
+    .allocation-note {
+      font-size: 0.74rem;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+    .nature-targets-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .nature-target-btn {
+      flex: 1;
+      min-width: 80px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-subtle);
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .nature-target-btn:hover {
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+    .nature-target-btn.active {
+      background: rgba(16, 185, 129, 0.22);
+      border-color: var(--emerald);
+      color: #6ee7b7;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+    }
+
     /* RIGHT PANEL: RESOURCE METABOLISM BALANCE SHEET */
     .balance-sheet-card {
       background: var(--panel-bg);
@@ -720,12 +797,28 @@
 
         <div>
           <div class="counter-value-row">
-            <span class="counter-number" id="lblPlanetsNeeded" style="color: var(--rose);">1.38</span>
+            <span class="counter-number" id="lblPlanetsNeeded" style="color: var(--rose);">1.34</span>
             <span class="counter-unit">Planet Earths</span>
           </div>
           <p class="counter-desc" id="lblCounterSummary">
-            At current global non-fossil consumption, humanity demands <strong>38% more living resources, freshwater, and biocapacity</strong> than Earth can regenerate each year.
+            At current global non-fossil consumption, humanity demands <strong>34% more living resources, freshwater, and biocapacity</strong> than Earth can regenerate each year.
           </p>
+
+          <!-- DYNAMIC ALLOCATION STACKED BREAKDOWN BAR -->
+          <div class="allocation-breakdown-box" style="margin-top: 10px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.76rem; font-family: var(--font-mono); margin-bottom: 4px;">
+              <span style="color: var(--cyan);">👤 Human Footprint: <strong id="lblHumanFootprintVal">1.19 Earths</strong></span>
+              <span style="color: var(--emerald);">🦋 Nature's Share: <strong id="lblNatureShareVal">+0.15 Earths (15%)</strong></span>
+            </div>
+            <div class="allocation-bar-track">
+              <div class="allocation-bar-human" id="barHuman" style="width: 79%;"></div>
+              <div class="allocation-bar-nature" id="barNature" style="width: 10%;"></div>
+              <div class="allocation-bar-boundary" id="barBoundary" title="1.00 Planet Earth Boundary"></div>
+            </div>
+            <div class="allocation-note" id="lblAllocationNote" style="margin-top: 4px;">
+              Human resource demand takes up 1.19 Earths + 0.15 Earths reserved for wildlife = 1.34 Earths total planetary load.
+            </div>
+          </div>
         </div>
 
         <!-- EARTH GLYPHS -->
@@ -919,13 +1012,24 @@
         </div>
 
         <!-- 7. Nature's Reserved Biocapacity (Nature's Share) -->
-        <div class="slider-card" style="border-color: rgba(16, 185, 129, 0.35);">
+        <div class="slider-card" style="border-color: rgba(16, 185, 129, 0.45); background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(18, 29, 51, 0.9));">
           <div class="slider-head">
             <label class="slider-label" for="sliderNature" style="color: var(--emerald);">🦋 Nature's Share (Reserved for Wildlife)</label>
-            <span class="slider-val-badge" id="lblNatureVal" style="color: var(--emerald);">15% (Status Quo)</span>
+            <span class="slider-val-badge" id="lblNatureVal" style="color: var(--emerald); border-color: rgba(16, 185, 129, 0.4);">15% (Status Quo)</span>
           </div>
+
+          <!-- Preset Target Buttons -->
+          <div class="nature-targets-group">
+            <button type="button" class="nature-target-btn active" id="btnNature15">15% Status Quo</button>
+            <button type="button" class="nature-target-btn" id="btnNature30">30% (COP15 30x30)</button>
+            <button type="button" class="nature-target-btn" id="btnNature50">50% (Half-Earth)</button>
+          </div>
+
           <input type="range" class="range-input" id="sliderNature" min="15" max="50" step="5" value="15">
-          <div class="slider-note">Fraction of Earth's bioproductive surface dedicated exclusively to wild nature and biodiversity (15% status quo vs 30% COP15 target vs 50% E.O. Wilson Half-Earth).</div>
+          
+          <div class="slider-note" id="lblNatureCeilingNote" style="color: #cbd5e1; line-height: 1.4;">
+            Sets aside <strong>0.15 Earths (15%)</strong> for wildlife. Maximum human allowance for 1-Planet living: <strong>0.85 Earths</strong>.
+          </div>
         </div>
 
         <!-- 8. Global Population Trajectory -->
@@ -1025,11 +1129,22 @@
       // Baseline 2026 demand = 11.8 B gha.
       // If 15% nature reserve: Available = 12.2 * 0.85 = 10.37 B gha -> 11.8 / 10.37 = ~1.14 gha/avail, plus resource depletion penalties = 1.38 Earths!
 
+      // DOM references
       const elPlanets = document.getElementById("lblPlanetsNeeded");
       const elStatusBadge = document.getElementById("statusBadge");
       const elSummary = document.getElementById("lblCounterSummary");
       const elGlyphs = document.getElementById("earthsGlyphContainer");
       const elOvershoot = document.getElementById("lblOvershootDay");
+      const elHumanFootprint = document.getElementById("lblHumanFootprintVal");
+      const elNatureShare = document.getElementById("lblNatureShareVal");
+      const elBarHuman = document.getElementById("barHuman");
+      const elBarNature = document.getElementById("barNature");
+      const elAllocationNote = document.getElementById("lblAllocationNote");
+      const elNatureCeilingNote = document.getElementById("lblNatureCeilingNote");
+
+      const btnNat15 = document.getElementById("btnNature15");
+      const btnNat30 = document.getElementById("btnNature30");
+      const btnNat50 = document.getElementById("btnNature50");
 
       // Streams elements
       const streams = {
@@ -1065,10 +1180,10 @@
       const presets = {
         btnPresetStatusQuo: { diet: 0, waste: 0, agri: 0, forest: 0, fisheries: 10, materials: 0, nature: 15, pop: 82 },
         btnPresetWestern: { diet: 0, waste: 0, agri: 0, forest: 0, fisheries: 10, materials: 0, nature: 15, pop: 82, westernPenalty: true },
-        btnPresetEatLancet: { diet: 50, waste: 30, agri: 20, forest: 30, fisheries: 25, materials: 15, nature: 20, pop: 82 },
-        btnPresetAgriTech: { diet: 20, waste: 60, agri: 70, forest: 40, fisheries: 30, materials: 30, nature: 25, pop: 82 },
-        btnPresetOnePlanet: { diet: 45, waste: 50, agri: 60, forest: 60, fisheries: 35, materials: 45, nature: 30, pop: 82 },
-        btnPresetHalfEarth: { diet: 70, waste: 65, agri: 80, forest: 85, fisheries: 45, materials: 60, nature: 50, pop: 82 }
+        btnPresetEatLancet: { diet: 50, waste: 30, agri: 25, forest: 35, fisheries: 25, materials: 20, nature: 20, pop: 82 },
+        btnPresetAgriTech: { diet: 25, waste: 60, agri: 70, forest: 45, fisheries: 30, materials: 35, nature: 25, pop: 82 },
+        btnPresetOnePlanet: { diet: 50, waste: 45, agri: 55, forest: 55, fisheries: 30, materials: 45, nature: 30, pop: 82 },
+        btnPresetHalfEarth: { diet: 70, waste: 65, agri: 75, forest: 80, fisheries: 45, materials: 65, nature: 50, pop: 82 }
       };
 
       function calculate() {
@@ -1091,60 +1206,60 @@
         lNature.textContent = `${nature}% (${nature === 15 ? 'Status Quo' : (nature === 30 ? 'COP15 30x30' : (nature === 50 ? 'Half-Earth' : 'Custom'))})`;
         lPop.textContent = `${popB.toFixed(1)} Billion`;
 
+        // Sync Nature preset buttons
+        if (btnNat15) btnNat15.classList.toggle("active", Math.round(nature) === 15);
+        if (btnNat30) btnNat30.classList.toggle("active", Math.round(nature) === 30);
+        if (btnNat50) btnNat50.classList.toggle("active", Math.round(nature) === 50);
+
         const popMultiplier = popB / 8.2;
 
-        // Effective Biocapacity available for humans after Nature's Share
-        // Base Earth capacity = 1.0 (with 15% nature reserve baseline).
-        // If nature reserve increases to 30%, human available capacity drops by (1 - 0.30)/(1 - 0.15) = 0.824
-        // If nature reserve increases to 50%, human available capacity drops to (1 - 0.50)/(1 - 0.15) = 0.588
-        const natureCapacityFactor = (1.0 - (nature / 100.0)) / (1.0 - 0.15);
-
         // 1. Cropland: Driven by diet (feed demand), food waste, and agri yield efficiency
-        // Eating less meat reduces feed crops; less waste reduces total crop demand.
-        const cropDemandMult = (1.0 - (diet / 100.0) * 0.45) * (1.0 - (waste / 100.0) * 0.30) * (1.0 - (agri / 100.0) * 0.15) * popMultiplier;
-        const cropRatio = Math.max(0.3, (streams.cropland.base * cropDemandMult) / natureCapacityFactor);
+        const cropDemandMult = (1.0 - (diet / 100.0) * 0.50) * (1.0 - (waste / 100.0) * 0.35) * (1.0 - (agri / 100.0) * 0.20) * popMultiplier;
+        const cropDemand = 0.32 * cropDemandMult;
 
         // 2. Pasture / Grazing Land: Heavily driven by ruminant meat/dairy diet
-        const pastureDemandMult = (1.0 - (diet / 100.0) * 0.80) * (1.0 - (waste / 100.0) * 0.15) * popMultiplier;
-        const pastureRatio = Math.max(0.2, (streams.pasture.base * pastureDemandMult) / natureCapacityFactor);
+        const pastureDemandMult = (1.0 - (diet / 100.0) * 0.85) * (1.0 - (waste / 100.0) * 0.15) * popMultiplier;
+        const pastureDemand = 0.28 * pastureDemandMult;
 
         // 3. Freshwater: Driven by agriculture (70% of water), drip irrigation, and food waste
-        const waterDemandMult = (1.0 - (agri / 100.0) * 0.35) * (1.0 - (diet / 100.0) * 0.25) * (1.0 - (waste / 100.0) * 0.20) * popMultiplier;
-        const waterRatio = Math.max(0.4, (streams.water.base * waterDemandMult) / natureCapacityFactor);
+        const waterDemandMult = (1.0 - (agri / 100.0) * 0.40) * (1.0 - (diet / 100.0) * 0.30) * (1.0 - (waste / 100.0) * 0.25) * popMultiplier;
+        const waterDemand = 0.20 * waterDemandMult;
 
         // 4. Forests & Timber: Driven by deforestation bans, circular wood, and paper recycling
-        const forestDemandMult = (1.0 - (forest / 100.0) * 0.55) * (1.0 - (diet / 100.0) * 0.25) * popMultiplier;
-        const forestRatio = Math.max(0.35, (streams.forest.base * forestDemandMult) / natureCapacityFactor);
+        const forestDemandMult = (1.0 - (forest / 100.0) * 0.60) * (1.0 - (diet / 100.0) * 0.30) * popMultiplier;
+        const forestDemand = 0.16 * forestDemandMult;
 
         // 5. Marine Fisheries: Driven by marine protected areas, ending bottom trawling, sustainable catch quotas
         const fisheriesEff = ((fisheries - 10) / 40.0); // 0 to 1
-        const fisheriesDemandMult = (1.0 - fisheriesEff * 0.60) * (1.0 - (waste / 100.0) * 0.15) * popMultiplier;
-        const fisheriesRatio = Math.max(0.3, (streams.fisheries.base * fisheriesDemandMult) / natureCapacityFactor);
+        const fisheriesDemandMult = (1.0 - fisheriesEff * 0.65) * (1.0 - (waste / 100.0) * 0.20) * popMultiplier;
+        const fisheriesDemand = 0.10 * fisheriesDemandMult;
 
         // 6. Soils & Minerals: Driven by no-till farming, cover crops, circular aggregates
-        const soilsDemandMult = (1.0 - (agri / 100.0) * 0.45) * (1.0 - (materials / 100.0) * 0.35) * (1.0 - (waste / 100.0) * 0.15) * popMultiplier;
-        const soilsRatio = Math.max(0.3, (streams.soils.base * soilsDemandMult) / natureCapacityFactor);
+        const soilsDemandMult = (1.0 - (agri / 100.0) * 0.50) * (1.0 - (materials / 100.0) * 0.40) * (1.0 - (waste / 100.0) * 0.20) * popMultiplier;
+        const soilsDemand = 0.13 * soilsDemandMult;
 
-        // Overall Planets Needed: Weighted geometric/harmonic composite of the non-fossil footprint components
-        // Weights reflecting ecological essentiality: Cropland 25%, Pasture 20%, Water 18%, Forests 15%, Fisheries 10%, Soils/Minerals 12%
-        const planets = (
-          cropRatio * 0.25 +
-          pastureRatio * 0.20 +
-          waterRatio * 0.18 +
-          forestRatio * 0.15 +
-          fisheriesRatio * 0.10 +
-          soilsRatio * 0.12
-        );
+        // Total Human Resource Footprint (fractions of Earth's total biocapacity)
+        const humanFootprint = cropDemand + pastureDemand + waterDemand + forestDemand + fisheriesDemand + soilsDemand;
 
-        // Update Streams UI
-        function updateStream(stream, val) {
-          stream.ratio.textContent = `${val.toFixed(2)}×`;
-          const pct = Math.min(100, Math.round((val / 1.7) * 100));
+        // Nature's Reserved Share (as a fraction of Earth biocapacity: 0.15, 0.30, 0.50)
+        const natureShare = nature / 100.0;
+
+        // Total Planetary Load = Human Extraction + Nature's Sanctuary
+        const planets = humanFootprint + natureShare;
+
+        // Maximum human allowance to achieve One-Planet Living under this Nature Share
+        const humanAllowance = Math.max(0, 1.0 - natureShare);
+
+        // Update Streams UI (normalized against sustainable Earth capacity)
+        function updateStream(stream, demand, baseCap) {
+          const ratio = demand / baseCap;
+          stream.ratio.textContent = `${ratio.toFixed(2)}×`;
+          const pct = Math.min(100, Math.round((ratio / 1.7) * 100));
           stream.meter.style.width = `${pct}%`;
-          if (val <= 1.0) {
+          if (ratio <= 1.0) {
             stream.ratio.style.color = "var(--emerald)";
             stream.meter.style.backgroundColor = "var(--emerald)";
-          } else if (val <= 1.25) {
+          } else if (ratio <= 1.25) {
             stream.ratio.style.color = "var(--amber)";
             stream.meter.style.backgroundColor = "var(--amber)";
           } else {
@@ -1153,36 +1268,51 @@
           }
         }
 
-        updateStream(streams.cropland, cropRatio);
-        updateStream(streams.pasture, pastureRatio);
-        updateStream(streams.water, waterRatio);
-        updateStream(streams.forest, forestRatio);
-        updateStream(streams.fisheries, fisheriesRatio);
-        updateStream(streams.soils, soilsRatio);
+        updateStream(streams.cropland, cropDemand, 0.24);
+        updateStream(streams.pasture, pastureDemand, 0.185);
+        updateStream(streams.water, waterDemand, 0.16);
+        updateStream(streams.forest, forestDemand, 0.125);
+        updateStream(streams.fisheries, fisheriesDemand, 0.068);
+        updateStream(streams.soils, soilsDemand, 0.092);
 
         // Update Headline Planet Counter
         elPlanets.textContent = planets.toFixed(2);
+        elHumanFootprint.textContent = `${humanFootprint.toFixed(2)} Earths`;
+        elNatureShare.textContent = `+${natureShare.toFixed(2)} Earths (${nature}%)`;
+
+        // Update Stacked Allocation Bar
+        const humanBarPct = Math.min(100, (humanFootprint / 1.5) * 100);
+        const natureBarPct = Math.min(100 - humanBarPct, (natureShare / 1.5) * 100);
+        elBarHuman.style.width = `${humanBarPct.toFixed(1)}%`;
+        elBarNature.style.width = `${natureBarPct.toFixed(1)}%`;
+
+        // Update Ceiling Note in Nature Card
+        elNatureCeilingNote.innerHTML = `Sets aside <strong>${natureShare.toFixed(2)} Earths (${nature}%)</strong> for wildlife. Maximum human allowance for 1-Planet living: <strong>${humanAllowance.toFixed(2)} Earths</strong> (currently at <strong>${humanFootprint.toFixed(2)}</strong>).`;
 
         if (planets <= 0.85) {
           elPlanets.style.color = "var(--blue)";
           elStatusBadge.className = "status-badge badge-regenerative";
           elStatusBadge.textContent = "Regenerative Surplus";
-          elSummary.innerHTML = `Humanity is using only <strong>${Math.round(planets * 100)}% of Earth's living biocapacity</strong>. Earth has ample surplus to regenerate ecosystems, rewild degraded biomes, and safeguard wildlife.`;
+          elSummary.innerHTML = `Humanity is using only <strong>${Math.round(humanFootprint * 100)}% of Earth's living biocapacity</strong>, leaving <strong>${Math.round((1.0 - humanFootprint) * 100)}% for wildlife and rewilding</strong> (exceeding the ${nature}% target). Earth has ample room to thrive!`;
+          elAllocationNote.innerHTML = `✨ <strong>Regenerative Harmony!</strong> Human footprint (${humanFootprint.toFixed(2)} Earths) + Nature's ${nature}% reserve (${natureShare.toFixed(2)} Earths) = <strong>${planets.toFixed(2)} Earths</strong>. Earth possesses an ecological surplus of +${(1.0 - planets).toFixed(2)} Earths!`;
         } else if (planets <= 1.00) {
           elPlanets.style.color = "var(--emerald)";
           elStatusBadge.className = "status-badge badge-sustainable";
           elStatusBadge.textContent = "One-Planet Living";
-          elSummary.innerHTML = `Humanity lives within Earth's boundaries at <strong>${planets.toFixed(2)} Earths</strong>. Renewable biological harvests, freshwater usage, and forest yields remain in equilibrium with nature.`;
+          elSummary.innerHTML = `Humanity lives within Earth's boundaries at <strong>${planets.toFixed(2)} Earths</strong>. Human resource demand (${humanFootprint.toFixed(2)} Earths) fits within the ${humanAllowance.toFixed(2)} Earth allowance, fully safeguarding the <strong>${nature}% reserve for wild nature</strong>!`;
+          elAllocationNote.innerHTML = `✨ <strong>One-Planet Living Achieved!</strong> Human footprint (${humanFootprint.toFixed(2)} Earths) + Nature's ${nature}% reserve (${natureShare.toFixed(2)} Earths) = <strong>${planets.toFixed(2)} Earths</strong>. Fits cleanly within ONE Pale Blue Dot!`;
         } else if (planets <= 1.25) {
           elPlanets.style.color = "var(--amber)";
           elStatusBadge.className = "status-badge badge-strain";
           elStatusBadge.textContent = "Moderate Overshoot";
-          elSummary.innerHTML = `Humanity demands <strong>+${Math.round((planets - 1.0) * 100)}% more living resources</strong> than Earth can replenish. Ecological reserves are slowly being depleted.`;
+          elSummary.innerHTML = `Humanity demands <strong>+${Math.round((planets - 1.0) * 100)}% more living resources</strong> than Earth can replenish. Human footprint (${humanFootprint.toFixed(2)} Earths) exceeds the ${humanAllowance.toFixed(2)} Earth ceiling needed for ${nature}% nature protection.`;
+          elAllocationNote.innerHTML = `⚠️ <strong>Planetary Overshoot:</strong> Human footprint (${humanFootprint.toFixed(2)} Earths) + Nature's ${nature}% reserve (${natureShare.toFixed(2)} Earths) = <strong>${planets.toFixed(2)} Earths</strong>. Exceeds single-planet capacity by +${(planets - 1.0).toFixed(2)} Earths. Reduce human demand to ≤ ${humanAllowance.toFixed(2)} Earths to fit!`;
         } else {
           elPlanets.style.color = "var(--rose)";
           elStatusBadge.className = "status-badge badge-critical";
           elStatusBadge.textContent = "Critical Overshoot";
           elSummary.innerHTML = `Humanity demands <strong>+${Math.round((planets - 1.0) * 100)}% more living resources</strong> than Earth can replenish. Severe ongoing degradation of topsoils, aquifers, forests, and marine fisheries.`;
+          elAllocationNote.innerHTML = `🔴 <strong>Critical Overshoot:</strong> Human footprint (${humanFootprint.toFixed(2)} Earths) + Nature's ${nature}% reserve (${natureShare.toFixed(2)} Earths) = <strong>${planets.toFixed(2)} Earths</strong>. To support ${nature}% for wildlife, human consumption must be reduced to ≤ ${humanAllowance.toFixed(2)} Earths.`;
         }
 
         // Calculate Non-Fossil Overshoot Day
@@ -1191,7 +1321,7 @@
           elOvershoot.style.color = "var(--emerald)";
         } else {
           // Fraction of year: 365 / planets
-          const dayOfYear = Math.round(365 / planets);
+          const dayOfYear = Math.max(1, Math.min(365, Math.round(365 / planets)));
           const d = new Date(2026, 0, 1);
           d.setDate(dayOfYear);
           const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -1238,6 +1368,16 @@
         note.textContent = `= ${planets.toFixed(2)} Planet${planets === 1.0 ? '' : 's'}`;
         elGlyphs.appendChild(note);
       }
+
+      function setNatureTarget(val) {
+        sNature.value = val;
+        document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+        calculate();
+      }
+
+      if (btnNat15) btnNat15.addEventListener("click", () => setNatureTarget(15));
+      if (btnNat30) btnNat30.addEventListener("click", () => setNatureTarget(30));
+      if (btnNat50) btnNat50.addEventListener("click", () => setNatureTarget(50));
 
       // Add slider listeners
       [sDiet, sWaste, sAgri, sForest, sFisheries, sMaterials, sNature, sPop].forEach(slider => {
