@@ -1040,6 +1040,23 @@
       text-decoration: none;
       white-space: nowrap;
     }
+    #btnZoomKeeling.chart-bottom-btn {
+      border-color: rgba(0, 229, 255, 0.45);
+      color: var(--cyan);
+      background: rgba(0, 229, 255, 0.10);
+    }
+    #btnZoomKeeling.chart-bottom-btn:hover {
+      background: rgba(0, 229, 255, 0.22);
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+      color: #fff;
+    }
+    #btnZoomKeeling.chart-bottom-btn.active {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.5);
+    }
     #btnMillionYear.chart-bottom-btn {
       border-color: rgba(0, 229, 255, 0.45);
       color: var(--cyan);
@@ -1061,13 +1078,57 @@
       box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
       color: #fff;
     }
-    .app-wrapper.simple-mode .chart-actions-bottom {
+    .app-wrapper.simple-mode .chart-actions-bottom,
+    .app-wrapper.simple-mode .canvas-zoom-pill,
+    .app-wrapper.simple-mode #btnZoomKeeling {
       display: none !important;
     }
     @media (max-width: 600px) {
       .chart-actions-bottom {
         flex-direction: column;
       }
+    }
+
+    /* Main Grid Zoom Layout (Instrumental Keeling Era 1958–Today) */
+    .main-grid.chart-zoomed {
+      grid-template-columns: 1fr;
+    }
+    .main-grid.chart-zoomed .canvas-panel {
+      grid-row: 1;
+      width: 100%;
+    }
+    .main-grid.chart-zoomed .canvas-container {
+      height: 520px;
+    }
+    .main-grid.chart-zoomed .controls-panel {
+      grid-row: 2;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 16px;
+    }
+    .canvas-zoom-pill {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      z-index: 25;
+      background: rgba(11, 19, 32, 0.92);
+      border: 1.5px solid var(--cyan);
+      color: var(--cyan);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .canvas-zoom-pill:hover,
+    .canvas-zoom-pill.active {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
     }
 
     /* Fallback Action Button on 500-Year Temperature Chart */
@@ -1417,9 +1478,69 @@
       display: flex; justify-content: space-between; align-items: center;
     }
     .modal-title { font-size: 1.15rem; font-weight: 700; color: var(--cyan); }
+    .modal-nav-bar {
+      display: none;
+      background: #080d19;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 18px;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-nav-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .modal-nav-info strong {
+      color: var(--cyan);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .btn-toggle-modal-nav {
+      background: rgba(0, 229, 255, 0.12);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      color: var(--cyan);
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-toggle-modal-nav:hover {
+      background: var(--cyan);
+      color: #000;
+    }
     .modal-nav {
       display: flex; flex-wrap: wrap; background: #080d1a; border-bottom: 1px solid var(--border);
       padding: 8px 16px; gap: 8px;
+    }
+    @media (max-width: 768px) {
+      .modal-nav-bar {
+        display: flex;
+      }
+      .modal-nav {
+        transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.2s ease;
+        max-height: 600px;
+        opacity: 1;
+        overflow: hidden;
+      }
+      .modal-nav.collapsed {
+        max-height: 0 !important;
+        opacity: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        border-bottom: none !important;
+        pointer-events: none;
+      }
     }
     .modal-tab-btn {
       background: var(--card-inner); border: 1px solid var(--border); color: var(--text-muted);
@@ -1765,6 +1886,11 @@
         <div class="canvas-container" id="canvasContainer">
           <canvas id="simCanvas"></canvas>
 
+          <!-- Floating Zoom Button for Instrumental Keeling Era -->
+          <button type="button" class="canvas-zoom-pill" id="btnCanvasZoom" title="Toggle zoom: 1958–Today (Keeling Era) with measured vs. simulated error bars">
+            🔍 Zoom 1958–Today
+          </button>
+
           <!-- 5 Sequential Physical Explanation Pins -->
           <div class="speech-pin" id="pin1" style="top: 6%; left: 24%;">1</div>
           <div class="speech-pin" id="pin2" style="top: 43%; left: 24%;">2</div>
@@ -1794,6 +1920,9 @@
 
         <!-- Action Buttons Below 500-Year Warming Chart (Side by Side) -->
         <div class="chart-actions-bottom" id="chartActionsBottom">
+          <button type="button" class="chart-bottom-btn" id="btnZoomKeeling" title="Zoom in to 1958–Today (Keeling Instrumental Era) with measured vs. simulated error bars">
+            <span>🔎</span> <strong id="lblZoomKeeling">Zoom: 1958–Today (Keeling Era)</strong>
+          </button>
           <button type="button" class="chart-bottom-btn" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
             <span>🔍</span> 1-Million-Year Comparison
           </button>
@@ -2635,7 +2764,18 @@
         <button id="closeModalBtn" style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">&times;</button>
       </div>
 
-      <div class="modal-nav">
+      <!-- Collapsible Chapter Navigation Bar for Mobile -->
+      <div class="modal-nav-bar" id="modalNavBar">
+        <div class="modal-nav-info">
+          <span>📖 Chapter:</span>
+          <strong id="modalActiveTabName">Table of Contents</strong>
+        </div>
+        <button type="button" class="btn-toggle-modal-nav" id="btnToggleModalNav" aria-expanded="true">
+          Chapters &#x25BE;
+        </button>
+      </div>
+
+      <div class="modal-nav" id="modalNav">
         <button class="modal-tab-btn active" data-page="page-toc">Table of Contents</button>
         <button class="modal-tab-btn" data-page="page-proofs">Page 1: Mathematical Proofs & Derivations</button>
         <button class="modal-tab-btn" data-page="page-transfer">Page 2: Radiative Transfer & Saturation Refuted</button>
@@ -4501,10 +4641,58 @@
       const pts1850_1900 = STATIC_HISTORICAL_RUN.filter(p => p.year >= 1850 && p.year <= 1900);
       const OFFSET_1850_1900 = pts1850_1900.reduce((acc, p) => acc + p.deltaTs, 0) / pts1850_1900.length;
 
+      // Measured Annual Surface Temperature Anomalies from 1958 (Start of Keeling) to 2026
+      // Source: HadCRUT5 / Berkeley Earth instrumental observations relative to 1850–1900 baseline (°C)
+      const OBSERVED_TEMP_1958_2026 = [
+        { y: 1958, t: 0.26 }, { y: 1959, t: 0.24 }, { y: 1960, t: 0.20 },
+        { y: 1961, t: 0.24 }, { y: 1962, t: 0.21 }, { y: 1963, t: 0.22 },
+        { y: 1964, t: 0.07 }, { y: 1965, t: 0.06 }, { y: 1966, t: 0.13 },
+        { y: 1967, t: 0.14 }, { y: 1968, t: 0.08 }, { y: 1969, t: 0.23 },
+        { y: 1970, t: 0.19 }, { y: 1971, t: 0.08 }, { y: 1972, t: 0.19 },
+        { y: 1973, t: 0.31 }, { y: 1974, t: 0.06 }, { y: 1975, t: 0.11 },
+        { y: 1976, t: 0.04 }, { y: 1977, t: 0.30 }, { y: 1978, t: 0.21 },
+        { y: 1979, t: 0.29 }, { y: 1980, t: 0.38 }, { y: 1981, t: 0.42 },
+        { y: 1982, t: 0.24 }, { y: 1983, t: 0.41 }, { y: 1984, t: 0.23 },
+        { y: 1985, t: 0.21 }, { y: 1986, t: 0.29 }, { y: 1987, t: 0.42 },
+        { y: 1988, t: 0.47 }, { y: 1989, t: 0.37 }, { y: 1990, t: 0.54 },
+        { y: 1991, t: 0.50 }, { y: 1992, t: 0.31 }, { y: 1993, t: 0.33 },
+        { y: 1994, t: 0.41 }, { y: 1995, t: 0.55 }, { y: 1996, t: 0.44 },
+        { y: 1997, t: 0.60 }, { y: 1998, t: 0.73 }, { y: 1999, t: 0.50 },
+        { y: 2000, t: 0.49 }, { y: 2001, t: 0.64 }, { y: 2002, t: 0.71 },
+        { y: 2003, t: 0.70 }, { y: 2004, t: 0.64 }, { y: 2005, t: 0.74 },
+        { y: 2006, t: 0.72 }, { y: 2007, t: 0.71 }, { y: 2008, t: 0.62 },
+        { y: 2009, t: 0.73 }, { y: 2010, t: 0.81 }, { y: 2011, t: 0.68 },
+        { y: 2012, t: 0.73 }, { y: 2013, t: 0.77 }, { y: 2014, t: 0.84 },
+        { y: 2015, t: 1.00 }, { y: 2016, t: 1.11 }, { y: 2017, t: 1.00 },
+        { y: 2018, t: 0.94 }, { y: 2019, t: 1.05 }, { y: 2020, t: 1.12 },
+        { y: 2021, t: 0.99 }, { y: 2022, t: 1.00 }, { y: 2023, t: 1.28 },
+        { y: 2024, t: 1.35 }, { y: 2025, t: 1.25 }, { y: 2026, t: 1.14 }
+      ];
+
+      function getMeasuredObservedDeltaAt(yr) {
+        if (yr < 1958) {
+          const pt = STATIC_HISTORICAL_RUN.find(p => Math.abs(p.year - yr) < 0.6);
+          return pt ? pt.deltaTs - OFFSET_1850_1900 : 0.0;
+        }
+        if (yr >= 2026) return 1.14;
+        const entry = OBSERVED_TEMP_1958_2026.find(p => p.y === Math.round(yr));
+        if (entry) return entry.t;
+        for (let i = 0; i < OBSERVED_TEMP_1958_2026.length - 1; i++) {
+          const p1 = OBSERVED_TEMP_1958_2026[i];
+          const p2 = OBSERVED_TEMP_1958_2026[i + 1];
+          if (yr >= p1.y && yr <= p2.y) {
+            const f = (yr - p1.y) / (p2.y - p1.y);
+            return p1.t + f * (p2.t - p1.t);
+          }
+        }
+        return 1.14;
+      }
+
       let state = {
         co2: BASELINE_1958_PT.co2,
         rate: 2.5,
         isNZ2050: false,
+        isZoomed: false, // Instrumental Keeling Era zoom view (1958–2026)
         deltaTs: BASELINE_1958_PT.deltaTs,
         deltaTd: BASELINE_1958_PT.deltaTd,
         year: 1958,
@@ -5690,8 +5878,8 @@
 
         const tGridTop = 18;
         const tGridBottom = h - 26;
-        const tGridLeft = isMobileNarrow ? 28 : 36;
-        const tGridRight = w - (isMobileNarrow ? 36 : 46);
+        const tGridLeft = state.isZoomed ? (isMobileNarrow ? 34 : 44) : (isMobileNarrow ? 28 : 36);
+        const tGridRight = w - (state.isZoomed ? (isMobileNarrow ? 40 : 54) : (isMobileNarrow ? 36 : 46));
         const tGridH = tGridBottom - tGridTop;
         const tGridW = tGridRight - tGridLeft;
 
@@ -5704,41 +5892,80 @@
         const titleFontSize = tGridW < 400 ? 13 : 16;
         ctx.fillStyle = "rgba(255, 255, 255, 0.92)";
         ctx.font = `bold ${titleFontSize}px system-ui, -apple-system, sans-serif`;
-        ctx.fillText("500-YEAR WARMING TRAJECTORY (1750–2250 CE)", tGridLeft + 8, tGridTop + (titleFontSize + 4));
+        const chartTitle = state.isZoomed
+          ? "INSTRUMENTAL ERA ZOOM (1958–2026 CE) · KEELING OBSERVATIONAL ERA"
+          : "500-YEAR WARMING TRAJECTORY (1750–2250 CE)";
+        ctx.fillText(chartTitle, tGridLeft + 8, tGridTop + (titleFontSize + 4));
 
-        // Subtitle legend for Temperature vs CO2: Single-row horizontal layout below headline (zero overlap with threshold lines or curves)
+        // Subtitle legend for Temperature vs CO2
         ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
         const legLeft = tGridLeft + 8;
         const legY = tGridTop + titleFontSize + 19;
 
-        ctx.fillStyle = "#f59e0b";
-        ctx.fillText("■ Actual Observed History (1750–2026)", legLeft, legY);
-        const dtHistLegendW = ctx.measureText("■ Actual Observed History (1750–2026)").width;
+        if (state.isZoomed) {
+          ctx.fillStyle = "#f59e0b";
+          ctx.fillText("■ Measured Temperature (HadCRUT5)", legLeft, legY);
+          const dtMeasW = ctx.measureText("■ Measured Temperature (HadCRUT5)").width;
 
-        ctx.fillStyle = "#f43f5e";
-        const dtSimLegendX = legLeft + dtHistLegendW + 14;
-        ctx.fillText("■ Simulated Warming (1958–2250)", dtSimLegendX, legY);
-        const dtSimLegendW = ctx.measureText("■ Simulated Warming (1958–2250)").width;
+          ctx.fillStyle = "#f43f5e";
+          const dtSimX = legLeft + dtMeasW + 14;
+          ctx.fillText("■ Simulated Warming (Two-Layer EBM)", dtSimX, legY);
+          const dtSimW = ctx.measureText("■ Simulated Warming (Two-Layer EBM)").width;
 
-        ctx.fillStyle = "#c084fc";
-        const co2LegendX = dtSimLegendX + dtSimLegendW + 14;
-        ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
-        const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+          ctx.fillStyle = "#00e5ff";
+          const errX = dtSimX + dtSimW + 14;
+          ctx.fillText("⫰ Scaled Error Bars (Sim vs Meas: ±0.15°C RMSE)", errX, legY);
+          const errW = ctx.measureText("⫰ Scaled Error Bars (Sim vs Meas: ±0.15°C RMSE)").width;
 
-        if (tGridW > 920) {
-          ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
-          ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
-          ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 14, legY);
+          ctx.fillStyle = "#c084fc";
+          const co2X = errX + errW + 14;
+          ctx.fillText("■ Atmospheric CO₂ (ppm)", co2X, legY);
+        } else {
+          ctx.fillStyle = "#f59e0b";
+          ctx.fillText("■ Actual Observed History (1750–2026)", legLeft, legY);
+          const dtHistLegendW = ctx.measureText("■ Actual Observed History (1750–2026)").width;
+
+          ctx.fillStyle = "#f43f5e";
+          const dtSimLegendX = legLeft + dtHistLegendW + 14;
+          ctx.fillText("■ Simulated Warming (1958–2250)", dtSimLegendX, legY);
+          const dtSimLegendW = ctx.measureText("■ Simulated Warming (1958–2250)").width;
+
+          ctx.fillStyle = "#00e5ff";
+          const errLegendX = dtSimLegendX + dtSimLegendW + 14;
+          ctx.fillText("⫰ Error Bars", errLegendX, legY);
+          const errLegendW = ctx.measureText("⫰ Error Bars").width;
+
+          ctx.fillStyle = "#c084fc";
+          const co2LegendX = errLegendX + errLegendW + 14;
+          ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
+          const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+
+          if (tGridW > 960) {
+            ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
+            ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
+            ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 14, legY);
+          }
         }
 
-        function yrToX(yr) { return tGridLeft + ((yr - 1750) / 500) * tGridW; }
-        // Scaled to 6.5°C span (-0.5°C to +6.0°C) so trajectories up to +5.5°C comfortably sit with head room (relative to 1850–1900)
-        function dtToY(dTemp) { return tGridBottom - ((dTemp - (-0.5)) / 6.5) * tGridH; }
-        // CO2 Scale: 200 ppm to 1050 ppm fitted across the 500-Year chart height
-        function co2ToY(c) { return tGridBottom - ((c - 200) / 850) * tGridH; }
+        const yrStart = state.isZoomed ? 1958 : 1750;
+        const yrEnd = state.isZoomed ? 2026 : 2250;
+        const yrSpan = yrEnd - yrStart;
 
-        // Right-hand Y-Axis Labels for CO2 in Purple (280, 400, 600, 800, 1000 ppm)
-        [280, 400, 600, 800, 1000].forEach(cVal => {
+        const tempMin = state.isZoomed ? 0.0 : -0.5;
+        const tempMax = state.isZoomed ? 1.6 : 6.0;
+        const tempSpan = tempMax - tempMin;
+
+        const co2Min = state.isZoomed ? 300 : 200;
+        const co2Max = state.isZoomed ? 440 : 1050;
+        const co2Span = co2Max - co2Min;
+
+        function yrToX(yr) { return tGridLeft + ((yr - yrStart) / yrSpan) * tGridW; }
+        function dtToY(dTemp) { return tGridBottom - ((dTemp - tempMin) / tempSpan) * tGridH; }
+        function co2ToY(c) { return tGridBottom - ((c - co2Min) / co2Span) * tGridH; }
+
+        // Right-hand Y-Axis Labels for CO2 in Purple
+        const co2Ticks = state.isZoomed ? [320, 340, 360, 380, 400, 420] : [280, 400, 600, 800, 1000];
+        co2Ticks.forEach(cVal => {
           const cy = co2ToY(cVal);
           if (cy >= tGridTop && cy <= tGridBottom) {
             ctx.strokeStyle = "rgba(192, 132, 252, 0.22)";
@@ -5757,130 +5984,219 @@
           }
         });
 
-        // 25-Year Interval Marks Along X-Axis (12px year labels placed OUTSIDE below the axis line)
-        const yearStep = tGridW < 550 ? 50 : 25;
-        for (let yr = 1750; yr <= 2250; yr += 25) {
-          const x = yrToX(yr);
-          const isMajor = yr % yearStep === 0;
-          ctx.strokeStyle = isMajor ? "rgba(148, 163, 184, 0.45)" : "rgba(148, 163, 184, 0.2)";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(x, tGridBottom);
-          ctx.lineTo(x, tGridBottom + (isMajor ? 5 : 3));
-          ctx.stroke();
+        // X-Axis Marks and Labels
+        if (state.isZoomed) {
+          for (let yr = 1958; yr <= 2026; yr++) {
+            const x = yrToX(yr);
+            const is5Yr = (yr % 5 === 0) || yr === 1958 || yr === 2026;
+            const isLabeled = (tGridW > 600) ? is5Yr : ((yr % 10 === 0) || yr === 1958 || yr === 2026);
+            ctx.strokeStyle = isLabeled ? "rgba(148, 163, 184, 0.45)" : "rgba(148, 163, 184, 0.18)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x, tGridBottom);
+            ctx.lineTo(x, tGridBottom + (isLabeled ? 5 : 2.5));
+            ctx.stroke();
 
-          if (isMajor && yr >= 1750 && yr <= 2250) {
-            ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
-            ctx.font = "11px ui-monospace, monospace";
-            ctx.textAlign = "center";
-            ctx.fillText(yr.toString(), x, tGridBottom + 16);
-            ctx.textAlign = "left";
+            if (isLabeled) {
+              ctx.fillStyle = (yr === 1958 || yr === 2026) ? "#f59e0b" : "rgba(148, 163, 184, 0.85)";
+              ctx.font = (yr === 1958 || yr === 2026) ? "bold 11px ui-monospace, monospace" : "11px ui-monospace, monospace";
+              ctx.textAlign = "center";
+              ctx.fillText(yr.toString(), x, tGridBottom + 16);
+              ctx.textAlign = "left";
+            }
+          }
+        } else {
+          const yearStep = tGridW < 550 ? 50 : 25;
+          for (let yr = 1750; yr <= 2250; yr += 25) {
+            const x = yrToX(yr);
+            const isMajor = yr % yearStep === 0;
+            ctx.strokeStyle = isMajor ? "rgba(148, 163, 184, 0.45)" : "rgba(148, 163, 184, 0.2)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x, tGridBottom);
+            ctx.lineTo(x, tGridBottom + (isMajor ? 5 : 3));
+            ctx.stroke();
+
+            if (isMajor && yr >= 1750 && yr <= 2250) {
+              ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
+              ctx.font = "11px ui-monospace, monospace";
+              ctx.textAlign = "center";
+              ctx.fillText(yr.toString(), x, tGridBottom + 16);
+              ctx.textAlign = "left";
+            }
           }
         }
 
         // Threshold Reference Lines (Evaluated directly on standard 1850–1900 baseline)
-        [0.0, 1.5, 2.0, 3.0, 4.0, 5.0].forEach(th => {
+        const tempThresholds = state.isZoomed ? [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.5] : [0.0, 1.5, 2.0, 3.0, 4.0, 5.0];
+        tempThresholds.forEach(th => {
           const y = dtToY(th);
-          ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (th === 1.5 ? "rgba(245,158,11,0.4)" : "rgba(244,63,94,0.4)");
+          const isParis = th === 1.5;
+          ctx.strokeStyle = th === 0.0 ? "rgba(255,255,255,0.2)" : (isParis ? "rgba(245,158,11,0.55)" : "rgba(148, 163, 184, 0.16)");
+          if (isParis) ctx.setLineDash([3, 3]);
           ctx.beginPath(); ctx.moveTo(tGridLeft, y); ctx.lineTo(tGridRight, y); ctx.stroke();
-          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (th === 1.5 ? "#f59e0b" : "#f43f5e");
+          if (isParis) ctx.setLineDash([]);
+          ctx.fillStyle = th === 0.0 ? "#94a3b8" : (isParis ? "#f59e0b" : "#94a3b8");
           ctx.font = "bold 9px ui-monospace, monospace";
-          const label = th === 0.0 ? "0.0°C (Baseline)" : `+${th.toFixed(1)}°C`;
+          const label = th === 0.0 ? "0.0°C (Baseline)" : (isParis ? "+1.5°C (Paris)" : `+${th.toFixed(1)}°C`);
           ctx.fillText(label, tGridLeft + 3, y - 2);
         });
 
-        // 1958 Keeling Boundary Marker (Vertical dashed line)
+        // 1958 Keeling Boundary Marker
         const keelingX = yrToX(1958);
-        ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
-        ctx.setLineDash([3, 3]);
-        ctx.beginPath();
-        ctx.moveTo(keelingX, tGridTop);
-        ctx.lineTo(keelingX, tGridBottom);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // 1958 Keeling Label rotated 90 degrees clockwise on the LEFT of the dashed line
         const keelingFontSize = tGridW < 400 ? 10 : 12;
-        ctx.save();
-        ctx.translate(keelingX - 5, tGridTop + 38);
-        ctx.rotate(Math.PI / 2);
-        ctx.fillStyle = "#f59e0b";
-        ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
-        ctx.fillText("1958 Keeling", 0, 0);
-        ctx.restore();
+        if (!state.isZoomed) {
+          ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(keelingX, tGridTop);
+          ctx.lineTo(keelingX, tGridBottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
 
-        // 2026 Present-Day Static Boundary Marker (Orange vertical dashed line like Keeling)
+          ctx.save();
+          ctx.translate(keelingX - 5, tGridTop + 38);
+          ctx.rotate(Math.PI / 2);
+          ctx.fillStyle = "#f59e0b";
+          ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+          ctx.fillText("1958 Keeling", 0, 0);
+          ctx.restore();
+        }
+
+        // 2026 Present-Day Static Boundary Marker
         const present2026X = yrToX(2026);
-        ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
-        ctx.setLineDash([3, 3]);
-        ctx.beginPath();
-        ctx.moveTo(present2026X, tGridTop);
-        ctx.lineTo(present2026X, tGridBottom);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        if (!state.isZoomed) {
+          ctx.strokeStyle = "rgba(245, 158, 11, 0.55)";
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(present2026X, tGridTop);
+          ctx.lineTo(present2026X, tGridBottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
 
-        // 2026 Label rotated 90 degrees clockwise on the LEFT of the dashed line
-        ctx.save();
-        ctx.translate(present2026X - 5, tGridTop + 38);
-        ctx.rotate(Math.PI / 2);
-        ctx.fillStyle = "#f59e0b";
-        ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
-        ctx.fillText("2026", 0, 0);
-        ctx.restore();
+          ctx.save();
+          ctx.translate(present2026X - 5, tGridTop + 38);
+          ctx.rotate(Math.PI / 2);
+          ctx.fillStyle = "#f59e0b";
+          ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+          ctx.fillText("2026", 0, 0);
+          ctx.restore();
+        }
 
         // 2050 Paris Net Zero Target Boundary Marker
         const nz2050X = yrToX(2050);
-        ctx.strokeStyle = state.isNZ2050 ? "rgba(16, 185, 129, 0.85)" : "rgba(16, 185, 129, 0.28)";
-        ctx.lineWidth = state.isNZ2050 ? 1.5 : 1;
-        ctx.setLineDash([3, 3]);
-        ctx.beginPath();
-        ctx.moveTo(nz2050X, tGridTop);
-        ctx.lineTo(nz2050X, tGridBottom);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        if (!state.isZoomed) {
+          ctx.strokeStyle = state.isNZ2050 ? "rgba(16, 185, 129, 0.85)" : "rgba(16, 185, 129, 0.28)";
+          ctx.lineWidth = state.isNZ2050 ? 1.5 : 1;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.moveTo(nz2050X, tGridTop);
+          ctx.lineTo(nz2050X, tGridBottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
 
-        ctx.save();
-        ctx.translate(nz2050X - 5, tGridTop + 38);
-        ctx.rotate(Math.PI / 2);
-        ctx.fillStyle = state.isNZ2050 ? "#10b981" : "rgba(16, 185, 129, 0.5)";
-        ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
-        ctx.fillText("2050 Net Zero", 0, 0);
-        ctx.restore();
+          ctx.save();
+          ctx.translate(nz2050X - 5, tGridTop + 38);
+          ctx.rotate(Math.PI / 2);
+          ctx.fillStyle = state.isNZ2050 ? "#10b981" : "rgba(16, 185, 129, 0.5)";
+          ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
+          ctx.fillText("2050 Net Zero", 0, 0);
+          ctx.restore();
+        }
 
-        // Plot Accumulated History: Static Historical Baseline (1750–2026) vs Dynamic Simulation (1958–2250)
-        // 1. Static 1750–2026 Historical Record (Always displayed on chart as ground truth: "that's what happened")
+        // Plot Accumulated History: Static Historical Baseline vs Dynamic Simulation
+        // 1. Atmospheric CO2 Curve (Purple #c084fc)
         ctx.strokeStyle = "#c084fc";
         ctx.lineWidth = 1.8;
         ctx.beginPath();
-        STATIC_HISTORICAL_RUN.forEach((pt, i) => {
+        let co2Started = false;
+        const ptsForCO2 = state.isZoomed ? STATIC_HISTORICAL_RUN.filter(p => p.year >= 1958 && p.year <= 2026) : STATIC_HISTORICAL_RUN;
+        ptsForCO2.forEach(pt => {
           const cx = yrToX(pt.year);
           const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, co2ToY(pt.co2)));
-          if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          if (!co2Started) { ctx.moveTo(cx, cy); co2Started = true; } else { ctx.lineTo(cx, cy); }
         });
         ctx.stroke();
 
-        ctx.strokeStyle = "#f59e0b";
-        ctx.lineWidth = 2.0;
+        // 2. Vertical Scaled Error Bars (Simulated vs Measured)
+        // Painted between measured temperature (HadCRUT5/Berkeley Earth) and simulated temperature (Two-Layer EBM)
+        ctx.strokeStyle = state.isZoomed ? "rgba(0, 229, 255, 0.88)" : "rgba(0, 229, 255, 0.50)";
+        ctx.lineWidth = state.isZoomed ? 1.3 : 1.0;
         ctx.beginPath();
-        STATIC_HISTORICAL_RUN.forEach((pt, i) => {
+        for (let y = 1958; y <= 2026; y++) {
+          const measDt = getMeasuredObservedDeltaAt(y);
+          const simDt = getHistoricalDeltaAt(y);
+          if (measDt !== null && simDt !== null) {
+            const x = yrToX(y);
+            const yMeas = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(measDt)));
+            const ySim = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(simDt)));
+            ctx.moveTo(x, yMeas);
+            ctx.lineTo(x, ySim);
+            // Whisker caps
+            const cap = state.isZoomed ? 3.0 : 1.5;
+            ctx.moveTo(x - cap, yMeas); ctx.lineTo(x + cap, yMeas);
+            ctx.moveTo(x - cap, ySim); ctx.lineTo(x + cap, ySim);
+          }
+        }
+        ctx.stroke();
+
+        // 3. Two-Layer Ocean EBM Simulated Curve (Rose #f43f5e)
+        ctx.strokeStyle = "#f43f5e";
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        let simStarted = false;
+        const ptsForSim = state.isZoomed
+          ? STATIC_HISTORICAL_RUN.filter(p => p.year >= 1958 && p.year <= 2026)
+          : STATIC_HISTORICAL_RUN.filter(p => p.year >= 1958);
+        ptsForSim.forEach(pt => {
           const cx = yrToX(pt.year);
           const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.deltaTs - OFFSET_1850_1900)));
-          if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          if (!simStarted) { ctx.moveTo(cx, cy); simStarted = true; } else { ctx.lineTo(cx, cy); }
         });
         ctx.stroke();
 
-        // 2. Dynamic Simulation Trajectory starting from 1958 Keeling
+        // 4. Measured Observed History Curve (Amber #f59e0b)
+        ctx.strokeStyle = "#f59e0b";
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        if (state.isZoomed) {
+          OBSERVED_TEMP_1958_2026.forEach((pt, i) => {
+            const cx = yrToX(pt.y);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.t)));
+            if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+          });
+        } else {
+          let obsStarted = false;
+          STATIC_HISTORICAL_RUN.forEach(pt => {
+            const cx = yrToX(pt.year);
+            const val = pt.year >= 1958 ? getMeasuredObservedDeltaAt(pt.year) : (pt.deltaTs - OFFSET_1850_1900);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(val)));
+            if (!obsStarted) { ctx.moveTo(cx, cy); obsStarted = true; } else { ctx.lineTo(cx, cy); }
+          });
+        }
+        ctx.stroke();
+
+        // In zoomed mode, draw circular markers on the measured points
+        if (state.isZoomed) {
+          OBSERVED_TEMP_1958_2026.forEach(pt => {
+            const cx = yrToX(pt.y);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.t)));
+            ctx.fillStyle = "#f59e0b";
+            ctx.beginPath();
+            ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+
+        // 5. Dynamic Simulation Trajectory starting from 1958 Keeling
         if (state.history && state.history.length > 0) {
-          // Dynamic simulated temperature line starting from 1958 Keeling (rose #f43f5e)
-          // Between 1958 and 2026, it closely traces the amber historical curve, demonstrating model fidelity
-          // Beyond 2026, it projects future warming according to the chosen scenario rate
           ctx.strokeStyle = "#f43f5e";
           ctx.lineWidth = 2.4;
           ctx.beginPath();
           let tDynStarted = false;
           for (let i = 0; i < state.history.length; i++) {
             const pt = state.history[i];
-            if (pt.year >= 1958) {
+            if (pt.year >= 1958 && (!state.isZoomed || pt.year <= 2026)) {
               const cx = yrToX(pt.year);
               const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(pt.deltaTs - OFFSET_1850_1900)));
               if (!tDynStarted) { ctx.moveTo(cx, cy); tDynStarted = true; } else { ctx.lineTo(cx, cy); }
@@ -5888,8 +6204,8 @@
           }
           if (tDynStarted) ctx.stroke();
 
-          // Projected CO2 curve into the future beyond 2026 in purple (#c084fc)
-          if (state.year > 2026) {
+          // Projected CO2 curve into future beyond 2026
+          if (!state.isZoomed && state.year > 2026) {
             ctx.strokeStyle = "#c084fc";
             ctx.lineWidth = 1.8;
             ctx.beginPath();
@@ -5906,7 +6222,7 @@
             if (co2DynStarted) ctx.stroke();
           }
 
-          // Active Simulation Leading-Edge Point Indicator (Pulsing Dot at active state.year)
+          // Active Simulation Leading-Edge Point Indicator
           const curHeadX = yrToX(state.year);
           const curHeadY = dtToY(state.deltaTs - OFFSET_1850_1900);
           if (curHeadX >= tGridLeft && curHeadX <= tGridRight && curHeadY >= tGridTop && curHeadY <= tGridBottom) {
@@ -5989,30 +6305,70 @@
           return state.history[state.history.length - 1].co2 || 427.0;
         }
 
-        // 1. Prepare temperature change callout badges at intersections with marker lines
+        // 1. Prepare temperature change callout badges with Error annotations
         const markerBadgeBoxes = [];
-        const markerYears = (state.isNZ2050 && state.year >= 2050) ? [1958, 2026, 2050] : [1958, 2026];
-        markerYears.forEach(targetYr => {
-          const dtVal = (targetYr === 2050) ? getSimulatedDeltaAt(2050) : getHistoricalDeltaAt(targetYr);
+        let markerTargets = [];
+        if (state.isZoomed) {
+          markerTargets = [
+            { yr: 1958 },
+            { yr: 1992 },
+            { yr: 1998 },
+            { yr: 2016 },
+            { yr: 2024 },
+            { yr: 2026 }
+          ];
+        } else {
+          markerTargets = (state.isNZ2050 && state.year >= 2050)
+            ? [{ yr: 1958 }, { yr: 2026 }, { yr: 2050 }]
+            : [{ yr: 1958 }, { yr: 2026 }];
+        }
+
+        markerTargets.forEach(tgt => {
+          const targetYr = tgt.yr;
+          const measDt = (targetYr === 2050) ? null : getMeasuredObservedDeltaAt(targetYr);
+          const simDt = (targetYr === 2050) ? getSimulatedDeltaAt(2050) : (getSimulatedDeltaAt(targetYr) || getHistoricalDeltaAt(targetYr));
+          const dtVal = measDt !== null ? measDt : simDt;
+
           if (dtVal !== null) {
             const ix = yrToX(targetYr);
             const iy = dtToY(dtVal);
 
-            // Label text: temperature change anomaly
-            const labelStr = `+${dtVal.toFixed(2)}°C`;
+            let labelStr = "";
+            if (state.isZoomed) {
+              const err = simDt - measDt;
+              const errSign = err >= 0 ? "+" : "";
+              labelStr = `${targetYr}: +${measDt.toFixed(2)}°C (Err: ${errSign}${err.toFixed(2)}°C)`;
+            } else {
+              const err = measDt !== null ? (simDt - measDt) : 0.0;
+              const errSign = err >= 0 ? "+" : "";
+              labelStr = (targetYr === 2050) ? `+${dtVal.toFixed(2)}°C` : `+${dtVal.toFixed(2)}°C (Err: ${errSign}${err.toFixed(2)}°C)`;
+            }
+
             ctx.font = "bold 10px ui-monospace, monospace";
             const tw = ctx.measureText(labelStr).width;
             const bw = tw + 10;
             const bh = 17;
-            // 2050 placed to the LEFT of the line (Rule 3); 1958/2026 to the right
-            const bx = (targetYr === 2050)
-              ? Math.max(tGridLeft + 4, ix - bw - 8)
-              : Math.min(tGridRight - bw - 4, ix + 10);
-            const by = (targetYr === 1958)
-              ? Math.min(tGridBottom - bh - 6, iy + 24)
-              : (targetYr === 2026
-                  ? Math.min(tGridBottom - bh - 6, iy + 36)
-                  : Math.min(tGridBottom - bh - 6, iy + 24));
+
+            // Rule 3: Always position callouts/badges to the LEFT of marker lines so trajectories remain visible!
+            let bx = ix - bw - 8;
+            if (bx < tGridLeft + 4) {
+              // Only when clamped at the very left boundary of the chart (e.g. 1958 in zoom mode)
+              bx = ix + 8;
+            }
+
+            let by = Math.min(tGridBottom - bh - 6, Math.max(tGridTop + 6, iy - bh / 2));
+            if (state.isZoomed) {
+              if (targetYr === 1958) by = Math.min(tGridBottom - bh - 6, iy + 20);
+              else if (targetYr === 1992) by = iy + 16;
+              else if (targetYr === 1998) by = iy - 22;
+              else if (targetYr === 2016) by = iy - 20;
+              else if (targetYr === 2024) by = iy - 22;
+              else if (targetYr === 2026) by = iy + 16;
+            } else {
+              if (targetYr === 1958) by = Math.min(tGridBottom - bh - 6, iy + 24);
+              else if (targetYr === 2026) by = Math.min(tGridBottom - bh - 6, iy + 36);
+            }
+
             markerBadgeBoxes.push({ yr: targetYr, ix, iy, bx, by, bw, bh, labelStr });
           }
         });
@@ -6195,15 +6551,17 @@
           }
 
           // Check proximity to the Temperature (ΔT) and CO2 (ppm) trajectory lines at the cursor's year
-          const hoverYr = 1750 + ((mousePos.x - tGridLeft) / tGridW) * 500;
-          const hoverDt = getHistoricalDeltaAt(hoverYr);
-          const simDt = getSimulatedDeltaAt(hoverYr);
+          const hoverYr = yrStart + ((mousePos.x - tGridLeft) / tGridW) * yrSpan;
+          const measDt = getMeasuredObservedDeltaAt(hoverYr);
+          const hoverDt = measDt !== null ? measDt : getHistoricalDeltaAt(hoverYr);
+          const simDt = getSimulatedDeltaAt(hoverYr) !== null ? getSimulatedDeltaAt(hoverYr) : getHistoricalDeltaAt(hoverYr);
           const hoverCo2 = getHistoricalCO2At(hoverYr);
           const tempLineY = (simDt !== null && hoverYr >= 1958) ? dtToY(simDt) : (hoverDt !== null ? dtToY(hoverDt) : -999);
+          const measLineY = (measDt !== null && hoverYr >= 1958) ? dtToY(measDt) : tempLineY;
           const co2LineY = hoverCo2 !== null ? co2ToY(hoverCo2) : -999;
-          const distTemp = Math.abs(mousePos.y - tempLineY);
+          const distTemp = Math.min(Math.abs(mousePos.y - tempLineY), Math.abs(mousePos.y - measLineY));
           const distCo2 = Math.abs(mousePos.y - co2LineY);
-          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 10 && distTemp <= distCo2;
+          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2;
           const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp;
 
           // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or left-side orange +0.26°C badge)
@@ -6255,10 +6613,12 @@
           } else if (isOverTempLine) {
             isPointerHover = true;
             let tipText = "";
-            let tipStroke = "#f59e0b";
+            let tipStroke = "#00e5ff";
             if (hoverYr >= 1958 && hoverYr <= 2026 && simDt !== null) {
-              tipText = `${Math.round(hoverYr)} CE · Observed: +${hoverDt.toFixed(2)}°C · Simulated: +${simDt.toFixed(2)}°C`;
-              tipStroke = "#f43f5e";
+              const err = simDt - hoverDt;
+              const errSign = err >= 0 ? "+" : "";
+              tipText = `${Math.round(hoverYr)} CE · Measured: +${hoverDt.toFixed(2)}°C · Simulated: +${simDt.toFixed(2)}°C · Error: ${errSign}${err.toFixed(2)}°C`;
+              tipStroke = "#00e5ff";
             } else if (hoverYr > 2026 && simDt !== null) {
               tipText = `${Math.round(hoverYr)} CE · Projected ΔT: +${simDt.toFixed(2)}°C`;
               tipStroke = "#f43f5e";
@@ -6271,7 +6631,7 @@
               stroke: tipStroke,
               compact: true,
               pointX: mousePos.x,
-              pointY: tempLineY
+              pointY: Math.min(tempLineY, measLineY)
             };
           } else if (isOverCo2Line) {
             isPointerHover = true;
@@ -6929,6 +7289,18 @@
           tpHoveringCard = false;
           tpCardEl.style.display = "none";
           activeTpGroupKey = null;
+        }
+        if (isSimple && state.isZoomed) {
+          state.isZoomed = false;
+          const mainGrid = document.querySelector(".main-grid");
+          if (mainGrid) mainGrid.classList.remove("chart-zoomed");
+          appWrapper.classList.remove("chart-zoomed");
+          const lbl = document.getElementById("lblZoomKeeling");
+          const btnCanvas = document.getElementById("btnCanvasZoom");
+          const btnBottom = document.getElementById("btnZoomKeeling");
+          if (lbl) lbl.textContent = "Zoom: 1958–Today (Keeling Era)";
+          if (btnCanvas) { btnCanvas.innerHTML = "🔍 Zoom 1958–Today"; btnCanvas.classList.remove("active"); }
+          if (btnBottom) btnBottom.classList.remove("active");
         }
         bubbleCard.style.display = "none";
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
@@ -8290,8 +8662,27 @@
         }
       });
 
-      // Modal Tabs & Navigation Handlers
+      // Modal Tabs & Navigation Handlers (with Mobile Minimise Support)
       const modalOverlay = document.getElementById("modalOverlay");
+      const modalNav = document.getElementById("modalNav");
+      const btnToggleModalNav = document.getElementById("btnToggleModalNav");
+      const modalActiveTabName = document.getElementById("modalActiveTabName");
+      const modalBody = document.querySelector(".modal-body");
+
+      function updateModalNavToggleText() {
+        if (!btnToggleModalNav || !modalNav) return;
+        const isCollapsed = modalNav.classList.contains("collapsed");
+        btnToggleModalNav.innerHTML = isCollapsed ? "Chapters &#x25BE;" : "Hide Chapters &#x25B4;";
+        btnToggleModalNav.setAttribute("aria-expanded", !isCollapsed);
+      }
+
+      if (btnToggleModalNav) {
+        btnToggleModalNav.addEventListener("click", () => {
+          modalNav.classList.toggle("collapsed");
+          updateModalNavToggleText();
+        });
+      }
+
       document.getElementById("openModalBtn").addEventListener("click", () => {
         modalOverlay.style.display = "flex";
       });
@@ -8303,12 +8694,29 @@
       });
 
       function setDocPage(pageId) {
+        let activeTitle = "";
         document.querySelectorAll(".modal-tab-btn").forEach(b => {
-          b.classList.toggle("active", b.dataset.page === pageId);
+          const isActive = b.dataset.page === pageId;
+          b.classList.toggle("active", isActive);
+          if (isActive) activeTitle = b.textContent.trim();
         });
         document.querySelectorAll(".doc-page").forEach(p => {
           p.classList.toggle("active", p.id === pageId);
         });
+
+        if (modalActiveTabName && activeTitle) {
+          modalActiveTabName.textContent = activeTitle;
+        }
+
+        // On mobile phone screens, auto-minimise contents links when a link is pressed
+        if (window.innerWidth <= 768 && modalNav) {
+          modalNav.classList.add("collapsed");
+          updateModalNavToggleText();
+        }
+
+        if (modalBody) {
+          modalBody.scrollTop = 0;
+        }
       }
 
       document.querySelectorAll(".modal-tab-btn").forEach(btn => {
@@ -8317,6 +8725,39 @@
       document.querySelectorAll(".toc-link").forEach(link => {
         link.addEventListener("click", () => setDocPage(link.dataset.target));
       });
+
+      // Instrumental Keeling Era (1958–Today) Zoom Engine
+      function toggleZoomKeeling() {
+        state.isZoomed = !state.isZoomed;
+        const mainGrid = document.querySelector(".main-grid");
+        const appWrapper = document.getElementById("appWrapper");
+        if (mainGrid) mainGrid.classList.toggle("chart-zoomed", state.isZoomed);
+        if (appWrapper) appWrapper.classList.toggle("chart-zoomed", state.isZoomed);
+
+        const lbl = document.getElementById("lblZoomKeeling");
+        const btnCanvas = document.getElementById("btnCanvasZoom");
+        const btnBottom = document.getElementById("btnZoomKeeling");
+
+        if (lbl) {
+          lbl.textContent = state.isZoomed ? "Reset 500-Year View (1750–2250)" : "Zoom: 1958–Today (Keeling Era)";
+        }
+        if (btnCanvas) {
+          btnCanvas.innerHTML = state.isZoomed ? "🔍 Reset 500-Year View" : "🔍 Zoom 1958–Today";
+          btnCanvas.classList.toggle("active", state.isZoomed);
+        }
+        if (btnBottom) {
+          btnBottom.classList.toggle("active", state.isZoomed);
+        }
+
+        requestAnimationFrame(() => {
+          draw();
+        });
+      }
+
+      const btnZoomKeeling = document.getElementById("btnZoomKeeling");
+      if (btnZoomKeeling) btnZoomKeeling.addEventListener("click", toggleZoomKeeling);
+      const btnCanvasZoom = document.getElementById("btnCanvasZoom");
+      if (btnCanvasZoom) btnCanvasZoom.addEventListener("click", toggleZoomKeeling);
 
       // =========================================================================
       // POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR ENGINE
