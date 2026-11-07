@@ -6586,31 +6586,27 @@
         // =========================================================================
         drawFluxProfile();
 
-        const tGridTop = 18;
+        const isHeaderTwoLine = w < 680;
+        const tGridTop = isHeaderTwoLine ? 54 : 44;
         const tGridBottom = h - 26;
         const tGridLeft = state.isZoomed ? (isMobileNarrow ? 34 : 44) : (isMobileNarrow ? 28 : 36);
         const tGridRight = w - (state.isZoomed ? (isMobileNarrow ? 40 : 54) : (isMobileNarrow ? 36 : 46));
         const tGridH = tGridBottom - tGridTop;
         const tGridW = tGridRight - tGridLeft;
 
-        ctx.fillStyle = "rgba(11, 19, 32, 0.72)";
-        ctx.fillRect(tGridLeft, tGridTop, tGridW, tGridH);
-        ctx.strokeStyle = "rgba(51, 65, 85, 0.55)";
-        ctx.strokeRect(tGridLeft, tGridTop, tGridW, tGridH);
-
-        // Headline scaled up by 100%
-        const titleFontSize = tGridW < 400 ? 13 : 16;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.92)";
+        // Chart Title (Placed cleanly in dedicated header band ABOVE the grid)
+        const titleFontSize = tGridW < 400 ? 11 : (tGridW < 600 ? 13 : 15);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
         ctx.font = `bold ${titleFontSize}px system-ui, -apple-system, sans-serif`;
         const chartTitle = state.isZoomed
           ? "INSTRUMENTAL ERA ZOOM (1958–2026 CE) · KEELING OBSERVATIONAL ERA"
           : "500-YEAR WARMING TRAJECTORY (1750–2250 CE)";
-        ctx.fillText(chartTitle, tGridLeft + 8, tGridTop + (titleFontSize + 4));
+        ctx.fillText(chartTitle, tGridLeft, 16);
 
-        // Subtitle legend for Temperature vs CO2
-        ctx.font = "bold 10px system-ui, -apple-system, sans-serif";
-        const legLeft = tGridLeft + 8;
-        const legY = tGridTop + titleFontSize + 19;
+        // Subtitle Legend (Placed cleanly in header band ABOVE the grid)
+        ctx.font = "bold 9.5px system-ui, -apple-system, sans-serif";
+        const legLeft = tGridLeft;
+        const legY = isHeaderTwoLine ? 30 : 32;
 
         if (state.isZoomed) {
           ctx.fillStyle = "#f59e0b";
@@ -6623,8 +6619,12 @@
           const dtSimW = ctx.measureText("■ Simulated Warming (Two-Layer EBM)").width;
 
           ctx.fillStyle = "#c084fc";
-          const co2X = dtSimX + dtSimW + 14;
-          ctx.fillText("■ Atmospheric CO₂ (ppm)", co2X, legY);
+          if (isHeaderTwoLine) {
+            ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, 44);
+          } else {
+            const co2X = dtSimX + dtSimW + 14;
+            ctx.fillText("■ Atmospheric CO₂ (ppm)", co2X, legY);
+          }
         } else {
           ctx.fillStyle = "#f59e0b";
           ctx.fillText("■ Actual Observed History (1750–2026, 5-yr smoothed)", legLeft, legY);
@@ -6636,16 +6636,26 @@
           const dtSimLegendW = ctx.measureText("■ Simulated Warming (1958–2250)").width;
 
           ctx.fillStyle = "#c084fc";
-          const co2LegendX = dtSimLegendX + dtSimLegendW + 14;
-          ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
-          const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+          if (isHeaderTwoLine) {
+            ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, 44);
+          } else {
+            const co2LegendX = dtSimLegendX + dtSimLegendW + 14;
+            ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
+            const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
 
-          if (tGridW > 960) {
-            ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
-            ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
-            ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 14, legY);
+            if (tGridW > 960) {
+              ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
+              ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
+              ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 14, legY);
+            }
           }
         }
+
+        // Draw Chart Grid Box
+        ctx.fillStyle = "rgba(11, 19, 32, 0.72)";
+        ctx.fillRect(tGridLeft, tGridTop, tGridW, tGridH);
+        ctx.strokeStyle = "rgba(51, 65, 85, 0.55)";
+        ctx.strokeRect(tGridLeft, tGridTop, tGridW, tGridH);
 
         const yrStart = state.isZoomed ? 1958 : 1750;
         const yrEnd = state.isZoomed ? 2026 : 2250;
