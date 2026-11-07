@@ -1079,7 +1079,6 @@
       color: #fff;
     }
     .app-wrapper.simple-mode .chart-actions-bottom,
-    .app-wrapper.simple-mode .canvas-zoom-pill,
     .app-wrapper.simple-mode #btnZoomKeeling {
       display: none !important;
     }
@@ -1087,48 +1086,6 @@
       .chart-actions-bottom {
         flex-direction: column;
       }
-    }
-
-    /* Main Grid Zoom Layout (Instrumental Keeling Era 1958–Today) */
-    .main-grid.chart-zoomed {
-      grid-template-columns: 1fr;
-    }
-    .main-grid.chart-zoomed .canvas-panel {
-      grid-row: 1;
-      width: 100%;
-    }
-    .main-grid.chart-zoomed .canvas-container {
-      height: 520px;
-    }
-    .main-grid.chart-zoomed .controls-panel {
-      grid-row: 2;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 16px;
-    }
-    .canvas-zoom-pill {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      z-index: 25;
-      background: rgba(11, 19, 32, 0.92);
-      border: 1.5px solid var(--cyan);
-      color: var(--cyan);
-      font-size: 0.74rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-      user-select: none;
-      white-space: nowrap;
-    }
-    .canvas-zoom-pill:hover,
-    .canvas-zoom-pill.active {
-      background: var(--cyan);
-      color: #000;
-      box-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
     }
 
     /* Fallback Action Button on 500-Year Temperature Chart */
@@ -1879,11 +1836,6 @@
         <div class="canvas-container" id="canvasContainer">
           <canvas id="simCanvas"></canvas>
 
-          <!-- Floating Zoom Button for Instrumental Keeling Era -->
-          <button type="button" class="canvas-zoom-pill" id="btnCanvasZoom" title="Toggle zoom: 1958–Today (Keeling Era) with measured vs. simulated error bars">
-            🔍 Zoom 1958–Today
-          </button>
-
           <!-- 5 Sequential Physical Explanation Pins -->
           <div class="speech-pin" id="pin1" style="top: 6%; left: 24%;">1</div>
           <div class="speech-pin" id="pin2" style="top: 43%; left: 24%;">2</div>
@@ -1913,7 +1865,7 @@
 
         <!-- Action Buttons Below 500-Year Warming Chart (Side by Side) -->
         <div class="chart-actions-bottom" id="chartActionsBottom">
-          <button type="button" class="chart-bottom-btn" id="btnZoomKeeling" title="Zoom in to 1958–Today (Keeling Instrumental Era) with measured vs. simulated error bars">
+          <button type="button" class="chart-bottom-btn" id="btnZoomKeeling" title="Zoom in to 1958–Today (Keeling Instrumental Era) vs. full 500-year view">
             <span>🔎</span> <strong id="lblZoomKeeling">Zoom: 1958–Today (Keeling Era)</strong>
           </button>
           <button type="button" class="chart-bottom-btn" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
@@ -5936,13 +5888,8 @@
           ctx.fillText("■ Simulated Warming (Two-Layer EBM)", dtSimX, legY);
           const dtSimW = ctx.measureText("■ Simulated Warming (Two-Layer EBM)").width;
 
-          ctx.fillStyle = "#00e5ff";
-          const errX = dtSimX + dtSimW + 14;
-          ctx.fillText("⫰ Scaled Error Bars (Sim vs Meas: ±0.15°C RMSE)", errX, legY);
-          const errW = ctx.measureText("⫰ Scaled Error Bars (Sim vs Meas: ±0.15°C RMSE)").width;
-
           ctx.fillStyle = "#c084fc";
-          const co2X = errX + errW + 14;
+          const co2X = dtSimX + dtSimW + 14;
           ctx.fillText("■ Atmospheric CO₂ (ppm)", co2X, legY);
         } else {
           ctx.fillStyle = "#f59e0b";
@@ -6137,31 +6084,7 @@
         });
         ctx.stroke();
 
-        // 2. Vertical Scaled Error Bars (Simulated vs Measured)
-        // Painted strictly in Zoom mode (1958–Today Keeling Era) where high resolution allows crisp whiskers
-        if (state.isZoomed) {
-          ctx.strokeStyle = "rgba(0, 229, 255, 0.88)";
-          ctx.lineWidth = 1.3;
-          ctx.beginPath();
-          for (let y = 1958; y <= 2026; y++) {
-            const measDt = getMeasuredObservedDeltaAt(y);
-            const simDt = getHistoricalDeltaAt(y);
-            if (measDt !== null && simDt !== null) {
-              const x = yrToX(y);
-              const yMeas = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(measDt)));
-              const ySim = Math.max(tGridTop + 1, Math.min(tGridBottom, dtToY(simDt)));
-              ctx.moveTo(x, yMeas);
-              ctx.lineTo(x, ySim);
-              // Whisker caps
-              const cap = 3.0;
-              ctx.moveTo(x - cap, yMeas); ctx.lineTo(x + cap, yMeas);
-              ctx.moveTo(x - cap, ySim); ctx.lineTo(x + cap, ySim);
-            }
-          }
-          ctx.stroke();
-        }
-
-        // 3. Two-Layer Ocean EBM Simulated Curve (Rose #f43f5e)
+        // 2. Two-Layer Ocean EBM Simulated Curve (Rose #f43f5e)
         ctx.strokeStyle = "#f43f5e";
         ctx.lineWidth = 2.2;
         ctx.beginPath();
@@ -6646,12 +6569,12 @@
           } else if (isOverTempLine) {
             isPointerHover = true;
             let tipText = "";
-            let tipStroke = "#00e5ff";
+            let tipStroke = "#f59e0b";
             if (hoverYr >= 1958 && hoverYr <= 2026 && simDt !== null) {
               const err = simDt - hoverDt;
               const errSign = err >= 0 ? "+" : "";
               tipText = `${Math.round(hoverYr)} CE · Measured: +${hoverDt.toFixed(2)}°C · Simulated: +${simDt.toFixed(2)}°C · Error: ${errSign}${err.toFixed(2)}°C`;
-              tipStroke = "#00e5ff";
+              tipStroke = "#f59e0b";
             } else if (hoverYr > 2026 && simDt !== null) {
               tipText = `${Math.round(hoverYr)} CE · Projected ΔT: +${simDt.toFixed(2)}°C`;
               tipStroke = "#f43f5e";
@@ -7329,10 +7252,8 @@
           if (mainGrid) mainGrid.classList.remove("chart-zoomed");
           appWrapper.classList.remove("chart-zoomed");
           const lbl = document.getElementById("lblZoomKeeling");
-          const btnCanvas = document.getElementById("btnCanvasZoom");
           const btnBottom = document.getElementById("btnZoomKeeling");
           if (lbl) lbl.textContent = "Zoom: 1958–Today (Keeling Era)";
-          if (btnCanvas) { btnCanvas.innerHTML = "🔍 Zoom 1958–Today"; btnCanvas.classList.remove("active"); }
           if (btnBottom) btnBottom.classList.remove("active");
         }
         bubbleCard.style.display = "none";
@@ -8768,15 +8689,10 @@
         if (appWrapper) appWrapper.classList.toggle("chart-zoomed", state.isZoomed);
 
         const lbl = document.getElementById("lblZoomKeeling");
-        const btnCanvas = document.getElementById("btnCanvasZoom");
         const btnBottom = document.getElementById("btnZoomKeeling");
 
         if (lbl) {
           lbl.textContent = state.isZoomed ? "Reset 500-Year View (1750–2250)" : "Zoom: 1958–Today (Keeling Era)";
-        }
-        if (btnCanvas) {
-          btnCanvas.innerHTML = state.isZoomed ? "🔍 Reset 500-Year View" : "🔍 Zoom 1958–Today";
-          btnCanvas.classList.toggle("active", state.isZoomed);
         }
         if (btnBottom) {
           btnBottom.classList.toggle("active", state.isZoomed);
@@ -8789,8 +8705,6 @@
 
       const btnZoomKeeling = document.getElementById("btnZoomKeeling");
       if (btnZoomKeeling) btnZoomKeeling.addEventListener("click", toggleZoomKeeling);
-      const btnCanvasZoom = document.getElementById("btnCanvasZoom");
-      if (btnCanvasZoom) btnCanvasZoom.addEventListener("click", toggleZoomKeeling);
 
       // =========================================================================
       // POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR ENGINE
