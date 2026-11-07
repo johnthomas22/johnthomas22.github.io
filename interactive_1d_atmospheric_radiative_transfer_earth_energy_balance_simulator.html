@@ -7290,8 +7290,8 @@
           // Check proximity to 350 ppm Safe Boundary line and badge
           const y350 = co2ToY(350);
           const has350Line = (y350 >= tGridTop && y350 <= tGridBottom);
-          const isOver350Line = has350Line && (Math.abs(mousePos.y - y350) <= 6 && mousePos.x >= tGridLeft && mousePos.x <= tGridRight);
-          const isOver350Badge = has350Line && (mousePos.x >= tGridLeft && mousePos.x <= tGridLeft + 165 && Math.abs(mousePos.y - (y350 - 8)) <= 10);
+          const isOver350Line = has350Line && (Math.abs(mousePos.y - y350) <= 8 && mousePos.x >= tGridLeft && mousePos.x <= tGridRight);
+          const isOver350Badge = has350Line && (mousePos.x >= tGridLeft && mousePos.x <= tGridLeft + 165 && Math.abs(mousePos.y - (y350 - 8)) <= 11);
           const isOverSafe350 = (isOver350Badge || isOver350Line);
 
           isHoveringMainTpBadge = !!hoveredMainTp;
