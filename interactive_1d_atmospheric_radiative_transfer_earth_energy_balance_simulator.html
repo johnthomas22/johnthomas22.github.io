@@ -1502,6 +1502,89 @@
       box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
     }
 
+    /* Interactive 350 ppm Safe Level Popover */
+    .safe-350-popover {
+      display: none;
+      position: fixed;
+      z-index: 2500;
+      width: 365px;
+      max-width: calc(100vw - 24px);
+      background: #061510;
+      border: 1.5px solid #10b981;
+      border-radius: 9px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.95), 0 0 18px rgba(16, 185, 129, 0.28);
+      pointer-events: auto;
+    }
+    .safe-350-popover .s350-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(16, 185, 129, 0.35);
+      padding-bottom: 5px;
+    }
+    .safe-350-popover .s350-title {
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .safe-350-popover .s350-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .safe-350-popover .s350-close:hover {
+      color: #fff;
+    }
+    .safe-350-popover .s350-stats {
+      font-family: ui-monospace, monospace;
+      font-size: 0.76rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      border-radius: 5px;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+    }
+    .safe-350-popover .s350-note {
+      font-size: 0.73rem;
+      color: #cbd5e1;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .safe-350-popover .s350-link-btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #34d399;
+      font-weight: 700;
+      font-size: 0.76rem;
+      padding: 7px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .safe-350-popover .s350-link-btn:hover {
+      background: #10b981;
+      color: #042f2e;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.45);
+    }
+
     /* Modal Documentation & Tabs */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88);
@@ -2889,11 +2972,11 @@
               </li>
               <li>
                 <a class="toc-link" data-target="page-carbon-budgets">
-                  <span>📉</span> <strong>Page 6: Global Carbon Budgets & The "Unburnable Carbon" Reality</strong>
-                  <span class="badge badge-rose" style="margin-left: 8px;">IPCC AR6 / TCRE / Paris Limits</span>
+                  <span>📉</span> <strong>Page 6: Global Carbon Budgets, "Unburnable Carbon" & The 350 ppm Safe Boundary</strong>
+                  <span class="badge badge-rose" style="margin-left: 8px;">IPCC AR6 / Hansen 350 ppm / Paris</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  The Transient Climate Response to Cumulative Emissions (TCRE ≈ 0.45 °C per 1,000 Gt CO₂), remaining carbon budgets for +1.5 °C (~200 Gt CO₂) and +2.0 °C (~1,150 Gt CO₂), translating budgets into remaining years of current extraction, and comparing finite atmospheric absorptive capacity against the ~3,400 Gt CO₂ of proven fossil reserves (the "Unburnable Carbon" paradox where >90% of reserves must stay unextracted).
+                  The Transient Climate Response to Cumulative Emissions (TCRE ≈ 0.45 °C per 1,000 Gt CO₂), remaining carbon budgets for +1.5 °C (~200 Gt CO₂) and +2.0 °C (~1,150 Gt CO₂), translating budgets into remaining years of current extraction, comparing finite atmospheric absorptive capacity against the ~3,400 Gt CO₂ of proven fossil reserves (the "Unburnable Carbon" paradox where >90% of reserves must stay unextracted), and the paleoclimate & planetary boundary justification for 350 ppm as the safe Holocene upper limit (Hansen et al. 2008, Rockström et al. 2009).
                 </div>
               </li>
                             <li>
@@ -3913,8 +3996,81 @@
             </li>
           </ul>
 
-          <h4>6. Key References & Authoritative Scientific Sources</h4>
+          <h4 id="sec-safe-350ppm" style="scroll-margin-top: 14px; border-left: 3px solid #10b981; padding-left: 8px; color: #34d399;">
+            6. The 350 ppm Boundary: Scientific Basis & Planetary Stability
+          </h4>
+          <p>
+            On this simulator's trajectory chart, a horizontal emerald boundary line marks <strong>350 ppm of atmospheric CO₂</strong>. Why is 350 ppm considered the physical ceiling for a stable, habitable planet, and how does it compare to today's level of ~427 ppm?
+          </p>
+
+          <p><strong>A. Radiative Transfer & Equilibrium Warming at 350 ppm:</strong></p>
+          <p>
+            Using the IPCC AR6 logarithmic radiative forcing equation evaluated in this simulator (pre-industrial baseline <i>C</i>₀ = 278 ppm):
+          </p>
+          <div class="code-box">
+            Δ<i>F</i>₃₅₀ = 5.35 · ln(350 / 278) ≈ <b>+1.23 W/m²</b> (Effective Radiative Forcing)<br>
+            Committed Equilibrium Warming (ECS = 3.0 °C, net feedback λ = 1.31 W/m²/K):<br>
+            Δ<i>T</i><sub>eq</sub> = 1.23 W/m² / 1.31 W/m²/K = <b>+0.94 °C above 1750 (+0.82 °C above 1850–1900)</b>
+          </div>
+          <p>
+            At 350 ppm, the planet's equilibrium surface warming stabilizes at roughly <strong>+1.0 °C</strong>. In contrast, at today's ~427 ppm, CO₂ radiative forcing alone is <b>+2.30 W/m²</b>, committing Earth to <b>+1.75 °C</b> of equilibrium warming (even before slow ice-albedo and vegetation feedbacks unfold).
+          </p>
+
+          <p style="margin-top: 10px;"><strong>B. Paleoclimate Ice Sheet Stability & Sea Level (Hansen et al. 2008):</strong></p>
+          <p>
+            The landmark paper establishing 350 ppm was published by <strong>James Hansen and colleagues in 2008</strong> (<em>The Open Atmospheric Science Journal</em>: "Target Atmospheric CO₂: Where Should Humanity Aim?"). Hansen's team combined high-resolution Cenozoic paleoclimate sediment records, Antarctic ice cores, and physical cryosphere modeling:
+          </p>
+          <ul style="margin: 8px 0 10px 22px; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              <strong>The Holocene Baseline (260–280 ppm):</strong> For the entire 11,700-year Holocene epoch—the climatic regime under which human agriculture, cities, and coastal civilizations arose—atmospheric CO₂ remained stably bounded between 260 and 280 ppm, maintaining global sea levels within ±0.5 metres.
+            </li>
+            <li>
+              <strong>Crossing the Threshold in 1988 CE:</strong> Atmospheric CO₂ passed 350 ppm in early <strong>1988 CE</strong>. Prior to 1988, Earth's radiative imbalance was small enough that polar ice sheet mass loss and mountain glacier retreat were minimal.
+            </li>
+            <li>
+              <strong>Cenozoic Glacial Inception (~34 Million Years Ago):</strong> Continental glaciation in Antarctica first occurred during the Eocene-Oligocene transition (~34 Ma) when atmospheric CO₂ fell below ~450 ppm (with long-term stability requiring ≤350 ppm). Hansen et al. demonstrated that maintaining CO₂ above 350 ppm for centuries melts mountain glaciers worldwide and destabilizes the marine-grounded portions of the West Antarctic and Greenland ice sheets, committing the planet to <strong>15 to 25 metres of eventual sea level rise</strong>.
+            </li>
+            <li>
+              <strong>Earth System Sensitivity (ESS):</strong> Standard climate sensitivity (ECS ≈ 3.0 °C) accounts only for fast feedbacks (water vapor, clouds, lapse rate, sea ice). Over centuries, slow feedbacks (continental ice sheet albedo, boreal forest expansion, permafrost carbon release) double Earth's warming response to ESS ≈ 4.5–6.0 °C per doubling. At 427 ppm, slow feedbacks make ice-free poles the thermodynamic equilibrium state.
+            </li>
+          </ul>
+
+          <p style="margin-top: 10px;"><strong>C. The Planetary Boundaries Framework (Rockström et al. Nature 2009; Steffen et al. Science 2015; Richardson et al. Sci Adv 2023):</strong></p>
+          <p>
+            In 2009, an international consortium of 29 Earth system scientists led by Johan Rockström and the Stockholm Resilience Centre defined <strong>Planetary Boundaries</strong> to demarcate a "safe operating space for humanity":
+          </p>
+          <div class="code-box">
+            • <b>Safe Operating Zone:</b> &le; 350 ppm CO₂ (Δ<i>F</i> &le; +1.0 W/m² relative to pre-industrial)<br>
+            • <b>Zone of Increasing Risk / Uncertainty:</b> 350 ppm to 450 ppm (Δ<i>F</i> = +1.0 to +1.5 W/m²)<br>
+            • <b>High-Risk Zone (Catastrophic Tipping Commitments):</b> &gt; 450 ppm (Δ<i>F</i> &gt; +1.5 W/m²)<br>
+            • <b>Current Reality (2026 CE):</b> <b>~427 ppm CO₂ (Δ<i>F</i> ≈ +2.30 W/m² for CO₂ alone; +2.91 W/m² total well-mixed GHGs)</b>
+          </div>
+          <p>
+            Earth crossed out of the "Safe Zone" in 1988 and is now deep inside the "Zone of Increasing Risk", accelerating toward critical cryospheric tipping points (Greenland ice sheet collapse, West Antarctic ice sheet collapse, and low-latitude coral reef mortality).
+          </p>
+
+          <p style="margin-top: 10px;"><strong>D. The Critical Policy Implication: Stopping Emissions (Net Zero) is Not Enough</strong></p>
+          <p>
+            Reaching <strong>Net Zero emissions</strong> stops temperature from rising further (via ZEC ≈ 0.0 °C), but it leaves atmospheric concentration frozen at whatever elevated peak humanity reaches (~430–450 ppm). Because that elevated concentration leaves Earth Energy Imbalance positive (<i>EEI</i> &gt; 0) for centuries, the cryosphere continues to melt.
+          </p>
+          <p>
+            Therefore, <strong>the ultimate goal of climate stabilization cannot end at Net Zero emissions</strong>: humanity must transition into a sustained era of net-negative emissions (Carbon Dioxide Removal, CDR) to draw atmospheric carbon back down from &gt;420 ppm to <strong>350 ppm</strong>.
+          </p>
+
+          <h4>7. Key References & Authoritative Scientific Sources</h4>
           <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              <strong>Hansen et al. (2008), <em>The Open Atmospheric Science Journal</em> — Target Atmospheric CO₂: Where Should Humanity Aim?:</strong><br>
+              <a href="https://pubs.giss.nasa.gov/abs/ha00410c.html" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://pubs.giss.nasa.gov/abs/ha00410c.html ↗</a>
+            </li>
+            <li>
+              <strong>Rockström et al. (2009), <em>Nature</em> — A safe operating space for humanity (Planetary Boundaries framework):</strong><br>
+              <a href="https://www.nature.com/articles/461472a" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.nature.com/articles/461472a ↗</a>
+            </li>
+            <li>
+              <strong>Steffen et al. (2015), <em>Science</em> & Richardson et al. (2023), <em>Science Advances</em> — Earth beyond six of nine planetary boundaries:</strong><br>
+              <a href="https://www.science.org/doi/10.1126/sciadv.adh2458" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.science.org/doi/10.1126/sciadv.adh2458 ↗</a>
+            </li>
             <li>
               <strong>IPCC AR6 Working Group I, Chapter 5 (Global Carbon and Other Biogeochemical Cycles and Feedbacks):</strong><br>
               <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-5/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-5/ ↗</a>
@@ -4663,6 +4819,30 @@
     </button>
   </div>
 
+  <!-- SAFE 350 PPM PLANETARY BOUNDARY POPOVER TOOLTIP WITH GUIDE LINK -->
+  <div class="safe-350-popover" id="safe350Popover">
+    <div class="s350-header">
+      <div class="s350-title">🌿 Safe Boundary: 350 ppm CO₂</div>
+      <button class="s350-close" id="safe350CloseBtn" title="Close">&times;</button>
+    </div>
+    <div class="s350-stats" id="safe350Stats">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+        <span>Boundary: <strong style="color: #34d399;">350.0 ppm</strong></span>
+        <span style="color: #94a3b8;">Crossed: <strong style="color: #f59e0b;">~1988 CE</strong></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted);">
+        <span>Rad. Forcing: +1.23 W/m²</span>
+        <span>Equil. Warming: <strong style="color: #34d399;">~+1.0 °C</strong></span>
+      </div>
+    </div>
+    <div class="s350-note" id="safe350Note">
+      To preserve a habitable planet similar to that on which human civilization developed, paleoclimate records show CO₂ must not exceed 350 ppm to avoid irreversible polar ice sheet loss and 15–25m sea level rise.
+    </div>
+    <button type="button" class="s350-link-btn" id="safe350LinkBtn">
+      📖 Why is 350 ppm Safe? Read Guide Page 6 →
+    </button>
+  </div>
+
   <script>
     (function () {
       "use strict";
@@ -4842,7 +5022,10 @@
         isHoveringMainTpBadge = false;
         scheduleHideTippingPointCard(150);
         scheduleHideMeasTempPopover(150);
+        scheduleHideSafe350Popover(150);
         activeMeasHitbox = null;
+        active350Hitbox = false;
+        isHovering350Line = false;
       });
 
       // Stationary Greenhouse Gas Molecules (Density decreases exponentially with altitude, +100% density)
@@ -5530,6 +5713,85 @@
         });
       }
 
+      // Interactive 350 ppm Safe Boundary Popover Elements & State
+      const safe350PopoverEl = document.getElementById("safe350Popover");
+      const safe350CloseBtn = document.getElementById("safe350CloseBtn");
+      const safe350LinkBtn = document.getElementById("safe350LinkBtn");
+      let safe350HideTimer = null;
+      let isHoveringSafe350 = false;
+      let isHovering350Line = false;
+      let active350Hitbox = false;
+
+      function cancelHideSafe350Popover() {
+        if (safe350HideTimer) {
+          clearTimeout(safe350HideTimer);
+          safe350HideTimer = null;
+        }
+      }
+
+      function scheduleHideSafe350Popover(delay = 140) {
+        if (isHoveringSafe350 || isHovering350Line) return;
+        if (safe350HideTimer) return;
+        safe350HideTimer = setTimeout(() => {
+          safe350HideTimer = null;
+          if (!isHoveringSafe350 && !isHovering350Line) {
+            if (safe350PopoverEl) safe350PopoverEl.style.display = "none";
+            active350Hitbox = false;
+          }
+        }, delay);
+      }
+
+      function showSafe350Popover(clientX, clientY) {
+        cancelHideSafe350Popover();
+        if (!safe350PopoverEl) return;
+
+        safe350PopoverEl.style.display = "block";
+        const cardW = safe350PopoverEl.offsetWidth || 365;
+        const cardH = safe350PopoverEl.offsetHeight || 195;
+        const pad = 12;
+
+        let left = clientX - cardW / 2;
+        let top = clientY - cardH - 14;
+
+        if (left < pad) left = pad;
+        if (left + cardW > window.innerWidth - pad) left = window.innerWidth - cardW - pad;
+        if (top < pad) {
+          top = clientY + 16;
+        }
+
+        safe350PopoverEl.style.left = `${Math.round(left)}px`;
+        safe350PopoverEl.style.top = `${Math.round(top)}px`;
+      }
+
+      if (safe350PopoverEl) {
+        safe350PopoverEl.addEventListener("mouseenter", () => {
+          isHoveringSafe350 = true;
+          cancelHideSafe350Popover();
+        });
+        safe350PopoverEl.addEventListener("mouseleave", () => {
+          isHoveringSafe350 = false;
+          scheduleHideSafe350Popover(120);
+        });
+      }
+
+      if (safe350CloseBtn) {
+        safe350CloseBtn.addEventListener("click", () => {
+          isHoveringSafe350 = false;
+          isHovering350Line = false;
+          cancelHideSafe350Popover();
+          if (safe350PopoverEl) safe350PopoverEl.style.display = "none";
+          active350Hitbox = false;
+        });
+      }
+
+      if (safe350LinkBtn) {
+        safe350LinkBtn.addEventListener("click", () => {
+          if (typeof openGuideTo350Section === "function") {
+            openGuideTo350Section();
+          }
+        });
+      }
+
       function renderTippingPointCardContent(grp, selectedIdx) {
         const idx = Math.max(0, Math.min(grp.items.length - 1, selectedIdx || 0));
         const key = grp.thresholdC.toFixed(2);
@@ -5670,6 +5932,13 @@
         activeTpGroupKey = null;
       });
       document.addEventListener("mousedown", e => {
+        if (safe350PopoverEl && safe350PopoverEl.style.display === "block" && !safe350PopoverEl.contains(e.target) && e.target !== canvas) {
+          isHoveringSafe350 = false;
+          isHovering350Line = false;
+          cancelHideSafe350Popover();
+          safe350PopoverEl.style.display = "none";
+          active350Hitbox = false;
+        }
         if (measTempPopoverEl && measTempPopoverEl.style.display === "block" && !measTempPopoverEl.contains(e.target) && e.target !== canvas) {
           isHoveringMeasTemp = false;
           isHoveringMeasLine = false;
@@ -5699,6 +5968,12 @@
         const rect = canvas.getBoundingClientRect();
         const mx = e.clientX - rect.left;
         const my = e.clientY - rect.top;
+        if (active350Hitbox) {
+          if (typeof openGuideTo350Section === "function") {
+            openGuideTo350Section();
+          }
+          return;
+        }
         if (activeMeasHitbox) {
           if (typeof openGuideToAerosolSection === "function") {
             openGuideToAerosolSection();
@@ -6210,6 +6485,43 @@
             ctx.textAlign = "left";
           }
         });
+
+        // Safe Planetary Boundary for Atmospheric CO2: 350 ppm (Hansen et al. 2008, Rockström et al. 2009)
+        const y350 = co2ToY(350);
+        if (y350 >= tGridTop && y350 <= tGridBottom) {
+          ctx.save();
+          ctx.strokeStyle = "rgba(16, 185, 129, 0.70)"; // Emerald-500
+          ctx.lineWidth = 1.4;
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath();
+          ctx.moveTo(tGridLeft, y350);
+          ctx.lineTo(tGridRight, y350);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Right-hand CO2 label in emerald green
+          ctx.fillStyle = "#10b981";
+          ctx.font = "bold 9px ui-monospace, monospace";
+          ctx.textAlign = "right";
+          ctx.fillText("350 ppm", tGridRight - 4, y350 - 3);
+
+          // Left-hand Safe Level badge / text
+          ctx.textAlign = "left";
+          ctx.font = "bold 10px ui-sans-serif, system-ui, sans-serif";
+          const badgeText = "🌿 350 ppm Safe Level";
+          const badgeW = ctx.measureText(badgeText).width + 10;
+          ctx.fillStyle = "rgba(6, 78, 59, 0.78)";
+          ctx.strokeStyle = "rgba(16, 185, 129, 0.65)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(tGridLeft + 6, y350 - 15, badgeW, 14, 3);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = "#34d399";
+          ctx.fillText(badgeText, tGridLeft + 11, y350 - 4);
+          ctx.restore();
+        }
 
         // X-Axis Marks and Labels
         if (state.isZoomed) {
@@ -6816,16 +7128,27 @@
             }
           });
 
+          // Check proximity to 350 ppm Safe Boundary line and badge
+          const y350 = co2ToY(350);
+          const has350Line = (y350 >= tGridTop && y350 <= tGridBottom);
+          const isOver350Line = has350Line && (Math.abs(mousePos.y - y350) <= 6 && mousePos.x >= tGridLeft && mousePos.x <= tGridRight);
+          const isOver350Badge = has350Line && (mousePos.x >= tGridLeft && mousePos.x <= tGridLeft + 165 && Math.abs(mousePos.y - (y350 - 8)) <= 10);
+          const isOverSafe350 = (isOver350Badge || isOver350Line);
+
           isHoveringMainTpBadge = !!hoveredMainTp;
           if (hoveredMainTp) {
             isPointerHover = true;
             scheduleHideMeasTempPopover(100);
+            scheduleHideSafe350Popover(100);
             activeMeasHitbox = null;
+            active350Hitbox = false;
             openTippingPointCard(hoveredMainTp.grp, hoveredMainTp.crossYr, rect.left + hoveredMainTp.anchorX, rect.top + hoveredMainTp.anchorY, false, hoveredMainTp.itemIdx);
           } else if (hoveredThreshold && hoveredThreshold.isOverLabel) {
             isPointerHover = true;
             scheduleHideMeasTempPopover(100);
+            scheduleHideSafe350Popover(100);
             activeMeasHitbox = null;
+            active350Hitbox = false;
             const thValStr = hoveredThreshold.th === 0.0 ? "0.0°C" : `+${hoveredThreshold.th.toFixed(1)}°C`;
             const thStroke = hoveredThreshold.th === 0.0 ? "#94a3b8" : (hoveredThreshold.th === 1.5 ? "#f59e0b" : "#f43f5e");
             activeTip = {
@@ -6835,7 +7158,32 @@
               pointX: Math.max(tGridLeft + 25, mousePos.x),
               pointY: hoveredThreshold.lineY
             };
+          } else if (isOverSafe350 && (!isOverMeasLine || isOver350Badge)) {
+            isPointerHover = true;
+            isHovering350Line = true;
+            active350Hitbox = true;
+            scheduleHideMeasTempPopover(100);
+            activeMeasHitbox = null;
+            showSafe350Popover(rect.left + mousePos.x, rect.top + y350);
+
+            // Glowing emerald indicator dot on 350 ppm line
+            ctx.fillStyle = "rgba(16, 185, 129, 0.40)";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, y350, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#10b981";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, y350, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, y350, 1.5, 0, Math.PI * 2);
+            ctx.fill();
           } else if (isOverMeasLine) {
+            scheduleHideSafe350Popover(100);
+            active350Hitbox = false;
             isPointerHover = true;
             isHoveringMeasLine = true;
             activeMeasHitbox = { hoverYr, measDt, simDt };
@@ -6858,7 +7206,9 @@
             ctx.fill();
           } else if (isOverTempLine) {
             scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
             activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             let tipText = "";
             let tipStroke = "#f59e0b";
@@ -6878,7 +7228,9 @@
             };
           } else if (isOverCo2Line) {
             scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
             activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             activeTip = {
               text: `${Math.round(hoverYr)} CE · CO₂: ${Math.round(hoverCo2)} ppm`,
@@ -6889,7 +7241,9 @@
             };
           } else if (isOverKeeling) {
             scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
             activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             activeTip = {
               text: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.",
@@ -6897,7 +7251,9 @@
             };
           } else if (isOver2026) {
             scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
             activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             activeTip = {
               text: "Present-day observational benchmark (+1.14°C anomaly rel. 1850–1900 / +1.26°C rel. 1750, 427 ppm CO2), dividing instrumental history from future warming trajectories.",
@@ -6905,7 +7261,9 @@
             };
           } else if (isOverActiveYr) {
             scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
             activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             const curObsDt = state.deltaTs - OFFSET_1850_1900;
             activeTip = {
@@ -6914,7 +7272,9 @@
             };
           } else if (hoveredThreshold && !hoveredThreshold.isOverLabel) {
             scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
             activeMeasHitbox = null;
+            active350Hitbox = false;
             isPointerHover = true;
             const thValStr = hoveredThreshold.th === 0.0 ? "0.0°C" : `+${hoveredThreshold.th.toFixed(1)}°C`;
             const thStroke = hoveredThreshold.th === 0.0 ? "#94a3b8" : (hoveredThreshold.th === 1.5 ? "#f59e0b" : "#f43f5e");
@@ -6936,6 +7296,11 @@
           isHoveringMeasLine = false;
           activeMeasHitbox = null;
           scheduleHideMeasTempPopover(140);
+        }
+        if (!isOverSafe350) {
+          isHovering350Line = false;
+          active350Hitbox = false;
+          scheduleHideSafe350Popover(140);
         }
 
         if (activeTip) {
@@ -7470,6 +7835,18 @@
           }
         }
 
+        if (safe350PopoverEl && safe350PopoverEl.style.display === "block") {
+          const sRect = safe350PopoverEl.getBoundingClientRect();
+          const inS350 = e.clientX >= sRect.left && e.clientX <= sRect.right && e.clientY >= sRect.top && e.clientY <= sRect.bottom;
+          if (inS350) {
+            isHoveringSafe350 = true;
+            cancelHideSafe350Popover();
+          } else if (!isHovering350Line) {
+            isHoveringSafe350 = false;
+            scheduleHideSafe350Popover(120);
+          }
+        }
+
         if (bubbleCard && bubbleCard.style.display === "block") {
           const bRect = bubbleCard.getBoundingClientRect();
           const inBubble = e.clientX >= bRect.left && e.clientX <= bRect.right && e.clientY >= bRect.top && e.clientY <= bRect.bottom;
@@ -7492,9 +7869,12 @@
         isHoveringPaleoTpBadge = false;
         isHoveringMeasTemp = false;
         isHoveringMeasLine = false;
+        isHoveringSafe350 = false;
+        isHovering350Line = false;
         scheduleHideTippingPointCard(120);
         scheduleHideBubbleCard(120);
         scheduleHideMeasTempPopover(120);
+        scheduleHideSafe350Popover(120);
       });
 
       document.getElementById("bubbleCloseBtn").addEventListener("click", () => {
@@ -7567,6 +7947,11 @@
           isHoveringMeasTemp = false;
           measTempPopoverEl.style.display = "none";
           activeMeasHitbox = null;
+        }
+        if (isSimple && safe350PopoverEl) {
+          isHoveringSafe350 = false;
+          safe350PopoverEl.style.display = "none";
+          active350Hitbox = false;
         }
         if (isSimple && state.isZoomed) {
           state.isZoomed = false;
@@ -9002,6 +9387,21 @@
         setDocPage("page-ebm");
         setTimeout(() => {
           const targetSec = document.getElementById("sec-aerosol-masking");
+          if (targetSec) {
+            targetSec.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 80);
+      }
+
+      function openGuideTo350Section() {
+        if (safe350PopoverEl) safe350PopoverEl.style.display = "none";
+        isHoveringSafe350 = false;
+        isHovering350Line = false;
+        active350Hitbox = false;
+        if (modalOverlay) modalOverlay.style.display = "flex";
+        setDocPage("page-carbon-budgets");
+        setTimeout(() => {
+          const targetSec = document.getElementById("sec-safe-350ppm");
           if (targetSec) {
             targetSec.scrollIntoView({ behavior: "smooth", block: "start" });
           }
