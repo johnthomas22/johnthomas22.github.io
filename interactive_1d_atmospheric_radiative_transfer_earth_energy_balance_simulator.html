@@ -7225,6 +7225,7 @@
         let isPointerHover = false;
         let hoveredMainTp = null;
         let isOverMeasLine = false;
+        let isOverSafe350 = false;
 
         const dtVal1958 = getHistoricalDeltaAt(1958);
         const dtVal2026 = getHistoricalDeltaAt(2026);
@@ -7292,7 +7293,7 @@
           const has350Line = (y350 >= tGridTop && y350 <= tGridBottom);
           const isOver350Line = has350Line && (Math.abs(mousePos.y - y350) <= 8 && mousePos.x >= tGridLeft && mousePos.x <= tGridRight);
           const isOver350Badge = has350Line && (mousePos.x >= tGridLeft && mousePos.x <= tGridLeft + 165 && Math.abs(mousePos.y - (y350 - 8)) <= 11);
-          const isOverSafe350 = (isOver350Badge || isOver350Line);
+          isOverSafe350 = (isOver350Badge || isOver350Line);
 
           isHoveringMainTpBadge = !!hoveredMainTp;
           if (hoveredMainTp) {
@@ -8231,8 +8232,13 @@
 
         document.getElementById("statPpmRate").innerHTML = `+${netPpmRate.toFixed(2)} <span style="font-size: 0.8rem; color: var(--text-muted);">ppm/yr</span>`;
 
-        document.getElementById("statWarmingRate").innerHTML = `+${committedRate.toFixed(3)} <span style="font-size: 0.8rem; color: var(--text-muted);">°C / yr</span>`;
-        document.getElementById("statWarmingRate").nextElementSibling.textContent = `+${(committedRate * 10).toFixed(2)} °C / decade (+0.010 °C per ppm locked in)`;
+        const elWarming = document.getElementById("statWarmingRate");
+        if (elWarming) {
+          elWarming.innerHTML = `+${committedRate.toFixed(3)} <span style="font-size: 0.8rem; color: var(--text-muted);">°C / yr</span>`;
+          if (elWarming.nextElementSibling) {
+            elWarming.nextElementSibling.textContent = `+${(committedRate * 10).toFixed(2)} °C / decade (+0.010 °C per ppm locked in)`;
+          }
+        }
 
         const badge15 = document.getElementById("budgetsBadge15");
         const stat15Val = document.getElementById("statDepletionClock");
@@ -8670,7 +8676,11 @@
 
         updateBudgetsCalculations();
       }
-      initBudgetsView();
+      try {
+        initBudgetsView();
+      } catch (err) {
+        console.error("Error initializing Budgets view:", err);
+      }
 
       // ==========================================
       // SOURCES OF CARBON & EMISSIONS ENGINE (OWID)
@@ -9402,8 +9412,16 @@
         updateSolutionsCalculations();
       }
 
-      initSourcesView();
-      initSolutionsView();
+      try {
+        initSourcesView();
+      } catch (err) {
+        console.error("Error initializing Sources view:", err);
+      }
+      try {
+        initSolutionsView();
+      } catch (err) {
+        console.error("Error initializing Solutions view:", err);
+      }
 
       // Simulation Controls
       function togglePlayPause() {
