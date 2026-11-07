@@ -1418,6 +1418,89 @@
       text-decoration: underline;
     }
 
+    /* Interactive Measured Temperature Curve Popover */
+    .measured-temp-popover {
+      display: none;
+      position: fixed;
+      z-index: 2500;
+      width: 330px;
+      max-width: calc(100vw - 24px);
+      background: #070d17;
+      border: 1.5px solid var(--amber);
+      border-radius: 9px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.95), 0 0 18px rgba(245, 158, 11, 0.28);
+      pointer-events: auto;
+    }
+    .measured-temp-popover .mt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.35);
+      padding-bottom: 5px;
+    }
+    .measured-temp-popover .mt-title {
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .measured-temp-popover .mt-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .measured-temp-popover .mt-close:hover {
+      color: #fff;
+    }
+    .measured-temp-popover .mt-stats {
+      font-family: ui-monospace, monospace;
+      font-size: 0.76rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 5px;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+    }
+    .measured-temp-popover .mt-note {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-bottom: 9px;
+      line-height: 1.4;
+    }
+    .measured-temp-popover .mt-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      justify-content: center;
+      padding: 6px 10px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1.2px solid var(--amber);
+      color: #fbbf24;
+      font-weight: 700;
+      font-size: 0.76rem;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .measured-temp-popover .mt-link-btn:hover {
+      background: var(--amber);
+      color: #000;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+    }
+
     /* Modal Documentation & Tabs */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88);
@@ -3146,7 +3229,7 @@
             </ul>
           </div>
 
-          <h4 style="margin-top: 22px;">Why Measured Warming Sat Below the CO₂ Prediction (1958–1995): Aerosols, Volcanoes & The Unmasking Surge</h4>
+          <h4 id="sec-aerosol-masking" style="margin-top: 22px;">Why Measured Warming Sat Below the CO₂ Prediction (1958–1995): Aerosols, Volcanoes & The Unmasking Surge</h4>
           <p>
             When examining the high-resolution instrumental era (1958–2026), users frequently ask why the measured thermometer record (HadCRUT5 / Berkeley Earth) sat slightly below the pure greenhouse-gas simulation trajectory for much of the 1960s, 70s, and 80s:
           </p>
@@ -4564,6 +4647,21 @@
     </div>
   </div>
 
+  <!-- MEASURED TEMPERATURE CURVE POPOVER TOOLTIP WITH GUIDE LINK -->
+  <div class="measured-temp-popover" id="measTempPopover">
+    <div class="mt-header">
+      <div class="mt-title">📈 Measured Temp vs. CO₂ Model</div>
+      <button class="mt-close" id="measTempCloseBtn" title="Close">&times;</button>
+    </div>
+    <div class="mt-stats" id="measTempStats"></div>
+    <div class="mt-note" id="measTempNote">
+      During the mid-20th century (1958–1995), post-WWII industrial sulfate aerosols ("global dimming") and volcanic eruptions temporarily masked ~50% of greenhouse warming until Clean Air Acts unmasked it.
+    </div>
+    <button type="button" class="mt-link-btn" id="measTempLinkBtn">
+      📖 Why Measured &lt; Model? Read Guide Page 3 →
+    </button>
+  </div>
+
   <script>
     (function () {
       "use strict";
@@ -4742,6 +4840,8 @@
         mousePos.active = false;
         isHoveringMainTpBadge = false;
         scheduleHideTippingPointCard(150);
+        scheduleHideMeasTempPopover(150);
+        activeMeasHitbox = null;
       });
 
       // Stationary Greenhouse Gas Molecules (Density decreases exponentially with altitude, +100% density)
@@ -5334,6 +5434,93 @@
       let mainChartTpHitboxes = [];
       let paleoChartTpHitboxes = [];
 
+      // Measured Temperature Line Interactive Tooltip & Guide Link
+      const measTempPopoverEl = document.getElementById("measTempPopover");
+      const measTempStatsEl = document.getElementById("measTempStats");
+      const measTempCloseBtn = document.getElementById("measTempCloseBtn");
+      const measTempLinkBtn = document.getElementById("measTempLinkBtn");
+      let measTempHideTimer = null;
+      let isHoveringMeasTemp = false;
+      let activeMeasHitbox = null;
+
+      function scheduleHideMeasTempPopover(delayMs) {
+        if (measTempHideTimer) clearTimeout(measTempHideTimer);
+        measTempHideTimer = setTimeout(() => {
+          if (!isHoveringMeasTemp && measTempPopoverEl) {
+            measTempPopoverEl.style.display = "none";
+          }
+        }, delayMs || 150);
+      }
+
+      function showMeasTempPopover(yr, measVal, simVal, clientX, clientY) {
+        if (measTempHideTimer) {
+          clearTimeout(measTempHideTimer);
+          measTempHideTimer = null;
+        }
+        if (!measTempPopoverEl || !measTempStatsEl) return;
+
+        const diff = simVal !== null ? (simVal - measVal) : 0;
+        const diffSign = diff >= 0 ? "+" : "";
+        const roundYr = Math.round(yr);
+
+        measTempStatsEl.innerHTML = `
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Year: <strong style="color: #fff;">${roundYr} CE</strong></span>
+            <span style="color: var(--amber);">Measured: <strong>+${measVal.toFixed(2)} °C</strong></span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted);">
+            <span>CO₂ Model: +${simVal !== null ? simVal.toFixed(2) : "--"} °C</span>
+            <span>Diff: <strong style="color: ${diff > 0.05 ? '#00e5ff' : '#fff'};">${diffSign}${diff.toFixed(2)} °C</strong></span>
+          </div>
+        `;
+
+        measTempPopoverEl.style.display = "block";
+        const cardW = measTempPopoverEl.offsetWidth || 330;
+        const cardH = measTempPopoverEl.offsetHeight || 190;
+        const pad = 12;
+
+        let left = clientX - cardW / 2;
+        let top = clientY - cardH - 14;
+
+        if (left < pad) left = pad;
+        if (left + cardW > window.innerWidth - pad) left = window.innerWidth - cardW - pad;
+        if (top < pad) {
+          top = clientY + 16;
+        }
+
+        measTempPopoverEl.style.left = `${Math.round(left)}px`;
+        measTempPopoverEl.style.top = `${Math.round(top)}px`;
+      }
+
+      if (measTempPopoverEl) {
+        measTempPopoverEl.addEventListener("mouseenter", () => {
+          isHoveringMeasTemp = true;
+          if (measTempHideTimer) {
+            clearTimeout(measTempHideTimer);
+            measTempHideTimer = null;
+          }
+        });
+        measTempPopoverEl.addEventListener("mouseleave", () => {
+          isHoveringMeasTemp = false;
+          scheduleHideMeasTempPopover(120);
+        });
+      }
+
+      if (measTempCloseBtn) {
+        measTempCloseBtn.addEventListener("click", () => {
+          isHoveringMeasTemp = false;
+          if (measTempPopoverEl) measTempPopoverEl.style.display = "none";
+        });
+      }
+
+      if (measTempLinkBtn) {
+        measTempLinkBtn.addEventListener("click", () => {
+          if (typeof openGuideToAerosolSection === "function") {
+            openGuideToAerosolSection();
+          }
+        });
+      }
+
       function renderTippingPointCardContent(grp, selectedIdx) {
         const idx = Math.max(0, Math.min(grp.items.length - 1, selectedIdx || 0));
         const key = grp.thresholdC.toFixed(2);
@@ -5496,6 +5683,12 @@
         const rect = canvas.getBoundingClientRect();
         const mx = e.clientX - rect.left;
         const my = e.clientY - rect.top;
+        if (activeMeasHitbox) {
+          if (typeof openGuideToAerosolSection === "function") {
+            openGuideToAerosolSection();
+          }
+          return;
+        }
         for (const hb of mainChartTpHitboxes) {
           if (mx >= hb.x1 && mx <= hb.x2 && my >= hb.y1 && my <= hb.y2) {
             openTippingPointCard(hb.grp, hb.crossYr, rect.left + hb.anchorX, rect.top + hb.anchorY, true, hb.itemIdx);
@@ -6544,6 +6737,7 @@
         let activeTip = null;
         let isPointerHover = false;
         let hoveredMainTp = null;
+        let isOverMeasLine = false;
 
         const dtVal1958 = getHistoricalDeltaAt(1958);
         const dtVal2026 = getHistoricalDeltaAt(2026);
@@ -6567,8 +6761,11 @@
           const tempLineY = (simDt !== null && hoverYr >= 1958) ? dtToY(simDt) : (hoverDt !== null ? dtToY(hoverDt) : -999);
           const measLineY = (measDt !== null && hoverYr >= 1958) ? dtToY(measDt) : tempLineY;
           const co2LineY = hoverCo2 !== null ? co2ToY(hoverCo2) : -999;
-          const distTemp = Math.min(Math.abs(mousePos.y - tempLineY), Math.abs(mousePos.y - measLineY));
+          const distMeas = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026) ? Math.abs(mousePos.y - measLineY) : 999;
+          const distSim = (simDt !== null && hoverYr >= 1958) ? Math.abs(mousePos.y - tempLineY) : 999;
+          const distTemp = Math.min(distMeas, distSim, (hoverDt !== null ? Math.abs(mousePos.y - dtToY(hoverDt)) : 999));
           const distCo2 = Math.abs(mousePos.y - co2LineY);
+          isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2);
           const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2;
           const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp;
 
@@ -6606,9 +6803,13 @@
           isHoveringMainTpBadge = !!hoveredMainTp;
           if (hoveredMainTp) {
             isPointerHover = true;
+            scheduleHideMeasTempPopover(100);
+            activeMeasHitbox = null;
             openTippingPointCard(hoveredMainTp.grp, hoveredMainTp.crossYr, rect.left + hoveredMainTp.anchorX, rect.top + hoveredMainTp.anchorY, false, hoveredMainTp.itemIdx);
           } else if (hoveredThreshold && hoveredThreshold.isOverLabel) {
             isPointerHover = true;
+            scheduleHideMeasTempPopover(100);
+            activeMeasHitbox = null;
             const thValStr = hoveredThreshold.th === 0.0 ? "0.0°C" : `+${hoveredThreshold.th.toFixed(1)}°C`;
             const thStroke = hoveredThreshold.th === 0.0 ? "#94a3b8" : (hoveredThreshold.th === 1.5 ? "#f59e0b" : "#f43f5e");
             activeTip = {
@@ -6618,16 +6819,33 @@
               pointX: Math.max(tGridLeft + 25, mousePos.x),
               pointY: hoveredThreshold.lineY
             };
+          } else if (isOverMeasLine) {
+            isPointerHover = true;
+            activeMeasHitbox = { hoverYr, measDt, simDt };
+            showMeasTempPopover(hoverYr, measDt, simDt, rect.left + mousePos.x, rect.top + measLineY);
+
+            // Glowing amber indicator dot on measured curve
+            ctx.fillStyle = "rgba(245, 158, 11, 0.40)";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, measLineY, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#f59e0b";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, measLineY, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, measLineY, 1.5, 0, Math.PI * 2);
+            ctx.fill();
           } else if (isOverTempLine) {
+            scheduleHideMeasTempPopover(120);
+            activeMeasHitbox = null;
             isPointerHover = true;
             let tipText = "";
             let tipStroke = "#f59e0b";
-            if (hoverYr >= 1958 && hoverYr <= 2026 && simDt !== null) {
-              const err = simDt - hoverDt;
-              const errSign = err >= 0 ? "+" : "";
-              tipText = `${Math.round(hoverYr)} CE · Measured: +${hoverDt.toFixed(2)}°C · Simulated: +${simDt.toFixed(2)}°C · Error: ${errSign}${err.toFixed(2)}°C`;
-              tipStroke = "#f59e0b";
-            } else if (hoverYr > 2026 && simDt !== null) {
+            if (hoverYr > 2026 && simDt !== null) {
               tipText = `${Math.round(hoverYr)} CE · Projected ΔT: +${simDt.toFixed(2)}°C`;
               tipStroke = "#f43f5e";
             } else {
@@ -6642,6 +6860,8 @@
               pointY: Math.min(tempLineY, measLineY)
             };
           } else if (isOverCo2Line) {
+            scheduleHideMeasTempPopover(120);
+            activeMeasHitbox = null;
             isPointerHover = true;
             activeTip = {
               text: `${Math.round(hoverYr)} CE · CO₂: ${Math.round(hoverCo2)} ppm`,
@@ -6651,18 +6871,24 @@
               pointY: co2LineY
             };
           } else if (isOverKeeling) {
+            scheduleHideMeasTempPopover(120);
+            activeMeasHitbox = null;
             isPointerHover = true;
             activeTip = {
               text: "When Charles David Keeling began continuous direct atmospheric CO2 flask sampling at Mauna Loa, transitioning science from ice-core proxy data to direct instrumental monitoring.",
               stroke: "#f59e0b"
             };
           } else if (isOver2026) {
+            scheduleHideMeasTempPopover(120);
+            activeMeasHitbox = null;
             isPointerHover = true;
             activeTip = {
               text: "Present-day observational benchmark (+1.14°C anomaly rel. 1850–1900 / +1.26°C rel. 1750, 427 ppm CO2), dividing instrumental history from future warming trajectories.",
               stroke: "#f59e0b"
             };
           } else if (isOverActiveYr) {
+            scheduleHideMeasTempPopover(120);
+            activeMeasHitbox = null;
             isPointerHover = true;
             const curObsDt = state.deltaTs - OFFSET_1850_1900;
             activeTip = {
@@ -6670,6 +6896,8 @@
               stroke: "#00e5ff"
             };
           } else if (hoveredThreshold && !hoveredThreshold.isOverLabel) {
+            scheduleHideMeasTempPopover(120);
+            activeMeasHitbox = null;
             isPointerHover = true;
             const thValStr = hoveredThreshold.th === 0.0 ? "0.0°C" : `+${hoveredThreshold.th.toFixed(1)}°C`;
             const thStroke = hoveredThreshold.th === 0.0 ? "#94a3b8" : (hoveredThreshold.th === 1.5 ? "#f59e0b" : "#f43f5e");
@@ -6686,6 +6914,10 @@
         if (!hoveredMainTp && (!paleoModalOverlay || paleoModalOverlay.style.display !== "flex")) {
           isHoveringMainTpBadge = false;
           scheduleHideTippingPointCard(180);
+        }
+        if (!isOverMeasLine) {
+          activeMeasHitbox = null;
+          scheduleHideMeasTempPopover(180);
         }
 
         if (activeTip) {
@@ -7297,6 +7529,11 @@
           tpHoveringCard = false;
           tpCardEl.style.display = "none";
           activeTpGroupKey = null;
+        }
+        if (isSimple && measTempPopoverEl) {
+          isHoveringMeasTemp = false;
+          measTempPopoverEl.style.display = "none";
+          activeMeasHitbox = null;
         }
         if (isSimple && state.isZoomed) {
           state.isZoomed = false;
@@ -8723,6 +8960,19 @@
         if (modalBody) {
           modalBody.scrollTop = 0;
         }
+      }
+
+      function openGuideToAerosolSection() {
+        if (measTempPopoverEl) measTempPopoverEl.style.display = "none";
+        isHoveringMeasTemp = false;
+        if (modalOverlay) modalOverlay.style.display = "flex";
+        setDocPage("page-ebm");
+        setTimeout(() => {
+          const targetSec = document.getElementById("sec-aerosol-masking");
+          if (targetSec) {
+            targetSec.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 80);
       }
 
       document.querySelectorAll(".modal-tab-btn").forEach(btn => {
