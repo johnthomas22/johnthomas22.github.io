@@ -9,6 +9,7 @@ const PRECACHE_ASSETS = [
   './advanced.html',
   './interactive_1d_atmospheric_radiative_transfer_earth_energy_balance_simulator.html',
   './we_only_have_one_pale_blue_dot.html',
+  './national_emergency_briefing.html',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',

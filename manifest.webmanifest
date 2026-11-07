@@ -51,6 +51,13 @@
       "description": "Humanity's Non-Fossil Planetary Resource Metabolism",
       "url": "./we_only_have_one_pale_blue_dot.html",
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "National Emergency Briefing",
+      "short_name": "Emergency Briefing",
+      "description": "Independent Climate & Nature Evidence (Westminster Central Hall)",
+      "url": "./national_emergency_briefing.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     }
   ]
 }
