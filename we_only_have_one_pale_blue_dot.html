@@ -906,9 +906,9 @@
         <div class="voyager-story-header">
           <div class="voyager-story-title">
             <span class="pulse-pixel"></span>
-            <span>🛰️ The Photograph: Earth Captured as a Single Pixel from Beyond Neptune (Feb 14, 1990)</span>
+            <span>🛰️ The Photograph: Earth Captured as Less Than a Single Pixel from Beyond Neptune's Orbit (Feb 14, 1990)</span>
           </div>
-          <span class="voyager-dist-badge">6,054,587,000 km (40.5 AU) away</span>
+          <span class="voyager-dist-badge">~6.06 billion km (40.5 AU) away</span>
         </div>
         <div class="voyager-story-body">
           <div class="voyager-beam-visual">
@@ -918,7 +918,7 @@
           </div>
           <div class="voyager-story-text">
             <p>
-              On <strong>Valentine's Day 1990</strong>, having completed its primary planetary mission and hurtling past the orbit of <strong>Neptune</strong> at ~61,000 km/h, NASA's <strong>Voyager 1</strong> received a command championed by astronomer Carl Sagan. Before permanently shutting down its cameras to save power for its journey into interstellar space, Voyager turned 180° back toward home to capture the 60-frame <em>Solar System Family Portrait</em>.
+              On <strong>Valentine's Day 1990</strong>, having completed its planetary tour (Jupiter in 1979, <strong>Saturn in 1980</strong>) and now well beyond the 30 AU orbit of Neptune, travelling at ~61,000 km/h, NASA's <strong>Voyager 1</strong> received a command championed by astronomer Carl Sagan. Before permanently shutting down its cameras to save power for its journey into interstellar space, Voyager turned back toward home to capture the 60-frame <em>Solar System Family Portrait</em>. (It was <em>Voyager 2</em>, not Voyager 1, that flew past Neptune, in 1989.)
             </p>
             <p>
               Across 6 billion kilometres of empty space, our entire world appeared as a pale blue speck occupying a mere <strong>0.12 of a single pixel</strong>, caught inside a scattered sunbeam diffracted across the spacecraft's optics. Every human who ever lived, every forest, ocean, and civilization existed entirely on that sub-pixel. There is no planet B: our living resources must fit sustainably within this one lonely dot.
@@ -1037,7 +1037,7 @@
               <div class="stream-meter-target-line" style="left: 78.1%;"></div>
               <div class="stream-meter-fill" id="meterForest" style="width: 100%; background: var(--rose);"></div>
             </div>
-            <span class="stream-sub" id="subForest">4.0B m³/yr harvested; ~10M ha/yr net tropical deforestation.</span>
+            <span class="stream-sub" id="subForest">4.0B m³/yr harvested; ~10M ha/yr gross deforestation (~4.7M ha/yr net loss).</span>
           </div>
 
           <!-- 5. Marine Fisheries -->
@@ -1224,7 +1224,7 @@
         <div class="doc-item">
           <h4>💧 The Freshwater & Topsoil Limits</h4>
           <div class="formula-pill">
-            Erosion Rate: ~20–35 t/ha/yr vs. Pedogenesis: ~1 t/ha/yr (Loss = 20–35× Replacement)
+            Cropland erosion: ~10 t/ha/yr (global mean) vs. Pedogenesis: ~1 t/ha/yr (Loss ≈ 10× Replacement; far higher on tilled slopes)
           </div>
           <p>
             Humanity extracts ~4,200 km³ of freshwater each year, 70% of which irrigates crops. Non-renewable fossil aquifers beneath global breadbaskets (the Ogallala in North America, the North China Plain, and the Indo-Gangetic Basin) are being drawn down at 2× to 4× natural recharge rates.
@@ -1245,9 +1245,9 @@
         </div>
 
         <div class="doc-item">
-          <h4>🛰️ The 0.12-Pixel Reality: Voyager 1 Beyond Neptune</h4>
+          <h4>🛰️ The 0.12-Pixel Reality: Voyager 1 Beyond Neptune's Orbit</h4>
           <p>
-            On February 14, 1990, NASA's <em>Voyager 1</em> spacecraft reached 40.5 AU (over 6 billion km) from the Sun, having crossed the orbit of <strong>Neptune</strong>. At the request of Carl Sagan, flight controllers rotated the probe back toward the inner solar system and took the historic <em>Pale Blue Dot</em> image using its 1500mm narrow-angle camera.
+            On February 14, 1990, NASA's <em>Voyager 1</em> spacecraft was 40.5 AU (about 6 billion km) from the Sun, far beyond the orbit of <strong>Neptune</strong> (30 AU) and well above the plane of the planets, which it had left after its 1980 Saturn flyby. At the request of Carl Sagan, flight controllers rotated the probe back toward the inner solar system and took the historic <em>Pale Blue Dot</em> image using its 1500mm narrow-angle camera.
           </p>
           <p>
             In that final image, Earth spans just <strong>0.12 of a single pixel</strong>, illuminated by a ray of sunlight scattered inside the camera barrel. That tiny fraction of a pixel holds the totality of human history, culture, biodiversity, and regenerative biocapacity.
@@ -1338,9 +1338,13 @@
         btnPresetWestern: { diet: 0, waste: 0, agri: 0, forest: 0, fisheries: 10, materials: 0, nature: 15, pop: 82, westernPenalty: true },
         btnPresetEatLancet: { diet: 50, waste: 30, agri: 25, forest: 35, fisheries: 25, materials: 20, nature: 20, pop: 82 },
         btnPresetAgriTech: { diet: 25, waste: 60, agri: 70, forest: 45, fisheries: 30, materials: 35, nature: 25, pop: 82 },
-        btnPresetOnePlanet: { diet: 50, waste: 45, agri: 55, forest: 55, fisheries: 30, materials: 45, nature: 30, pop: 82 },
+        btnPresetOnePlanet: { diet: 50, waste: 45, agri: 55, forest: 55, fisheries: 40, materials: 45, nature: 30, pop: 82 },
         btnPresetHalfEarth: { diet: 70, waste: 65, agri: 75, forest: 80, fisheries: 45, materials: 65, nature: 50, pop: 82 }
       };
+
+      // Illustrative "Western diet everywhere" demand multipliers (scenario assumption, not a measured value)
+      let westernMode = false;
+      const WESTERN_MULT = { crop: 1.20, pasture: 1.50, water: 1.15, forest: 1.25, fisheries: 1.20, soils: 1.10 };
 
       function calculate() {
         const diet = parseFloat(sDiet.value); // 0 to 80 %
@@ -1371,28 +1375,28 @@
 
         // 1. Cropland: Driven by diet (feed demand), food waste, and agri yield efficiency
         const cropDemandMult = (1.0 - (diet / 100.0) * 0.50) * (1.0 - (waste / 100.0) * 0.35) * (1.0 - (agri / 100.0) * 0.20) * popMultiplier;
-        const cropDemand = 0.32 * cropDemandMult;
+        const cropDemand = 0.32 * cropDemandMult * (westernMode ? WESTERN_MULT.crop : 1);
 
         // 2. Pasture / Grazing Land: Heavily driven by ruminant meat/dairy diet
         const pastureDemandMult = (1.0 - (diet / 100.0) * 0.85) * (1.0 - (waste / 100.0) * 0.15) * popMultiplier;
-        const pastureDemand = 0.28 * pastureDemandMult;
+        const pastureDemand = 0.28 * pastureDemandMult * (westernMode ? WESTERN_MULT.pasture : 1);
 
         // 3. Freshwater: Driven by agriculture (70% of water), drip irrigation, and food waste
         const waterDemandMult = (1.0 - (agri / 100.0) * 0.40) * (1.0 - (diet / 100.0) * 0.30) * (1.0 - (waste / 100.0) * 0.25) * popMultiplier;
-        const waterDemand = 0.20 * waterDemandMult;
+        const waterDemand = 0.20 * waterDemandMult * (westernMode ? WESTERN_MULT.water : 1);
 
         // 4. Forests & Timber: Driven by deforestation bans, circular wood, and paper recycling
         const forestDemandMult = (1.0 - (forest / 100.0) * 0.60) * (1.0 - (diet / 100.0) * 0.30) * popMultiplier;
-        const forestDemand = 0.16 * forestDemandMult;
+        const forestDemand = 0.16 * forestDemandMult * (westernMode ? WESTERN_MULT.forest : 1);
 
         // 5. Marine Fisheries: Driven by marine protected areas, ending bottom trawling, sustainable catch quotas
         const fisheriesEff = ((fisheries - 10) / 40.0); // 0 to 1
         const fisheriesDemandMult = (1.0 - fisheriesEff * 0.65) * (1.0 - (waste / 100.0) * 0.20) * popMultiplier;
-        const fisheriesDemand = 0.10 * fisheriesDemandMult;
+        const fisheriesDemand = 0.10 * fisheriesDemandMult * (westernMode ? WESTERN_MULT.fisheries : 1);
 
         // 6. Soils & Minerals: Driven by no-till farming, cover crops, circular aggregates
         const soilsDemandMult = (1.0 - (agri / 100.0) * 0.50) * (1.0 - (materials / 100.0) * 0.40) * (1.0 - (waste / 100.0) * 0.20) * popMultiplier;
-        const soilsDemand = 0.13 * soilsDemandMult;
+        const soilsDemand = 0.13 * soilsDemandMult * (westernMode ? WESTERN_MULT.soils : 1);
 
         // Total Human Resource Footprint (fractions of Earth's total biocapacity)
         const humanFootprint = cropDemand + pastureDemand + waterDemand + forestDemand + fisheriesDemand + soilsDemand;
@@ -1408,7 +1412,7 @@
 
         // Update Streams UI (normalized against sustainable Earth capacity)
         function updateStream(stream, demand, baseCap) {
-          const ratio = demand / baseCap;
+          const ratio = demand / Math.max(baseCap, 0.001);
           stream.ratio.textContent = `${ratio.toFixed(2)}×`;
           const pct = Math.min(100, Math.round((ratio / 1.7) * 100));
           stream.meter.style.width = `${pct}%`;
@@ -1424,12 +1428,14 @@
           }
         }
 
-        updateStream(streams.cropland, cropDemand, 0.24);
-        updateStream(streams.pasture, pastureDemand, 0.185);
-        updateStream(streams.water, waterDemand, 0.16);
-        updateStream(streams.forest, forestDemand, 0.125);
-        updateStream(streams.fisheries, fisheriesDemand, 0.068);
-        updateStream(streams.soils, soilsDemand, 0.092);
+        // Stream capacities (sum 0.87) are rescaled so they always sum to the human allowance (1 - Nature's Share)
+        const capScale = humanAllowance / 0.87;
+        updateStream(streams.cropland, cropDemand, 0.24 * capScale);
+        updateStream(streams.pasture, pastureDemand, 0.185 * capScale);
+        updateStream(streams.water, waterDemand, 0.16 * capScale);
+        updateStream(streams.forest, forestDemand, 0.125 * capScale);
+        updateStream(streams.fisheries, fisheriesDemand, 0.068 * capScale);
+        updateStream(streams.soils, soilsDemand, 0.092 * capScale);
 
         // Update Headline Planet Counter
         elPlanets.textContent = planets.toFixed(2);
@@ -1538,6 +1544,7 @@
       // Add slider listeners
       [sDiet, sWaste, sAgri, sForest, sFisheries, sMaterials, sNature, sPop].forEach(slider => {
         slider.addEventListener("input", () => {
+          if (slider !== sNature) westernMode = false;
           document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
           calculate();
         });
@@ -1551,39 +1558,15 @@
             document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
             const p = presets[btnId];
-            if (p.westernPenalty) {
-              // High meat, high waste, high consumption
-              sDiet.value = 0;
-              sWaste.value = 0;
-              sAgri.value = 0;
-              sForest.value = 0;
-              sFisheries.value = 10;
-              sMaterials.value = 0;
-              sNature.value = 15;
-              sPop.value = 82;
-              // Simulate higher per capita western impact
-              streams.cropland.base = 2.40;
-              streams.pasture.base = 2.80;
-              streams.water.base = 2.20;
-              streams.forest.base = 2.50;
-              streams.fisheries.base = 2.30;
-              streams.soils.base = 2.60;
-            } else {
-              streams.cropland.base = 1.34;
-              streams.pasture.base = 1.52;
-              streams.water.base = 1.25;
-              streams.forest.base = 1.28;
-              streams.fisheries.base = 1.46;
-              streams.soils.base = 1.42;
-              sDiet.value = p.diet;
-              sWaste.value = p.waste;
-              sAgri.value = p.agri;
-              sForest.value = p.forest;
-              sFisheries.value = p.fisheries;
-              sMaterials.value = p.materials;
-              sNature.value = p.nature;
-              sPop.value = p.pop;
-            }
+            westernMode = !!p.westernPenalty;
+            sDiet.value = p.diet;
+            sWaste.value = p.waste;
+            sAgri.value = p.agri;
+            sForest.value = p.forest;
+            sFisheries.value = p.fisheries;
+            sMaterials.value = p.materials;
+            sNature.value = p.nature;
+            sPop.value = p.pop;
             calculate();
           });
         }
