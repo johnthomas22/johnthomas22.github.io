@@ -53,6 +53,13 @@
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     },
     {
+      "name": "Doughnut Economics",
+      "short_name": "Doughnut",
+      "description": "The Safe & Just Space for Humanity — Kate Raworth's Model",
+      "url": "./doughnut_economics.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
       "name": "National Emergency Briefing",
       "short_name": "Emergency Briefing",
       "description": "Independent Climate & Nature Evidence (Westminster Central Hall)",
