@@ -565,7 +565,7 @@
       cursor: help;
     }
 
-    /* Rich Interactive Tooltip (Hover & Clickable Links) */
+    /* Rich Interactive Tooltip & Snowball Earth Popover (Outside canvas, never truncated) */
     .rich-tooltip-wrap {
       position: relative;
       display: inline;
@@ -593,77 +593,80 @@
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.15s ease;
+      font-family: inherit;
+      line-height: inherit;
     }
     .rich-tooltip-badge:hover {
       background: var(--cyan);
       color: #000;
       box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
     }
-    .rich-tooltip-popover {
+    .snowball-foote-popover {
       display: none;
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      width: 320px;
-      max-width: calc(100vw - 32px);
+      position: fixed;
+      z-index: 2500;
+      width: 350px;
+      max-width: calc(100vw - 24px);
+      max-height: min(390px, calc(100vh - 40px));
+      overflow-y: auto;
       background: #070d17;
       border: 1.5px solid var(--cyan);
-      border-radius: 8px;
-      padding: 10px 12px;
+      border-radius: 9px;
+      padding: 12px 14px;
       color: #cbd5e1;
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       line-height: 1.45;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.95), 0 0 18px rgba(0, 229, 255, 0.3);
-      z-index: 2000;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 229, 255, 0.32);
       pointer-events: auto;
       text-align: left;
     }
-    .rich-tooltip-popover::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      height: 12px;
+    .snowball-foote-popover .sf-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(0, 229, 255, 0.35);
+      padding-bottom: 6px;
     }
-    .rich-tooltip-wrap:hover .rich-tooltip-popover,
-    .rich-tooltip-popover:hover,
-    .rich-tooltip-wrap.pinned .rich-tooltip-popover {
-      display: block;
+    .snowball-foote-popover .sf-title {
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: var(--cyan);
     }
-    .rich-tooltip-links {
+    .snowball-foote-popover .sf-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.25rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+      transition: color 0.15s;
+    }
+    .snowball-foote-popover .sf-close:hover {
+      color: #ffffff;
+    }
+    .snowball-foote-popover .sf-body {
+      color: #cbd5e1;
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+    .snowball-foote-popover .rich-tooltip-links {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      margin-top: 6px;
-      padding-top: 6px;
+      gap: 5px;
+      margin-top: 8px;
+      padding-top: 8px;
       border-top: 1px solid rgba(0, 229, 255, 0.25);
     }
-    .rich-tooltip-links a {
+    .snowball-foote-popover .rich-tooltip-links a {
       color: var(--amber);
       font-weight: 600;
       text-decoration: underline;
       transition: color 0.15s;
     }
-    .rich-tooltip-links a:hover {
+    .snowball-foote-popover .rich-tooltip-links a:hover {
       color: var(--cyan);
-    }
-    @media (max-width: 768px) {
-      .rich-tooltip-popover {
-        bottom: auto;
-        top: calc(100% + 6px);
-        left: 0;
-        transform: none;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-      .rich-tooltip-popover::after {
-        top: auto;
-        bottom: 100%;
-        height: 10px;
-      }
     }
     .intro-banner {
       display: none;
@@ -5182,6 +5185,15 @@
     </button>
   </div>
 
+  <!-- SNOWBALL EARTH & EUNICE FOOTE POPOVER (Outside canvas-container, never truncated) -->
+  <div class="snowball-foote-popover" id="snowballFootePopover">
+    <div class="sf-header">
+      <div class="sf-title">💡 The Discovery &amp; Essential Blanket</div>
+      <button type="button" class="sf-close" id="sfCloseBtn" title="Close" onclick="hideSnowballFootePopover()">&times;</button>
+    </div>
+    <div class="sf-body" id="sfBody"></div>
+  </div>
+
   <script>
     (function () {
       "use strict";
@@ -6131,6 +6143,121 @@
         });
       }
 
+      // Interactive Snowball Earth & Eunice Foote Popover
+      const sfPopoverEl = document.getElementById("snowballFootePopover");
+      const sfBodyEl = document.getElementById("sfBody");
+      const sfCloseBtn = document.getElementById("sfCloseBtn");
+      let sfPinned = false;
+      let sfHovering = false;
+      let sfHideTimer = null;
+
+      const sfContentSimple = `In 1856, scientist <strong><a href="https://en.wikipedia.org/wiki/Eunice_Newton_Foote" target="_blank" rel="noopener noreferrer" style="color: var(--amber); text-decoration: underline;">Eunice Newton Foote ↗</a></strong> was the first person to prove experimentally that carbon dioxide gas traps heat and that higher levels would give Earth a warmer climate.<br><br>Greenhouse warming is essential for life: without it, Earth would be ~33°C colder, plunging surface temperatures to <strong>~18°C below zero</strong> (-18°C / 0°F). Earth has been a snowball twice in its history. Recent 2024–2026 geological research has confirmed equatorial ice sheets and mapped the transition:<div class="rich-tooltip-links"><a href="https://en.wikipedia.org/wiki/Eunice_Newton_Foote" target="_blank" rel="noopener noreferrer">🔬 Eunice Newton Foote: First Climate Scientist (1856) ↗</a><a href="https://www.pnas.org/doi/10.1073/pnas.2410759121" target="_blank" rel="noopener noreferrer">🏔️ Colorado Sandstones: Equatorial Ice Confirmed (PNAS 2024) ↗</a><a href="https://www.ucl.ac.uk/news/2024/aug/scottish-islands-hold-worlds-most-complete-record-snowball-earth" target="_blank" rel="noopener noreferrer">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish Isles: Unbroken Snowball Transition (UCL 2024) ↗</a><a href="https://doi.org/10.1073/pnas.2525919123" target="_blank" rel="noopener noreferrer">🔄 Sturtian Snowball–Hothouse Climate Cycling (PNAS 2026) ↗</a><a href="https://en.wikipedia.org/wiki/Huronian_glaciation" target="_blank" rel="noopener noreferrer">1. Huronian Glaciation (~2.4–2.1 Ga) ↗</a><a href="https://en.wikipedia.org/wiki/Snowball_Earth" target="_blank" rel="noopener noreferrer">2. Cryogenian Snowball Earth (~720–635 Ma) ↗</a><a href="https://www.britannica.com/science/Snowball-Earth-hypothesis" target="_blank" rel="noopener noreferrer">3. Britannica: Snowball Earth Hypothesis ↗</a></div>`;
+
+      const sfContentAdvanced = `In 1856, American scientist and inventor <strong><a href="https://en.wikipedia.org/wiki/Eunice_Newton_Foote" target="_blank" rel="noopener noreferrer" style="color: var(--amber); text-decoration: underline;">Eunice Newton Foote ↗</a></strong> was the first to prove experimentally that carbon dioxide absorbs radiant heat and that an atmosphere of CO₂ would give Earth a warmer climate (three years before John Tyndall).<br><br>Without carbon in the atmosphere, Earth would radiate as a bare blackbody at ~255 K (<strong>~18°C below zero</strong>). Earth experienced runaway global glaciations twice in deep time. Recent 2024–2026 geological field evidence has confirmed true equatorial ice sheets and mapped the transition:<div class="rich-tooltip-links"><a href="https://en.wikipedia.org/wiki/Eunice_Newton_Foote" target="_blank" rel="noopener noreferrer">🔬 Eunice Newton Foote: First Climate Scientist (1856) ↗</a><a href="https://www.pnas.org/doi/10.1073/pnas.2410759121" target="_blank" rel="noopener noreferrer">🏔️ Colorado Sandstones: Equatorial Ice Confirmed (PNAS 2024) ↗</a><a href="https://www.ucl.ac.uk/news/2024/aug/scottish-islands-hold-worlds-most-complete-record-snowball-earth" target="_blank" rel="noopener noreferrer">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish Isles: Unbroken Snowball Transition (UCL 2024) ↗</a><a href="https://doi.org/10.1073/pnas.2525919123" target="_blank" rel="noopener noreferrer">🔄 Sturtian Snowball–Hothouse Climate Cycling (PNAS 2026) ↗</a><a href="https://doi.org/10.1130/G53722.1" target="_blank" rel="noopener noreferrer">🌊 Seafloor Weathering Explains Sturtian Duration (Geology 2025) ↗</a><a href="https://en.wikipedia.org/wiki/Huronian_glaciation" target="_blank" rel="noopener noreferrer">1. Huronian Glaciation (~2.4–2.1 Ga) ↗</a><a href="https://en.wikipedia.org/wiki/Snowball_Earth" target="_blank" rel="noopener noreferrer">2. Cryogenian Snowball Earth (~720–635 Ma) ↗</a><a href="https://www.britannica.com/science/Snowball-Earth-hypothesis" target="_blank" rel="noopener noreferrer">3. Britannica: Snowball Earth Hypothesis ↗</a></div>`;
+
+      function cancelHideSnowballFootePopover() {
+        if (sfHideTimer) {
+          clearTimeout(sfHideTimer);
+          sfHideTimer = null;
+        }
+      }
+
+      function scheduleHideSnowballFootePopover(delay = 140) {
+        if (sfPinned || sfHovering) return;
+        if (sfHideTimer) return;
+        sfHideTimer = setTimeout(() => {
+          sfHideTimer = null;
+          if (!sfPinned && !sfHovering && sfPopoverEl) {
+            sfPopoverEl.style.display = "none";
+          }
+        }, delay);
+      }
+
+      function hideSnowballFootePopover() {
+        cancelHideSnowballFootePopover();
+        sfPinned = false;
+        sfHovering = false;
+        if (sfPopoverEl) sfPopoverEl.style.display = "none";
+      }
+
+      function showSnowballFootePopover(anchorEl) {
+        cancelHideSnowballFootePopover();
+        if (!sfPopoverEl) return;
+        const targetAnchor = anchorEl || document.getElementById("btnSnowballFoote");
+        if (!targetAnchor) return;
+
+        const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
+        if (sfBodyEl) {
+          sfBodyEl.innerHTML = isSimple ? sfContentSimple : sfContentAdvanced;
+        }
+
+        sfPopoverEl.style.display = "block";
+
+        const rect = targetAnchor.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const cardW = Math.min(350, vw - 24);
+        const cardH = sfPopoverEl.offsetHeight || 320;
+
+        let left = rect.left + rect.width / 2 - cardW / 2;
+        left = Math.max(12, Math.min(vw - cardW - 12, left));
+
+        let top;
+        const spaceAbove = rect.top - 12;
+        const spaceBelow = vh - rect.bottom - 12;
+
+        if (spaceAbove >= cardH + 10) {
+          top = rect.top - cardH - 8;
+        } else if (spaceBelow >= cardH + 10) {
+          top = rect.bottom + 8;
+        } else if (spaceBelow >= spaceAbove) {
+          top = rect.bottom + 8;
+        } else {
+          top = rect.top - cardH - 8;
+        }
+
+        top = Math.max(12, Math.min(vh - cardH - 12, top));
+
+        sfPopoverEl.style.left = `${Math.round(left)}px`;
+        sfPopoverEl.style.top = `${Math.round(top)}px`;
+      }
+
+      function toggleSnowballFootePopover(anchorEl, e) {
+        if (e) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        if (sfPopoverEl && sfPopoverEl.style.display === "block" && sfPinned) {
+          hideSnowballFootePopover();
+        } else {
+          showSnowballFootePopover(anchorEl);
+          sfPinned = true;
+        }
+      }
+
+      if (sfPopoverEl) {
+        sfPopoverEl.addEventListener("mouseenter", () => {
+          sfHovering = true;
+          cancelHideSnowballFootePopover();
+        });
+        sfPopoverEl.addEventListener("mouseleave", () => {
+          sfHovering = false;
+          scheduleHideSnowballFootePopover(120);
+        });
+      }
+
+      if (sfCloseBtn) {
+        sfCloseBtn.addEventListener("click", () => {
+          hideSnowballFootePopover();
+        });
+      }
+
+      window.showSnowballFootePopover = showSnowballFootePopover;
+      window.hideSnowballFootePopover = hideSnowballFootePopover;
+      window.scheduleHideSnowballFootePopover = scheduleHideSnowballFootePopover;
+      window.cancelHideSnowballFootePopover = cancelHideSnowballFootePopover;
+      window.toggleSnowballFootePopover = toggleSnowballFootePopover;
+
       function renderTippingPointCardContent(grp, selectedIdx) {
         const idx = Math.max(0, Math.min(grp.items.length - 1, selectedIdx || 0));
         const key = grp.thresholdC.toFixed(2);
@@ -6271,6 +6398,12 @@
         activeTpGroupKey = null;
       });
       document.addEventListener("mousedown", e => {
+        if (sfPopoverEl && sfPopoverEl.style.display === "block" && !sfPopoverEl.contains(e.target)) {
+          const btn = document.getElementById("btnSnowballFoote");
+          if (!btn || !btn.contains(e.target)) {
+            hideSnowballFootePopover();
+          }
+        }
         if (safe350PopoverEl && safe350PopoverEl.style.display === "block" && !safe350PopoverEl.contains(e.target) && e.target !== canvas) {
           isHoveringSafe350 = false;
           isHovering350Line = false;
@@ -6293,6 +6426,7 @@
           activeTpGroupKey = null;
         }
         if (bubbleCard && bubbleCard.style.display === "block" && !bubbleCard.contains(e.target) && (!e.target.closest || (!e.target.closest(".speech-pin") && e.target.id !== "btnWhatCanIDo"))) {
+          hideSnowballFootePopover();
           bubbleHoveringCard = false;
           isHoveringSpeechPin = false;
           cancelHideBubbleCard();
@@ -7944,7 +8078,7 @@
         {
           pinId: "pin2",
           title: "Step 2: Earth Absorbs and Glows with Heat (Longwave Infrared)",
-          html: `Bright white surfaces like ice reflect sunlight straight back to space. But dark ground and oceans absorb the incoming shortwave light, warm up to ~15°C, and glow with invisible <strong>longwave thermal infrared heat (~15 µm)</strong>.<br><br><span class="rich-tooltip-wrap" onclick="this.classList.toggle('pinned')"><span class="rich-tooltip-trigger" title="Greenhouse warming is not all bad: without carbon in the atmosphere, Earth would be ~33°C colder (-18°C). Earth froze twice in its history. First discovered by Eunice Newton Foote in 1856.">Because this heat wavelength is ~30× longer than sunlight, it matches the exact vibration of CO₂ molecules—meaning heat is trapped on the way <em>out</em>, not on the way <em>in</em>. <span class="rich-tooltip-badge">❄️ Snowball Earth & Eunice Foote (1856)</span></span><span class="rich-tooltip-popover"><button type="button" onclick="event.stopPropagation(); this.closest('.rich-tooltip-wrap').classList.remove('pinned');" style="float: right; background: none; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 4px;" title="Close">&times;</button><strong style="color: var(--cyan); display: block; margin-bottom: 4px; font-size: 0.78rem;">💡 The Discovery & Essential Blanket</strong>In 1856, scientist <strong><a href="https://en.wikipedia.org/wiki/Eunice_Newton_Foote" target="_blank" rel="noopener noreferrer" style="color: var(--amber); text-decoration: underline;">Eunice Newton Foote ↗</a></strong> was the first person to prove experimentally that carbon dioxide gas traps heat and that higher levels would give Earth a warmer climate.<br><br>Greenhouse warming is essential for life: without it, Earth would be ~33°C colder, plunging surface temperatures to <strong>~18°C below zero</strong> (-18°C / 0°F). Earth has been a snowball twice in its history. Recent 2024–2026 geological research has confirmed equatorial ice sheets and mapped the transition:<span class="rich-tooltip-links"><a href="https://en.wikipedia.org/wiki/Eunice_Newton_Foote" target="_blank" rel="noopener noreferrer">🔬 Eunice Newton Foote: First Climate Scientist (1856) ↗</a><a href="https://www.pnas.org/doi/10.1073/pnas.2410759121" target="_blank" rel="noopener noreferrer">🏔️ Colorado Sandstones: Equatorial Ice Confirmed (PNAS 2024) ↗</a><a href="https://www.ucl.ac.uk/news/2024/aug/scottish-islands-hold-worlds-most-complete-record-snowball-earth" target="_blank" rel="noopener noreferrer">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish Isles: Unbroken Snowball Transition (UCL 2024) ↗</a><a href="https://doi.org/10.1073/pnas.2525919123" target="_blank" rel="noopener noreferrer">🔄 Sturtian Snowball–Hothouse Climate Cycling (PNAS 2026) ↗</a><a href="https://en.wikipedia.org/wiki/Huronian_glaciation" target="_blank" rel="noopener noreferrer">1. Huronian Glaciation (~2.4–2.1 Ga) ↗</a><a href="https://en.wikipedia.org/wiki/Snowball_Earth" target="_blank" rel="noopener noreferrer">2. Cryogenian Snowball Earth (~720–635 Ma) ↗</a><a href="https://www.britannica.com/science/Snowball-Earth-hypothesis" target="_blank" rel="noopener noreferrer">3. Britannica: Snowball Earth Hypothesis ↗</a></span></span></span>`
+          html: `Bright white surfaces like ice reflect sunlight straight back to space. But dark ground and oceans absorb the incoming shortwave light, warm up to ~15°C, and glow with invisible <strong>longwave thermal infrared heat (~15 µm)</strong>.<br><br><span class="rich-tooltip-trigger" title="Greenhouse warming is not all bad: without carbon in the atmosphere, Earth would be ~33°C colder (-18°C). Earth froze twice in its history.&#10;&#10;The greenhouse effect of carbon molecules was first discovered by Eunice Newton Foote in 1856.">Because this heat wavelength is ~30× longer than sunlight, it matches the exact vibration of CO₂ molecules—meaning heat is trapped on the way <em>out</em>, not on the way <em>in</em>. <button type="button" class="rich-tooltip-badge" id="btnSnowballFoote" onclick="toggleSnowballFootePopover(this, event)" onmouseenter="showSnowballFootePopover(this)" onmouseleave="scheduleHideSnowballFootePopover()">❄️ Snowball Earth & Eunice Foote (1856)</button></span>`
         },
         {
           pinId: "pin3",
@@ -7977,7 +8111,7 @@
         {
           pinId: "pin2",
           title: "Step 2: Surface Absorption & Infrared Re-emission (Longwave)",
-          html: `Bright ice reflects ~30% of incoming shortwave photons back to space (planetary albedo). The remaining ~70% warms the planetary surface (~288 K), which re-emits as <strong>longwave thermal infrared (peaking at 10–15 µm)</strong>.<br><br><span class="rich-tooltip-wrap" onclick="this.classList.toggle('pinned')"><span class="rich-tooltip-trigger" title="Greenhouse warming is not all bad: without greenhouse gases, Earth radiates at ~255 K (-18°C / ~33°C colder). Earth froze twice into a snowball. Discovered by Eunice Newton Foote in 1856.">Because this heat wavelength is ~30× longer than sunlight, it matches the exact ~15 µm bending vibration mode of CO₂ molecules (O=C=O)—meaning heat is trapped on the way <em>out</em>, not on the way <em>in</em>. <span class="rich-tooltip-badge">❄️ Snowball Earth & Eunice Foote (1856)</span></span><span class="rich-tooltip-popover"><button type="button" onclick="event.stopPropagation(); this.closest('.rich-tooltip-wrap').classList.remove('pinned');" style="float: right; background: none; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 4px;" title="Close">&times;</button><strong style="color: var(--cyan); display: block; margin-bottom: 4px; font-size: 0.78rem;">💡 The Discovery & Essential Blanket</strong>In 1856, American scientist and inventor <strong><a href="https://en.wikipedia.org/wiki/Eunice_Newton_Foote" target="_blank" rel="noopener noreferrer" style="color: var(--amber); text-decoration: underline;">Eunice Newton Foote ↗</a></strong> was the first to prove experimentally that carbon dioxide absorbs radiant heat and that an atmosphere of CO₂ would give Earth a warmer climate (three years before John Tyndall).<br><br>Without carbon in the atmosphere, Earth would radiate as a bare blackbody at ~255 K (<strong>~18°C below zero</strong>). Earth experienced runaway global glaciations twice in deep time. Recent 2024–2026 geological field evidence has confirmed true equatorial ice sheets and mapped the transition:<span class="rich-tooltip-links"><a href="https://en.wikipedia.org/wiki/Eunice_Newton_Foote" target="_blank" rel="noopener noreferrer">🔬 Eunice Newton Foote: First Climate Scientist (1856) ↗</a><a href="https://www.pnas.org/doi/10.1073/pnas.2410759121" target="_blank" rel="noopener noreferrer">🏔️ Colorado Sandstones: Equatorial Ice Confirmed (PNAS 2024) ↗</a><a href="https://www.ucl.ac.uk/news/2024/aug/scottish-islands-hold-worlds-most-complete-record-snowball-earth" target="_blank" rel="noopener noreferrer">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish Isles: Unbroken Snowball Transition (UCL 2024) ↗</a><a href="https://doi.org/10.1073/pnas.2525919123" target="_blank" rel="noopener noreferrer">🔄 Sturtian Snowball–Hothouse Climate Cycling (PNAS 2026) ↗</a><a href="https://doi.org/10.1130/G53722.1" target="_blank" rel="noopener noreferrer">🌊 Seafloor Weathering Explains Sturtian Duration (Geology 2025) ↗</a><a href="https://en.wikipedia.org/wiki/Huronian_glaciation" target="_blank" rel="noopener noreferrer">1. Huronian Glaciation (~2.4–2.1 Ga) ↗</a><a href="https://en.wikipedia.org/wiki/Snowball_Earth" target="_blank" rel="noopener noreferrer">2. Cryogenian Snowball Earth (~720–635 Ma) ↗</a><a href="https://www.britannica.com/science/Snowball-Earth-hypothesis" target="_blank" rel="noopener noreferrer">3. Britannica: Snowball Earth Hypothesis ↗</a></span></span></span>`
+          html: `Bright ice reflects ~30% of incoming shortwave photons back to space (planetary albedo). The remaining ~70% warms the planetary surface (~288 K), which re-emits as <strong>longwave thermal infrared (peaking at 10–15 µm)</strong>.<br><br><span class="rich-tooltip-trigger" title="Greenhouse warming is not all bad: without greenhouse gases, Earth radiates at ~255 K (-18°C / ~33°C colder). Earth froze twice in its history into a snowball.&#10;&#10;The greenhouse effect of carbon molecules was first discovered by Eunice Newton Foote in 1856.">Because this heat wavelength is ~30× longer than sunlight, it matches the exact ~15 µm bending vibration mode of CO₂ molecules (O=C=O)—meaning heat is trapped on the way <em>out</em>, not on the way <em>in</em>. <button type="button" class="rich-tooltip-badge" id="btnSnowballFoote" onclick="toggleSnowballFootePopover(this, event)" onmouseenter="showSnowballFootePopover(this)" onmouseleave="scheduleHideSnowballFootePopover()">❄️ Snowball Earth & Eunice Foote (1856)</button></span>`
         },
         {
           pinId: "pin3",
@@ -8008,6 +8142,7 @@
       const bubbleStepCount = document.getElementById("bubbleStepCount");
 
       function showSpeechBubble(index) {
+        hideSnowballFootePopover();
         currentStep = index;
         const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
         const dataset = isSimple ? speechDataIntro : speechDataAdvanced;
@@ -8119,11 +8254,12 @@
       }
 
       function scheduleHideBubbleCard(delay = 140) {
-        if (bubbleHoveringCard || isHoveringSpeechPin) return;
+        if (bubbleHoveringCard || isHoveringSpeechPin || (sfPopoverEl && sfPopoverEl.style.display === "block" && (sfPinned || sfHovering))) return;
         if (bubbleHideTimer) return;
         bubbleHideTimer = setTimeout(() => {
           bubbleHideTimer = null;
-          if (!bubbleHoveringCard && !isHoveringSpeechPin) {
+          if (!bubbleHoveringCard && !isHoveringSpeechPin && (!sfPopoverEl || sfPopoverEl.style.display !== "block" || (!sfPinned && !sfHovering))) {
+            hideSnowballFootePopover();
             bubbleCard.style.display = "none";
             document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
             const btnWhat = document.getElementById("btnWhatCanIDo");
@@ -8197,11 +8333,28 @@
           }
         }
 
+        if (sfPopoverEl && sfPopoverEl.style.display === "block") {
+          const sfRect = sfPopoverEl.getBoundingClientRect();
+          const inSf = e.clientX >= sfRect.left && e.clientX <= sfRect.right && e.clientY >= sfRect.top && e.clientY <= sfRect.bottom;
+          const btn = document.getElementById("btnSnowballFoote");
+          const onBtn = btn ? (e.clientX >= btn.getBoundingClientRect().left && e.clientX <= btn.getBoundingClientRect().right && e.clientY >= btn.getBoundingClientRect().top && e.clientY <= btn.getBoundingClientRect().bottom) : false;
+          if (inSf || onBtn) {
+            sfHovering = true;
+            bubbleHoveringCard = true;
+            cancelHideSnowballFootePopover();
+            cancelHideBubbleCard();
+          } else if (!sfPinned) {
+            sfHovering = false;
+            scheduleHideSnowballFootePopover(120);
+          }
+        }
+
         if (bubbleCard && bubbleCard.style.display === "block") {
           const bRect = bubbleCard.getBoundingClientRect();
           const inBubble = e.clientX >= bRect.left && e.clientX <= bRect.right && e.clientY >= bRect.top && e.clientY <= bRect.bottom;
           const onPin = !!(e.target && ((e.target.closest && e.target.closest(".speech-pin")) || e.target.id === "btnWhatCanIDo"));
-          if (inBubble) {
+          const inSf = (sfPopoverEl && sfPopoverEl.style.display === "block") ? (e.clientX >= sfPopoverEl.getBoundingClientRect().left && e.clientX <= sfPopoverEl.getBoundingClientRect().right && e.clientY >= sfPopoverEl.getBoundingClientRect().top && e.clientY <= sfPopoverEl.getBoundingClientRect().bottom) : false;
+          if (inBubble || inSf) {
             bubbleHoveringCard = true;
             cancelHideBubbleCard();
           } else if (!onPin) {
@@ -8221,13 +8374,16 @@
         isHoveringMeasLine = false;
         isHoveringSafe350 = false;
         isHovering350Line = false;
+        sfHovering = false;
         scheduleHideTippingPointCard(120);
         scheduleHideBubbleCard(120);
         scheduleHideMeasTempPopover(120);
         scheduleHideSafe350Popover(120);
+        scheduleHideSnowballFootePopover(120);
       });
 
       document.getElementById("bubbleCloseBtn").addEventListener("click", () => {
+        hideSnowballFootePopover();
         bubbleCard.style.display = "none";
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
         const btnWhat = document.getElementById("btnWhatCanIDo");
@@ -8313,6 +8469,7 @@
           if (lbl) lbl.textContent = "Zoom: 1958–Today (Keeling Era)";
           if (btnBottom) btnBottom.classList.remove("active");
         }
+        hideSnowballFootePopover();
         bubbleCard.style.display = "none";
         document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
         const btnWhat = document.getElementById("btnWhatCanIDo");
