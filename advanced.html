@@ -1619,63 +1619,41 @@
       padding: 10px 18px;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
     .modal-nav-info {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       color: #94a3b8;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      font-weight: 600;
     }
-    .modal-nav-info strong {
-      color: var(--cyan);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .btn-toggle-modal-nav {
-      background: rgba(0, 229, 255, 0.12);
-      border: 1px solid rgba(0, 229, 255, 0.35);
-      color: var(--cyan);
-      font-size: 0.76rem;
+    .modal-chapter-select {
+      background: #0d1527;
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      color: #38bdf8;
+      font-size: 0.84rem;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 5px;
+      padding: 6px 12px;
+      border-radius: 6px;
       cursor: pointer;
+      outline: none;
+      max-width: 100%;
       transition: all 0.15s ease;
-      white-space: nowrap;
+      font-family: inherit;
     }
-    .btn-toggle-modal-nav:hover {
-      background: var(--cyan);
-      color: #000;
+    .modal-chapter-select:hover, .modal-chapter-select:focus {
+      border-color: #38bdf8;
+      background: #111e38;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
     }
-    .modal-nav {
-      display: flex; flex-wrap: wrap; background: #080d1a; border-bottom: 1px solid var(--border);
-      padding: 8px 16px; gap: 8px;
-      transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.2s ease;
-      max-height: 600px;
-      opacity: 1;
-      overflow: hidden;
+    .modal-chapter-select option {
+      background: #0d1527;
+      color: #f1f5f9;
+      padding: 6px 10px;
     }
-    .modal-nav.collapsed {
-      max-height: 0 !important;
-      opacity: 0 !important;
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-      border-bottom: none !important;
-      pointer-events: none;
-    }
-    .modal-tab-btn {
-      background: var(--card-inner); border: 1px solid var(--border); color: var(--text-muted);
-      padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 6px; cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .modal-tab-btn:hover { color: #fff; border-color: var(--text-muted); }
-    .modal-tab-btn.active { color: #000; background: var(--cyan); border-color: var(--cyan); }
     .modal-body {
       padding: 24px; overflow-y: auto; font-size: 0.88rem; line-height: 1.65; color: #cbd5e1;
     }
@@ -2919,30 +2897,25 @@
         <button id="closeModalBtn" style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">&times;</button>
       </div>
 
-      <!-- Collapsible Chapter Navigation Bar for Mobile -->
+      <!-- Sticky Chapter Navigation Dropdown -->
       <div class="modal-nav-bar" id="modalNavBar">
         <div class="modal-nav-info">
           <span>📖 Chapter:</span>
-          <strong id="modalActiveTabName">Table of Contents</strong>
         </div>
-        <button type="button" class="btn-toggle-modal-nav" id="btnToggleModalNav" aria-expanded="true">
-          Chapters &#x25BE;
-        </button>
-      </div>
-
-      <div class="modal-nav" id="modalNav">
-        <button class="modal-tab-btn active" data-page="page-toc">Table of Contents</button>
-        <button class="modal-tab-btn" data-page="page-proofs">Page 1: Mathematical Proofs & Derivations</button>
-        <button class="modal-tab-btn" data-page="page-transfer">Page 2: Radiative Transfer & Saturation Refuted</button>
-        <button class="modal-tab-btn" data-page="page-ebm">Page 3: Two-Layer Ocean EBM Formulation</button>
-        <button class="modal-tab-btn" data-page="page-paleo">Page 4: 1-Million-Year Paleoclimate Sources</button>
-        <button class="modal-tab-btn" data-page="page-fossil-metrics">Page 5: Barrels of Oil & Gas to ppm & °C</button>
-        <button class="modal-tab-btn" data-page="page-carbon-budgets">Page 6: Carbon Budgets & Reserves</button>
-        <button class="modal-tab-btn" data-page="page-sources-owid">Page 7: Emissions Sources (OWID)</button>
-        <button class="modal-tab-btn" data-page="page-solutions-storage">Page 8: Solutions & Grid Storage</button>
-        <button class="modal-tab-btn" data-page="page-wind-payback">Page 9: Wind Carbon Payback (Scotland)</button>
-        <button class="modal-tab-btn" data-page="page-methodology">Page 10: Global Temp Measurement Methodology</button>
-        <button class="modal-tab-btn" data-page="page-addendum">Addendum: 2026 Warming vs. +1.5°C Breach</button>
+        <select id="modalChapterSelect" class="modal-chapter-select" aria-label="Select Documentation Chapter">
+          <option value="page-toc">Table of Contents</option>
+          <option value="page-proofs">Page 1: Mathematical Proofs &amp; Derivations</option>
+          <option value="page-transfer">Page 2: Radiative Transfer &amp; Saturation Refuted</option>
+          <option value="page-ebm">Page 3: Two-Layer Ocean EBM Formulation</option>
+          <option value="page-paleo">Page 4: 1-Million-Year Paleoclimate Sources</option>
+          <option value="page-fossil-metrics">Page 5: Barrels of Oil &amp; Gas to ppm &amp; °C</option>
+          <option value="page-carbon-budgets">Page 6: Carbon Budgets &amp; Reserves</option>
+          <option value="page-sources-owid">Page 7: Emissions Sources (OWID)</option>
+          <option value="page-solutions-storage">Page 8: Solutions &amp; Grid Storage</option>
+          <option value="page-wind-payback">Page 9: Wind Carbon Payback (Scotland)</option>
+          <option value="page-methodology">Page 10: Global Temp Measurement Methodology</option>
+          <option value="page-addendum">Addendum: 2026 Warming vs. +1.5°C Breach</option>
+        </select>
       </div>
 
       <div class="modal-body">
@@ -9738,26 +9711,10 @@
         }
       });
 
-      // Modal Tabs & Navigation Handlers (with Mobile Minimise Support)
+      // Modal Tabs & Navigation Handlers (with Chapter Dropdown Support)
       const modalOverlay = document.getElementById("modalOverlay");
-      const modalNav = document.getElementById("modalNav");
-      const btnToggleModalNav = document.getElementById("btnToggleModalNav");
-      const modalActiveTabName = document.getElementById("modalActiveTabName");
+      const modalChapterSelect = document.getElementById("modalChapterSelect");
       const modalBody = document.querySelector(".modal-body");
-
-      function updateModalNavToggleText() {
-        if (!btnToggleModalNav || !modalNav) return;
-        const isCollapsed = modalNav.classList.contains("collapsed");
-        btnToggleModalNav.innerHTML = isCollapsed ? "Chapters &#x25BE;" : "Hide Chapters &#x25B4;";
-        btnToggleModalNav.setAttribute("aria-expanded", !isCollapsed);
-      }
-
-      if (btnToggleModalNav) {
-        btnToggleModalNav.addEventListener("click", () => {
-          modalNav.classList.toggle("collapsed");
-          updateModalNavToggleText();
-        });
-      }
 
       document.getElementById("openModalBtn").addEventListener("click", () => {
         modalOverlay.style.display = "flex";
@@ -9770,29 +9727,23 @@
       });
 
       function setDocPage(pageId) {
-        let activeTitle = "";
-        document.querySelectorAll(".modal-tab-btn").forEach(b => {
-          const isActive = b.dataset.page === pageId;
-          b.classList.toggle("active", isActive);
-          if (isActive) activeTitle = b.textContent.trim();
-        });
         document.querySelectorAll(".doc-page").forEach(p => {
           p.classList.toggle("active", p.id === pageId);
         });
 
-        if (modalActiveTabName && activeTitle) {
-          modalActiveTabName.textContent = activeTitle;
-        }
-
-        // Auto-minimise contents links unconditionally when a link is pressed (clean reading pane on all screen widths)
-        if (modalNav) {
-          modalNav.classList.add("collapsed");
-          updateModalNavToggleText();
+        if (modalChapterSelect) {
+          modalChapterSelect.value = pageId;
         }
 
         if (modalBody) {
           modalBody.scrollTop = 0;
         }
+      }
+
+      if (modalChapterSelect) {
+        modalChapterSelect.addEventListener("change", e => {
+          setDocPage(e.target.value);
+        });
       }
 
       function openGuideToAerosolSection() {
@@ -9823,9 +9774,6 @@
         }, 80);
       }
 
-      document.querySelectorAll(".modal-tab-btn").forEach(btn => {
-        btn.addEventListener("click", () => setDocPage(btn.dataset.page));
-      });
       document.querySelectorAll(".toc-link").forEach(link => {
         link.addEventListener("click", () => setDocPage(link.dataset.target));
       });
