@@ -1017,8 +1017,9 @@
         { id: "freshwater", name: "Water", deficit: 0.26, metric: "2.2 billion people lack safely managed drinking water; 3.5 billion lack sanitation." }
       ];
 
-      // 2. Scenario Multipliers
+      // 2. Scenario Multipliers & Selection State
       let activeScenario = "2026"; // '2026', 'high', 'low', 'safe'
+      let selectedTarget = { type: "ecological", item: ecologicalCeiling[0] };
 
       function getOvershootFactor(item) {
         if (activeScenario === "safe") return 1.0;
@@ -1052,7 +1053,7 @@
       const rInner = 85;       // Social foundation inner circle
       const rSocial = 135;     // Social floor (Doughnut inner ring)
       const rEcological = 210;  // Ecological ceiling (Doughnut outer ring)
-      const rMax = 290;        // Max overshoot radius
+      const rMax = 285;        // Max overshoot radius
 
       function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
         const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
@@ -1060,16 +1061,6 @@
           x: centerX + (radius * Math.cos(angleInRadians)),
           y: centerY + (radius * Math.sin(angleInRadians))
         };
-      }
-
-      function describeArc(x, y, radius, startAngle, endAngle) {
-        const start = polarToCartesian(x, y, radius, endAngle);
-        const end = polarToCartesian(x, y, radius, startAngle);
-        const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-        return [
-          "M", start.x, start.y,
-          "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
-        ].join(" ");
       }
 
       function describeWedge(x, y, innerR, outerR, startAngle, endAngle) {
@@ -1109,9 +1100,9 @@
         doughnutBand.setAttribute("cx", cx);
         doughnutBand.setAttribute("cy", cy);
         doughnutBand.setAttribute("r", rEcological);
-        doughnutBand.setAttribute("fill", "rgba(16, 185, 129, 0.16)");
+        doughnutBand.setAttribute("fill", activeScenario === "safe" ? "rgba(16, 185, 129, 0.28)" : "rgba(16, 185, 129, 0.16)");
         doughnutBand.setAttribute("stroke", "#10b981");
-        doughnutBand.setAttribute("stroke-width", "2.5");
+        doughnutBand.setAttribute("stroke-width", activeScenario === "safe" ? "3.5" : "2.5");
         doughnutBand.setAttribute("stroke-dasharray", "4,4");
         bgGroup.appendChild(doughnutBand);
 
@@ -1152,50 +1143,68 @@
           const isApproaching = factor > 1.0 && factor <= 1.05;
           const isSafe = factor <= 1.0;
 
-          // Outer radius scales with overshoot factor
-          const targetR = isSafe ? rEcological : Math.min(rMax, rEcological + (factor - 1.0) * (rMax - rEcological) * 1.5);
+          // Crucial fix: The wedge base starts inside the rim (rEcological - 18)
+          // so it ALWAYS exists with tangible area, is clickable, hoverable, and visible
+          const baseInnerR = rEcological - 18;
+          let targetR = rEcological;
+          let fillColor = "rgba(16, 185, 129, 0.4)";
+          let strokeColor = "#10b981";
 
-          const wedge = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          wedge.setAttribute("d", describeWedge(cx, cy, rEcological, targetR, startA + 1, endA - 1));
-
-          let fillColor = "rgba(244, 63, 94, 0.55)";
-          let strokeColor = "#f43f5e";
-          if (isSafe) {
-            fillColor = "rgba(16, 185, 129, 0.35)";
-            strokeColor = "#10b981";
+          if (isOvershot) {
+            targetR = Math.min(rMax, rEcological + (factor - 1.0) * (rMax - rEcological) * 1.5);
+            fillColor = "rgba(244, 63, 94, 0.65)";
+            strokeColor = "#f43f5e";
           } else if (isApproaching) {
-            fillColor = "rgba(245, 158, 11, 0.55)";
+            targetR = rEcological + 14;
+            fillColor = "rgba(245, 158, 11, 0.6)";
             strokeColor = "#f59e0b";
+          } else if (activeScenario === "safe") {
+            fillColor = "rgba(16, 185, 129, 0.6)";
+            strokeColor = "#34d399";
           }
 
+          const isSelected = selectedTarget.type === "ecological" && selectedTarget.item.id === item.id;
+
+          const wedge = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          wedge.setAttribute("d", describeWedge(cx, cy, baseInnerR, targetR, startA + 1, endA - 1));
           wedge.setAttribute("fill", fillColor);
-          wedge.setAttribute("stroke", strokeColor);
-          wedge.setAttribute("stroke-width", "1.2");
+          wedge.setAttribute("stroke", isSelected ? "#ffffff" : strokeColor);
+          wedge.setAttribute("stroke-width", isSelected ? "2.8" : "1.2");
+          if (isSelected) {
+            wedge.setAttribute("filter", "drop-shadow(0 0 10px rgba(56, 189, 248, 0.8))");
+          }
           wedge.style.cursor = "pointer";
-          wedge.style.transition = "all 0.25s ease";
+          wedge.style.transition = "all 0.2s ease";
 
           wedge.addEventListener("mouseenter", () => {
             wedge.setAttribute("stroke-width", "3");
-            wedge.setAttribute("filter", "drop-shadow(0 0 10px rgba(244, 63, 94, 0.8))");
+            selectedTarget = { type: "ecological", item: item };
             inspectEcological(item);
           });
           wedge.addEventListener("mouseleave", () => {
-            wedge.setAttribute("stroke-width", "1.2");
-            wedge.removeAttribute("filter");
+            if (selectedTarget.item.id !== item.id) {
+              wedge.setAttribute("stroke-width", "1.2");
+              wedge.removeAttribute("filter");
+            }
           });
-          wedge.addEventListener("click", () => inspectEcological(item));
+          wedge.addEventListener("click", () => {
+            selectedTarget = { type: "ecological", item: item };
+            renderDoughnut();
+            inspectEcological(item);
+          });
 
           ecoGroup.appendChild(wedge);
 
-          // Sector Label positioned along the rim
-          const labelPos = polarToCartesian(cx, cy, targetR + 12, midA);
+          // Sector Label positioned along the outer rim
+          const labelR = Math.max(targetR + 14, rEcological + 18);
+          const labelPos = polarToCartesian(cx, cy, labelR, midA);
           const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
           text.setAttribute("x", labelPos.x);
           text.setAttribute("y", labelPos.y);
           text.setAttribute("font-size", "9.5");
           text.setAttribute("font-family", "system-ui, sans-serif");
           text.setAttribute("font-weight", "700");
-          text.setAttribute("fill", isSafe ? "#34d399" : (isApproaching ? "#f59e0b" : "#fda4af"));
+          text.setAttribute("fill", isSafe ? "#34d399" : (isApproaching ? "#fbbf24" : "#fda4af"));
           text.setAttribute("text-anchor", "middle");
           text.setAttribute("dominant-baseline", "middle");
           text.textContent = item.name;
@@ -1217,41 +1226,62 @@
           const deficit = getDeficitFactor(item);
           const hasDeficit = deficit > 0.05;
 
-          // Inner radius falls towards center hole if deficit exists
-          const innerTarget = hasDeficit ? Math.max(rInner, rSocial - deficit * (rSocial - rInner) * 1.5) : rSocial;
+          // The social sector wedge always exists between rSocial + 18 and innerTarget
+          const baseOuterR = rSocial + 18;
+          let innerTarget = rSocial;
+          let fillColor = "rgba(16, 185, 129, 0.45)";
+          let strokeColor = "#10b981";
+
+          if (hasDeficit) {
+            innerTarget = Math.max(rInner, rSocial - deficit * (rSocial - rInner) * 1.5);
+            fillColor = "rgba(244, 63, 94, 0.7)";
+            strokeColor = "#f43f5e";
+          } else if (activeScenario === "safe") {
+            fillColor = "rgba(16, 185, 129, 0.65)";
+            strokeColor = "#34d399";
+          }
+
+          const isSelected = selectedTarget.type === "social" && selectedTarget.item.id === item.id;
 
           const wedge = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          wedge.setAttribute("d", describeWedge(cx, cy, innerTarget, rSocial, startA + 1, endA - 1));
-
-          const fillColor = hasDeficit ? "rgba(244, 63, 94, 0.65)" : "rgba(56, 189, 248, 0.45)";
-          const strokeColor = hasDeficit ? "#f43f5e" : "#38bdf8";
-
+          wedge.setAttribute("d", describeWedge(cx, cy, innerTarget, baseOuterR, startA + 1, endA - 1));
           wedge.setAttribute("fill", fillColor);
-          wedge.setAttribute("stroke", strokeColor);
-          wedge.setAttribute("stroke-width", "1");
+          wedge.setAttribute("stroke", isSelected ? "#ffffff" : strokeColor);
+          wedge.setAttribute("stroke-width", isSelected ? "2.5" : "1");
+          if (isSelected) {
+            wedge.setAttribute("filter", "drop-shadow(0 0 10px rgba(56, 189, 248, 0.8))");
+          }
           wedge.style.cursor = "pointer";
-          wedge.style.transition = "all 0.25s ease";
+          wedge.style.transition = "all 0.2s ease";
 
           wedge.addEventListener("mouseenter", () => {
             wedge.setAttribute("stroke-width", "2.8");
+            selectedTarget = { type: "social", item: item };
             inspectSocial(item);
           });
           wedge.addEventListener("mouseleave", () => {
-            wedge.setAttribute("stroke-width", "1");
+            if (selectedTarget.item.id !== item.id) {
+              wedge.setAttribute("stroke-width", "1");
+              wedge.removeAttribute("filter");
+            }
           });
-          wedge.addEventListener("click", () => inspectSocial(item));
+          wedge.addEventListener("click", () => {
+            selectedTarget = { type: "social", item: item };
+            renderDoughnut();
+            inspectSocial(item);
+          });
 
           socGroup.appendChild(wedge);
 
           // Sector Label inside Social Ring
-          const labelPos = polarToCartesian(cx, cy, (rSocial + rEcological) / 2, midA);
+          const labelPos = polarToCartesian(cx, cy, (rSocial + rEcological) / 2 + 2, midA);
           const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
           text.setAttribute("x", labelPos.x);
           text.setAttribute("y", labelPos.y);
-          text.setAttribute("font-size", "9");
+          text.setAttribute("font-size", "8.5");
           text.setAttribute("font-family", "system-ui, sans-serif");
           text.setAttribute("font-weight", "700");
-          text.setAttribute("fill", hasDeficit ? "#fed7aa" : "#e2e8f0");
+          text.setAttribute("fill", hasDeficit ? "#fca5a5" : "#e2e8f0");
           text.setAttribute("text-anchor", "middle");
           text.setAttribute("dominant-baseline", "middle");
           text.textContent = item.name;
@@ -1308,18 +1338,27 @@
 
         const factor = getOvershootFactor(item);
         const badge = document.getElementById("inspectBadge");
-        if (factor > 1.05) {
+        const metricEl = document.getElementById("inspectMetric");
+
+        if (activeScenario === "safe") {
+          badge.className = "inspector-status-badge status-safe";
+          badge.textContent = `✅ Within Safe Ecological Operating Space (Zero Overshoot)`;
+          metricEl.textContent = `Target Met: ${item.name} safely bounded within the Holocene stability equilibrium (Factor: 1.00x).`;
+        } else if (factor > 1.05) {
           badge.className = "inspector-status-badge status-overshot";
-          badge.textContent = `⚠️ Transgressed (${Math.round(factor * 100 - 100)}% above safe planetary limit)`;
+          const pct = Math.round((factor - 1.0) * 100);
+          badge.textContent = `⚠️ Transgressed (${pct}% above safe planetary limit)`;
+          metricEl.textContent = item.metric;
         } else if (factor > 1.0) {
           badge.className = "inspector-status-badge status-approaching";
           badge.textContent = `⚡ Approaching Planetary Boundary`;
+          metricEl.textContent = item.metric;
         } else {
           badge.className = "inspector-status-badge status-safe";
           badge.textContent = `✅ Within Safe Ecological Operating Space`;
+          metricEl.textContent = item.metric;
         }
 
-        document.getElementById("inspectMetric").textContent = item.metric;
         document.getElementById("inspectDriver").textContent = item.driver;
         document.getElementById("inspectSolution").textContent = item.solution;
         document.getElementById("inspectPrinciple").innerHTML = `<strong>${item.principle}</strong>`;
@@ -1332,15 +1371,21 @@
 
         const deficit = getDeficitFactor(item);
         const badge = document.getElementById("inspectBadge");
-        if (deficit > 0.05) {
-          badge.className = "inspector-status-badge status-shortfall";
-          badge.textContent = `⚠️ Critical Shortfall (Falling below Social Foundation floor)`;
-        } else {
+        const metricEl = document.getElementById("inspectMetric");
+
+        if (activeScenario === "safe" || deficit <= 0.05) {
           badge.className = "inspector-status-badge status-met";
           badge.textContent = `✅ Foundation Met (Universal Human Dignity Achieved)`;
+          metricEl.textContent = activeScenario === "safe" 
+            ? `Universal Floor Met: 100% of global population secured with reliable, dignified access to ${item.name}.`
+            : item.metric;
+        } else {
+          badge.className = "inspector-status-badge status-shortfall";
+          const pct = Math.round(deficit * 100);
+          badge.textContent = `⚠️ Critical Shortfall (~${pct}% falling below Social Foundation floor)`;
+          metricEl.textContent = item.metric;
         }
 
-        document.getElementById("inspectMetric").textContent = item.metric;
         document.getElementById("inspectDriver").textContent = 
           "Extractive economic institutions, austerity, monopolized public goods, wealth hoarding, and failure to provide universal basic services.";
         document.getElementById("inspectSolution").textContent = 
@@ -1365,6 +1410,13 @@
             btn.classList.add("active");
             activeScenario = scenBtns[id];
             renderDoughnut();
+            
+            // Synchronously refresh inspector with active scenario's numbers
+            if (selectedTarget.type === "ecological") {
+              inspectEcological(selectedTarget.item);
+            } else {
+              inspectSocial(selectedTarget.item);
+            }
           });
         }
       });

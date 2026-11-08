@@ -848,6 +848,145 @@
       line-height: 1.4;
     }
 
+    /* GLOBAL CARBON & METABOLIC INEQUALITY SECTION */
+    .inequality-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .inequality-head {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+    .inequality-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .inequality-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+    .inequality-grid {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .inequality-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .pie-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    #pieChartSvg {
+      width: 250px;
+      height: 250px;
+      user-select: none;
+      filter: drop-shadow(0 0 16px rgba(0, 0, 0, 0.5));
+    }
+    .pie-slice {
+      cursor: pointer;
+      transition: all 0.25s ease;
+      stroke-width: 2px;
+    }
+    .pie-slice:hover, .pie-slice.active {
+      stroke: #fff;
+      stroke-width: 3.5px;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    }
+    .pie-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+      margin-top: 12px;
+    }
+    .pie-legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .pie-legend-item:hover, .pie-legend-item.active {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .inequality-bars-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .tier-bar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tier-bar-card:hover, .tier-bar-card.active {
+      border-color: var(--blue);
+      background: var(--card-subtle);
+    }
+    .tier-bar-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .tier-bar-track {
+      height: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .tier-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.4s ease;
+    }
+    .tier-bar-target-guideline {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #38bdf8;
+      box-shadow: 0 0 6px #38bdf8;
+      z-index: 2;
+    }
+    .tier-inspector-card {
+      margin-top: 16px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+
     /* FOOTER */
     footer {
       border-top: 1px solid var(--border);
@@ -1085,6 +1224,54 @@
 
       </div>
 
+    </div>
+
+    <!-- GLOBAL CARBON & CONSUMPTION INEQUALITY PANEL -->
+    <div class="inequality-panel">
+      <div class="inequality-head">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div class="inequality-title">
+            <span>⚖️</span> Global Carbon &amp; Ecological Inequality: Who Emits, Who Suffers, and Who Must Cut
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #38bdf8; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">
+            Paris 1.5°C Budget: ~2.1 t CO₂ / person / yr
+          </span>
+        </div>
+        <div class="inequality-subtitle">
+          Global greenhouse gas emissions and resource depletion are overwhelmingly concentrated in top-income percentiles. Meeting planetary boundaries requires deep structural savings from high earners, while the poorest 50% of humanity are already living well within the 1.5°C per-capita boundary. <em>(Data: Lucas Chancel, Nature Sustainability 2022; World Inequality Database; Oxfam &amp; Stockholm Environment Institute).</em>
+        </div>
+      </div>
+
+      <div class="inequality-grid">
+        <!-- LEFT: PIE CHART -->
+        <div class="pie-wrap">
+          <svg id="pieChartSvg" viewBox="0 0 260 260">
+            <!-- Dynamic SVG slices rendered by JavaScript -->
+          </svg>
+
+          <!-- PIE LEGEND -->
+          <div class="pie-legend" id="pieLegend">
+            <!-- Rendered in JS -->
+          </div>
+        </div>
+
+        <!-- RIGHT: PER CAPITA VS 1.5°C BOUNDARY BARS -->
+        <div class="inequality-bars-wrap">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 2px;">
+            <span>Annual Per-Capita Emissions (tonnes CO₂e / person)</span>
+            <span style="color: #38bdf8;">1.5°C Boundary: 2.1 t</span>
+          </div>
+
+          <div id="tierBarsContainer" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Rendered in JS -->
+          </div>
+
+          <!-- DYNAMIC INSPECTOR CARD -->
+          <div class="tier-inspector-card" id="tierInspectorCard">
+            <!-- Dynamic inspector content rendered in JS -->
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- SIMULATOR CONTROLS DECK -->
@@ -1619,6 +1806,259 @@
 
       // Initial calculation
       calculate();
+
+      // ========================================================
+      // GLOBAL CARBON & ECOLOGICAL INEQUALITY LOGIC
+      // Data: Lucas Chancel (Nature Sustainability 2022) / Oxfam / SEI
+      // ========================================================
+      (function initInequalitySection() {
+        const tiers = [
+          {
+            id: "top1",
+            name: "Top 1% (Ultra-Wealthy, ~80 Million)",
+            shortName: "Top 1%",
+            popShare: 1,
+            emissionsShare: 17,
+            perCapita: 101.0,
+            requiredCut: 98,
+            color: "#f43f5e",
+            threshold: "Individual income > $140,000 / yr (PPP) or personal net wealth > $1,100,000 USD.",
+            disparity: "Emits 63× more per person than the bottom 50%. The top 1% generates more carbon pollution than the poorest 66% (two-thirds of humanity) combined.",
+            paradox: "Emits 17% of all planet-heating pollution, yet insulated by wealth and geography from direct physical devastation.",
+            driver: "Over 70% of total footprint is derived from capital ownership and investment portfolios in high-polluting fossil, petrochemical, and industrial corporations, combined with private aviation, mega-yachts, and multiple large estates.",
+            solutions: "Progressive wealth tax on high-carbon assets and equity; strict bans or punitive levies on private jets and superyachts; mandatory fossil fuel divestment."
+          },
+          {
+            id: "top9",
+            name: "Next 9% (Upper-Middle, ~720 Million)",
+            shortName: "Next 9%",
+            popShare: 9,
+            emissionsShare: 31,
+            perCapita: 23.2,
+            requiredCut: 91,
+            color: "#f59e0b",
+            threshold: "Individual income > $40,000 / yr (PPP) or net personal wealth > $140,000 USD (Includes much of the Western / OECD middle class).",
+            disparity: "Combined with the Top 1%, the Top 10% generates nearly half (48%) of all global greenhouse gas emissions.",
+            paradox: "Per-capita footprint is more than 11× higher than the sustainable 1.5°C Paris budget (2.1 t/person/yr).",
+            driver: "High annual vehicle mileage (fossil SUVs), frequent commercial aviation, large fossil gas-heated detached homes, high meat and dairy consumption.",
+            solutions: "Rapid transition to domestic heat pumps, solar arrays, electric vehicles, plant-forward diets, and frequent flyer levies."
+          },
+          {
+            id: "mid40",
+            name: "Middle 40% (Global Middle, ~3.2 Billion)",
+            shortName: "Middle 40%",
+            popShare: 40,
+            emissionsShare: 40,
+            perCapita: 5.3,
+            requiredCut: 60,
+            color: "#38bdf8",
+            threshold: "Urban workers and manufacturing populations in middle- and developing-income nations; wages between ~$3,000 and $40,000 / yr.",
+            disparity: "Emissions share matches their population share (40% of people generate 40% of emissions). Average footprint: 5.3 t CO₂/yr.",
+            paradox: "Requires a 60% reduction to meet the 1.5°C boundary (5.3 t → 2.1 t), primarily achieved through state-level infrastructure decarbonization.",
+            driver: "Reliance on fossil-fueled electrical grids, urban transit, industrial food systems, and standard domestic energy use.",
+            solutions: "National clean energy grids (solar, wind, nuclear), reliable electrified public transport, municipal insulation programmes, affordable public housing."
+          },
+          {
+            id: "bot50",
+            name: "Bottom 50% (Poorest Half, ~4.0 Billion)",
+            shortName: "Bottom 50%",
+            popShare: 50,
+            emissionsShare: 12,
+            perCapita: 1.6,
+            requiredCut: 0,
+            color: "#10b981",
+            threshold: "Individual income < $3,000 / yr (< $8.20/day); includes over 700 million individuals living in extreme poverty (< $2.15/day).",
+            disparity: "Half of humanity generates only 12% of emissions (1.6 t/person), yet suffers ~75% of climate damages, extreme heat fatalities, and agricultural loss.",
+            paradox: "ZERO emissions savings needed. Their current footprint (1.6 t) is 24% BELOW the 1.5°C boundary (2.1 t). They have ecological headroom to expand consumption.",
+            driver: "Subsistence farming, active walking/bicycling, minimal consumer electronics, low-energy housing, traditional biomass cooking.",
+            solutions: "Unconditional poverty eradication: expanding clean rural microgrids, clean cooking technology, universal healthcare, and clean freshwater access without climate penalty."
+          }
+        ];
+
+        let activeTier = tiers[0];
+
+        const svgPie = document.getElementById("pieChartSvg");
+        const legendContainer = document.getElementById("pieLegend");
+        const barsContainer = document.getElementById("tierBarsContainer");
+        const inspectorCard = document.getElementById("tierInspectorCard");
+
+        function polarToCartesian(cx, cy, r, angleDeg) {
+          const rad = (angleDeg - 90) * Math.PI / 180.0;
+          return {
+            x: cx + r * Math.cos(rad),
+            y: cy + r * Math.sin(rad)
+          };
+        }
+
+        function describeDonutWedge(cx, cy, innerR, outerR, startAngle, endAngle) {
+          const p1 = polarToCartesian(cx, cy, outerR, startAngle);
+          const p2 = polarToCartesian(cx, cy, outerR, endAngle);
+          const p3 = polarToCartesian(cx, cy, innerR, endAngle);
+          const p4 = polarToCartesian(cx, cy, innerR, startAngle);
+          const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
+
+          return [
+            "M", p1.x, p1.y,
+            "A", outerR, outerR, 0, largeArc, 1, p2.x, p2.y,
+            "L", p3.x, p3.y,
+            "A", innerR, innerR, 0, largeArc, 0, p4.x, p4.y,
+            "Z"
+          ].join(" ");
+        }
+
+        function renderPie() {
+          svgPie.innerHTML = "";
+          const cx = 130, cy = 130, innerR = 52, outerR = 98;
+          let currentA = 0;
+
+          tiers.forEach(tier => {
+            const angleSpan = (tier.emissionsShare / 100) * 360;
+            const startA = currentA;
+            const endA = currentA + angleSpan;
+            currentA = endA;
+
+            const isSelected = tier.id === activeTier.id;
+            const wedge = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            wedge.setAttribute("d", describeDonutWedge(cx, cy, innerR, isSelected ? outerR + 6 : outerR, startA + 0.8, endA - 0.8));
+            wedge.setAttribute("fill", tier.color);
+            wedge.setAttribute("fill-opacity", isSelected ? "0.95" : "0.75");
+            wedge.setAttribute("stroke", isSelected ? "#ffffff" : tier.color);
+            wedge.setAttribute("stroke-width", isSelected ? "2.5" : "1");
+            wedge.classList.add("pie-slice");
+            if (isSelected) wedge.classList.add("active");
+
+            wedge.addEventListener("click", () => selectTier(tier));
+            wedge.addEventListener("mouseenter", () => {
+              updateCenterText(tier);
+            });
+            wedge.addEventListener("mouseleave", () => {
+              updateCenterText(activeTier);
+            });
+
+            svgPie.appendChild(wedge);
+          });
+
+          // Center Text Group
+          const centerG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          centerG.setAttribute("id", "pieCenterG");
+          centerG.style.pointerEvents = "none";
+          svgPie.appendChild(centerG);
+          updateCenterText(activeTier);
+        }
+
+        function updateCenterText(tier) {
+          const centerG = document.getElementById("pieCenterG");
+          if (!centerG) return;
+          centerG.innerHTML = `
+            <text x="130" y="118" text-anchor="middle" font-size="10" font-weight="700" fill="${tier.color}">${tier.shortName}</text>
+            <text x="130" y="136" text-anchor="middle" font-size="16" font-weight="900" font-family="ui-monospace, monospace" fill="#ffffff">${tier.emissionsShare}%</text>
+            <text x="130" y="148" text-anchor="middle" font-size="7.5" fill="#94a3b8">of Emissions</text>
+          `;
+        }
+
+        function renderLegend() {
+          legendContainer.innerHTML = "";
+          tiers.forEach(tier => {
+            const isSelected = tier.id === activeTier.id;
+            const item = document.createElement("div");
+            item.className = `pie-legend-item ${isSelected ? 'active' : ''}`;
+            item.innerHTML = `
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: ${tier.color}; box-shadow: 0 0 6px ${tier.color};"></span>
+                <span style="font-weight: 700; color: ${isSelected ? '#ffffff' : '#cbd5e1'};">${tier.shortName}</span>
+                <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">(${tier.popShare}% pop)</span>
+              </div>
+              <div style="font-family: var(--font-mono); font-weight: 700; color: ${tier.color};">
+                ${tier.emissionsShare}% emissions
+              </div>
+            `;
+            item.addEventListener("click", () => selectTier(tier));
+            legendContainer.appendChild(item);
+          });
+        }
+
+        function renderBars() {
+          barsContainer.innerHTML = "";
+          const maxPerCapita = 101.0; // Top 1% = 101 t CO2
+
+          tiers.forEach(tier => {
+            const isSelected = tier.id === activeTier.id;
+            const barPct = Math.max(2, Math.min(100, (tier.perCapita / maxPerCapita) * 100));
+            const budgetPct = (2.1 / maxPerCapita) * 100; // ~2.08%
+
+            const card = document.createElement("div");
+            card.className = `tier-bar-card ${isSelected ? 'active' : ''}`;
+            card.innerHTML = `
+              <div class="tier-bar-top">
+                <span style="color: ${tier.color};">${tier.name}</span>
+                <span style="font-family: var(--font-mono); font-size: 0.78rem;">
+                  <strong>${tier.perCapita.toFixed(1)} t</strong> / person / yr
+                  ${tier.requiredCut > 0 
+                    ? `<span style="color: #f43f5e; margin-left: 6px; font-size: 0.74rem;">(Must Cut -${tier.requiredCut}%)</span>` 
+                    : `<span style="color: #10b981; margin-left: 6px; font-size: 0.74rem;">(✅ 0% Cut Needed)</span>`}
+                </span>
+              </div>
+              <div class="tier-bar-track" title="${tier.perCapita} tonnes CO2/yr vs 2.1 t 1.5°C target">
+                <div class="tier-bar-target-guideline" style="left: ${budgetPct.toFixed(2)}%;" title="1.5°C Paris Budget Limit (2.1 t)"></div>
+                <div class="tier-bar-fill" style="width: ${barPct.toFixed(1)}%; background: ${tier.color};"></div>
+              </div>
+            `;
+            card.addEventListener("click", () => selectTier(tier));
+            barsContainer.appendChild(card);
+          });
+        }
+
+        function renderInspector() {
+          const t = activeTier;
+          const isSafe = t.requiredCut === 0;
+
+          inspectorCard.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: ${t.color}; box-shadow: 0 0 8px ${t.color};"></span>
+                <span style="font-size: 0.95rem; font-weight: 800; color: #ffffff;">${t.name}</span>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; ${isSafe ? 'color: #10b981; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3);' : 'color: #f43f5e; background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3);'}">
+                ${isSafe ? '✅ Sustainable Per-Capita Budget' : `🚨 Required Reduction: -${t.requiredCut}% by 2030`}
+              </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; font-size: 0.78rem; margin-bottom: 12px;">
+              <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px;">
+                <div style="color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase;">Income / Wealth Bracket</div>
+                <div style="color: #cbd5e1; font-weight: 600; margin-top: 2px;">${t.threshold}</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px;">
+                <div style="color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase;">Emissions vs. Population Share</div>
+                <div style="color: #cbd5e1; font-weight: 600; margin-top: 2px;">${t.popShare}% of humans generate <strong>${t.emissionsShare}%</strong> of carbon.</div>
+              </div>
+            </div>
+
+            <div style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 8px;">
+              <strong style="color: #fff;">The Climate Injustice Paradox:</strong> ${t.disparity} ${t.paradox}
+            </div>
+
+            <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45; margin-bottom: 6px;">
+              <strong style="color: #cbd5e1;">Structural Consumption &amp; Investment Drivers:</strong> ${t.driver}
+            </div>
+
+            <div style="font-size: 0.78rem; color: #34d399; line-height: 1.45; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 6px; padding: 6px 10px;">
+              <strong style="color: #6ee7b7;">21st-Century Systemic Levers:</strong> ${t.solutions}
+            </div>
+          `;
+        }
+
+        function selectTier(tier) {
+          activeTier = tier;
+          renderPie();
+          renderLegend();
+          renderBars();
+          renderInspector();
+        }
+
+        // Initialize Inequality Module
+        selectTier(tiers[0]);
+      })();
     })();
   </script>
 
