@@ -427,6 +427,16 @@
       color: #070d17;
     }
 
+    .btn-rss {
+      color: #f97316;
+      background: rgba(249, 115, 22, 0.12);
+      border: 1px solid rgba(249, 115, 22, 0.35);
+    }
+    .btn-rss:hover {
+      background: #f97316;
+      color: #070d17;
+    }
+
     .btn-bbc {
       color: #f59e0b;
       background: rgba(245, 158, 11, 0.12);
@@ -527,6 +537,14 @@
       </div>
     </div>
 
+    <!-- RSS DIRECTORY TIP BANNER -->
+    <div style="background: rgba(249, 115, 22, 0.08); border: 1px solid rgba(249, 115, 22, 0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.8rem; color: #fed7aa; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.15rem;">📡</span>
+        <span><strong>Open RSS Podcast Feeds:</strong> Direct open RSS feeds are provided on podcast cards below. Copy or open the RSS link directly in your preferred independent podcast player (e.g. AntennaPod, Pocket Casts, Overcast) without walled-garden app requirements.</span>
+      </div>
+    </div>
+
     <!-- PODCASTS DIRECTORY GRID -->
     <div class="podcasts-grid" id="podcastsGrid">
 
@@ -570,6 +588,9 @@
             </a>
             <a href="https://podcasts.apple.com/gb/podcast/outrage-optimism/id1459416461" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
               🎙️ Apple Podcasts
+            </a>
+            <a href="https://feeds.acast.com/public/shows/6781112bec40818e0b501b6a" target="_blank" rel="noopener noreferrer" class="btn-listen btn-rss" title="Direct RSS Feed for Podcast Apps (AntennaPod, Pocket Casts, Overcast)">
+              📡 RSS Feed
             </a>
             <a href="https://www.outrageandoptimism.org/" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="Official Website">
               🌐 Website
@@ -621,6 +642,9 @@
             <a href="https://podcasts.apple.com/gb/podcast/the-rest-is-politics/id1611374685" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
               🎙️ Apple Podcasts
             </a>
+            <a href="https://feeds.megaphone.fm/GLT9190936013" target="_blank" rel="noopener noreferrer" class="btn-listen btn-rss" title="Direct RSS Feed for Podcast Apps">
+              📡 RSS Feed
+            </a>
           </div>
         </div>
       </div>
@@ -661,6 +685,9 @@
             <a href="https://podcasts.apple.com/gb/podcast/sustainable-ish/id1383805328" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
               🎙️ Apple Podcasts
             </a>
+            <a href="https://api.riverside.com/hosting/dLyDdtNJ.rss" target="_blank" rel="noopener noreferrer" class="btn-listen btn-rss" title="Direct RSS Feed for Podcast Apps">
+              📡 RSS Feed
+            </a>
           </div>
         </div>
       </div>
@@ -693,8 +720,11 @@
         <div class="podcast-footer">
           <span style="font-size: 0.74rem; color: var(--text-muted);">Weekly International Reporting</span>
           <div class="listen-links">
-            <a href="https://www.bbc.co.uk/programmes/w13xtvb6" target="_blank" rel="noopener noreferrer" class="btn-listen btn-bbc" title="Listen on BBC Sounds">
-              📻 BBC Sounds
+            <a href="https://podcasts.files.bbci.co.uk/w13xtvb6.rss" target="_blank" rel="noopener noreferrer" class="btn-listen btn-rss" title="Direct RSS Feed for Podcast Apps (AntennaPod, Pocket Casts, Overcast)">
+              📡 RSS Feed
+            </a>
+            <a href="https://podcasts.apple.com/us/podcast/the-climate-question/id1538415261" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
+              🎙️ Apple Podcasts
             </a>
             <a href="https://open.spotify.com/show/4t5x9dZfS0cK5uUjC1zP5W" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream on Spotify">
               🟢 Spotify
@@ -731,11 +761,14 @@
         <div class="podcast-footer">
           <span style="font-size: 0.74rem; color: var(--text-muted);">Science &amp; Ecological Tipping Points</span>
           <div class="listen-links">
-            <a href="https://www.bbc.co.uk/programmes/m001pqbw" target="_blank" rel="noopener noreferrer" class="btn-listen btn-bbc" title="Listen on BBC Sounds">
-              📻 BBC Sounds
+            <a href="https://podcasts.files.bbci.co.uk/m001vbt0.rss" target="_blank" rel="noopener noreferrer" class="btn-listen btn-rss" title="Direct RSS Feed for Podcast Apps (AntennaPod, Pocket Casts, Overcast)">
+              📡 RSS Feed
             </a>
             <a href="https://podcasts.apple.com/gb/podcast/rare-earth/id1708819430" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
               🎙️ Apple Podcasts
+            </a>
+            <a href="https://www.bbc.co.uk/programmes/m001pqbw" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="BBC Radio 4 Programme Archive">
+              📻 BBC Radio 4
             </a>
           </div>
         </div>
@@ -771,11 +804,14 @@
         <div class="podcast-footer">
           <span style="font-size: 0.74rem; color: var(--text-muted);">Empirical Mitigation Pathways</span>
           <div class="listen-links">
-            <a href="https://www.bbc.co.uk/programmes/m000q9x7" target="_blank" rel="noopener noreferrer" class="btn-listen btn-bbc" title="Listen on BBC Sounds">
-              📻 BBC Sounds
-            </a>
             <a href="https://podcasts.apple.com/gb/podcast/39-ways-to-save-the-planet/id1547432657" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
               🎙️ Apple Podcasts
+            </a>
+            <a href="https://www.rgs.org/schools/teaching-resources/39-ways-to-save-the-planet" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="Royal Geographical Society Series Hub &amp; Audio">
+              🌐 RGS Series Hub
+            </a>
+            <a href="https://www.bbc.co.uk/programmes/m000q9x7" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="BBC Radio 4 Programme Archive">
+              📻 BBC Radio 4
             </a>
           </div>
         </div>
@@ -811,6 +847,12 @@
           <div class="listen-links">
             <a href="https://open.spotify.com/show/0Y2r6l1q6EhyhW0iM4UvXk" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream on Spotify">
               🟢 Spotify
+            </a>
+            <a href="https://podcasts.apple.com/us/podcast/volts/id1548554104" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
+              🎙️ Apple Podcasts
+            </a>
+            <a href="https://api.substack.com/feed/podcast/193024.rss" target="_blank" rel="noopener noreferrer" class="btn-listen btn-rss" title="Direct RSS Feed for Podcast Apps">
+              📡 RSS Feed
             </a>
             <a href="https://www.volts.wtf/" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="Official Website">
               🌐 volts.wtf
@@ -850,6 +892,12 @@
             <a href="https://open.spotify.com/show/5J0DqFvO2jVw8qZ0U9Qk3D" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream on Spotify">
               🟢 Spotify
             </a>
+            <a href="https://podcasts.apple.com/us/podcast/drilled-displaced/id1439735906" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
+              🎙️ Apple Podcasts
+            </a>
+            <a href="https://drilled.media/category/podcasts/drilled/feed/" target="_blank" rel="noopener noreferrer" class="btn-listen btn-rss" title="Direct RSS Feed for Podcast Apps">
+              📡 RSS Feed
+            </a>
             <a href="https://drilled.media/" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="Official Website">
               🌐 drilled.media
             </a>
@@ -887,6 +935,12 @@
           <div class="listen-links">
             <a href="https://open.spotify.com/show/1k5M3gO9eI4r4A1E8p4g5w" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream on Spotify">
               🟢 Spotify
+            </a>
+            <a href="https://podcasts.apple.com/us/podcast/how-to-stop-climate-change/id1490766939" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
+              🎙️ Apple Podcasts
+            </a>
+            <a href="https://rss.libsyn.com/shows/191481/destinations/1344981.xml" target="_blank" rel="noopener noreferrer" class="btn-listen btn-rss" title="Direct RSS Feed for Podcast Apps">
+              📡 RSS Feed
             </a>
             <a href="https://theclimatepod.com/" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="Official Website">
               🌐 Website
