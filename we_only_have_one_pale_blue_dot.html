@@ -297,6 +297,171 @@
       50% { opacity: 1; transform: scale(1.35); }
     }
 
+    /* PLANETARY NEIGHBOURS SECTION */
+    .neighbours-section {
+      background: rgba(13, 21, 39, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-top: 14px;
+    }
+    .neighbours-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .neighbours-title-box h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .neighbours-title-box p {
+      margin: 4px 0 0 0;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .neighbours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 980px) {
+      .neighbours-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .neighbour-card {
+      background: rgba(7, 13, 23, 0.88);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+    .neighbour-card.venus {
+      border-top: 3px solid #f97316;
+    }
+    .neighbour-card.earth {
+      border-top: 3px solid #38bdf8;
+      background: rgba(14, 30, 48, 0.88);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.12);
+    }
+    .neighbour-card.mars {
+      border-top: 3px solid #f43f5e;
+    }
+    .neighbour-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .neighbour-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .neighbour-status {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: var(--font-mono);
+    }
+    .neighbour-status.venus {
+      background: rgba(249, 115, 22, 0.18);
+      color: #fb923c;
+      border: 1px solid rgba(249, 115, 22, 0.35);
+    }
+    .neighbour-status.earth {
+      background: rgba(56, 189, 248, 0.18);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+    .neighbour-status.mars {
+      background: rgba(244, 63, 94, 0.18);
+      color: #fda4af;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
+    .neighbour-stats-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.32);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+    }
+    .neighbour-stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .neighbour-stat-item span:first-child {
+      color: var(--text-muted);
+      font-size: 0.65rem;
+    }
+    .neighbour-stat-item span:last-child {
+      color: #f1f5f9;
+      font-weight: 700;
+    }
+    .neighbour-text {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      line-height: 1.48;
+      flex-grow: 1;
+    }
+    .neighbour-text p {
+      margin: 0 0 8px 0;
+    }
+    .neighbour-text p:last-child {
+      margin: 0;
+    }
+    .neighbour-hansen-highlight {
+      background: rgba(249, 115, 22, 0.12);
+      border-left: 2px solid #f97316;
+      padding: 6px 8px;
+      border-radius: 0 4px 4px 0;
+      margin-top: 6px;
+      font-size: 0.73rem;
+      color: #fed7aa;
+      line-height: 1.4;
+    }
+    .neighbour-hazard-highlight {
+      background: rgba(244, 63, 94, 0.12);
+      border-left: 2px solid #f43f5e;
+      padding: 6px 8px;
+      border-radius: 0 4px 4px 0;
+      margin-top: 6px;
+      font-size: 0.73rem;
+      color: #fecdd3;
+      line-height: 1.4;
+    }
+    .neighbour-earth-highlight {
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 2px solid #38bdf8;
+      padding: 6px 8px;
+      border-radius: 0 4px 4px 0;
+      margin-top: 6px;
+      font-size: 0.73rem;
+      color: #bae6fd;
+      line-height: 1.4;
+    }
+
     /* MAIN DISPLAY GRID */
     .top-overview-grid {
       display: grid;
@@ -1081,6 +1246,131 @@
           </div>
         </div>
       </div>
+
+      <!-- PLANETARY NEIGHBOURS: VENUS, EARTH & MARS -->
+      <div class="neighbours-section">
+        <div class="neighbours-header">
+          <div class="neighbours-title-box">
+            <h3>🪐 Our Next-Door Neighbours: Why Earth's Gossamer Atmosphere is Our Only Life Support</h3>
+            <p>
+              Space is not an escape hatch. Venus is a crushing 465&deg;C greenhouse acid furnace, while Mars is a freezing near-vacuum where exposed fluids boil in seconds. Earth's entire biosphere relies on a 10-kilometre atmospheric veneer thinner than a coat of varnish on a classroom globe.
+            </p>
+          </div>
+        </div>
+
+        <div class="neighbours-grid">
+          <!-- VENUS -->
+          <div class="neighbour-card venus">
+            <div class="neighbour-badge-row">
+              <span class="neighbour-name" style="color: #fb923c;">🔥 Venus</span>
+              <span class="neighbour-status venus">Runaway Greenhouse</span>
+            </div>
+            <div class="neighbour-stats-box">
+              <div class="neighbour-stat-item">
+                <span>SURFACE TEMP</span>
+                <span>465&deg;C (870&deg;F)</span>
+              </div>
+              <div class="neighbour-stat-item">
+                <span>SURFACE PRESSURE</span>
+                <span>92 bar (90&times; Earth)</span>
+              </div>
+              <div class="neighbour-stat-item">
+                <span>ATMOSPHERE</span>
+                <span>96.5% CO&sub2;, 3.5% N&sub2;</span>
+              </div>
+              <div class="neighbour-stat-item">
+                <span>CLOUDS</span>
+                <span>Sulfuric Acid (H&sub2;SO&sub4;)</span>
+              </div>
+            </div>
+            <div class="neighbour-text">
+              <p>
+                <strong>Crushing Atmospheric Vise:</strong> Venus's surface pressure is ~92 times Earth's—equivalent to being 900 metres (3,000 ft) under the ocean. That hydrostatic load would instantly crush a reinforced steel scuba diving cylinder like an aluminum soda can.
+              </p>
+              <p>
+                <strong>Thermal Furnace:</strong> Blanketed in hyper-dense CO&sub2;, surface temperatures hit 465&deg;C day and night (hot enough to melt lead), far hotter than Mercury despite receiving only a fraction of its solar flux.
+              </p>
+              <div class="neighbour-hansen-highlight">
+                <strong>🔭 The Jim Hansen Warning (1988):</strong> One of the earliest pioneers to model Venus's atmosphere was <strong>Dr. James Hansen</strong> at NASA GISS in the 1970s. Deciphering Venus's runaway greenhouse led Hansen directly to realize that identical radiative physics apply to Earth. This work led directly to Hansen's landmark <strong>June 23, 1988 US Senate testimony</strong>, first alerting the world to human-induced climate warming.
+              </div>
+            </div>
+          </div>
+
+          <!-- EARTH -->
+          <div class="neighbour-card earth">
+            <div class="neighbour-badge-row">
+              <span class="neighbour-name" style="color: #38bdf8;">🌍 Earth</span>
+              <span class="neighbour-status earth">The Miraculous Biosphere</span>
+            </div>
+            <div class="neighbour-stats-box">
+              <div class="neighbour-stat-item">
+                <span>BREATHABLE LAYER</span>
+                <span>~10&ndash;12 km (&lt;0.16% radius)</span>
+              </div>
+              <div class="neighbour-stat-item">
+                <span>SURFACE PRESSURE</span>
+                <span>1.013 bar (1.0 atm)</span>
+              </div>
+              <div class="neighbour-stat-item">
+                <span>ATMOSPHERE</span>
+                <span>78% N&sub2;, 21% O&sub2;, 0.04% CO&sub2;</span>
+              </div>
+              <div class="neighbour-stat-item">
+                <span>WATER STATE</span>
+                <span>Liquid &middot; Vapour &middot; Ice</span>
+              </div>
+            </div>
+            <div class="neighbour-text">
+              <p>
+                <strong>The Varnish on the Globe:</strong> If Earth were scaled to a standard 30 cm classroom desk globe, our entire breathable troposphere would measure just <strong>0.28 millimetres</strong>—thinner than the spray of varnish protecting the globe or the skin of an apple.
+              </p>
+              <p>
+                <strong>Our Gossamer Life Support:</strong> Within that fragile boundary, balanced greenhouse physics keeps liquid water flowing and average global surface temperatures at a benign ~15&deg;C.
+              </p>
+              <div class="neighbour-earth-highlight">
+                <strong>🛡️ Double Shielding:</strong> Earth's molten iron core creates a geomagnetic dynamo deflecting solar cosmic rays, while stratospheric ozone filters lethal UV radiation. Discarding this life support system in pursuit of infinite extraction threatens the only habitable sanctuary known in the cosmos.
+              </div>
+            </div>
+          </div>
+
+          <!-- MARS -->
+          <div class="neighbour-card mars">
+            <div class="neighbour-badge-row">
+              <span class="neighbour-name" style="color: #fda4af;">🔴 Mars</span>
+              <span class="neighbour-status mars">Desiccated Low-G Vacuum</span>
+            </div>
+            <div class="neighbour-stats-box">
+              <div class="neighbour-stat-item">
+                <span>SURFACE TEMP</span>
+                <span>-63&deg;C (-81&deg;F) avg</span>
+              </div>
+              <div class="neighbour-stat-item">
+                <span>SURFACE PRESSURE</span>
+                <span>~6&ndash;7 mbar (&lt;1% Earth)</span>
+              </div>
+              <div class="neighbour-stat-item">
+                <span>ATMOSPHERE</span>
+                <span>95% CO&sub2;, 0.13% O&sub2;</span>
+              </div>
+              <div class="neighbour-stat-item">
+                <span>SURFACE GRAVITY</span>
+                <span>0.38g (38% of Earth)</span>
+              </div>
+            </div>
+            <div class="neighbour-text">
+              <p>
+                <strong>Armstrong Limit &amp; Boiling Eyes:</strong> Mars's atmospheric pressure is just 1/100th of Earth's—far below the Armstrong Limit (63 mbar) where water boils at body temperature (37&deg;C). Exposed human eyes, saliva, and lung moisture would boil away in seconds before the victim asphyxiates.
+              </p>
+              <p>
+                <strong>Unshielded Radiation &amp; Underground Living:</strong> Mars lacks a global magnetic dipole. Unfiltered cosmic rays and solar particle storms force any human occupants to live permanently deep underground in lava tubes or regolith bunkers, venturing out only for brief pressurized sorties.
+              </p>
+              <div class="neighbour-hazard-highlight">
+                <strong>💔 Fatal Low-G Muscle Atrophy:</strong> In 0.38g gravity, the heart muscle atrophies rapidly because pumping blood requires far less force. After extended periods on Mars, returning to Earth's 1g gravity field could cause fatal cardiovascular and orthostatic collapse.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
 
     <!-- TOP OVERVIEW GRID: PLANETS COUNTER + BALANCE SHEET -->
@@ -1458,6 +1748,24 @@
           <p>
             When economic or consumption models demand 1.34 or 1.5 Earths, they demand something that physical reality cannot supply. There is nowhere else to offload humanity's ecological debt: living within 1.0 Planet Earth is our only viable future.
           </p>
+        </div>
+
+        <div class="doc-item">
+          <h4>🪐 Our Next-Door Neighbours &amp; The Armstrong Limit: Why Earth is Our Only Life Support</h4>
+          <p>
+            Discussions of planetary escape or off-world colonization often treat Venus and Mars as viable fallbacks. The underlying astrophysics, radiative thermodynamics, and human physiology tell a sobering story:
+          </p>
+          <ul style="margin: 8px 0 10px 18px; padding: 0; line-height: 1.5; font-size: 0.85rem; color: #cbd5e1;">
+            <li style="margin-bottom: 6px;">
+              <strong>Venus (465&deg;C / 870&deg;F, 92 bar):</strong> Blanketed by 96.5% CO&sub2;, Venus is gripped by an irreversible runaway greenhouse effect. Surface atmospheric pressure is 92 times Earth's—equivalent to being submerged under 900 metres of ocean, sufficient to crush heavy industrial steel scuba diving cylinders. In the 1970s, NASA climate physicist <strong>Dr. James Hansen</strong> investigated Venus's atmospheric radiative transfer, recognizing that the exact same physics governed Earth's energy balance. That breakthrough formed the foundation for his historic June 23, 1988 testimony before the US Senate.
+            </li>
+            <li style="margin-bottom: 6px;">
+              <strong>Mars (&lt;1% Earth pressure, 95% CO&sub2;, 0.38g):</strong> Surface pressure on Mars is ~6&ndash;7 mbar. This falls far below the <em>Armstrong Limit</em> (~63 mbar / 6.3 kPa), the pressure threshold where water boils at normal human body temperature (37&deg;C / 98.6&deg;F). Any human exposed without a pressurized suit would experience boiling tears, saliva, and pulmonary moisture in seconds before suffocating. Furthermore, Mars has no protective global dipole magnetic field; lethal galactic cosmic rays and solar proton events force any long-term presence to live underground beneath meters of regolith or lava tubes. Finally, extended stays in Mars's 0.38g gravity cause severe cardiovascular deconditioning and myocardial atrophy (the heart shrinks because pumping blood requires less work); returning to Earth's 1g gravitational pull could prove fatal due to acute orthostatic circulatory failure.
+            </li>
+            <li>
+              <strong>Earth's 10-Kilometre Varnish:</strong> Our breathable troposphere spans only 10 to 12 km—less than 0.16% of Earth's 6,371 km radius. On a 30 cm classroom desk globe, this breathable layer is thinner than 0.3 mm (the varnish on its surface). There is no Planet B; safeguarding our thin, miraculous atmospheric membrane is our existential imperative.
+            </li>
+          </ul>
         </div>
 
         <!-- DOUGHNUT ECONOMICS BRIDGE BANNER -->
