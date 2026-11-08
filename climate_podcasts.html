@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Podcasts — Essential Audio on Adaptation, Mitigation & Science</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%237c3aed%22/><circle cx=%2250%22 cy=%2250%22 r=%2232%22 fill=%22%2338bdf8%22/><circle cx=%2250%22 cy=%2250%22 r=%2216%22 fill=%22%23070d17%22/></svg>">
+
+  <!-- Progressive Web App (PWA) Meta & Manifest -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#070d17">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ClimateSim">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+  <style>
+    :root {
+      --bg-dark: #070d17;
+      --panel-bg: #0d1527;
+      --card-bg: #121d33;
+      --card-subtle: #17243f;
+      --border: #1e293b;
+      --border-focus: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --cyan: #00e5ff;
+      --blue: #38bdf8;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --purple: #c084fc;
+      --purple-accent: #a855f7;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.5;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(168, 85, 247, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 55%);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      font-size: 1.7rem;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    .brand-title span {
+      color: var(--purple-accent);
+    }
+
+    .brand-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .version-badge {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--purple);
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-subtle);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+      border-color: var(--border-focus);
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .nav-btn.active {
+      color: #c084fc;
+      border-color: var(--purple-accent);
+      background: rgba(168, 85, 247, 0.16);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
+    }
+
+    /* SEARCH & FILTER CONTROLS */
+    .controls-bar {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .filter-pill:hover {
+      color: #fff;
+      border-color: var(--purple);
+    }
+
+    .filter-pill.active {
+      background: rgba(168, 85, 247, 0.2);
+      border-color: var(--purple-accent);
+      color: #d8b4fe;
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+    }
+
+    .search-box {
+      position: relative;
+      min-width: 240px;
+      flex-grow: 1;
+      max-width: 340px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 7px 14px 7px 32px;
+      color: #fff;
+      font-size: 0.8rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-input:focus {
+      border-color: var(--purple-accent);
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.25);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* PODCAST CARDS GRID */
+    .podcasts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 18px;
+    }
+
+    @media (max-width: 640px) {
+      .podcasts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .podcast-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .podcast-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(168, 85, 247, 0.5);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .podcast-card.featured {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(56, 189, 248, 0.05));
+      border: 1.5px solid rgba(168, 85, 247, 0.45);
+      box-shadow: 0 6px 24px rgba(168, 85, 247, 0.15);
+    }
+
+    .podcast-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .podcast-tag-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .podcast-cat-tag {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .tag-diplomacy {
+      color: #c084fc;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+    }
+    .tag-security {
+      color: #f43f5e;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
+    .tag-grassroots {
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+    }
+    .tag-bbc {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+    .tag-tech {
+      color: #fbbf24;
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+    }
+
+    .podcast-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .podcast-hosts {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .podcast-hosts strong {
+      color: #fff;
+    }
+
+    .podcast-body {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .podcast-body p {
+      margin-bottom: 8px;
+    }
+    .podcast-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .figueres-spotlight {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: #e2e8f0;
+    }
+
+    .figueres-spotlight strong {
+      color: #d8b4fe;
+    }
+
+    .ep-highlights {
+      margin-top: 8px;
+      padding-left: 16px;
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .podcast-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .listen-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-listen {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      font-family: var(--font-mono);
+    }
+
+    .btn-spotify {
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .btn-spotify:hover {
+      background: #10b981;
+      color: #070d17;
+    }
+
+    .btn-apple {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+    .btn-apple:hover {
+      background: #38bdf8;
+      color: #070d17;
+    }
+
+    .btn-bbc {
+      color: #f59e0b;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .btn-bbc:hover {
+      background: #f59e0b;
+      color: #070d17;
+    }
+
+    .btn-web {
+      color: #94a3b8;
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+    .btn-web:hover {
+      color: #fff;
+      border-color: #cbd5e1;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 20px 0 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: center;
+      width: 100%;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-link {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.15s;
+    }
+
+    .footer-link:hover {
+      text-decoration: underline;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-top">
+        <div class="brand-wrap">
+          <div class="brand-icon">🎙️</div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="brand-title">Climate Audio <span>Intelligence</span></div>
+              <span class="version-badge">v1.4</span>
+            </div>
+            <div class="brand-sub">Curated Podcasts on Climate Adaptation, Mitigation, National Security &amp; Earth Systems</div>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <a href="earth_heat_trap.html" class="nav-btn">⚡ Plain-English Intro</a>
+          <a href="advanced.html" class="nav-btn">🔬 Warming Simulator</a>
+          <a href="we_only_have_one_pale_blue_dot.html" class="nav-btn">🌍 Pale Blue Dot</a>
+          <a href="doughnut_economics.html" class="nav-btn" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.4);">🍩 Doughnut Economics</a>
+          <a href="climate_podcasts.html" class="nav-btn active">🎙️ Podcasts</a>
+          <a href="national_emergency_briefing.html" class="nav-btn" style="color: #f43f5e; border-color: rgba(244, 63, 94, 0.4);">🚨 National Emergency Briefing</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- CONTROLS: CATEGORY PILLS & INSTANT SEARCH -->
+    <div class="controls-bar">
+      <div class="filter-pills" id="filterPills">
+        <button class="filter-pill active" data-category="all">All Podcasts (9)</button>
+        <button class="filter-pill" data-category="diplomacy">⭐ Diplomacy &amp; Optimism</button>
+        <button class="filter-pill" data-category="security">🛡️ Security &amp; Geopolitics</button>
+        <button class="filter-pill" data-category="grassroots">🌱 Everyday &amp; Civic Action</button>
+        <button class="filter-pill" data-category="bbc">🌍 BBC Science</button>
+        <button class="filter-pill" data-category="tech">⚡ Clean Tech &amp; Investigation</button>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="podcastSearch" placeholder="Search hosts, topics, episodes...">
+      </div>
+    </div>
+
+    <!-- PODCASTS DIRECTORY GRID -->
+    <div class="podcasts-grid" id="podcastsGrid">
+
+      <!-- 1. OUTRAGE + OPTIMISM (FEATURED BANNER) -->
+      <div class="podcast-card featured" data-categories="diplomacy">
+        <div>
+          <div class="podcast-header">
+            <div>
+              <div class="podcast-tag-group">
+                <span class="podcast-cat-tag tag-diplomacy">Global Diplomacy · Paris Agreement Benchmark</span>
+                <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">Weekly</span>
+              </div>
+              <div class="podcast-title">Outrage + Optimism</div>
+              <div class="podcast-hosts">
+                Co-hosted by <strong>Christiana Figueres</strong>, <strong>Tom Rivett-Carnac</strong>, and <strong>Paul Dickinson</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="podcast-body" style="margin-top: 12px;">
+            <p>
+              The premier international forum connecting high-stakes climate negotiations, corporate decarbonization, and psychology. The show explores how to process legitimate fury at planetary destruction while channeling it into <em>stubborn, resolute optimism</em> that builds systemic momentum.
+            </p>
+
+            <!-- CHRISTIANA FIGUERES SPOTLIGHT NOTE -->
+            <div class="figueres-spotlight">
+              <strong>⭐ Historical Significance of Christiana Figueres:</strong> As Executive Secretary of the United Nations Framework Convention on Climate Change (UNFCCC, 2010–2016), Figueres stepped in following the collapsed 2009 Copenhagen summit. Through six years of relentless international diplomacy, she united 195 nations to deliver the historic <strong>2015 Paris Agreement</strong>—cementing the global commitment to hold warming well below 2.0 °C and actively pursue the <strong>1.5 °C ceiling</strong>. Co-host Tom Rivett-Carnac served as her political strategist throughout the negotiations.
+            </div>
+
+            <p style="margin-top: 10px;">
+              Regularly features candid interviews with global changemakers, heads of state, IPCC lead authors, youth organizers, and financial leaders, accompanied by sharp weekly news analysis.
+            </p>
+          </div>
+        </div>
+
+        <div class="podcast-footer">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Global Energy &amp; Geopolitics</span>
+          <div class="listen-links">
+            <a href="https://open.spotify.com/show/5Rbif0NfMJDT2zVaadZBBq" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream Outrage + Optimism on Spotify">
+              🟢 Spotify Show
+            </a>
+            <a href="https://podcasts.apple.com/gb/podcast/outrage-optimism/id1459416461" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
+              🎙️ Apple Podcasts
+            </a>
+            <a href="https://www.outrageandoptimism.org/" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="Official Website">
+              🌐 Website
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. WHEN NATURE BECOMES A SECURITY THREAT / THE REST IS POLITICS -->
+      <div class="podcast-card" data-categories="security">
+        <div>
+          <div class="podcast-header">
+            <div>
+              <div class="podcast-tag-group">
+                <span class="podcast-cat-tag tag-security">National Security · Ecosystem Collapse</span>
+                <span class="podcast-cat-tag tag-diplomacy">Goalhanger</span>
+              </div>
+              <div class="podcast-title">When Nature Becomes A Security Threat</div>
+              <div class="podcast-hosts">
+                Hosted by <strong>Caroline Lucas</strong> (Produced by Goalhanger on <em>The Rest Is Politics Presents</em>)
+              </div>
+            </div>
+          </div>
+
+          <div class="podcast-body" style="margin-top: 10px;">
+            <p>
+              A landmark four-part investigative series fronted by former Green MP and Party Leader <strong>Caroline Lucas</strong>. Investigates how ecological breakdown and climate breakdown have crossed over from environmental concerns to acute national defense risks.
+            </p>
+            <p>
+              Centers on the suppressed government-commissioned report from the UK <strong>Joint Intelligence Committee (JIC)</strong> (coordinating MI5, MI6, and GCHQ) titled <em>Global Biodiversity Loss, Ecosystem Collapse and National Security</em>, which warned that ecological collapse threatens the survival of the state.
+            </p>
+            <ul class="ep-highlights">
+              <li><strong>Defense Preparedness:</strong> Lt. Gen. Richard Nugee on British military resilience in an unstable climate.</li>
+              <li><strong>Food Supply Fragility:</strong> Prof. Paul Behrens on supermarket logistics and acute UK crop vulnerabilities.</li>
+              <li><strong>Geopolitics &amp; Water Wars:</strong> Conflict multipliers and mass displacement in the Global South.</li>
+            </ul>
+            <p style="margin-top: 8px; font-size: 0.78rem; color: #cbd5e1;">
+              <em>Also check occasional climate &amp; COP deep-dives on <strong>The Rest Is Politics</strong> with Rory Stewart and Alastair Campbell.</em>
+            </p>
+          </div>
+        </div>
+
+        <div class="podcast-footer">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">The Rest Is Politics Feed</span>
+          <div class="listen-links">
+            <a href="https://open.spotify.com/show/3XzccfmnuUYbZfPq72F4Hk" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream on Spotify">
+              🟢 Spotify Feed
+            </a>
+            <a href="https://podcasts.apple.com/gb/podcast/the-rest-is-politics/id1611374685" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
+              🎙️ Apple Podcasts
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. SUSTAINABLE(ISH) WITH JEN GALE -->
+      <div class="podcast-card" data-categories="grassroots">
+        <div>
+          <div class="podcast-header">
+            <div>
+              <div class="podcast-tag-group">
+                <span class="podcast-cat-tag tag-grassroots">Grassroots · Practical Action</span>
+                <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">Over 200 Episodes</span>
+              </div>
+              <div class="podcast-title">Sustainable(ish)</div>
+              <div class="podcast-hosts">
+                Hosted by environmental author &amp; campaigner <strong>Jen Gale</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="podcast-body" style="margin-top: 10px;">
+            <p>
+              Pragmatic, compassionate conversations designed to break through climate paralysis and eco-guilt. Jen Gale champions "imperfect environmentalism"—empowering ordinary households, schools, and local communities to exert democratic and consumer leverage.
+            </p>
+            <ul class="ep-highlights">
+              <li><strong>Episode 186 — Nick Oldridge:</strong> Inside the genesis of the <em>National Emergency Briefing</em> at Westminster Central Hall, and screening the People's Emergency Briefing film.</li>
+              <li><strong>Episode 203 — Prof. Hugh Montgomery:</strong> <em>7 Acts to Save the World</em> — an intensive-care consultant's masterclass linking human physiology, extreme heat, and 7 decisive levers.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="podcast-footer">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Individual &amp; Civic Mobilization</span>
+          <div class="listen-links">
+            <a href="https://open.spotify.com/show/7hl6HO12o9WdcPlDrHZ5oY" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream Sustainable(ish) on Spotify">
+              🟢 Spotify Show
+            </a>
+            <a href="https://podcasts.apple.com/gb/podcast/sustainable-ish/id1383805328" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
+              🎙️ Apple Podcasts
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. THE CLIMATE QUESTION (BBC WORLD SERVICE) -->
+      <div class="podcast-card" data-categories="bbc">
+        <div>
+          <div class="podcast-header">
+            <div>
+              <div class="podcast-tag-group">
+                <span class="podcast-cat-tag tag-bbc">BBC World Service · Global Reporting</span>
+              </div>
+              <div class="podcast-title">The Climate Question</div>
+              <div class="podcast-hosts">
+                Presented by <strong>Jordan Dunbar</strong>, <strong>Graihagh Jackson</strong> &amp; BBC Correspondents
+              </div>
+            </div>
+          </div>
+
+          <div class="podcast-body" style="margin-top: 10px;">
+            <p>
+              Rigorous global journalism examining how human communities are adapting to and mitigating a changing climate. From floating farms in Bangladesh to heat-dome air-conditioning grids in Phoenix, each episode interrogates why we find it so difficult to save ourselves.
+            </p>
+            <p>
+              Unpacks international carbon markets, loss-and-damage climate finance, methane leaks from super-emitters, and agricultural resilience with local eyewitness reporting.
+            </p>
+          </div>
+        </div>
+
+        <div class="podcast-footer">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Weekly International Reporting</span>
+          <div class="listen-links">
+            <a href="https://www.bbc.co.uk/programmes/w13xtvb6" target="_blank" rel="noopener noreferrer" class="btn-listen btn-bbc" title="Listen on BBC Sounds">
+              📻 BBC Sounds
+            </a>
+            <a href="https://open.spotify.com/show/4t5x9dZfS0cK5uUjC1zP5W" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream on Spotify">
+              🟢 Spotify
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. RARE EARTH (BBC RADIO 4) -->
+      <div class="podcast-card" data-categories="bbc">
+        <div>
+          <div class="podcast-header">
+            <div>
+              <div class="podcast-tag-group">
+                <span class="podcast-cat-tag tag-bbc">BBC Radio 4 · Earth Systems</span>
+              </div>
+              <div class="podcast-title">Rare Earth</div>
+              <div class="podcast-hosts">
+                Hosted by rural journalist <strong>Tom Heap</strong> &amp; ocean physicist <strong>Dr. Helen Czerski</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="podcast-body" style="margin-top: 10px;">
+            <p>
+              Pairs frontline investigative reporting with world-class oceanography and biophysics. Examines critical ecological tipping points: Atlantic Meridional Overturning Circulation (AMOC) stability, Antarctic ice shelf grounding lines, deep-sea mining risks, and peat bog hydrology.
+            </p>
+            <p>
+              Features rigorous debates on rewilding vs. food security, nuclear power vs. baseload renewables, and legal rights for rivers and marine ecosystems.
+            </p>
+          </div>
+        </div>
+
+        <div class="podcast-footer">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Science &amp; Ecological Tipping Points</span>
+          <div class="listen-links">
+            <a href="https://www.bbc.co.uk/programmes/m001pqbw" target="_blank" rel="noopener noreferrer" class="btn-listen btn-bbc" title="Listen on BBC Sounds">
+              📻 BBC Sounds
+            </a>
+            <a href="https://podcasts.apple.com/gb/podcast/rare-earth/id1708819430" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
+              🎙️ Apple Podcasts
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. 39 WAYS TO SAVE THE PLANET (BBC RADIO 4) -->
+      <div class="podcast-card" data-categories="bbc tech">
+        <div>
+          <div class="podcast-header">
+            <div>
+              <div class="podcast-tag-group">
+                <span class="podcast-cat-tag tag-bbc">BBC Radio 4</span>
+                <span class="podcast-cat-tag tag-tech">Solutions · Royal Geographical Society</span>
+              </div>
+              <div class="podcast-title">39 Ways to Save the Planet</div>
+              <div class="podcast-hosts">
+                Reported by <strong>Tom Heap</strong> in collaboration with the <strong>Royal Geographical Society</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="podcast-body" style="margin-top: 10px;">
+            <p>
+              A focused, evidence-based exploration of 39 real, scalable solutions already eliminating gigatonnes of carbon or drawing down atmospheric CO₂.
+            </p>
+            <ul class="ep-highlights">
+              <li><strong>Natural Sinks:</strong> Restoring Scottish blanket peat, kelp farming, basalt rock dust (enhanced rock weathering).</li>
+              <li><strong>Engineering Breakthroughs:</strong> Sodium-ion batteries, geothermal deep-tapping, electric commercial aviation, and smart grids.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="podcast-footer">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Empirical Mitigation Pathways</span>
+          <div class="listen-links">
+            <a href="https://www.bbc.co.uk/programmes/m000q9x7" target="_blank" rel="noopener noreferrer" class="btn-listen btn-bbc" title="Listen on BBC Sounds">
+              📻 BBC Sounds
+            </a>
+            <a href="https://podcasts.apple.com/gb/podcast/39-ways-to-save-the-planet/id1547432657" target="_blank" rel="noopener noreferrer" class="btn-listen btn-apple" title="Listen on Apple Podcasts">
+              🎙️ Apple Podcasts
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. VOLTS (DAVID ROBERTS) -->
+      <div class="podcast-card" data-categories="tech">
+        <div>
+          <div class="podcast-header">
+            <div>
+              <div class="podcast-tag-group">
+                <span class="podcast-cat-tag tag-tech">Clean Energy · Grid Technology</span>
+              </div>
+              <div class="podcast-title">Volts</div>
+              <div class="podcast-hosts">
+                Hosted by energy analyst &amp; journalist <strong>David Roberts</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="podcast-body" style="margin-top: 10px;">
+            <p>
+              The definitive, deeply technical podcast covering the clean energy transition. David Roberts conducts comprehensive, unfiltered interviews with engineers, grid operators, and policymakers driving the end of fossil fuels.
+            </p>
+            <p>
+              Covers high-voltage direct current (HVDC) transmission lines, thermal storage, heat pump refrigerants, industrial hydrogen, advanced fission, and market reform.
+            </p>
+          </div>
+        </div>
+
+        <div class="podcast-footer">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Technical Decarbonization</span>
+          <div class="listen-links">
+            <a href="https://open.spotify.com/show/0Y2r6l1q6EhyhW0iM4UvXk" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream on Spotify">
+              🟢 Spotify
+            </a>
+            <a href="https://www.volts.wtf/" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="Official Website">
+              🌐 volts.wtf
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. DRILLED (AMY WESTERVELT) -->
+      <div class="podcast-card" data-categories="tech">
+        <div>
+          <div class="podcast-header">
+            <div>
+              <div class="podcast-tag-group">
+                <span class="podcast-cat-tag tag-security">Investigative Journalism · Fossil Disinformation</span>
+              </div>
+              <div class="podcast-title">Drilled</div>
+              <div class="podcast-hosts">
+                Reported by award-winning investigative journalist <strong>Amy Westervelt</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="podcast-body" style="margin-top: 10px;">
+            <p>
+              A true-crime style investigative podcast holding the fossil fuel industry accountable. Drilled investigates the multi-billion-dollar public relations apparatus, greenwashing PR firms, and dark-money networks created by oil majors to manufacture doubt around climate science.
+            </p>
+            <p>
+              Essential listening for understanding why political action has stalled for four decades despite ironclad physical physics.
+            </p>
+          </div>
+        </div>
+
+        <div class="podcast-footer">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Accountability &amp; Corporate Liability</span>
+          <div class="listen-links">
+            <a href="https://open.spotify.com/show/5J0DqFvO2jVw8qZ0U9Qk3D" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream on Spotify">
+              🟢 Spotify
+            </a>
+            <a href="https://drilled.media/" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="Official Website">
+              🌐 drilled.media
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. THE CLIMATE POD -->
+      <div class="podcast-card" data-categories="diplomacy">
+        <div>
+          <div class="podcast-header">
+            <div>
+              <div class="podcast-tag-group">
+                <span class="podcast-cat-tag tag-diplomacy">Science &amp; Culture</span>
+              </div>
+              <div class="podcast-title">The Climate Pod</div>
+              <div class="podcast-hosts">
+                Hosted by brothers <strong>Ty Brock</strong> &amp; <strong>Dan Brock</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="podcast-body" style="margin-top: 10px;">
+            <p>
+              Wide-ranging conversations with prominent climate scientists, activists, authors, and politicians. Regular guests include Dr. Michael Mann, Dr. Katharine Hayhoe, Bill McKibben, and Al Gore.
+            </p>
+            <p>
+              Bridges peer-reviewed climate physics, climate attribution science (quantifying human blame in extreme weather events), and mainstream political discourse.
+            </p>
+          </div>
+        </div>
+
+        <div class="podcast-footer">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Physics, Attribution &amp; Policy</span>
+          <div class="listen-links">
+            <a href="https://open.spotify.com/show/1k5M3gO9eI4r4A1E8p4g5w" target="_blank" rel="noopener noreferrer" class="btn-listen btn-spotify" title="Stream on Spotify">
+              🟢 Spotify
+            </a>
+            <a href="https://theclimatepod.com/" target="_blank" rel="noopener noreferrer" class="btn-listen btn-web" title="Official Website">
+              🌐 Website
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-nav">
+        <a href="earth_heat_trap.html" class="footer-link">⚡ Earth's Heat Trap (Plain-English Intro)</a>
+        <span>·</span>
+        <a href="advanced.html" class="footer-link">🔬 1D Radiative Transfer Simulator</a>
+        <span>·</span>
+        <a href="we_only_have_one_pale_blue_dot.html" class="footer-link">🌍 We Only Have One Pale Blue Dot</a>
+        <span>·</span>
+        <a href="doughnut_economics.html" class="footer-link" style="color: #fbbf24;">🍩 Doughnut Economics</a>
+        <span>·</span>
+        <a href="climate_podcasts.html" class="footer-link" style="color: #c084fc;">🎙️ Climate Podcasts</a>
+        <span>·</span>
+        <a href="national_emergency_briefing.html" class="footer-link" style="color: #f43f5e;">🚨 National Emergency Briefing</a>
+        <span>·</span>
+        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--purple);">v1.4</span>
+      </div>
+      <div>
+        Curated audio directory connecting peer-reviewed climate science, UN diplomacy, UK national security, and community-led emergency mobilization.
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- INTERACTIVE FILTERING & SEARCH SCRIPT -->
+  <script>
+    (function() {
+      const pills = document.querySelectorAll(".filter-pill");
+      const searchInput = document.getElementById("podcastSearch");
+      const cards = document.querySelectorAll(".podcast-card");
+
+      let currentCategory = "all";
+      let currentQuery = "";
+
+      function filterCards() {
+        cards.forEach(card => {
+          const cats = card.dataset.categories ? card.dataset.categories.split(" ") : [];
+          const matchesCategory = currentCategory === "all" || cats.includes(currentCategory);
+
+          const cardText = card.textContent.toLowerCase();
+          const matchesQuery = !currentQuery || cardText.includes(currentQuery);
+
+          if (matchesCategory && matchesQuery) {
+            card.style.display = "flex";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      }
+
+      pills.forEach(pill => {
+        pill.addEventListener("click", () => {
+          pills.forEach(p => p.classList.remove("active"));
+          pill.classList.add("active");
+          currentCategory = pill.dataset.category;
+          filterCards();
+        });
+      });
+
+      if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+          currentQuery = e.target.value.trim().toLowerCase();
+          filterCards();
+        });
+      }
+    })();
+  </script>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.warn('PWA ServiceWorker registration failed:', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

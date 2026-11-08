@@ -60,6 +60,13 @@
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     },
     {
+      "name": "Climate Podcasts",
+      "short_name": "Podcasts",
+      "description": "Essential Audio on Adaptation, Mitigation & Science",
+      "url": "./climate_podcasts.html",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
       "name": "National Emergency Briefing",
       "short_name": "Emergency Briefing",
       "description": "Independent Climate & Nature Evidence (Westminster Central Hall)",
