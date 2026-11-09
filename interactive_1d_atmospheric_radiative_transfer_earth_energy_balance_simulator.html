@@ -2038,9 +2038,7 @@
           <div class="speech-pin" id="pin5" style="top: 27%; left: 22%;">5</div>
 
           <!-- Top-Right Action Button on IR Percolation Chart -->
-          <a href="what_can_i_do.html" class="speech-pin-action" id="btnWhatCanIDo" title="What can I do? Practical action guide &amp; interactive carbon calculator">
-            What can I do about it? ↗
-          </a>
+          <a href="what_can_i_do.html" class="speech-pin-action" id="btnWhatCanIDo">What can I do about it?</a>
 
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
@@ -7176,15 +7174,13 @@
           tpCardEl.style.display = "none";
           activeTpGroupKey = null;
         }
-        if (bubbleCard && bubbleCard.style.display === "block" && !bubbleCard.contains(e.target) && (!e.target.closest || (!e.target.closest(".speech-pin") && e.target.id !== "btnWhatCanIDo"))) {
+        if (bubbleCard && bubbleCard.style.display === "block" && !bubbleCard.contains(e.target) && (!e.target.closest || !e.target.closest(".speech-pin"))) {
           hideSnowballFootePopover();
           bubbleHoveringCard = false;
           isHoveringSpeechPin = false;
           cancelHideBubbleCard();
           bubbleCard.style.display = "none";
           document.querySelectorAll(".speech-pin").forEach(p => p.classList.remove("active"));
-          const btnWhat = document.getElementById("btnWhatCanIDo");
-          if (btnWhat) btnWhat.classList.remove("active");
         }
       });
 
@@ -8845,11 +8841,6 @@
           pinId: "pin5",
           title: "Step 5: More CO₂ Lifts the Escape Level and Heats Earth",
           text: "When we pump more CO₂ into the air, heat is blocked higher up where the air is much colder. Because colder air radiates less heat away, energy builds up below — warming the surface until balance is restored."
-        },
-        {
-          pinId: "btnWhatCanIDo",
-          title: "What can I do about it?",
-          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div style="margin-bottom: 8px;"><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Watch People's Emergency Briefing with Chris Packham. ↗</a></div><div><a href="what_can_i_do.html" style="color: var(--emerald); font-weight: 700; text-decoration: underline;">Open What Can I Do? Guide &amp; Carbon Calculator &rarr;</a></div>`
         }
       ];
 
@@ -8878,11 +8869,6 @@
           pinId: "pin5",
           title: "Step 5: Radiative Choking & Surface Warming",
           text: "Adding CO₂ forces this emission level higher into colder air. Because colder air radiates less power (σT⁴), outgoing thermal energy drops below solar inflow. Heat accumulates until surface warming restores equilibrium."
-        },
-        {
-          pinId: "btnWhatCanIDo",
-          title: "What can I do about it?",
-          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div style="margin-bottom: 8px;"><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Watch People's Emergency Briefing with Chris Packham. ↗</a></div><div><a href="what_can_i_do.html" style="color: var(--emerald); font-weight: 700; text-decoration: underline;">Open What Can I Do? Guide &amp; Carbon Calculator &rarr;</a></div>`
         }
       ];
 
@@ -8928,11 +8914,7 @@
           bubbleCard.style.transform = "none";
 
           let targetTop = 10;
-          if (pin && d.pinId === "btnWhatCanIDo") {
-            const pRect = pin.getBoundingClientRect();
-            const pinTop = pRect.top - cRect.top;
-            targetTop = pinTop + pRect.height + 8;
-          } else if (pin) {
+          if (pin) {
             const pRect = pin.getBoundingClientRect();
             const pinTop = pRect.top - cRect.top;
             if (pinTop < 80) {
@@ -8952,13 +8934,7 @@
           const cardH = bubbleCard.offsetHeight || 190;
 
           let targetLeft, targetTop;
-          if (d.pinId === "btnWhatCanIDo" && pin) {
-            const pRect = pin.getBoundingClientRect();
-            const pinLeft = pRect.left - cRect.left;
-            const pinTop = pRect.top - cRect.top;
-            targetLeft = Math.max(12, pinLeft + pRect.width - cardW);
-            targetTop = pinTop + pRect.height + 8;
-          } else if (!pin) {
+          if (!pin) {
             targetLeft = Math.max(12, Math.min(cRect.width - cardW - 12, (cRect.width - cardW) / 2));
             targetTop = 50;
           } else {
@@ -9103,7 +9079,7 @@
         if (bubbleCard && bubbleCard.style.display === "block") {
           const bRect = bubbleCard.getBoundingClientRect();
           const inBubble = e.clientX >= bRect.left && e.clientX <= bRect.right && e.clientY >= bRect.top && e.clientY <= bRect.bottom;
-          const onPin = !!(e.target && ((e.target.closest && e.target.closest(".speech-pin")) || e.target.id === "btnWhatCanIDo"));
+          const onPin = !!(e.target && e.target.closest && e.target.closest(".speech-pin"));
           const inSf = (sfPopoverEl && sfPopoverEl.style.display === "block") ? (e.clientX >= sfPopoverEl.getBoundingClientRect().left && e.clientX <= sfPopoverEl.getBoundingClientRect().right && e.clientY >= sfPopoverEl.getBoundingClientRect().top && e.clientY <= sfPopoverEl.getBoundingClientRect().bottom) : false;
           if (inBubble || inSf) {
             bubbleHoveringCard = true;
