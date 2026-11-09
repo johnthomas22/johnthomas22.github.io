@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Can I Do? — High-Impact Personal, Household &amp; Food Carbon Action</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%2310b981%22/><circle cx=%2250%22 cy=%2250%22 r=%2238%22 fill=%22%23070d17%22/><path d=%22M32 68 C32 45, 68 45, 68 32 C68 55, 32 55, 32 68 Z%22 fill=%22none%22 stroke=%22%2334d399%22 stroke-width=%225%22/><circle cx=%2250%22 cy=%2232%22 r=%227%22 fill=%22%2338bdf8%22/><circle cx=%2236%22 cy=%2264%22 r=%225%22 fill=%22%2310b981%22/><circle cx=%2264%22 cy=%2264%22 r=%225%22 fill=%22%2310b981%22/></svg>">
+
+  <meta name="copyright" content="© 2026 Earth Energy Balance Simulator Project. Licensed under CC BY-SA 4.0.">
+  <meta name="authorship-verification" content="sha256:2308c58eff8d7bacfcbfcb553eb4985f25abf8dc1a55234c163a31a5b243d02f">
+
+  <!-- Progressive Web App (PWA) Meta & Manifest -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#070d17">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ClimateSim">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+  <style>
+    :root {
+      --bg-dark: #070d17;
+      --panel-bg: #0d1527;
+      --card-bg: #121d33;
+      --card-subtle: #17243f;
+      --border: #1e293b;
+      --border-focus: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --cyan: #00e5ff;
+      --blue: #38bdf8;
+      --emerald: #10b981;
+      --emerald-light: #34d399;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --purple: #c084fc;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.55;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* TOP HEADER & PODCAST / NEB BANNER */
+    .header-bar {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(15, 23, 42, 0.95));
+      border: 1.5px solid rgba(16, 185, 129, 0.35);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: var(--emerald-light);
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-return-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1e293b;
+      border: 1px solid var(--border);
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-return-home:hover {
+      background: #334155;
+      color: #fff;
+    }
+
+    h1.page-title {
+      font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    h1.page-title span {
+      color: var(--emerald-light);
+      background: linear-gradient(135deg, #34d399, #00e5ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* MANDATED PROMINENT HEADER CALLOUTS */
+    .headline-callout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .callout-card-pod {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid rgba(192, 132, 252, 0.4);
+      border-radius: 9px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .callout-card-neb {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid rgba(244, 63, 94, 0.4);
+      border-radius: 9px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .callout-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 0.92rem;
+    }
+
+    .btn-listen-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(192, 132, 252, 0.15);
+      border: 1px solid rgba(192, 132, 252, 0.4);
+      color: #e9d5ff;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-listen-mini:hover {
+      background: var(--purple);
+      color: #000;
+    }
+
+    .btn-neb-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(244, 63, 94, 0.18);
+      border: 1px solid rgba(244, 63, 94, 0.45);
+      color: #fda4af;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-neb-mini:hover {
+      background: var(--rose);
+      color: #fff;
+    }
+
+    /* REALITY CHECK & COMPASSION BANNER */
+    .compassion-banner {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--amber);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+    .compassion-banner strong {
+      color: var(--amber);
+    }
+
+    /* INTERACTIVE CALCULATOR SECTION */
+    .calc-wrapper {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .calc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+    }
+
+    .calc-title-box h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .calc-title-box p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* PRESETS ROW */
+    .preset-pill-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .preset-pill {
+      background: #17243f;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .preset-pill:hover {
+      background: #23355c;
+      color: #fff;
+    }
+    .preset-pill.active {
+      background: var(--emerald);
+      color: #042f2e;
+      border-color: var(--emerald-light);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    }
+
+    /* DASHBOARD TOP SUMMARY */
+    .dash-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .dash-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dash-card-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.4px;
+    }
+    .dash-card-val {
+      font-size: 1.55rem;
+      font-weight: 900;
+      font-family: var(--font-mono);
+      color: #fff;
+    }
+    .dash-card-sub {
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+
+    /* PROGRESS VISUALIZER BAR */
+    .target-bar-wrap {
+      background: #090e18;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .target-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #cbd5e1;
+    }
+    .target-track {
+      position: relative;
+      height: 22px;
+      background: #17243f;
+      border-radius: 11px;
+      overflow: hidden;
+      display: flex;
+    }
+    .track-seg-home { background: #38bdf8; transition: width 0.25s ease; }
+    .track-seg-transport { background: #00e5ff; transition: width 0.25s ease; }
+    .track-seg-food { background: #fbbf24; transition: width 0.25s ease; }
+    .track-seg-society { background: #a855f7; width: 15%; } /* Shared UK public services baseline (~1.5t / 10t max scale) */
+
+    .target-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.72rem;
+    }
+    .target-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    /* SLIDERS 3-COLUMN GRID */
+    .slider-columns-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+    }
+
+    .pillar-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+    .pillar-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pillar-badge {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .dial-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .dial-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+    .dial-label {
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .dial-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.76rem;
+      color: var(--emerald-light);
+    }
+    select.dial-select, input[type="range"] {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: #f1f5f9;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+    }
+    select.dial-select:focus {
+      border-color: var(--emerald);
+    }
+    .dial-hint {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    /* DETAILED KNOWLEDGE CARDS */
+    .knowledge-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .knowledge-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .knowledge-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 10px;
+    }
+    .knowledge-header h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .knowledge-card p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    .knowledge-card strong {
+      color: #fff;
+    }
+
+    .comparison-box-food {
+      background: rgba(245, 158, 11, 0.06);
+      border: 1.5px solid rgba(245, 158, 11, 0.35);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 8px 0;
+    }
+
+    .food-bars-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .food-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+    }
+    .food-bar-label {
+      width: 180px;
+      flex-shrink: 0;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .food-bar-track {
+      flex: 1;
+      background: #0f172a;
+      height: 18px;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .food-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding-right: 6px;
+      justify-content: flex-end;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #000;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .footer-nav {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer-link {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .footer-link:hover {
+      text-decoration: underline;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- TOP HEADER -->
+    <header class="header-bar">
+      <div class="header-top-row">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="badge-action">🌱 High-Impact Climate Action</span>
+          <span style="font-size: 0.74rem; font-family: var(--font-mono); font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 7px; border-radius: 4px;">v1.7</span>
+        </div>
+        <a href="earth_heat_trap.html" class="btn-return-home">← Return to Earth's Heat Trap</a>
+      </div>
+
+      <div>
+        <h1 class="page-title">WHAT CAN <span>I DO?</span></h1>
+        <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 4px;">
+          Personal agency without guilt or purism: the biggest levers in our homes, transport, and food—backed by empirical physics and carbon data.
+        </p>
+      </div>
+
+      <!-- MANDATED HEADLINE CALLOUTS -->
+      <div class="headline-callout-grid">
+        <div class="callout-card-pod">
+          <div class="callout-header" style="color: #c084fc;">
+            <span>🎧</span> Listen to the Sustainable(ish) Podcast Episode
+          </div>
+          <div style="font-size: 0.82rem; color: #e2e8f0;">
+            <strong>'7 acts to save the world with Hugh Montgomery'</strong>
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
+            Hosted by Jen Gale with <strong>Prof. Hugh Montgomery OBE</strong> (Professor of Intensive Care Medicine at UCL; Co-chair, The Lancet Countdown on Health and Climate Change). A decisive clinical masterclass linking human physiology to 7 transformative levers.
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
+            <a href="https://open.spotify.com/show/7hl6HO12o9WdcPlDrHZ5oY" target="_blank" rel="noopener noreferrer" class="btn-listen-mini">
+              🟢 Spotify Show ↗
+            </a>
+            <a href="https://podcasts.apple.com/gb/podcast/sustainable-ish/id1383805328" target="_blank" rel="noopener noreferrer" class="btn-listen-mini">
+              🎙️ Apple Podcasts ↗
+            </a>
+            <a href="climate_podcasts.html" class="btn-listen-mini" style="border-color: rgba(56,189,248,0.4); color: #7dd3fc;">
+              📻 Full Podcast Directory →
+            </a>
+          </div>
+        </div>
+
+        <div class="callout-card-neb">
+          <div class="callout-header" style="color: var(--rose);">
+            <span>🚨</span> Watch People's Emergency Briefing
+          </div>
+          <div style="font-size: 0.82rem; color: #e2e8f0;">
+            <strong>With Chris Packham CBE, Dr. Hugh Montgomery &amp; Leading Scientists</strong>
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
+            The historic Westminster Central Hall briefing that translates global thermodynamic vital signs into urgent political, legal, and citizen duty.
+          </div>
+          <div style="margin-top: 6px;">
+            <a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" class="btn-neb-mini">
+              Watch People's Emergency Briefing with Chris Packham ↗
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPASSION & TRAVEL REALISM CALLOUT -->
+      <div class="compassion-banner">
+        <strong>A Note on Systemic Realism &amp; Family Ties:</strong>
+        For some journeys, currently there are no practical alternatives. If you have loved ones on the other side of the planet, no one can expect you to sit on a container ship for six weeks. Climate action is about systemic realism, not performative self-punishment. Visiting family in Australia, New Zealand, or the Americas is deeply human. The focus belongs on cutting frivolous short-haul flights where fast trains exist, electrifying everyday heating and driving, and adopting plant-rich eating.
+      </div>
+    </header>
+
+    <!-- INTERACTIVE PERSONAL CARBON CALCULATOR -->
+    <section class="calc-wrapper">
+      <div class="calc-header">
+        <div class="calc-title-box">
+          <h2><span>⚖️</span> Personal Carbon Dial &amp; Net-Zero Pathfinder</h2>
+          <p>Adjust your household, mobility, and diet choices to see how close you can get to the Paris 1.5°C target (~2.0 tonnes/year).</p>
+        </div>
+        <div class="preset-pill-group">
+          <button class="preset-pill active" id="btnPresetAverage" type="button">🇬🇧 Average UK Resident (9.5 t)</button>
+          <button class="preset-pill" id="btnPresetQuickWins" type="button">⚡ Quick Wins (5.8 t)</button>
+          <button class="preset-pill" id="btnPresetSuburban" type="button">🌿 Suburban Eco (3.3 t)</button>
+          <button class="preset-pill" id="btnPresetTrailblazer" type="button">🎯 Low-Carbon Pioneer (1.9 t)</button>
+        </div>
+      </div>
+
+      <!-- DASHBOARD SUMMARY CARDS -->
+      <div class="dash-summary">
+        <div class="dash-card">
+          <span class="dash-card-label">Your Estimated Footprint</span>
+          <div class="dash-card-val" id="valTotalFootprint" style="color: var(--amber);">9.5 <span style="font-size: 0.9rem; color: var(--text-muted);">t CO₂e/yr</span></div>
+          <span class="dash-card-sub" id="subTotalComparison">Typical British consumption footprint</span>
+        </div>
+        <div class="dash-card">
+          <span class="dash-card-label">Reduction From UK Baseline</span>
+          <div class="dash-card-val" id="valReductionPct" style="color: #38bdf8;">0% <span style="font-size: 0.9rem; color: var(--text-muted);">saved</span></div>
+          <span class="dash-card-sub" id="subReductionTonnes">0.0 tonnes CO₂e eliminated</span>
+        </div>
+        <div class="dash-card">
+          <span class="dash-card-label">Paris 1.5°C Budget Status</span>
+          <div class="dash-card-val" id="valTargetStatus" style="color: var(--rose); font-size: 1.3rem;">+7.5 t <span style="font-size: 0.8rem; color: var(--text-muted);">above budget</span></div>
+          <span class="dash-card-sub">2030 Global Target: ~2.0 tonnes/person</span>
+        </div>
+        <div class="dash-card">
+          <span class="dash-card-label">Shared Society Baseline</span>
+          <div class="dash-card-val" style="color: var(--purple);">1.5 <span style="font-size: 0.9rem; color: var(--text-muted);">t CO₂e</span></div>
+          <span class="dash-card-sub">NHS, schools, water &amp; roads (public policy required)</span>
+        </div>
+      </div>
+
+      <!-- STACKED PROGRESS TRACK -->
+      <div class="target-bar-wrap">
+        <div class="target-bar-labels">
+          <span>Carbon Footprint Breakdown vs. Paris Budget</span>
+          <span id="txtBarTotal">9.5 tonnes / 10.0t max scale</span>
+        </div>
+        <div class="target-track">
+          <div class="track-seg-home" id="barHome" style="width: 27%;"></div>
+          <div class="track-seg-transport" id="barTransport" style="width: 32%;"></div>
+          <div class="track-seg-food" id="barFood" style="width: 26%;"></div>
+          <div class="track-seg-society" title="Shared Societal Baseline (NHS, public services): 1.5 tonnes" style="width: 15%;"></div>
+        </div>
+        <div class="target-legend">
+          <div class="target-legend-item">
+            <span class="legend-dot" style="background: #38bdf8;"></span>
+            <span>Home Heating &amp; Electricity: <strong id="lblLegHome">2.7 t</strong></span>
+          </div>
+          <div class="target-legend-item">
+            <span class="legend-dot" style="background: #00e5ff;"></span>
+            <span>Transport &amp; Flights: <strong id="lblLegTransport">3.2 t</strong></span>
+          </div>
+          <div class="target-legend-item">
+            <span class="legend-dot" style="background: #fbbf24;"></span>
+            <span>Food &amp; Diet: <strong id="lblLegFood">2.1 t</strong></span>
+          </div>
+          <div class="target-legend-item">
+            <span class="legend-dot" style="background: #a855f7;"></span>
+            <span>Public Services Baseline: <strong>1.5 t</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDERS AND DIALS -->
+      <div class="slider-columns-grid">
+
+        <!-- PILLAR 1: HOME -->
+        <div class="pillar-box">
+          <div class="pillar-header">
+            <div class="pillar-title"><span>🏠</span> 1. Home &amp; Energy</div>
+            <span class="pillar-badge" id="badgePillarHome" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">2.7 t CO₂e</span>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Space &amp; Water Heating:</span>
+              <span class="dial-val" id="lblDialHeating">Gas Boiler</span>
+            </div>
+            <select class="dial-select" id="selectHeating">
+              <option value="gas-standard" selected>Standard Gas Boiler (85% eff)</option>
+              <option value="gas-condensing">Modern Condensing Gas Boiler (92% eff)</option>
+              <option value="oil-lpg">Oil / LPG Boiler (High Carbon)</option>
+              <option value="heat-pump-grid">Air-Source Heat Pump (Grid Mix, COP 3.5)</option>
+              <option value="heat-pump-green">Heat Pump + 100% Green Renewable Tariff</option>
+            </select>
+            <span class="dial-hint">Heat pumps move heat with 350% efficiency instead of burning methane.</span>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Home Insulation Level:</span>
+              <span class="dial-val" id="lblDialInsulation">Moderate (Typical Cavity)</span>
+            </div>
+            <select class="dial-select" id="selectInsulation">
+              <option value="poor">Poor / Draughty Solid Walls (+0.8 t)</option>
+              <option value="moderate" selected>Typical Cavity Wall &amp; 100mm Loft</option>
+              <option value="high">Super-Insulated (300mm Loft, Double Glazed, Draught-Proofed)</option>
+            </select>
+            <span class="dial-hint">Insulation slashes heat loss by 40–60%, lowering heat pump flow temps.</span>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Cooking Appliance:</span>
+              <span class="dial-val" id="lblDialCooking">Gas Hob</span>
+            </div>
+            <select class="dial-select" id="selectCooking">
+              <option value="gas" selected>Gas Hob &amp; Oven (Fossil Methane)</option>
+              <option value="induction">Electric Induction Hob (No Indoor NO₂)</option>
+            </select>
+            <span class="dial-hint">Induction is 85% efficient and stops indoor nitrogen dioxide pollution.</span>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Electricity Source:</span>
+              <span class="dial-val" id="lblDialElectricity">UK Grid Standard</span>
+            </div>
+            <select class="dial-select" id="selectElectricity">
+              <option value="grid" selected>Standard National Grid (~140 g CO₂/kWh)</option>
+              <option value="green">100% Certified Green Tariff / Rooftop Solar PV</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- PILLAR 2: TRANSPORT -->
+        <div class="pillar-box">
+          <div class="pillar-header">
+            <div class="pillar-title"><span>🚗</span> 2. Transport &amp; Travel</div>
+            <span class="pillar-badge" id="badgePillarTransport" style="background: rgba(0, 229, 255, 0.15); color: #00e5ff;">3.2 t CO₂e</span>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Car Type / Primary Commute:</span>
+              <span class="dial-val" id="lblDialCarType">Petrol Car</span>
+            </div>
+            <select class="dial-select" id="selectCarType">
+              <option value="suv">Large Petrol / Diesel SUV (High Fuel)</option>
+              <option value="petrol" selected>Average Petrol / Diesel Hatchback</option>
+              <option value="hybrid">Efficient Hybrid</option>
+              <option value="ev">Battery Electric Vehicle (EV)</option>
+              <option value="car-free">Car-Free (Walk, Cycle &amp; Public Transit)</option>
+            </select>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Annual Car Driving Mileage:</span>
+              <span class="dial-val" id="lblDialMiles">7,500 miles/yr</span>
+            </div>
+            <input type="range" id="sliderMiles" min="0" max="20000" step="500" value="7500">
+            <span class="dial-hint">UK average is ~7,400 miles/year per vehicle.</span>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Short-Haul Flights / Year:</span>
+              <span class="dial-val" id="lblDialShortFlights">2 Return Flights</span>
+            </div>
+            <input type="range" id="sliderShortFlights" min="0" max="8" step="1" value="2">
+            <span class="dial-hint">UK/European flights (~0.35 t CO₂e per return flight with contrails).</span>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Long-Haul Flights / Year:</span>
+              <span class="dial-val" id="lblDialLongFlights">0 Return Flights</span>
+            </div>
+            <input type="range" id="sliderLongFlights" min="0" max="4" step="1" value="0">
+            <span class="dial-hint">Transatlantic or intercontinental (~2.5 t CO₂e per return flight).</span>
+          </div>
+        </div>
+
+        <!-- PILLAR 3: FOOD -->
+        <div class="pillar-box">
+          <div class="pillar-header">
+            <div class="pillar-title"><span>🥗</span> 3. Food &amp; Diet</div>
+            <span class="pillar-badge" id="badgePillarFood" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24;">2.1 t CO₂e</span>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Dietary Pattern:</span>
+              <span class="dial-val" id="lblDialDiet">Average UK Diet</span>
+            </div>
+            <select class="dial-select" id="selectDiet">
+              <option value="heavy-meat">Heavy Meat Eater (Beef/Lamb Daily)</option>
+              <option value="average" selected>Average UK Diet (Meat 3–4× per week)</option>
+              <option value="flexitarian">Low Meat / Flexitarian (Beef &lt;1× per month)</option>
+              <option value="vegetarian">Vegetarian (Dairy &amp; Eggs, No Meat)</option>
+              <option value="vegan">100% Plant-Based (Vegan)</option>
+            </select>
+            <span class="dial-hint">Ruminant meat (beef &amp; lamb) emits 10–50× more than pulses or grains.</span>
+          </div>
+
+          <div class="dial-group">
+            <div class="dial-top-row">
+              <span class="dial-label">Food Waste &amp; Seasonality:</span>
+              <span class="dial-val" id="lblDialWaste">Typical Waste (~25%)</span>
+            </div>
+            <select class="dial-select" id="selectWaste">
+              <option value="typical" selected>Typical UK Household (~25% food discarded)</option>
+              <option value="low-waste">Low Waste / Mindful Meal Planning (-0.3 t)</option>
+            </select>
+            <span class="dial-hint">UK households discard 4.7 million tonnes of edible food each year.</span>
+          </div>
+
+          <div class="dial-group" style="background: rgba(0,0,0,0.25); padding: 8px 10px; border-radius: 6px;">
+            <div style="font-size: 0.76rem; font-weight: 700; color: var(--emerald-light); margin-bottom: 3px;">
+              💡 The 10,000-Mile Fruit Rule:
+            </div>
+            <p style="font-size: 0.72rem; color: #cbd5e1; margin: 0; line-height: 1.35;">
+              Transport accounts for only <strong>~5% of food emissions</strong>. Even fruit flown 10,000 miles produces less carbon than beef from a farm down the road!
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- IN-DEPTH EXPLAINER CARDS -->
+    <section class="knowledge-section">
+
+      <!-- CARD 1: HOME -->
+      <article class="knowledge-card">
+        <div class="knowledge-header">
+          <span style="font-size: 1.5rem;">🏠</span>
+          <div>
+            <h3>Home Decarbonisation: Insulation, Heat Pumps &amp; Induction Cooking</h3>
+            <span style="font-size: 0.76rem; color: #38bdf8;">Space heating accounts for over 60% of British household energy consumption</span>
+          </div>
+        </div>
+
+        <p>
+          In the United Kingdom, domestic buildings are responsible for roughly <strong>17% of total greenhouse gas emissions</strong>, primarily from burning fossil natural gas in over 24 million boilers. Decarbonising a home follows a strict physical hierarchy:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 6px 0;">
+          <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 12px 14px;">
+            <strong style="color: #38bdf8; font-size: 0.88rem; display: block; margin-bottom: 4px;">1. Fabric First: Insulation</strong>
+            <p style="font-size: 0.8rem; margin: 0; color: #cbd5e1;">
+              Loft insulation (to 270–300mm), cavity wall insulation, and draught-proofing reduce heat loss by <strong>30% to 50%</strong>. This lowers the heat output required to keep rooms at 20°C, meaning a replacement heat pump can run at low flow temperatures (35°C–45°C), where its thermodynamic efficiency is highest.
+            </p>
+          </div>
+
+          <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 12px 14px;">
+            <strong style="color: var(--emerald-light); font-size: 0.88rem; display: block; margin-bottom: 4px;">2. Heat Pumps (COP 3.0 to 4.0)</strong>
+            <p style="font-size: 0.8rem; margin: 0; color: #cbd5e1;">
+              Gas boilers burn methane at ~85%–92% efficiency. A heat pump does not manufacture heat from fuel; it uses a closed refrigeration cycle to <em>extract and amplify ambient environmental heat</em> from outside air or the ground. For every 1.0 kWh of electricity consumed, it delivers <strong>3.0 to 4.0 kWh of heat into your home</strong>. On Great Britain's coal-free grid, this slashes heating carbon by >80%.
+            </p>
+          </div>
+
+          <div style="background: rgba(192, 132, 252, 0.06); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 8px; padding: 12px 14px;">
+            <strong style="color: var(--purple); font-size: 0.88rem; display: block; margin-bottom: 4px;">3. Induction Cooking &amp; Clean Air</strong>
+            <p style="font-size: 0.8rem; margin: 0; color: #cbd5e1;">
+              Gas hobs vent nitrogen dioxide (NO₂), carbon monoxide, benzene, and particulate matter directly into kitchen air, elevating childhood asthma risks by ~42%. Induction hobs use electromagnetic coils to heat the iron base of cookware directly with <strong>85%–90% thermal efficiency</strong> (vs ~35% for an open gas flame), eliminating indoor fossil fuel combustion entirely.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 2: TRANSPORT -->
+      <article class="knowledge-card">
+        <div class="knowledge-header">
+          <span style="font-size: 1.5rem;">🚆</span>
+          <div>
+            <h3>Transport: Electric Vehicles, Rail, and Compassionate Realism on Flights</h3>
+            <span style="font-size: 0.76rem; color: #00e5ff;">Surface transport is the single largest greenhouse gas emitting sector in the UK (~24%)</span>
+          </div>
+        </div>
+
+        <p>
+          The physics of moving human beings and cargo is dictated by propulsion efficiency and rolling resistance:
+        </p>
+
+        <ul style="margin-left: 20px; font-size: 0.84rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 8px;">
+          <li>
+            <strong>Electric Vehicles vs. Internal Combustion Engines (ICE):</strong> A petrol engine is essentially a rolling space heater; roughly <strong>70% to 75% of the fuel's chemical energy is wasted</strong> as friction and hot exhaust gas. An electric motor converts over <strong>90% of battery energy into wheel torque</strong>. Even when accounting for battery manufacturing in overseas factories, life-cycle studies confirm an EV in the UK reaches full carbon parity within ~12,000 miles of driving and produces ~70% fewer lifetime emissions.
+          </li>
+          <li>
+            <strong>Trains and Buses (Modal Shift):</strong> Steel wheels on steel rails reduce rolling friction by an order of magnitude. An electrified train journey produces <strong>~15 to 30 g CO₂e per passenger-kilometre</strong>, compared to ~170 to 210 g for a solo petrol car driver.
+          </li>
+          <li>
+            <strong>Aviation &amp; High-Altitude Contrail Warming:</strong> Burning kerosene at 35,000 feet causes disproportionate radiative forcing. In addition to CO₂, jet engines emit nitrogen oxides (which alter ozone and methane) and water vapour that forms linear cirrus contrails, trapping outgoing thermal infrared radiation. Aviation's total warming impact is approximately <strong>1.7× to 2.0× its pure CO₂ emissions</strong>.
+          </li>
+          <li>
+            <strong>The Realistic Compassion Boundary (Long-Haul Family Ties):</strong> While short-haul domestic flights (e.g. London to Edinburgh or Manchester) can readily be replaced by electric rail, <strong>intercontinental travel has no current low-carbon alternative</strong>. If your family lives in Melbourne, Auckland, Toronto, or Mumbai, nobody expects you to spend six weeks on a cargo vessel or sever human bonds. Eliminating routine regional flights, driving an EV or cycling locally, and reducing beef consumption easily compensates for an occasional family reunion flight.
+          </li>
+        </ul>
+      </article>
+
+      <!-- CARD 3: FOOD -->
+      <article class="knowledge-card">
+        <div class="knowledge-header">
+          <span style="font-size: 1.5rem;">🥑</span>
+          <div>
+            <h3>Food: Buying Local, Eating Less Meat &amp; The 10,000-Mile Fruit Reality</h3>
+            <span style="font-size: 0.76rem; color: #fbbf24;">Why what you eat matters 10× to 50× more than where it was grown</span>
+          </div>
+        </div>
+
+        <p>
+          A common intuition is that eating local food is the best way to cut carbon. While supporting local farmers is fantastic for community resilience and fresh produce, <strong>food transport accounts for only ~5% to 6% of food's total carbon footprint</strong> (Poore &amp; Nemecek, <em>Science</em> 2018). The emissions released during food production—enteric methane, deforestation, fertilisers, and manure—dominate by an order of magnitude.
+        </p>
+
+        <!-- THE 10,000 MILE FRUIT COMPARISON -->
+        <div class="comparison-box-food">
+          <strong style="color: var(--amber); font-size: 0.95rem;">🔬 The 10,000-Mile Fruit vs. Local Farm Beef Fact:</strong>
+          <p style="margin: 6px 0; font-size: 0.84rem;">
+            Even if a punnet of fresh berries or mangoes is <strong>flown 10,000 miles by cargo aeroplane</strong>, its carbon footprint (~15 to 20 kg CO₂e per kg) is <strong>far lower than beef produced on a British farm right next door (60 to 100 kg CO₂e per kg)</strong>!
+          </p>
+          <p style="margin: 6px 0; font-size: 0.84rem;">
+            And if fruit travels 10,000 miles by <strong>refrigerated container sea freight (such as bananas or apples from South America)</strong>, shipping emissions are tiny (~0.1 to 0.3 kg CO₂e/kg), meaning its total carbon footprint is <strong>less than 1% that of local beef</strong>.
+          </p>
+
+          <div class="food-bars-wrap">
+            <div class="food-bar-row">
+              <span class="food-bar-label">🥩 Beef (Local Grass-fed):</span>
+              <div class="food-bar-track">
+                <div class="food-bar-fill" style="width: 100%; background: #f43f5e;">~80–100 kg CO₂e/kg</div>
+              </div>
+            </div>
+            <div class="food-bar-row">
+              <span class="food-bar-label">🐑 Lamb (UK Pasture):</span>
+              <div class="food-bar-track">
+                <div class="food-bar-fill" style="width: 40%; background: #fb7185;">~35–40 kg CO₂e/kg</div>
+              </div>
+            </div>
+            <div class="food-bar-row">
+              <span class="food-bar-label">✈️ Fruit Flown 10,000 Miles:</span>
+              <div class="food-bar-track">
+                <div class="food-bar-fill" style="width: 18%; background: #f59e0b;">~15–18 kg CO₂e/kg</div>
+              </div>
+            </div>
+            <div class="food-bar-row">
+              <span class="food-bar-label">🍗 Poultry / Eggs:</span>
+              <div class="food-bar-track">
+                <div class="food-bar-fill" style="width: 8%; background: #38bdf8;">~5–7 kg CO₂e/kg</div>
+              </div>
+            </div>
+            <div class="food-bar-row">
+              <span class="food-bar-label">🚢 Fruit Shipped 10,000 Miles:</span>
+              <div class="food-bar-track">
+                <div class="food-bar-fill" style="width: 1.5%; background: #10b981; min-width: 25px;">0.4 kg</div>
+              </div>
+            </div>
+            <div class="food-bar-row">
+              <span class="food-bar-label">🫘 Beans, Peas &amp; Lentils:</span>
+              <div class="food-bar-track">
+                <div class="food-bar-fill" style="width: 1.5%; background: #10b981; min-width: 25px;">0.5 kg</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p><strong>Why is Meat so Carbon-Intensive?</strong></p>
+        <ul style="margin-left: 20px; font-size: 0.84rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+          <li>
+            <strong>Trophic Energy Losses (10:1 conversion):</strong> Animals burn calories moving, breathing, and maintaining body heat. It takes ~7 to 10 kg of plant grains or forage to produce 1 kg of beef. Eating plant proteins directly cuts out the 90% thermodynamic middleman.
+          </li>
+          <li>
+            <strong>Enteric Fermentation (Methane):</strong> Cattle and sheep are ruminants. Microbes in their rumen break down cellulose, emitting methane (CH₄)—a greenhouse gas with 84× the warming potency of CO₂ over a 20-year timescale.
+          </li>
+          <li>
+            <strong>Land Use Opportunity Cost:</strong> Livestock uses <strong>77% of all agricultural land worldwide</strong>, but produces only <strong>18% of global calories and 37% of protein</strong>. Swapping to plant-rich meals frees up vast land areas for peatland rewetting, commercial timber, and woodland carbon capture.
+          </li>
+        </ul>
+      </article>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-nav">
+        <a href="earth_heat_trap.html" class="footer-link">⚡ Earth's Heat Trap (Plain-English Intro)</a>
+        <span>·</span>
+        <a href="advanced.html" class="footer-link">🔬 1D Radiative Transfer Simulator</a>
+        <span>·</span>
+        <a href="we_only_have_one_pale_blue_dot.html" class="footer-link">🌍 We Only Have One Pale Blue Dot</a>
+        <span>·</span>
+        <a href="doughnut_economics.html" class="footer-link" style="color: #fbbf24;">🍩 Doughnut Economics</a>
+        <span>·</span>
+        <a href="climate_podcasts.html" class="footer-link" style="color: #c084fc;">🎙️ Climate Podcasts</a>
+        <span>·</span>
+        <a href="national_emergency_briefing.html" class="footer-link" style="color: #f43f5e;">🚨 National Emergency Briefing</a>
+        <span>·</span>
+        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--emerald-light);">v1.7</span>
+      </div>
+      <div>
+        Empirical carbon factors derived from UK Government Conversion Factors (DESNZ 2024), Poore &amp; Nemecek (Science 2018), and Our World in Data.
+      </div>
+      <div style="margin-top: 6px; font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
+        <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
+        <span>&middot;</span>
+        <span>Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer" style="color: #94a3b8; text-decoration: underline;">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a></span>
+        <span>&middot;</span>
+        <span title="Cryptographic Authorship Stamp (SHA-256)">SHA-256: <code style="font-family: var(--font-mono); color: var(--emerald-light);">2308c58e...d02f</code></span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- INTERACTIVE CARBON CALCULATOR LOGIC -->
+  <script>
+    (function() {
+      "use strict";
+
+      // 1. DOM Elements
+      const selectHeating = document.getElementById("selectHeating");
+      const selectInsulation = document.getElementById("selectInsulation");
+      const selectCooking = document.getElementById("selectCooking");
+      const selectElectricity = document.getElementById("selectElectricity");
+
+      const selectCarType = document.getElementById("selectCarType");
+      const sliderMiles = document.getElementById("sliderMiles");
+      const sliderShortFlights = document.getElementById("sliderShortFlights");
+      const sliderLongFlights = document.getElementById("sliderLongFlights");
+
+      const selectDiet = document.getElementById("selectDiet");
+      const selectWaste = document.getElementById("selectWaste");
+
+      // Output Elements
+      const valTotalFootprint = document.getElementById("valTotalFootprint");
+      const subTotalComparison = document.getElementById("subTotalComparison");
+      const valReductionPct = document.getElementById("valReductionPct");
+      const subReductionTonnes = document.getElementById("subReductionTonnes");
+      const valTargetStatus = document.getElementById("valTargetStatus");
+
+      const barHome = document.getElementById("barHome");
+      const barTransport = document.getElementById("barTransport");
+      const barFood = document.getElementById("barFood");
+      const txtBarTotal = document.getElementById("txtBarTotal");
+
+      const lblLegHome = document.getElementById("lblLegHome");
+      const lblLegTransport = document.getElementById("lblLegTransport");
+      const lblLegFood = document.getElementById("lblLegFood");
+
+      const badgePillarHome = document.getElementById("badgePillarHome");
+      const badgePillarTransport = document.getElementById("badgePillarTransport");
+      const badgePillarFood = document.getElementById("badgePillarFood");
+
+      const lblDialHeating = document.getElementById("lblDialHeating");
+      const lblDialInsulation = document.getElementById("lblDialInsulation");
+      const lblDialCooking = document.getElementById("lblDialCooking");
+      const lblDialElectricity = document.getElementById("lblDialElectricity");
+
+      const lblDialCarType = document.getElementById("lblDialCarType");
+      const lblDialMiles = document.getElementById("lblDialMiles");
+      const lblDialShortFlights = document.getElementById("lblDialShortFlights");
+      const lblDialLongFlights = document.getElementById("lblDialLongFlights");
+
+      const lblDialDiet = document.getElementById("lblDialDiet");
+      const lblDialWaste = document.getElementById("lblDialWaste");
+
+      // Presets
+      const btnPresetAverage = document.getElementById("btnPresetAverage");
+      const btnPresetQuickWins = document.getElementById("btnPresetQuickWins");
+      const btnPresetSuburban = document.getElementById("btnPresetSuburban");
+      const btnPresetTrailblazer = document.getElementById("btnPresetTrailblazer");
+
+      const UK_BASELINE_TOTAL = 9.5; // tonnes CO2e
+      const SOCIETAL_BASELINE = 1.5; // tonnes CO2e for NHS, roads, public services
+      const PARIS_TARGET = 2.0; // tonnes CO2e 2030 budget
+
+      function updateCalculator() {
+        // --- 1. HOME EMISSIONS ---
+        let homeEmissions = 0;
+
+        // Space & water heating
+        const heatVal = selectHeating.value;
+        if (heatVal === "oil-lpg") {
+          homeEmissions += 2.8;
+          lblDialHeating.textContent = "Oil / LPG";
+        } else if (heatVal === "gas-standard") {
+          homeEmissions += 2.1;
+          lblDialHeating.textContent = "Standard Gas Boiler";
+        } else if (heatVal === "gas-condensing") {
+          homeEmissions += 1.7;
+          lblDialHeating.textContent = "Condensing Gas";
+        } else if (heatVal === "heat-pump-grid") {
+          homeEmissions += 0.45;
+          lblDialHeating.textContent = "Heat Pump (Grid)";
+        } else if (heatVal === "heat-pump-green") {
+          homeEmissions += 0.05;
+          lblDialHeating.textContent = "Heat Pump (Green)";
+        }
+
+        // Insulation modifier
+        const insVal = selectInsulation.value;
+        if (insVal === "poor") {
+          homeEmissions += 0.8;
+          lblDialInsulation.textContent = "Poor (+0.8 t)";
+        } else if (insVal === "moderate") {
+          lblDialInsulation.textContent = "Typical Cavity";
+        } else if (insVal === "high") {
+          homeEmissions = Math.max(0.1, homeEmissions * 0.65);
+          lblDialInsulation.textContent = "Super-Insulated (-35%)";
+        }
+
+        // Cooking
+        const cookVal = selectCooking.value;
+        if (cookVal === "gas") {
+          homeEmissions += 0.18;
+          lblDialCooking.textContent = "Gas Hob";
+        } else {
+          homeEmissions += 0.03;
+          lblDialCooking.textContent = "Induction Hob";
+        }
+
+        // Electricity
+        const elecVal = selectElectricity.value;
+        if (elecVal === "grid") {
+          homeEmissions += 0.55;
+          lblDialElectricity.textContent = "UK Grid Standard";
+        } else {
+          homeEmissions += 0.05;
+          lblDialElectricity.textContent = "100% Green / Solar";
+        }
+
+        // --- 2. TRANSPORT EMISSIONS ---
+        let transportEmissions = 0;
+
+        const carVal = selectCarType.value;
+        const miles = parseFloat(sliderMiles.value) || 0;
+        lblDialMiles.textContent = `${miles.toLocaleString()} miles/yr`;
+
+        // Emission factor per mile
+        let carGramsPerMile = 0;
+        if (carVal === "suv") {
+          carGramsPerMile = 380; // large petrol SUV
+          lblDialCarType.textContent = "Large SUV";
+        } else if (carVal === "petrol") {
+          carGramsPerMile = 260; // average petrol
+          lblDialCarType.textContent = "Petrol Car";
+        } else if (carVal === "hybrid") {
+          carGramsPerMile = 170;
+          lblDialCarType.textContent = "Hybrid";
+        } else if (carVal === "ev") {
+          carGramsPerMile = 55; // EV on UK grid
+          lblDialCarType.textContent = "Electric Vehicle (EV)";
+        } else if (carVal === "car-free") {
+          carGramsPerMile = 0;
+          lblDialCarType.textContent = "Car-Free";
+        }
+
+        const carTonnes = (miles * carGramsPerMile) / 1000000;
+        transportEmissions += carTonnes;
+
+        // Flights
+        const shortFlights = parseInt(sliderShortFlights.value, 10) || 0;
+        lblDialShortFlights.textContent = `${shortFlights} Return Flight${shortFlights === 1 ? "" : "s"}`;
+        transportEmissions += (shortFlights * 0.35); // ~350 kg CO2e per European return with contrails
+
+        const longFlights = parseInt(sliderLongFlights.value, 10) || 0;
+        lblDialLongFlights.textContent = `${longFlights} Return Flight${longFlights === 1 ? "" : "s"}`;
+        transportEmissions += (longFlights * 2.5); // ~2.5 t CO2e per long-haul return
+
+        // --- 3. FOOD EMISSIONS ---
+        let foodEmissions = 0;
+
+        const dietVal = selectDiet.value;
+        if (dietVal === "heavy-meat") {
+          foodEmissions = 3.2;
+          lblDialDiet.textContent = "Heavy Meat";
+        } else if (dietVal === "average") {
+          foodEmissions = 2.3;
+          lblDialDiet.textContent = "Average UK Diet";
+        } else if (dietVal === "flexitarian") {
+          foodEmissions = 1.4;
+          lblDialDiet.textContent = "Flexitarian";
+        } else if (dietVal === "vegetarian") {
+          foodEmissions = 1.1;
+          lblDialDiet.textContent = "Vegetarian";
+        } else if (dietVal === "vegan") {
+          foodEmissions = 0.65;
+          lblDialDiet.textContent = "100% Plant-Based";
+        }
+
+        const wasteVal = selectWaste.value;
+        if (wasteVal === "typical") {
+          lblDialWaste.textContent = "Typical Waste";
+        } else {
+          foodEmissions = Math.max(0.4, foodEmissions - 0.3);
+          lblDialWaste.textContent = "Zero-Waste Plan (-0.3 t)";
+        }
+
+        // --- TOTAL & REDUCTION ---
+        const totalPersonal = homeEmissions + transportEmissions + foodEmissions;
+        const totalOverall = totalPersonal + SOCIETAL_BASELINE;
+
+        valTotalFootprint.innerHTML = `${totalOverall.toFixed(1)} <span style="font-size: 0.9rem; color: var(--text-muted);">t CO₂e/yr</span>`;
+
+        if (totalOverall <= 2.2) {
+          valTotalFootprint.style.color = "var(--emerald-light)";
+          subTotalComparison.textContent = "🌟 Aligned with Paris 1.5°C Global Target!";
+        } else if (totalOverall <= 4.0) {
+          valTotalFootprint.style.color = "var(--cyan)";
+          subTotalComparison.textContent = "Great progress! Deep personal reductions achieved.";
+        } else if (totalOverall <= 7.0) {
+          valTotalFootprint.style.color = "var(--amber)";
+          subTotalComparison.textContent = "Substantially better than UK national average.";
+        } else {
+          valTotalFootprint.style.color = "var(--rose)";
+          subTotalComparison.textContent = "Typical fossil-intensive Western lifestyle.";
+        }
+
+        const savedTonnes = UK_BASELINE_TOTAL - totalOverall;
+        const savedPct = Math.max(0, (savedTonnes / UK_BASELINE_TOTAL) * 100);
+        valReductionPct.innerHTML = `${Math.round(savedPct)}% <span style="font-size: 0.9rem; color: var(--text-muted);">saved</span>`;
+        subReductionTonnes.textContent = savedTonnes > 0
+          ? `${savedTonnes.toFixed(1)} tonnes CO₂e eliminated / yr`
+          : "Matches UK standard average baseline";
+
+        const diffFromParis = totalOverall - PARIS_TARGET;
+        if (diffFromParis <= 0) {
+          valTargetStatus.style.color = "var(--emerald-light)";
+          valTargetStatus.innerHTML = `Within Budget <span style="font-size: 0.8rem; color: var(--text-muted);">(${totalOverall.toFixed(1)}t ≤ 2.0t)</span>`;
+        } else {
+          valTargetStatus.style.color = "var(--rose)";
+          valTargetStatus.innerHTML = `+${diffFromParis.toFixed(1)} t <span style="font-size: 0.8rem; color: var(--text-muted);">above 2.0t target</span>`;
+        }
+
+        // Update Pillar Badges
+        badgePillarHome.textContent = `${homeEmissions.toFixed(1)} t CO₂e`;
+        badgePillarTransport.textContent = `${transportEmissions.toFixed(1)} t CO₂e`;
+        badgePillarFood.textContent = `${foodEmissions.toFixed(1)} t CO₂e`;
+
+        // Update Legend Labels
+        lblLegHome.textContent = `${homeEmissions.toFixed(1)} t`;
+        lblLegTransport.textContent = `${transportEmissions.toFixed(1)} t`;
+        lblLegFood.textContent = `${foodEmissions.toFixed(1)} t`;
+
+        // Progress Bar Visualizer (Scale: 0 to 12 tonnes)
+        const scaleMax = 12.0;
+        const pctHome = (homeEmissions / scaleMax) * 100;
+        const pctTransport = (transportEmissions / scaleMax) * 100;
+        const pctFood = (foodEmissions / scaleMax) * 100;
+
+        barHome.style.width = `${pctHome}%`;
+        barTransport.style.width = `${pctTransport}%`;
+        barFood.style.width = `${pctFood}%`;
+        txtBarTotal.textContent = `${totalOverall.toFixed(1)} tonnes / 12.0t scale (Goal: ≤ 2.0t)`;
+      }
+
+      // Preset Applicator
+      function applyPreset(preset) {
+        document.querySelectorAll(".preset-pill").forEach(p => p.classList.remove("active"));
+
+        if (preset === "average") {
+          btnPresetAverage.classList.add("active");
+          selectHeating.value = "gas-standard";
+          selectInsulation.value = "moderate";
+          selectCooking.value = "gas";
+          selectElectricity.value = "grid";
+
+          selectCarType.value = "petrol";
+          sliderMiles.value = 7500;
+          sliderShortFlights.value = 2;
+          sliderLongFlights.value = 0;
+
+          selectDiet.value = "average";
+          selectWaste.value = "typical";
+        } else if (preset === "quick-wins") {
+          btnPresetQuickWins.classList.add("active");
+          selectHeating.value = "gas-condensing";
+          selectInsulation.value = "moderate";
+          selectCooking.value = "induction";
+          selectElectricity.value = "green";
+
+          selectCarType.value = "hybrid";
+          sliderMiles.value = 6000;
+          sliderShortFlights.value = 1;
+          sliderLongFlights.value = 0;
+
+          selectDiet.value = "flexitarian";
+          selectWaste.value = "low-waste";
+        } else if (preset === "suburban") {
+          btnPresetSuburban.classList.add("active");
+          selectHeating.value = "heat-pump-grid";
+          selectInsulation.value = "high";
+          selectCooking.value = "induction";
+          selectElectricity.value = "green";
+
+          selectCarType.value = "ev";
+          sliderMiles.value = 5000;
+          sliderShortFlights.value = 0;
+          sliderLongFlights.value = 0;
+
+          selectDiet.value = "vegetarian";
+          selectWaste.value = "low-waste";
+        } else if (preset === "trailblazer") {
+          btnPresetTrailblazer.classList.add("active");
+          selectHeating.value = "heat-pump-green";
+          selectInsulation.value = "high";
+          selectCooking.value = "induction";
+          selectElectricity.value = "green";
+
+          selectCarType.value = "car-free";
+          sliderMiles.value = 0;
+          sliderShortFlights.value = 0;
+          sliderLongFlights.value = 0;
+
+          selectDiet.value = "vegan";
+          selectWaste.value = "low-waste";
+        }
+
+        updateCalculator();
+      }
+
+      // Event Listeners
+      [
+        selectHeating, selectInsulation, selectCooking, selectElectricity,
+        selectCarType, sliderMiles, sliderShortFlights, sliderLongFlights,
+        selectDiet, selectWaste
+      ].forEach(el => {
+        if (el) {
+          el.addEventListener("input", () => {
+            document.querySelectorAll(".preset-pill").forEach(p => p.classList.remove("active"));
+            updateCalculator();
+          });
+        }
+      });
+
+      if (btnPresetAverage) btnPresetAverage.addEventListener("click", () => applyPreset("average"));
+      if (btnPresetQuickWins) btnPresetQuickWins.addEventListener("click", () => applyPreset("quick-wins"));
+      if (btnPresetSuburban) btnPresetSuburban.addEventListener("click", () => applyPreset("suburban"));
+      if (btnPresetTrailblazer) btnPresetTrailblazer.addEventListener("click", () => applyPreset("trailblazer"));
+
+      // Initial Run
+      updateCalculator();
+    })();
+  </script>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.warn('PWA ServiceWorker registration failed:', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

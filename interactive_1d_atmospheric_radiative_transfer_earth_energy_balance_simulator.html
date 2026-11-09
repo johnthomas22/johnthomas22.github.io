@@ -1040,6 +1040,7 @@
       transition: all 0.15s ease;
       user-select: none;
       white-space: nowrap;
+      text-decoration: none;
     }
     .speech-pin-action:hover,
     .speech-pin-action.active {
@@ -1844,7 +1845,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v1.6</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v1.7</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -2037,9 +2038,9 @@
           <div class="speech-pin" id="pin5" style="top: 27%; left: 22%;">5</div>
 
           <!-- Top-Right Action Button on IR Percolation Chart -->
-          <button type="button" class="speech-pin-action" id="btnWhatCanIDo">
-            What can I do about it?
-          </button>
+          <a href="what_can_i_do.html" class="speech-pin-action" id="btnWhatCanIDo" title="What can I do? Practical action guide &amp; interactive carbon calculator">
+            What can I do about it? ↗
+          </a>
 
           <!-- Dynamic Speech Bubble Card -->
           <div class="bubble-popup-card" id="bubbleCard">
@@ -3256,7 +3257,7 @@
         <span>·</span>
         <a href="national_emergency_briefing.html" style="color: #f43f5e; text-decoration: none;">🚨 National Emergency Briefing</a>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v1.6</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v1.7</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -3302,7 +3303,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v1.6</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v1.7</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -8848,7 +8849,7 @@
         {
           pinId: "btnWhatCanIDo",
           title: "What can I do about it?",
-          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Watch People's Emergency Briefing with Chris Packham. ↗</a></div>`
+          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div style="margin-bottom: 8px;"><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Watch People's Emergency Briefing with Chris Packham. ↗</a></div><div><a href="what_can_i_do.html" style="color: var(--emerald); font-weight: 700; text-decoration: underline;">Open What Can I Do? Guide &amp; Carbon Calculator &rarr;</a></div>`
         }
       ];
 
@@ -8881,7 +8882,7 @@
         {
           pinId: "btnWhatCanIDo",
           title: "What can I do about it?",
-          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Watch People's Emergency Briefing with Chris Packham. ↗</a></div>`
+          html: `<div style="margin-bottom: 8px;">Listen to the Sustainable(ish) podcast episode '7 acts to save the world with Hugh Montgomery'.</div><div style="margin-bottom: 8px;"><a href="https://nebriefing.org" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">Watch People's Emergency Briefing with Chris Packham. ↗</a></div><div><a href="what_can_i_do.html" style="color: var(--emerald); font-weight: 700; text-decoration: underline;">Open What Can I Do? Guide &amp; Carbon Calculator &rarr;</a></div>`
         }
       ];
 
