@@ -258,25 +258,37 @@
 
     /* Sources & Solutions Mode Layout Overrides */
     .app-wrapper.sources-mode,
-    .app-wrapper.solutions-mode {
+    .app-wrapper.solutions-mode,
+    .app-wrapper.dunkel-mode {
       max-width: 1420px;
     }
     .app-wrapper.sources-mode .top-stats-strip,
     .app-wrapper.sources-mode .intro-banner,
     .app-wrapper.sources-mode .main-grid,
     .app-wrapper.sources-mode .budgets-view,
-    .app-wrapper.sources-mode .solutions-view {
+    .app-wrapper.sources-mode .solutions-view,
+    .app-wrapper.sources-mode .dunkel-view {
       display: none !important;
     }
     .app-wrapper.solutions-mode .top-stats-strip,
     .app-wrapper.solutions-mode .intro-banner,
     .app-wrapper.solutions-mode .main-grid,
     .app-wrapper.solutions-mode .budgets-view,
-    .app-wrapper.solutions-mode .sources-view {
+    .app-wrapper.solutions-mode .sources-view,
+    .app-wrapper.solutions-mode .dunkel-view {
+      display: none !important;
+    }
+    .app-wrapper.dunkel-mode .top-stats-strip,
+    .app-wrapper.dunkel-mode .intro-banner,
+    .app-wrapper.dunkel-mode .main-grid,
+    .app-wrapper.dunkel-mode .budgets-view,
+    .app-wrapper.dunkel-mode .sources-view,
+    .app-wrapper.dunkel-mode .solutions-view {
       display: none !important;
     }
     .sources-view,
-    .solutions-view {
+    .solutions-view,
+    .dunkel-view {
       display: none;
       flex-direction: column;
       gap: 16px;
@@ -288,15 +300,33 @@
     .app-wrapper.solutions-mode .solutions-view {
       display: flex;
     }
+    .app-wrapper.dunkel-mode .dunkel-view {
+      display: flex;
+    }
     .app-wrapper.budgets-mode .sources-view,
-    .app-wrapper.budgets-mode .solutions-view {
+    .app-wrapper.budgets-mode .solutions-view,
+    .app-wrapper.budgets-mode .dunkel-view {
       display: none !important;
     }
     .app-wrapper.simple-mode .sources-view,
     .app-wrapper.simple-mode .solutions-view,
+    .app-wrapper.simple-mode .dunkel-view,
     .app-wrapper.advanced-mode .sources-view,
-    .app-wrapper.advanced-mode .solutions-view {
+    .app-wrapper.advanced-mode .solutions-view,
+    .app-wrapper.advanced-mode .dunkel-view {
       display: none !important;
+    }
+
+    .dunkel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.08fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .dunkel-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* Sector Explorer Styles (OWID) */
@@ -607,26 +637,29 @@
       z-index: 2500;
       width: 350px;
       max-width: calc(100vw - 24px);
-      max-height: min(390px, calc(100vh - 40px));
-      overflow-y: auto;
+      max-height: min(440px, calc(100vh - 36px));
       background: #070d17;
       border: 1.5px solid var(--cyan);
       border-radius: 9px;
-      padding: 12px 14px;
+      padding: 0;
       color: #cbd5e1;
       font-size: 0.76rem;
       line-height: 1.45;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 229, 255, 0.32);
       pointer-events: auto;
       text-align: left;
+      flex-direction: column;
+      overflow: hidden;
     }
     .snowball-foote-popover .sf-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      padding: 10px 14px;
       border-bottom: 1px solid rgba(0, 229, 255, 0.35);
-      padding-bottom: 6px;
+      background: #0b1526;
+      flex-shrink: 0;
+      margin-bottom: 0;
     }
     .snowball-foote-popover .sf-title {
       font-weight: 800;
@@ -650,6 +683,10 @@
       color: #cbd5e1;
       font-size: 0.76rem;
       line-height: 1.45;
+      padding: 12px 14px 14px 14px;
+      overflow-y: auto;
+      flex: 1 1 auto;
+      max-height: min(380px, calc(100vh - 90px));
     }
     .snowball-foote-popover .rich-tooltip-links {
       display: flex;
@@ -1823,6 +1860,7 @@
           <button class="mode-switch-btn" id="btnModeBudgets">🛢️ Carbon Budgets</button>
           <button class="mode-switch-btn" id="btnModeSources">🏭 Greenhouse Gas Sources</button>
           <button class="mode-switch-btn" id="btnModeSolutions">💡 Energy Solutions</button>
+          <button class="mode-switch-btn" id="btnModeDunkel" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);" title="UK Dunkelflaute &amp; Storage Simulator — Oxford &amp; Royal Society Model">🇬🇧 UK Dunkelflaute &amp; Storage</button>
           <a href="we_only_have_one_pale_blue_dot.html" class="mode-switch-btn" style="text-decoration: none; color: #34d399;" title="We Only Have One Pale Blue Dot — Resource Overshoot Simulator">🌍 Pale Blue Dot</a>
           <a href="doughnut_economics.html" class="mode-switch-btn" style="text-decoration: none; color: #fbbf24;" title="Doughnut Economics — The Safe &amp; Just Space for Humanity">🍩 Doughnut Economics</a>
           <a href="climate_podcasts.html" class="mode-switch-btn" style="text-decoration: none; color: #a78bfa;" title="Climate Podcasts — Adaptation, Mitigation &amp; Science">🎙️ Podcasts</a>
@@ -2880,6 +2918,330 @@
         </div>
       </div>
     </div>
+
+    <!-- DEDICATED INTERACTIVE PAGE: UK DUNKELFLAUTE & STORAGE SIMULATOR (OXFORD & ROYAL SOCIETY MODEL) -->
+    <div class="dunkel-view" id="dunkelView">
+      
+      <!-- Top Real-Time Metrics Strip -->
+      <div class="top-stats-strip" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 0;">
+        <div class="stat-card">
+          <div class="stat-header"><span>Dunkelflaute Energy Deficit</span><span class="badge badge-amber" id="dunkelBadgeDeficit">Deficit to Bridge</span></div>
+          <div class="stat-value" id="dunkelStatDeficitVal" style="color: var(--amber);">12.5 <span style="font-size: 0.8rem; color: var(--text-muted);">TWh</span></div>
+          <div class="stat-sub" id="dunkelStatDeficitSub">14 days @ 0.89 TWh/day net winter deficit</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Storage Delivery &amp; Reliability</span><span class="badge badge-emerald" id="dunkelBadgeCoverage">Reliability Score</span></div>
+          <div class="stat-value" id="dunkelStatCoverageVal" style="color: var(--emerald);">100% <span style="font-size: 0.8rem; color: var(--text-muted);">Covered</span></div>
+          <div class="stat-sub" id="dunkelStatCoverageSub">Zero blackout risk · 12.6 TWh delivered</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Total Storage Capex</span><span class="badge badge-cyan" id="dunkelBadgeCapex">Infrastructure</span></div>
+          <div class="stat-value" id="dunkelStatCapexVal" style="color: var(--cyan);">£26.4 <span style="font-size: 0.8rem; color: var(--text-muted);">Billion</span></div>
+          <div class="stat-sub" id="dunkelStatCapexSub">Hydrogen caverns + batteries + pumped hydro</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header"><span>Fiscal &amp; Tax Impact</span><span class="badge badge-purple" id="dunkelBadgeFiscal">Annualised Cost</span></div>
+          <div class="stat-value" id="dunkelStatFiscalVal" style="color: #c084fc;">+0.37p <span style="font-size: 0.8rem; color: var(--text-muted);">Basic Tax</span></div>
+          <div class="stat-sub" id="dunkelStatFiscalSub">£73/yr per taxpayer · £7.02/mo per household</div>
+        </div>
+      </div>
+
+      <!-- Main Dunkelflaute Layout Grid -->
+      <div class="dunkel-grid">
+
+        <!-- Left Column: Interactive Dials & Allocation Sliders -->
+        <div class="card" style="margin-bottom: 0;">
+          <div class="card-title-row">
+            <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
+              <span>🇬🇧</span> UK Grid Demand &amp; Dunkelflaute Controls
+            </div>
+            <span class="badge badge-cyan">Oxford &amp; Royal Society Model</span>
+          </div>
+
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0; margin-bottom: 12px; line-height: 1.45;">
+            Configure Great Britain's annual electricity demand and select a winter wind-drought (<em>Dunkelflaute</em>) duration to calculate the required energy storage volume and test your technology allocation.
+          </p>
+
+          <!-- 1. Annual Demand Presets & Slider -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="sliderDunkelDemand" style="font-size: 0.85rem; font-weight: 700; color: #fff;">1. UK Annual Electricity Demand:</label>
+              <span id="lblDunkelDemand" style="font-family: ui-monospace, monospace; font-size: 0.85rem; font-weight: 700; color: var(--cyan);">360 TWh/yr</span>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+              <button class="budget-preset-btn" id="presetDunkelDemand2025" type="button">Current 2025 (300 TWh)</button>
+              <button class="budget-preset-btn active" id="presetDunkelDemand2030" type="button">Clean Power 2030 (360 TWh)</button>
+              <button class="budget-preset-btn" id="presetDunkelDemand2035" type="button">Decarbonised 2035 (450 TWh)</button>
+              <button class="budget-preset-btn" id="presetDunkelDemand2050" type="button">Net Zero 2050 (570 TWh)</button>
+            </div>
+            <input type="range" id="sliderDunkelDemand" min="250" max="700" step="10" value="360" style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+              <span>250 TWh (historic low)</span>
+              <span>Average Winter Load: <strong id="lblDunkelDailyWinterLoad" style="color: #cbd5e1;">1.13 TWh/day</strong></span>
+              <span>700 TWh (deep electrification)</span>
+            </div>
+          </div>
+
+          <!-- 2. Dunkelflaute Duration Presets & Slider -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="sliderDunkelDays" style="font-size: 0.85rem; font-weight: 700; color: #fff;">2. Dunkelflaute Duration (Wind &amp; Solar Lull):</label>
+              <span id="lblDunkelDays" style="font-family: ui-monospace, monospace; font-size: 0.85rem; font-weight: 700; color: var(--amber);">14 Days</span>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+              <button class="budget-preset-btn" id="presetDunkel3d" type="button">3 Days (Cold snap)</button>
+              <button class="budget-preset-btn" id="presetDunkel7d" type="button">7 Days (1 Week)</button>
+              <button class="budget-preset-btn active" id="presetDunkel14d" type="button">14 Days (2 Weeks)</button>
+              <button class="budget-preset-btn" id="presetDunkel21d" type="button">21 Days (3 Weeks)</button>
+              <button class="budget-preset-btn" id="presetDunkel30d" type="button">30 Days (1 Month)</button>
+              <button class="budget-preset-btn" id="presetDunkelRS" type="button" title="Royal Society 37-year weather benchmark: multi-week winter lull plus seasonal deficit (~65 TWh)">Royal Society 37-Yr (~65 TWh)</button>
+            </div>
+            <input type="range" id="sliderDunkelDays" min="1" max="45" step="1" value="14" style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+              <span>1 Day (diurnal peak)</span>
+              <span>Net Storage Deficit: <strong id="lblDunkelNetDailyDeficit" style="color: var(--amber);">0.89 TWh/day</strong></span>
+              <span>45 Days (prolonged blocking)</span>
+            </div>
+            <div style="margin-top: 8px; font-size: 0.72rem; color: #94a3b8; background: rgba(0,0,0,0.25); padding: 6px 10px; border-radius: 4px; line-height: 1.35;">
+              ℹ️ <em>Assumes clean firm non-storage supply (nuclear ~6 GW, run-of-river hydro ~1.5 GW, sustainable biomass ~2.5 GW = ~10 GW continuous / 0.24 TWh/day). Space-heating load is winter-adjusted (+15%).</em>
+            </div>
+          </div>
+
+          <!-- 3. Dialable Storage Fleet Allocation -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <strong style="color: var(--cyan); font-size: 0.86rem; display: flex; align-items: center; gap: 6px;">
+                <span>🔋</span> 3. Dialable Storage Fleet Allocation
+              </strong>
+              <button class="btn btn-secondary" id="btnDunkelAutoBalance" type="button" style="padding: 3px 8px; font-size: 0.7rem;" title="Automatically balance the fleet to meet 100% of the deficit using the most cost-effective technologies">⚡ Auto-Balance Fleet</button>
+            </div>
+
+            <!-- Option 1: Pumped Hydro (Strictly Limited) -->
+            <div style="margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <div>
+                  <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">A. Pumped Storage Hydro (PHS)</span>
+                  <span class="badge badge-amber" style="margin-left: 6px; font-size: 0.65rem;" title="Strictly constrained by Scottish & Welsh topography. Coire Glas + Cruachan II + Balliemeanoch capped at ~90 GWh.">UK Geological Limit: 90 GWh</span>
+                </div>
+                <span id="lblDunkelPHS" style="font-family: ui-monospace, monospace; font-size: 0.78rem; font-weight: 700; color: var(--amber);">30 GWh (0.030 TWh)</span>
+              </div>
+              <input type="range" id="sliderDunkelPHS" min="0" max="90" step="5" value="30" style="width: 100%;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">
+                <span>0 GWh</span>
+                <span>Current Fleet: 30 GWh (Dinorwig, Cruachan) · Max Pipeline: 90 GWh</span>
+                <span>90 GWh (Max UK Limit)</span>
+              </div>
+            </div>
+
+            <!-- Option 2: Grid-Scale Batteries -->
+            <div style="margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <div>
+                  <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">B. Grid-Scale Batteries (BESS - Li/Na-ion)</span>
+                  <span class="badge badge-cyan" style="margin-left: 6px; font-size: 0.65rem;">Short-Duration (£130M/GWh)</span>
+                </div>
+                <span id="lblDunkelBESS" style="font-family: ui-monospace, monospace; font-size: 0.78rem; font-weight: 700; color: var(--cyan);">10 GWh (0.010 TWh)</span>
+              </div>
+              <input type="range" id="sliderDunkelBESS" min="0" max="200" step="5" value="10" style="width: 100%;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">
+                <span>0 GWh</span>
+                <span>Current: ~6 GWh · CP2030 Target: ~50–100 GWh (2–4 hour duration)</span>
+                <span>200 GWh (£26B)</span>
+              </div>
+            </div>
+
+            <!-- Option 3: Compressed Air Energy Storage -->
+            <div style="margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <div>
+                  <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">C. Compressed Air (CAES in Salt Caverns)</span>
+                  <span class="badge badge-emerald" style="margin-left: 6px; font-size: 0.65rem;">Medium-Duration (£55M/GWh)</span>
+                </div>
+                <span id="lblDunkelCAES" style="font-family: ui-monospace, monospace; font-size: 0.78rem; font-weight: 700; color: var(--emerald);">200 GWh (0.20 TWh)</span>
+              </div>
+              <input type="range" id="sliderDunkelCAES" min="0" max="5000" step="50" value="200" style="width: 100%;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">
+                <span>0 GWh</span>
+                <span>Salt caverns (Cheshire, Larne, East Yorks) · 60% round-trip</span>
+                <span>5,000 GWh (5.0 TWh)</span>
+              </div>
+            </div>
+
+            <!-- Option 4: Hydrogen in Salt Caverns (The Bulk Solution) -->
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <div>
+                  <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">D. Green Hydrogen in Salt Caverns (P2G2P)</span>
+                  <span class="badge badge-purple" style="margin-left: 6px; font-size: 0.65rem;">Oxford / Royal Society Bulk Fix</span>
+                </div>
+                <span id="lblDunkelH2" style="font-family: ui-monospace, monospace; font-size: 0.78rem; font-weight: 700; color: #c084fc;">32 TWh (Caverns)</span>
+              </div>
+              <input type="range" id="sliderDunkelH2" min="0" max="100" step="1" value="32" style="width: 100%;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">
+                <span>0 TWh</span>
+                <span>East Yorkshire, Cheshire, Wessex · £3.5B/TWh cavern storage</span>
+                <span>100 TWh (Royal Society 2050 Fleet)</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Right Column: Engineering, Financial & Fiscal Analysis Cards -->
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+
+          <!-- Card 1: Deliverability & Capacity Balance -->
+          <div class="card" style="margin-bottom: 0;">
+            <div class="card-title-row">
+              <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
+                <span>⚖️</span> Storage Fleet Deliverability vs. Deficit
+              </div>
+              <span id="dunkelBadgeBalance" class="badge badge-emerald">Balanced</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+              <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 6px; padding: 10px 12px;">
+                <span style="font-size: 0.7rem; color: #f43f5e; text-transform: uppercase; font-weight: 700;">Required Dunkelflaute Energy:</span>
+                <div id="dunkelCardReqVal" style="font-size: 1.35rem; font-weight: 800; color: #f43f5e; font-family: ui-monospace, monospace;">12.5 TWh</div>
+                <span id="dunkelCardReqSub" style="font-size: 0.72rem; color: #cbd5e1;">Peak discharge needed: ~45 GW</span>
+              </div>
+              <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 6px; padding: 10px 12px;">
+                <span style="font-size: 0.7rem; color: #34d399; text-transform: uppercase; font-weight: 700;">Effective Storage Delivered:</span>
+                <div id="dunkelCardDeliveredVal" style="font-size: 1.35rem; font-weight: 800; color: #34d399; font-family: ui-monospace, monospace;">12.6 TWh</div>
+                <span id="dunkelCardDeliveredSub" style="font-size: 0.72rem; color: #cbd5e1;">100% of demand covered</span>
+              </div>
+            </div>
+
+            <!-- Table of Fleet Breakdown -->
+            <table class="data-table" style="font-size: 0.76rem; margin-bottom: 8px;">
+              <thead>
+                <tr>
+                  <th>Technology</th>
+                  <th>Installed Capacity</th>
+                  <th>Delivered Output</th>
+                  <th>Round-Trip Eff.</th>
+                  <th>Technology Capex</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Pumped Hydro (PHS)</strong></td>
+                  <td id="dunkelRowPHSCap">30 GWh</td>
+                  <td id="dunkelRowPHSDel">0.023 TWh</td>
+                  <td>~75%</td>
+                  <td id="dunkelRowPHSCapex">£3.0 B</td>
+                </tr>
+                <tr>
+                  <td><strong>Grid Batteries (BESS)</strong></td>
+                  <td id="dunkelRowBESSCap">10 GWh</td>
+                  <td id="dunkelRowBESSDel">0.009 TWh</td>
+                  <td>~86%</td>
+                  <td id="dunkelRowBESSCapex">£1.3 B</td>
+                </tr>
+                <tr>
+                  <td><strong>Compressed Air (CAES)</strong></td>
+                  <td id="dunkelRowCAESCap">200 GWh</td>
+                  <td id="dunkelRowCAESDel">0.124 TWh</td>
+                  <td>~62%</td>
+                  <td id="dunkelRowCAESCapex">£0.1 B</td>
+                </tr>
+                <tr>
+                  <td><strong>Hydrogen Salt Caverns</strong></td>
+                  <td id="dunkelRowH2Cap">32.0 TWh</td>
+                  <td id="dunkelRowH2Del">12.16 TWh</td>
+                  <td>~38%</td>
+                  <td id="dunkelRowH2Capex">£22.0 B</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Card 2: The "What if We Used Batteries Alone?" Eye-Opener -->
+          <div style="background: rgba(244, 63, 94, 0.05); border: 1.5px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 12px 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <strong style="color: #f43f5e; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+                <span>⚠️</span> The "All-Battery Storage" Fallacy (Why We Need Hydrogen)
+              </strong>
+              <span id="dunkelBadgeBatDiff" style="font-size: 0.68rem; font-family: ui-monospace, monospace; color: #f43f5e; background: rgba(244,63,94,0.15); padding: 1px 6px; border-radius: 4px;">71× More Expensive</span>
+            </div>
+            <p style="font-size: 0.78rem; color: #cbd5e1; margin: 0 0 8px 0; line-height: 1.45;">
+              If Great Britain attempted to meet this <span id="dunkelTxtBatDeficit" style="font-weight: 700; color: #fff;">12.5 TWh</span> Dunkelflaute deficit using <strong>grid-scale lithium-ion batteries alone</strong>, the capital cost would be:
+            </p>
+            <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+              <span id="dunkelValAllBat" style="font-size: 1.4rem; font-weight: 800; color: #f43f5e; font-family: ui-monospace, monospace;">£1,890 Billion</span>
+              <span style="font-size: 0.78rem; color: #fda4af;">(£1.89 Trillion — nearly the entire UK national debt)</span>
+            </div>
+            <div style="font-size: 0.74rem; color: #94a3b8; line-height: 1.4;">
+              By contrast, storing green hydrogen in <strong>underground salt caverns</strong> provides the same multi-week energy security for <strong id="dunkelValH2Compare" style="color: #34d399;">~£26 Billion</strong>. Batteries are vital for fast 2-to-4 hour intraday balancing, but chemically and economically impossible for multi-week seasonal storage.
+            </div>
+          </div>
+
+          <!-- Card 3: Fiscal Cost, Tax Impact & Household Bills -->
+          <div class="card" style="margin-bottom: 0;">
+            <div class="card-title-row">
+              <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
+                <span>🏛️</span> Fiscal Accounting &amp; Cost to Taxpayers / Energy Bills
+              </div>
+              <span class="badge badge-purple">HMRC Tax Factor</span>
+            </div>
+
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0; margin-bottom: 10px; line-height: 1.4;">
+              Annualised over a 25-year infrastructure life at 5% WACC (7.1% capital recovery) plus 2.0% operational maintenance:
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 12px;">
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px;">
+                <span style="font-size: 0.7rem; color: var(--text-muted); display: block;">Annualised System Cost:</span>
+                <strong id="dunkelFiscalAnnualCost" style="font-size: 1.15rem; color: #fff; font-family: ui-monospace, monospace;">£2.40 B/yr</strong>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px;">
+                <span style="font-size: 0.7rem; color: var(--text-muted); display: block;">Equivalent Income Tax Rise:</span>
+                <strong id="dunkelFiscalTaxRate" style="font-size: 1.15rem; color: #c084fc; font-family: ui-monospace, monospace;">+0.37p</strong>
+                <span style="font-size: 0.65rem; color: #94a3b8; display: block;">(1p basic rate = £6.5B HMRC)</span>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px;">
+                <span style="font-size: 0.7rem; color: var(--text-muted); display: block;">Cost per UK Taxpayer:</span>
+                <strong id="dunkelFiscalPerTaxpayer" style="font-size: 1.15rem; color: var(--cyan); font-family: ui-monospace, monospace;">£73 / year</strong>
+                <span style="font-size: 0.65rem; color: #94a3b8; display: block;">(~33.0M income taxpayers)</span>
+              </div>
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px;">
+                <span style="font-size: 0.7rem; color: var(--text-muted); display: block;">Cost per UK Household:</span>
+                <strong id="dunkelFiscalPerHousehold" style="font-size: 1.15rem; color: var(--emerald); font-family: ui-monospace, monospace;">£7.02 / month</strong>
+                <span style="font-size: 0.65rem; color: #94a3b8; display: block;">(£84/yr over 28.5M homes)</span>
+              </div>
+            </div>
+
+            <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.35;">
+              💡 <em>Whether funded through general taxation (+0.37p on the basic rate) or through a regulated grid standing charge on electricity bills (~£7/month per household), this represents the insurance premium guaranteeing 100% continuous power during freezing, windless winter blocks.</em>
+            </div>
+          </div>
+
+          <!-- Card 4: Oxford & Royal Society Citation Card -->
+          <div style="background: rgba(0, 229, 255, 0.04); border: 1px solid rgba(0, 229, 255, 0.25); border-radius: 8px; padding: 12px 16px;">
+            <strong style="color: var(--cyan); font-size: 0.84rem; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+              <span>🔬</span> Key Academic Reference: The Royal Society (2023)
+            </strong>
+            <p style="font-size: 0.76rem; color: #cbd5e1; margin: 0 0 6px 0; line-height: 1.45;">
+              <strong>Sir Chris Llewellyn Smith FRS (University of Oxford, Department of Physics)</strong> &amp; The Royal Society: <em>"Large-scale electricity storage"</em> (September 2023). Modeled 37 years of hourly UK weather data (1980–2016) and concluded the UK needs up to <strong>60 to 100 TWh of hydrogen storage in solution-mined salt caverns</strong> to guarantee security of supply.
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.74rem;">
+              <a href="https://royalsociety.org/news-resources/publications/2023/large-scale-electricity-storage/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">
+                The Royal Society Report ↗
+              </a>
+              <span style="color: var(--text-muted);">·</span>
+              <a class="toc-link" data-target="page-uk-grid" style="color: var(--amber); text-decoration: underline; cursor: pointer;" onclick="document.getElementById('modalOverlay').style.display='flex'; setDocPage('page-uk-grid');">
+                Read Full Analysis in Guide Page 10 &rarr;
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
 
     <!-- MAIN SIMULATOR FOOTER -->
     <footer style="margin-top: 24px; padding: 18px 0 24px; border-top: 1px solid var(--border); text-align: center; font-size: 0.8rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px;">
@@ -5238,10 +5600,26 @@
           </div>
 
           <p>
-            <strong>The Engineering Challenge: Winter <em>Dunkelflaute</em>:</strong> A Dunkelflaute (German for "dark doldrums") occurs when a stationary high-pressure anticyclone settles over North-Western Europe in mid-winter. Temperatures drop below freezing (driving space-heating demand toward 50 GW), while wind speeds collapse across the North Sea and overcast skies suppress solar PV to &lt;5% capacity for 5 to 10 consecutive days.
+            <strong>The Engineering Challenge: Winter <em>Dunkelflaute</em> &amp; The Royal Society 37-Year Weather Analysis:</strong> A Dunkelflaute (German for "dark doldrums") occurs when a stationary high-pressure anticyclone settles over North-Western Europe in mid-winter. Temperatures drop below freezing (driving space-heating demand toward 50 GW), while wind speeds collapse across the North Sea and overcast skies suppress solar PV to &lt;5% capacity for 5 to 20+ consecutive days.
           </p>
+          <div style="background: rgba(0, 229, 255, 0.05); border-left: 3px solid var(--cyan); padding: 12px 16px; margin: 12px 0; border-radius: 0 8px 8px 0; font-size: 0.85rem; line-height: 1.55;">
+            <strong style="color: var(--cyan); font-size: 0.92rem;">🔬 The Landmark Oxford / Royal Society Study: Sir Chris Llewellyn Smith FRS (2023)</strong>
+            <p style="margin: 6px 0;">
+              In September 2023, The Royal Society published its definitive report <em>"Large-scale electricity storage"</em>, led by <strong>Sir Chris Llewellyn Smith FRS</strong> (Emeritus Professor of Physics, University of Oxford; former Director-General of CERN). Rather than relying on simplified typical meteorological years, the Oxford team modeled <strong>37 continuous years of hourly UK weather data (1980–2016)</strong> across wind, solar, and temperature to calculate the true storage volume required to keep British lights on in a wind-dominated grid:
+            </p>
+            <ul style="margin: 6px 0 6px 18px; font-size: 0.82rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 4px;">
+              <li><strong>The Seasonal Deficit:</strong> To support a decarbonised power demand of 570 TWh/year by 2050, Great Britain will need between <strong>60 and 100 TWh of energy storage</strong> to bridge multi-week winter wind droughts and multi-year meteorological variations.</li>
+              <li><strong>The "All-Battery" Fallacy:</strong> Meeting this 60–100 TWh deficit with lithium-ion grid batteries would cost <strong>over £1.8 to £2.5 Trillion</strong>—equivalent to the entire UK national debt. Batteries degrade over cycles and have a round-trip storage cost over 30× too high for seasonal standby.</li>
+              <li><strong>The Underground Salt Cavern Solution:</strong> By far the cheapest and most viable technology at scale is <strong>green hydrogen stored in solution-mined salt caverns</strong> (in the Permian and Triassic halite strata of East Yorkshire, Cheshire, and Wessex). Cavern storage volume costs approximately <strong>£3.50/kWh (£3.5 Billion per TWh)</strong>—over 35× cheaper per unit of stored energy than batteries.</li>
+            </ul>
+            <div style="margin-top: 10px;">
+              <button type="button" onclick="document.getElementById('modalOverlay').style.display='none'; setViewMode('dunkel');" style="padding: 7px 14px; font-size: 0.8rem; font-weight: 700; background: linear-gradient(135deg, #0ea5e9, #0284c7); border: none; border-radius: 6px; color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.35);">
+                ⚡ Launch Interactive Dunkelflaute &amp; Hydrogen Storage Simulator &rarr;
+              </button>
+            </div>
+          </div>
           <p>
-            Managing a zero-carbon Dunkelflaute without building dozens of new gas plants requires a multi-layered flexibility portfolio:
+            Managing a zero-carbon Dunkelflaute without building dozens of new unabated gas plants requires a multi-layered flexibility portfolio:
           </p>
           <ul style="margin-left: 20px; font-size: 0.84rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
             <li><strong>Long-Duration Energy Storage (LDES):</strong> Compressed air (CAES in Cheshire salt caverns), liquid air energy storage (Highview Power at Carrington 300 MWh), and new pumped hydro projects (SSE's Coire Glas 1.5 GW / 30 GWh in the Scottish Highlands).</li>
@@ -5305,6 +5683,11 @@
               <strong>Department for Energy Security and Net Zero (DESNZ, 2024):</strong><br>
               <em>"Digest of UK Energy Statistics (DUKES) &amp; Energy Trends: Electricity generation, supply and consumption."</em> Official UK government statutory energy statistical archive.<br>
               <a href="https://www.gov.uk/government/collections/digest-of-uk-energy-statistics-dukes" target="_blank" rel="noopener noreferrer">https://www.gov.uk/government/collections/digest-of-uk-energy-statistics-dukes ↗</a>
+            </li>
+            <li>
+              <strong>The Royal Society &amp; University of Oxford (Sir Chris Llewellyn Smith FRS et al., 2023):</strong><br>
+              <em>"Large-scale electricity storage."</em> Comprehensive 37-year weather modeling determining the UK requires 60 to 100 TWh of energy storage, establishing that green hydrogen in salt caverns is the only economically viable option for multi-week seasonal storage.<br>
+              <a href="https://royalsociety.org/news-resources/publications/2023/large-scale-electricity-storage/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://royalsociety.org/news-resources/publications/2023/large-scale-electricity-storage/ ↗</a>
             </li>
             <li>
               <strong>National Grid ESO / University of Oxford / WWF (2017–2026):</strong><br>
@@ -6535,7 +6918,13 @@
         cancelHideSnowballFootePopover();
         sfPinned = false;
         sfHovering = false;
-        if (sfPopoverEl) sfPopoverEl.style.display = "none";
+        if (sfPopoverEl) {
+          sfPopoverEl.style.display = "none";
+          sfPopoverEl.scrollTop = 0;
+        }
+        if (sfBodyEl) {
+          sfBodyEl.scrollTop = 0;
+        }
       }
 
       function showSnowballFootePopover(anchorEl) {
@@ -6547,15 +6936,17 @@
         const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
         if (sfBodyEl) {
           sfBodyEl.innerHTML = isSimple ? sfContentSimple : sfContentAdvanced;
+          sfBodyEl.scrollTop = 0;
         }
 
-        sfPopoverEl.style.display = "block";
+        sfPopoverEl.style.display = "flex";
+        sfPopoverEl.scrollTop = 0;
 
         const rect = targetAnchor.getBoundingClientRect();
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const cardW = Math.min(350, vw - 24);
-        const cardH = sfPopoverEl.offsetHeight || 320;
+        const cardH = sfPopoverEl.offsetHeight || 340;
 
         let left = rect.left + rect.width / 2 - cardW / 2;
         left = Math.max(12, Math.min(vw - cardW - 12, left));
@@ -6585,7 +6976,8 @@
           e.stopPropagation();
           e.preventDefault();
         }
-        if (sfPopoverEl && sfPopoverEl.style.display === "block" && sfPinned) {
+        const isShown = sfPopoverEl && sfPopoverEl.style.display !== "none" && sfPopoverEl.style.display !== "";
+        if (isShown && sfPinned) {
           hideSnowballFootePopover();
         } else {
           showSnowballFootePopover(anchorEl);
@@ -6756,7 +7148,7 @@
         activeTpGroupKey = null;
       });
       document.addEventListener("mousedown", e => {
-        if (sfPopoverEl && sfPopoverEl.style.display === "block" && !sfPopoverEl.contains(e.target)) {
+        if (sfPopoverEl && sfPopoverEl.style.display !== "none" && sfPopoverEl.style.display !== "" && !sfPopoverEl.contains(e.target)) {
           const btn = document.getElementById("btnSnowballFoote");
           if (!btn || !btn.contains(e.target)) {
             hideSnowballFootePopover();
@@ -8436,7 +8828,7 @@
         {
           pinId: "pin2",
           title: "Step 2: Earth Absorbs and Glows with Heat (Longwave Infrared)",
-          html: `Bright white surfaces like ice reflect sunlight straight back to space. But dark ground and oceans absorb the incoming shortwave light, warm up to ~15°C, and glow with invisible <strong>longwave thermal infrared heat (~15 µm)</strong>.<br><br><span class="rich-tooltip-trigger" title="Greenhouse warming is not all bad: without carbon in the atmosphere, Earth would be ~33°C colder (-18°C). Earth froze twice in its history.&#10;&#10;The greenhouse effect of carbon molecules was first discovered by Eunice Newton Foote in 1856.">Because this heat wavelength is ~30× longer than sunlight, it matches the exact vibration of CO₂ molecules—meaning heat is trapped on the way <em>out</em>, not on the way <em>in</em>. <button type="button" class="rich-tooltip-badge" id="btnSnowballFoote" onclick="toggleSnowballFootePopover(this, event)" onmouseenter="showSnowballFootePopover(this)" onmouseleave="scheduleHideSnowballFootePopover()">❄️ Snowball Earth & Eunice Foote (1856)</button></span>`
+          html: `Bright white surfaces like ice reflect sunlight straight back to space. But dark ground and oceans absorb the incoming shortwave light, warm up to ~15°C, and glow with invisible <strong>longwave thermal infrared heat (~15 µm)</strong>.<br><br><span class="rich-tooltip-trigger" title="Greenhouse warming is not all bad: without carbon in the atmosphere, Earth would be ~33°C colder (-18°C); Earth froze into a snowball twice in deep time.&#10;&#10;The greenhouse effect of carbon molecules was first discovered by Eunice Newton Foote in 1856.">Because this heat wavelength is ~30× longer than sunlight, it matches the exact vibration of CO₂ molecules—meaning heat is trapped on the way <em>out</em>, not on the way <em>in</em>. <button type="button" class="rich-tooltip-badge" id="btnSnowballFoote" onclick="toggleSnowballFootePopover(this, event)" onmouseenter="showSnowballFootePopover(this)" onmouseleave="scheduleHideSnowballFootePopover()">❄️ Snowball Earth & Eunice Foote (1856)</button></span>`
         },
         {
           pinId: "pin3",
@@ -8469,7 +8861,7 @@
         {
           pinId: "pin2",
           title: "Step 2: Surface Absorption & Infrared Re-emission (Longwave)",
-          html: `Bright ice reflects ~30% of incoming shortwave photons back to space (planetary albedo). The remaining ~70% warms the planetary surface (~288 K), which re-emits as <strong>longwave thermal infrared (peaking at 10–15 µm)</strong>.<br><br><span class="rich-tooltip-trigger" title="Greenhouse warming is not all bad: without greenhouse gases, Earth radiates at ~255 K (-18°C / ~33°C colder). Earth froze twice in its history into a snowball.&#10;&#10;The greenhouse effect of carbon molecules was first discovered by Eunice Newton Foote in 1856.">Because this heat wavelength is ~30× longer than sunlight, it matches the exact ~15 µm bending vibration mode of CO₂ molecules (O=C=O)—meaning heat is trapped on the way <em>out</em>, not on the way <em>in</em>. <button type="button" class="rich-tooltip-badge" id="btnSnowballFoote" onclick="toggleSnowballFootePopover(this, event)" onmouseenter="showSnowballFootePopover(this)" onmouseleave="scheduleHideSnowballFootePopover()">❄️ Snowball Earth & Eunice Foote (1856)</button></span>`
+          html: `Bright ice reflects ~30% of incoming shortwave photons back to space (planetary albedo). The remaining ~70% warms the planetary surface (~288 K), which re-emits as <strong>longwave thermal infrared (peaking at 10–15 µm)</strong>.<br><br><span class="rich-tooltip-trigger" title="Greenhouse warming is not all bad: without greenhouse gases, Earth radiates at ~255 K (-18°C / ~33°C colder); Earth froze twice in its geological history into a snowball.&#10;&#10;The greenhouse effect of carbon molecules was first discovered by Eunice Newton Foote in 1856.">Because this heat wavelength is ~30× longer than sunlight, it matches the exact ~15 µm bending vibration mode of CO₂ molecules (O=C=O)—meaning heat is trapped on the way <em>out</em>, not on the way <em>in</em>. <button type="button" class="rich-tooltip-badge" id="btnSnowballFoote" onclick="toggleSnowballFootePopover(this, event)" onmouseenter="showSnowballFootePopover(this)" onmouseleave="scheduleHideSnowballFootePopover()">❄️ Snowball Earth & Eunice Foote (1856)</button></span>`
         },
         {
           pinId: "pin3",
@@ -8691,7 +9083,7 @@
           }
         }
 
-        if (sfPopoverEl && sfPopoverEl.style.display === "block") {
+        if (sfPopoverEl && sfPopoverEl.style.display !== "none" && sfPopoverEl.style.display !== "") {
           const sfRect = sfPopoverEl.getBoundingClientRect();
           const inSf = e.clientX >= sfRect.left && e.clientX <= sfRect.right && e.clientY >= sfRect.top && e.clientY <= sfRect.bottom;
           const btn = document.getElementById("btnSnowballFoote");
@@ -8761,6 +9153,7 @@
       const btnModeBudgets = document.getElementById("btnModeBudgets");
       const btnModeSources = document.getElementById("btnModeSources");
       const btnModeSolutions = document.getElementById("btnModeSolutions");
+      const btnModeDunkel = document.getElementById("btnModeDunkel");
 
       function setViewMode(mode) {
         const isSimple = mode === "simple";
@@ -8768,18 +9161,21 @@
         const isBudgets = mode === "budgets";
         const isSources = mode === "sources";
         const isSolutions = mode === "solutions";
+        const isDunkel = mode === "dunkel";
 
         appWrapper.classList.toggle("simple-mode", isSimple);
         appWrapper.classList.toggle("advanced-mode", isAdvanced);
         appWrapper.classList.toggle("budgets-mode", isBudgets);
         appWrapper.classList.toggle("sources-mode", isSources);
         appWrapper.classList.toggle("solutions-mode", isSolutions);
+        appWrapper.classList.toggle("dunkel-mode", isDunkel);
 
         btnModeSimple.classList.toggle("active", isSimple);
         btnModeAdvanced.classList.toggle("active", isAdvanced);
         if (btnModeBudgets) btnModeBudgets.classList.toggle("active", isBudgets);
         if (btnModeSources) btnModeSources.classList.toggle("active", isSources);
         if (btnModeSolutions) btnModeSolutions.classList.toggle("active", isSolutions);
+        if (btnModeDunkel) btnModeDunkel.classList.toggle("active", isDunkel);
 
         if (isSimple) {
           document.getElementById("headerTitle").textContent = "Earth's Energy Imbalance";
@@ -8799,6 +9195,10 @@
           document.getElementById("headerTitle").textContent = "Clean Energy Solutions & Grid Storage";
           document.getElementById("headerSubtitle").textContent = "What does it take to replace 41 Gt/yr of fossil energy? Generation mix & storage balancing";
           updateSolutionsCalculations();
+        } else if (isDunkel) {
+          document.getElementById("headerTitle").textContent = "UK Dunkelflaute & Energy Storage Simulator";
+          document.getElementById("headerSubtitle").textContent = "Modeling British wind droughts, required storage volume, and the fiscal/tax cost of hydrogen salt caverns vs batteries";
+          updateDunkelCalculations();
         }
 
         if (isSimple && tpCardEl) {
@@ -8833,7 +9233,7 @@
         const btnWhat = document.getElementById("btnWhatCanIDo");
         if (btnWhat) btnWhat.classList.remove("active");
 
-        if (!isBudgets && !isSources && !isSolutions) {
+        if (!isBudgets && !isSources && !isSolutions && !isDunkel) {
           draw();
         }
       }
@@ -8843,6 +9243,7 @@
       if (btnModeBudgets) btnModeBudgets.addEventListener("click", () => setViewMode("budgets"));
       if (btnModeSources) btnModeSources.addEventListener("click", () => setViewMode("sources"));
       if (btnModeSolutions) btnModeSolutions.addEventListener("click", () => setViewMode("solutions"));
+      if (btnModeDunkel) btnModeDunkel.addEventListener("click", () => setViewMode("dunkel"));
       const btnBackToSim = document.getElementById("btnBackToSim");
       if (btnBackToSim) btnBackToSim.addEventListener("click", () => setViewMode("advanced"));
       const btnJumpToBudgets = document.getElementById("btnJumpToBudgets");
@@ -10117,6 +10518,295 @@
         updateSolutionsCalculations();
       }
 
+      // ==========================================
+      // UK DUNKELFLAUTE & ENERGY STORAGE SIMULATOR
+      // ==========================================
+      const sliderDunkelDemand = document.getElementById("sliderDunkelDemand");
+      const sliderDunkelDays = document.getElementById("sliderDunkelDays");
+      const sliderDunkelPHS = document.getElementById("sliderDunkelPHS");
+      const sliderDunkelBESS = document.getElementById("sliderDunkelBESS");
+      const sliderDunkelCAES = document.getElementById("sliderDunkelCAES");
+      const sliderDunkelH2 = document.getElementById("sliderDunkelH2");
+
+      function updateDunkelCalculations() {
+        if (!sliderDunkelDemand || !sliderDunkelDays) return;
+
+        const demand = parseFloat(sliderDunkelDemand.value) || 360;
+        const days = parseFloat(sliderDunkelDays.value) || 14;
+        const phs = parseFloat(sliderDunkelPHS.value) || 30; // GWh
+        const bess = parseFloat(sliderDunkelBESS.value) || 10; // GWh
+        const caes = parseFloat(sliderDunkelCAES.value) || 200; // GWh
+        const h2 = parseFloat(sliderDunkelH2.value) || 32; // TWh
+
+        // Winter space-heating factor: winter daily load is ~15% higher than annual average
+        const dailyWinterDemand = (demand / 365) * 1.15; // TWh/day
+
+        // Clean firm continuous baseload (Nuclear ~6 GW, Hydro ~1.5 GW, Biomass ~2.5 GW = ~10 GW continuous = 0.24 TWh/day)
+        const firmCleanDaily = 0.24; // TWh/day
+        const netDailyDeficit = Math.max(0, dailyWinterDemand - firmCleanDaily); // TWh/day
+        const reqEnergy = netDailyDeficit * days; // TWh required
+        const peakGW = (netDailyDeficit / 24) * 1000 * 1.25; // estimated peak discharge GW (with diurnal peaking)
+
+        // Storage deliverability with round-trip efficiencies:
+        // PHS: 75% eff, max 90 GWh in UK
+        const delPHS = (phs / 1000) * 0.75; // TWh
+        // BESS: 86% eff
+        const delBESS = (bess / 1000) * 0.86; // TWh
+        // CAES: 62% eff
+        const delCAES = (caes / 1000) * 0.62; // TWh
+        // H2 in salt caverns: 38% power-to-gas-to-power eff
+        const delH2 = h2 * 0.38; // TWh
+
+        const delTotal = delPHS + delBESS + delCAES + delH2;
+        const coveragePct = reqEnergy > 0 ? (delTotal / reqEnergy) * 100 : 100;
+
+        // Technology Capex:
+        // PHS: £100/kWh = £100M/GWh = £0.1B/GWh
+        const capexPHS = phs * 0.1; // £B
+        // BESS: £130/kWh = £130M/GWh = £0.13B/GWh
+        const capexBESS = bess * 0.13; // £B
+        // CAES: £55/kWh = £55M/GWh = £0.055B/GWh
+        const capexCAES = caes * 0.055; // £B
+        // H2 in salt caverns: £3.50/kWh cavern volume (£3.5B/TWh) + £450M/GW generation/re-electrification fleet
+        const reqDischargeGW = Math.max(10, (netDailyDeficit / 24) * 1000);
+        const capexH2 = (h2 * 3.5) + (h2 > 0 ? (reqDischargeGW * 0.45) : 0); // £B
+        const totalCapex = capexPHS + capexBESS + capexCAES + capexH2;
+
+        // Fiscal & Tax Metrics:
+        // 25-yr life, 5% WACC (7.1% capital recovery factor) + 2.0% annual O&M = 9.1% annual cost factor
+        const annualCost = totalCapex * 0.091; // £B/year
+        // HMRC standard basic rate factor: 1p on the basic rate of income tax raises £6.5 Billion/year
+        const taxRatePence = (annualCost / 6.5); // pence
+        // UK Income Taxpayers (~33.0 million)
+        const costPerTaxpayer = (annualCost * 1e9) / 33000000; // £/year
+        // UK Households (~28.5 million)
+        const costPerHousehold = (annualCost * 1e9) / 28500000; // £/year
+
+        // Update Labels
+        const lblDemand = document.getElementById("lblDunkelDemand");
+        if (lblDemand) lblDemand.textContent = `${demand} TWh/yr`;
+        const lblWinterLoad = document.getElementById("lblDunkelDailyWinterLoad");
+        if (lblWinterLoad) lblWinterLoad.textContent = `${dailyWinterDemand.toFixed(2)} TWh/day`;
+        const lblDays = document.getElementById("lblDunkelDays");
+        if (lblDays) lblDays.textContent = `${days} Day${days > 1 ? "s" : ""}`;
+        const lblDeficit = document.getElementById("lblDunkelNetDailyDeficit");
+        if (lblDeficit) lblDeficit.textContent = `${netDailyDeficit.toFixed(2)} TWh/day`;
+
+        const lblPHS = document.getElementById("lblDunkelPHS");
+        if (lblPHS) lblPHS.textContent = `${phs} GWh (${(phs / 1000).toFixed(3)} TWh)`;
+        const lblBESS = document.getElementById("lblDunkelBESS");
+        if (lblBESS) lblBESS.textContent = `${bess} GWh (${(bess / 1000).toFixed(3)} TWh)`;
+        const lblCAES = document.getElementById("lblDunkelCAES");
+        if (lblCAES) lblCAES.textContent = `${caes} GWh (${(caes / 1000).toFixed(2)} TWh)`;
+        const lblH2 = document.getElementById("lblDunkelH2");
+        if (lblH2) lblH2.textContent = `${h2.toFixed(1)} TWh (Caverns)`;
+
+        // Top Metric Strip
+        const statDeficitVal = document.getElementById("dunkelStatDeficitVal");
+        if (statDeficitVal) statDeficitVal.innerHTML = `${reqEnergy.toFixed(1)} <span style="font-size: 0.8rem; color: var(--text-muted);">TWh</span>`;
+        const statDeficitSub = document.getElementById("dunkelStatDeficitSub");
+        if (statDeficitSub) statDeficitSub.textContent = `${days} days @ ${netDailyDeficit.toFixed(2)} TWh/day net winter deficit`;
+
+        const statCoverageVal = document.getElementById("dunkelStatCoverageVal");
+        if (statCoverageVal) {
+          const isFull = coveragePct >= 99.5;
+          statCoverageVal.style.color = isFull ? "var(--emerald)" : "var(--rose)";
+          statCoverageVal.innerHTML = `${Math.min(100, Math.round(coveragePct))}% <span style="font-size: 0.8rem; color: var(--text-muted);">${isFull ? "Covered" : "Deficit"}</span>`;
+        }
+        const statCoverageSub = document.getElementById("dunkelStatCoverageSub");
+        if (statCoverageSub) {
+          statCoverageSub.textContent = coveragePct >= 99.5 ? `Zero blackout risk · ${delTotal.toFixed(1)} TWh delivered` : `Shortfall: ${(reqEnergy - delTotal).toFixed(1)} TWh unsupplied (${delTotal.toFixed(1)} TWh delivered)`;
+        }
+
+        const statCapexVal = document.getElementById("dunkelStatCapexVal");
+        if (statCapexVal) statCapexVal.innerHTML = `£${totalCapex.toFixed(1)} <span style="font-size: 0.8rem; color: var(--text-muted);">Billion</span>`;
+        const statCapexSub = document.getElementById("dunkelStatCapexSub");
+        if (statCapexSub) statCapexSub.textContent = `Caverns £${capexH2.toFixed(1)}B · Batteries £${capexBESS.toFixed(1)}B · PHS £${capexPHS.toFixed(1)}B`;
+
+        const statFiscalVal = document.getElementById("dunkelStatFiscalVal");
+        if (statFiscalVal) statFiscalVal.innerHTML = `+${taxRatePence.toFixed(2)}p <span style="font-size: 0.8rem; color: var(--text-muted);">Basic Tax</span>`;
+        const statFiscalSub = document.getElementById("dunkelStatFiscalSub");
+        if (statFiscalSub) statFiscalSub.textContent = `£${Math.round(costPerTaxpayer)}/yr per taxpayer · £${(costPerHousehold / 12).toFixed(2)}/mo per household`;
+
+        // Card 1: Deliverability Table & Badges
+        const cardReqVal = document.getElementById("dunkelCardReqVal");
+        if (cardReqVal) cardReqVal.textContent = `${reqEnergy.toFixed(1)} TWh`;
+        const cardReqSub = document.getElementById("dunkelCardReqSub");
+        if (cardReqSub) cardReqSub.textContent = `Peak discharge needed: ~${Math.round(peakGW)} GW`;
+
+        const cardDeliveredVal = document.getElementById("dunkelCardDeliveredVal");
+        if (cardDeliveredVal) cardDeliveredVal.textContent = `${delTotal.toFixed(1)} TWh`;
+        const cardDeliveredSub = document.getElementById("dunkelCardDeliveredSub");
+        if (cardDeliveredSub) cardDeliveredSub.textContent = `${coveragePct.toFixed(0)}% of demand covered`;
+
+        const badgeBalance = document.getElementById("dunkelBadgeBalance");
+        if (badgeBalance) {
+          if (coveragePct >= 99.5) {
+            badgeBalance.className = "badge badge-emerald";
+            badgeBalance.textContent = "Balanced";
+          } else {
+            badgeBalance.className = "badge badge-rose";
+            badgeBalance.textContent = `Shortfall -${(reqEnergy - delTotal).toFixed(1)} TWh`;
+          }
+        }
+
+        // Table Rows
+        const rowPHSCap = document.getElementById("dunkelRowPHSCap");
+        if (rowPHSCap) rowPHSCap.textContent = `${phs} GWh`;
+        const rowPHSDel = document.getElementById("dunkelRowPHSDel");
+        if (rowPHSDel) rowPHSDel.textContent = `${delPHS.toFixed(3)} TWh`;
+        const rowPHSCapex = document.getElementById("dunkelRowPHSCapex");
+        if (rowPHSCapex) rowPHSCapex.textContent = `£${capexPHS.toFixed(1)} B`;
+
+        const rowBESSCap = document.getElementById("dunkelRowBESSCap");
+        if (rowBESSCap) rowBESSCap.textContent = `${bess} GWh`;
+        const rowBESSDel = document.getElementById("dunkelRowBESSDel");
+        if (rowBESSDel) rowBESSDel.textContent = `${delBESS.toFixed(3)} TWh`;
+        const rowBESSCapex = document.getElementById("dunkelRowBESSCapex");
+        if (rowBESSCapex) rowBESSCapex.textContent = `£${capexBESS.toFixed(1)} B`;
+
+        const rowCAESCap = document.getElementById("dunkelRowCAESCap");
+        if (rowCAESCap) rowCAESCap.textContent = `${caes} GWh`;
+        const rowCAESDel = document.getElementById("dunkelRowCAESDel");
+        if (rowCAESDel) rowCAESDel.textContent = `${delCAES.toFixed(3)} TWh`;
+        const rowCAESCapex = document.getElementById("dunkelRowCAESCapex");
+        if (rowCAESCapex) rowCAESCapex.textContent = `£${capexCAES.toFixed(1)} B`;
+
+        const rowH2Cap = document.getElementById("dunkelRowH2Cap");
+        if (rowH2Cap) rowH2Cap.textContent = `${h2.toFixed(1)} TWh`;
+        const rowH2Del = document.getElementById("dunkelRowH2Del");
+        if (rowH2Del) rowH2Del.textContent = `${delH2.toFixed(2)} TWh`;
+        const rowH2Capex = document.getElementById("dunkelRowH2Capex");
+        if (rowH2Capex) rowH2Capex.textContent = `£${capexH2.toFixed(1)} B`;
+
+        // Card 2: The "All-Battery Storage" Fallacy Card
+        const txtBatDeficit = document.getElementById("dunkelTxtBatDeficit");
+        if (txtBatDeficit) txtBatDeficit.textContent = `${reqEnergy.toFixed(1)} TWh`;
+
+        const batEnergyNeeded = reqEnergy / 0.86; // TWh of battery nameplate needed
+        const capexAllBat = batEnergyNeeded * 130; // £130B per TWh
+        const h2CapacityNeeded = reqEnergy / 0.38;
+        const capexAllH2 = (h2CapacityNeeded * 3.5) + (reqDischargeGW * 0.45);
+        const batMultiplier = capexAllH2 > 0 ? (capexAllBat / capexAllH2) : 1;
+
+        const valAllBat = document.getElementById("dunkelValAllBat");
+        if (valAllBat) valAllBat.textContent = `£${Math.round(capexAllBat).toLocaleString()} Billion`;
+        const valH2Compare = document.getElementById("dunkelValH2Compare");
+        if (valH2Compare) valH2Compare.textContent = `~£${Math.round(capexAllH2)} Billion`;
+        const badgeBatDiff = document.getElementById("dunkelBadgeBatDiff");
+        if (badgeBatDiff) badgeBatDiff.textContent = `${Math.round(batMultiplier)}× More Expensive`;
+
+        // Card 3: Fiscal & Tax Accounting
+        const fiscalAnnualCost = document.getElementById("dunkelFiscalAnnualCost");
+        if (fiscalAnnualCost) fiscalAnnualCost.textContent = `£${annualCost.toFixed(2)} B/yr`;
+        const fiscalTaxRate = document.getElementById("dunkelFiscalTaxRate");
+        if (fiscalTaxRate) fiscalTaxRate.textContent = `+${taxRatePence.toFixed(2)}p`;
+        const fiscalPerTaxpayer = document.getElementById("dunkelFiscalPerTaxpayer");
+        if (fiscalPerTaxpayer) fiscalPerTaxpayer.textContent = `£${Math.round(costPerTaxpayer)} / year`;
+        const fiscalPerHousehold = document.getElementById("dunkelFiscalPerHousehold");
+        if (fiscalPerHousehold) fiscalPerHousehold.textContent = `£${(costPerHousehold / 12).toFixed(2)} / month`;
+      }
+
+      function initDunkelView() {
+        if (!sliderDunkelDemand) return;
+
+        const dunkelSliders = [
+          sliderDunkelDemand, sliderDunkelDays, sliderDunkelPHS,
+          sliderDunkelBESS, sliderDunkelCAES, sliderDunkelH2
+        ];
+        dunkelSliders.forEach(s => {
+          if (s) {
+            s.addEventListener("input", () => {
+              updateDunkelCalculations();
+            });
+          }
+        });
+
+        // Demand Presets
+        const demandPresets = [
+          { id: "presetDunkelDemand2025", val: 300 },
+          { id: "presetDunkelDemand2030", val: 360 },
+          { id: "presetDunkelDemand2035", val: 450 },
+          { id: "presetDunkelDemand2050", val: 570 }
+        ];
+        demandPresets.forEach(dp => {
+          const btn = document.getElementById(dp.id);
+          if (btn) {
+            btn.addEventListener("click", () => {
+              sliderDunkelDemand.value = dp.val;
+              demandPresets.forEach(o => {
+                const b = document.getElementById(o.id);
+                if (b) b.classList.toggle("active", o.id === dp.id);
+              });
+              updateDunkelCalculations();
+            });
+          }
+        });
+
+        // Duration Presets
+        const dayPresets = [
+          { id: "presetDunkel3d", val: 3 },
+          { id: "presetDunkel7d", val: 7 },
+          { id: "presetDunkel14d", val: 14 },
+          { id: "presetDunkel21d", val: 21 },
+          { id: "presetDunkel30d", val: 30 },
+          { id: "presetDunkelRS", val: 42, isRS: true }
+        ];
+        dayPresets.forEach(dp => {
+          const btn = document.getElementById(dp.id);
+          if (btn) {
+            btn.addEventListener("click", () => {
+              if (dp.isRS) {
+                // Royal Society 37-Year Benchmark: 570 TWh Net Zero demand, ~42-day lull & seasonal deficit (~65 TWh)
+                sliderDunkelDemand.value = 570;
+                sliderDunkelDays.value = 42;
+                demandPresets.forEach(o => {
+                  const b = document.getElementById(o.id);
+                  if (b) b.classList.toggle("active", o.id === "presetDunkelDemand2050");
+                });
+              } else {
+                sliderDunkelDays.value = dp.val;
+              }
+              dayPresets.forEach(o => {
+                const b = document.getElementById(o.id);
+                if (b) b.classList.toggle("active", o.id === dp.id);
+              });
+              updateDunkelCalculations();
+            });
+          }
+        });
+
+        // Auto-Balance Fleet Button
+        const btnAutoBalance = document.getElementById("btnDunkelAutoBalance");
+        if (btnAutoBalance) {
+          btnAutoBalance.addEventListener("click", () => {
+            const demand = parseFloat(sliderDunkelDemand.value) || 360;
+            const days = parseFloat(sliderDunkelDays.value) || 14;
+            const dailyWinterDemand = (demand / 365) * 1.15;
+            const netDailyDeficit = Math.max(0, dailyWinterDemand - 0.24);
+            const reqEnergy = netDailyDeficit * days;
+
+            // Fill physical limits first:
+            // PHS capped at UK limit of 90 GWh (0.09 TWh * 0.75 = 0.0675 TWh delivered)
+            sliderDunkelPHS.value = 90;
+            // Batteries optimized for 2-4 hour intraday balancing: 50 GWh (0.05 TWh * 0.86 = 0.043 TWh delivered)
+            sliderDunkelBESS.value = 50;
+            // CAES in salt caverns: 500 GWh (0.5 TWh * 0.62 = 0.31 TWh delivered)
+            sliderDunkelCAES.value = 500;
+
+            const nonH2Delivered = (0.09 * 0.75) + (0.05 * 0.86) + (0.5 * 0.62); // ~0.42 TWh
+            const remainingNeeded = Math.max(0, reqEnergy - nonH2Delivered);
+            // Needed H2 storage in salt caverns at 38% efficiency
+            const neededH2 = remainingNeeded / 0.38;
+            sliderDunkelH2.value = Math.min(100, Math.max(1, Math.ceil(neededH2)));
+
+            updateDunkelCalculations();
+          });
+        }
+
+        updateDunkelCalculations();
+      }
+
       try {
         initSourcesView();
       } catch (err) {
@@ -10126,6 +10816,11 @@
         initSolutionsView();
       } catch (err) {
         console.error("Error initializing Solutions view:", err);
+      }
+      try {
+        initDunkelView();
+      } catch (err) {
+        console.error("Error initializing Dunkelflaute view:", err);
       }
 
       // Simulation Controls
