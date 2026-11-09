@@ -205,6 +205,52 @@
       color: #fff;
     }
 
+    /* CIVIC PERSPECTIVE CARD & REGIONAL SELECTOR */
+    .civic-perspective-card {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1.5px solid rgba(52, 211, 153, 0.4);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-top: 2px;
+    }
+    .civic-country-selector {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .btn-civic-country {
+      background: #17243f;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #94a3b8;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-civic-country:hover {
+      background: #23355c;
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .btn-civic-country.active {
+      background: var(--emerald);
+      color: #042f2e;
+      border-color: var(--emerald-light);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    }
+    .civic-panel {
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* REALITY CHECK & COMPASSION BANNER */
     .compassion-banner {
       background: rgba(245, 158, 11, 0.08);
@@ -584,16 +630,74 @@
       </div>
 
       <!-- PERSPECTIVE & CIVIC ADVOCACY STATEMENT -->
-      <div class="civic-perspective-card" style="background: rgba(16, 185, 129, 0.08); border: 1.5px solid rgba(52, 211, 153, 0.4); border-radius: 10px; padding: 16px 18px; margin-top: 2px;">
-        <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.96rem; color: var(--emerald-light); margin-bottom: 6px;">
-          <span>🌍</span> Thanks for reading. You are one of around 8 billion.
+      <div class="civic-perspective-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid rgba(52, 211, 153, 0.2); padding-bottom: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.96rem; color: var(--emerald-light);">
+            <span>🌍</span> Perspective &amp; Civic Duty: Select Your Region
+          </div>
+          <div class="civic-country-selector">
+            <button type="button" class="btn-civic-country active" id="btnCivicUK" data-country="uk">🇬🇧 UK Resident</button>
+            <button type="button" class="btn-civic-country" id="btnCivicUS" data-country="us">🇺🇸 US Resident</button>
+            <button type="button" class="btn-civic-country" id="btnCivicChina" data-country="china">🇨🇳 Chinese Resident</button>
+            <button type="button" class="btn-civic-country" id="btnCivicMalawi" data-country="malawi">🇲🇼 Malawian Resident</button>
+          </div>
         </div>
-        <p style="font-size: 0.88rem; color: #f1f5f9; line-height: 1.6; margin-bottom: 10px;">
-          You can only make 1/1×10⁸ difference to humanity's carbon emissions by adjusting your own practices.
-        </p>
-        <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 0;">
-          <strong>Rethink, Refuse, Reduce, Reuse, Repair, Regift, Recycle</strong>, yes, but to make a bigger difference, <strong>contact your representatives</strong>. Let them know how strongly and urgently you want action on human-induced climate change, and why. Tell them you have seen the forecasts and while nothing major may happen in their time in Parliament/Assembly/Congress you know that if we continue to fail to act, your children, younger relatives, loved ones may be left a difficult world to live in.
-        </p>
+
+        <!-- UK PANEL -->
+        <div id="civicPanelUK" class="civic-panel">
+          <p style="font-size: 0.88rem; color: #f1f5f9; line-height: 1.6; margin-bottom: 8px;">
+            <strong>Thanks for reading.</strong> You are one of around 68 million in the UK (and 8 billion globally). You can only make 1/1×10⁸ difference to humanity's carbon emissions (and 1/6.8×10⁷ of the UK's territorial emissions) by adjusting your own individual practices.
+          </p>
+          <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 8px;">
+            <strong>Rethink, Refuse, Reduce, Reuse, Repair, Regift, Recycle</strong>, yes, but to make a bigger difference, <strong>contact your representatives</strong>. Let them know how strongly and urgently you want action on human-induced climate change, and why. Tell them you have seen the forecasts and while nothing major may happen in their time in Parliament or local councils, you know that if we continue to fail to act, your children, younger relatives, loved ones may be left a difficult world to live in.
+          </p>
+          <div style="font-size: 0.8rem; color: #94a3b8; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1);">
+            <span>🏛️ <strong>Key Action:</strong> Contact your MP at Westminster (<a href="https://www.writetothem.com" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">WriteToThem.com ↗</a>).</span>
+            <span>⚡ <strong>Key Demand:</strong> Unblock transmission infrastructure, mandate heat pumps in new homes, and subsidise home insulation retrofits.</span>
+          </div>
+        </div>
+
+        <!-- US PANEL -->
+        <div id="civicPanelUS" class="civic-panel" style="display: none;">
+          <p style="font-size: 0.88rem; color: #f1f5f9; line-height: 1.6; margin-bottom: 8px;">
+            <strong>Thanks for reading.</strong> You are one of around 340 million in the United States (and 8 billion globally). You can only make 1/3.4×10⁸ difference to US emissions (and ~1/8×10⁹ globally) solely through individual consumer choices.
+          </p>
+          <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 8px;">
+            <strong>Rethink, Refuse, Reduce, Reuse, Repair, Regift, Recycle</strong>, yes, but to make an exponential difference, <strong>contact your elected representatives</strong>. Call your two U.S. Senators and your House Representative in Congress. Let them know how strongly and urgently you want action on human-induced climate change, and why. Tell them you have seen the forecasts and while nothing major may happen in their term in Congress, if we fail to act, your children, younger relatives, and loved ones will inherit an unlivable world of mega-droughts, lethal heat domes, and economic chaos.
+          </p>
+          <div style="font-size: 0.8rem; color: #94a3b8; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1);">
+            <span>🏛️ <strong>Key Action:</strong> Call your U.S. Senators &amp; Representative (<a href="https://5calls.org" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">5calls.org ↗</a> / Congress.gov).</span>
+            <span>⚡ <strong>Key Demand:</strong> Defend Inflation Reduction Act (IRA) clean energy tax credits (Sec. 25C $2,000 heat pump credits, 30% solar credit), end fossil fuel leasing on federal lands, and accelerate clean grid transmission.</span>
+          </div>
+        </div>
+
+        <!-- CHINA PANEL -->
+        <div id="civicPanelChina" class="civic-panel" style="display: none;">
+          <p style="font-size: 0.88rem; color: #f1f5f9; line-height: 1.6; margin-bottom: 8px;">
+            <strong>Thanks for reading.</strong> You are one of around 1.4 billion people in China (and 8 billion globally). You can only make 1/1.4×10⁹ difference to China's carbon emissions through individual household practices alone.
+          </p>
+          <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 8px;">
+            China is the world's clean-technology powerhouse—manufacturing over 80% of global solar cells, batteries, and electric vehicles—while simultaneously consuming over half of global coal for power and heavy industry. Frugal personal habits (勤俭节约), choosing High-Speed Rail over domestic flights, and adopting EVs are essential. But reaching national carbon peaking (碳达峰) and carbon neutrality (碳中和) requires <strong>civic and community-level participation</strong>.
+          </p>
+          <div style="font-size: 0.8rem; color: #94a3b8; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1);">
+            <span>🏘️ <strong>Key Action:</strong> Join municipal &amp; community green low-carbon initiatives (碳普惠 Tan Puhui personal carbon accounting platforms).</span>
+            <span>⚡ <strong>Key Demand:</strong> Engage with neighborhood committees (居委会) on rooftop solar PV installations, district clean heating retrofits, and report industrial polluters via the Ministry of Ecology and Environment 12369 reporting system.</span>
+          </div>
+        </div>
+
+        <!-- MALAWI PANEL -->
+        <div id="civicPanelMalawi" class="civic-panel" style="display: none;">
+          <p style="font-size: 0.88rem; color: #f1f5f9; line-height: 1.6; margin-bottom: 8px;">
+            <strong>Thanks for reading.</strong> You are one of around 21 million people in Malawi (and 8 billion globally).
+          </p>
+          <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 8px;">
+            An average Malawian emits just <strong>~0.2 tonnes of CO₂e per year</strong>—over 80 times less than an average American and 45 times less than a British resident! You are already living at a tiny fraction of the safe Paris 2.0-tonne limit. Malawians bear virtually zero historic responsibility for planetary warming, yet Malawi faces catastrophic front-line impacts: deadly super-cyclones (Cyclone Freddy), severe flooding in the Shire Basin, and recurring agricultural droughts.
+          </p>
+          <div style="font-size: 0.8rem; color: #94a3b8; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1);">
+            <span>⚖️ <strong>Key Moral Demand: Climate Justice &amp; Loss and Damage Finance:</strong> Wealthy historical emitters (US, UK, EU) must deliver non-debt grant climate reparations to vulnerable nations.</span>
+            <span>🌱 <strong>Domestic Action:</strong> Urge Members of the National Assembly of Malawi and civil society (CISONECC) to fund decentralized solar microgrids, clean cookstoves (to prevent deforestation and smoke inhalation), and drought-resistant agro-ecology.</span>
+          </div>
+        </div>
       </div>
 
       <!-- MANDATED HEADLINE CALLOUTS -->
@@ -654,7 +758,13 @@
           <p>Adjust your household, mobility, and diet choices to see how close you can get to the Paris 1.5°C target (~2.0 tonnes/year).</p>
         </div>
         <div class="preset-pill-group">
-          <button class="preset-pill active" id="btnPresetAverage" type="button">🇬🇧 Average UK Resident (9.5 t)</button>
+          <span style="font-size: 0.74rem; font-weight: 700; color: #94a3b8; align-self: center; margin-right: 4px;">Compare Baselines:</span>
+          <button class="preset-pill active" id="btnPresetAverage" type="button">🇬🇧 UK Resident (9.5 t)</button>
+          <button class="preset-pill" id="btnPresetUS" type="button">🇺🇸 US Resident (16.5 t)</button>
+          <button class="preset-pill" id="btnPresetChina" type="button">🇨🇳 Chinese Resident (8.2 t)</button>
+          <button class="preset-pill" id="btnPresetMalawi" type="button">🇲🇼 Malawian Resident (0.2 t)</button>
+          <span style="border-left: 1px solid rgba(255, 255, 255, 0.18); margin: 0 4px; height: 18px; align-self: center;"></span>
+          <span style="font-size: 0.74rem; font-weight: 700; color: #94a3b8; align-self: center; margin-right: 4px;">UK Action Plans:</span>
           <button class="preset-pill" id="btnPresetQuickWins" type="button">⚡ Quick Wins (5.8 t)</button>
           <button class="preset-pill" id="btnPresetSuburban" type="button">🌿 Suburban Eco (3.3 t)</button>
           <button class="preset-pill" id="btnPresetTrailblazer" type="button">🎯 Low-Carbon Pioneer (1.9 t)</button>
@@ -669,7 +779,7 @@
           <span class="dash-card-sub" id="subTotalComparison">Typical British consumption footprint</span>
         </div>
         <div class="dash-card">
-          <span class="dash-card-label">Reduction From UK Baseline</span>
+          <span class="dash-card-label" id="lblBaselineComparison">Reduction From UK Baseline</span>
           <div class="dash-card-val" id="valReductionPct" style="color: #38bdf8;">0% <span style="font-size: 0.9rem; color: var(--text-muted);">saved</span></div>
           <span class="dash-card-sub" id="subReductionTonnes">0.0 tonnes CO₂e eliminated</span>
         </div>
@@ -679,23 +789,24 @@
           <span class="dash-card-sub">2030 Global Target: ~2.0 tonnes/person</span>
         </div>
         <div class="dash-card">
-          <span class="dash-card-label">Shared Society Baseline</span>
-          <div class="dash-card-val" style="color: var(--purple);">1.5 <span style="font-size: 0.9rem; color: var(--text-muted);">t CO₂e</span></div>
-          <span class="dash-card-sub">NHS, schools, water &amp; roads (public policy required)</span>
+          <span class="dash-card-label" id="lblSocietalTitle">UK Public Services Baseline</span>
+          <div class="dash-card-val" id="valSocietalBaseline" style="color: var(--purple);">1.5 <span style="font-size: 0.9rem; color: var(--text-muted);">t CO₂e</span></div>
+          <span class="dash-card-sub" id="subSocietalBaseline">NHS, schools, water &amp; roads (public policy required)</span>
         </div>
       </div>
 
       <!-- STACKED PROGRESS TRACK -->
       <div class="target-bar-wrap">
         <div class="target-bar-labels">
-          <span>Carbon Footprint Breakdown vs. Paris Budget</span>
-          <span id="txtBarTotal">9.5 tonnes / 10.0t max scale</span>
+          <span>Carbon Footprint Breakdown vs. Paris 1.5°C Target (White Line = 2.0 t)</span>
+          <span id="txtBarTotal">9.5 tonnes / 18.0t scale (Goal: ≤ 2.0t)</span>
         </div>
-        <div class="target-track">
-          <div class="track-seg-home" id="barHome" style="width: 27%;"></div>
-          <div class="track-seg-transport" id="barTransport" style="width: 32%;"></div>
-          <div class="track-seg-food" id="barFood" style="width: 26%;"></div>
-          <div class="track-seg-society" title="Shared Societal Baseline (NHS, public services): 1.5 tonnes" style="width: 15%;"></div>
+        <div class="target-track" style="position: relative;">
+          <div class="track-seg-home" id="barHome" style="width: 15%;"></div>
+          <div class="track-seg-transport" id="barTransport" style="width: 18%;"></div>
+          <div class="track-seg-food" id="barFood" style="width: 12%;"></div>
+          <div class="track-seg-society" id="barSociety" title="Shared Societal Baseline" style="width: 8%;"></div>
+          <div class="paris-budget-line" style="position: absolute; left: 11.11%; top: 0; bottom: 0; width: 2px; background: #fff; z-index: 10; box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);" title="Paris 1.5°C Global Target: 2.0 tonnes/year"></div>
         </div>
         <div class="target-legend">
           <div class="target-legend-item">
@@ -712,7 +823,11 @@
           </div>
           <div class="target-legend-item">
             <span class="legend-dot" style="background: #a855f7;"></span>
-            <span>Public Services Baseline: <strong>1.5 t</strong></span>
+            <span>Public Services Baseline: <strong id="lblLegSociety">1.5 t</strong></span>
+          </div>
+          <div class="target-legend-item" style="margin-left: auto;">
+            <span class="legend-dot" style="background: #fff; border: 1px solid #38bdf8;"></span>
+            <span style="color: #38bdf8;">Paris 1.5°C Threshold: <strong>2.0 t</strong></span>
           </div>
         </div>
       </div>
@@ -1111,13 +1226,34 @@
 
       // Presets
       const btnPresetAverage = document.getElementById("btnPresetAverage");
+      const btnPresetUS = document.getElementById("btnPresetUS");
+      const btnPresetChina = document.getElementById("btnPresetChina");
+      const btnPresetMalawi = document.getElementById("btnPresetMalawi");
       const btnPresetQuickWins = document.getElementById("btnPresetQuickWins");
       const btnPresetSuburban = document.getElementById("btnPresetSuburban");
       const btnPresetTrailblazer = document.getElementById("btnPresetTrailblazer");
 
-      const UK_BASELINE_TOTAL = 9.5; // tonnes CO2e
-      const SOCIETAL_BASELINE = 1.5; // tonnes CO2e for NHS, roads, public services
+      // Country & Baseline State
+      let currentCountry = "uk"; // "uk", "us", "china", "malawi"
+      let currentCountryBaselineTotal = 9.5; // tonnes CO2e
+      let currentSocietalBaseline = 1.5; // tonnes CO2e
       const PARIS_TARGET = 2.0; // tonnes CO2e 2030 budget
+
+      const lblBaselineComparison = document.getElementById("lblBaselineComparison");
+      const lblSocietalTitle = document.getElementById("lblSocietalTitle");
+      const valSocietalBaseline = document.getElementById("valSocietalBaseline");
+      const subSocietalBaseline = document.getElementById("subSocietalBaseline");
+      const barSociety = document.getElementById("barSociety");
+      const lblLegSociety = document.getElementById("lblLegSociety");
+
+      function setCivicCountry(country) {
+        document.querySelectorAll(".btn-civic-country").forEach(b => {
+          b.classList.toggle("active", b.dataset.country === country);
+        });
+        document.querySelectorAll(".civic-panel").forEach(p => p.style.display = "none");
+        const panel = document.getElementById(`civicPanel${country.charAt(0).toUpperCase() + country.slice(1)}`);
+        if (panel) panel.style.display = "block";
+      }
 
       function updateCalculator() {
         // --- 1. HOME EMISSIONS ---
@@ -1125,30 +1261,55 @@
 
         // Space & water heating
         const heatVal = selectHeating.value;
-        if (heatVal === "oil-lpg") {
-          homeEmissions += 2.8;
-          lblDialHeating.textContent = "Oil / LPG";
-        } else if (heatVal === "gas-standard") {
-          homeEmissions += 2.1;
-          lblDialHeating.textContent = "Standard Gas Boiler";
-        } else if (heatVal === "gas-condensing") {
-          homeEmissions += 1.7;
-          lblDialHeating.textContent = "Condensing Gas";
-        } else if (heatVal === "heat-pump-grid") {
-          homeEmissions += 0.45;
-          lblDialHeating.textContent = "Heat Pump (Grid)";
-        } else if (heatVal === "heat-pump-green") {
-          homeEmissions += 0.05;
-          lblDialHeating.textContent = "Heat Pump (Green)";
+        if (currentCountry === "malawi") {
+          homeEmissions += 0.04;
+          lblDialHeating.textContent = "Tropical Climate / Solar";
+        } else if (currentCountry === "us") {
+          if (heatVal === "oil-lpg") {
+            homeEmissions += 3.6; // large US suburban home
+            lblDialHeating.textContent = "Oil / Propane Furnace";
+          } else if (heatVal === "gas-standard") {
+            homeEmissions += 2.8;
+            lblDialHeating.textContent = "Standard Gas Furnace";
+          } else if (heatVal === "gas-condensing") {
+            homeEmissions += 2.1;
+            lblDialHeating.textContent = "High-Eff Gas Furnace";
+          } else if (heatVal === "heat-pump-grid") {
+            homeEmissions += 0.75;
+            lblDialHeating.textContent = "Heat Pump (US Grid Mix)";
+          } else if (heatVal === "heat-pump-green") {
+            homeEmissions += 0.08;
+            lblDialHeating.textContent = "Heat Pump + Solar";
+          }
+        } else {
+          // UK / Europe / China standard
+          if (heatVal === "oil-lpg") {
+            homeEmissions += 2.8;
+            lblDialHeating.textContent = "Oil / LPG";
+          } else if (heatVal === "gas-standard") {
+            homeEmissions += 2.1;
+            lblDialHeating.textContent = "Standard Gas Boiler";
+          } else if (heatVal === "gas-condensing") {
+            homeEmissions += 1.6;
+            lblDialHeating.textContent = "Condensing Gas / District Heat";
+          } else if (heatVal === "heat-pump-grid") {
+            homeEmissions += 0.45;
+            lblDialHeating.textContent = "Heat Pump (Grid)";
+          } else if (heatVal === "heat-pump-green") {
+            homeEmissions += 0.05;
+            lblDialHeating.textContent = "Heat Pump (Green)";
+          }
         }
 
         // Insulation modifier
         const insVal = selectInsulation.value;
-        if (insVal === "poor") {
+        if (currentCountry === "malawi") {
+          lblDialInsulation.textContent = "Natural Ventilation";
+        } else if (insVal === "poor") {
           homeEmissions += 0.8;
-          lblDialInsulation.textContent = "Poor (+0.8 t)";
+          lblDialInsulation.textContent = "Poor / Draughty (+0.8 t)";
         } else if (insVal === "moderate") {
-          lblDialInsulation.textContent = "Typical Cavity";
+          lblDialInsulation.textContent = "Typical Cavity / Moderate";
         } else if (insVal === "high") {
           homeEmissions = Math.max(0.1, homeEmissions * 0.65);
           lblDialInsulation.textContent = "Super-Insulated (-35%)";
@@ -1156,9 +1317,12 @@
 
         // Cooking
         const cookVal = selectCooking.value;
-        if (cookVal === "gas") {
+        if (currentCountry === "malawi") {
+          homeEmissions += 0.03;
+          lblDialCooking.textContent = "Clean Biomass / Solar";
+        } else if (cookVal === "gas") {
           homeEmissions += 0.18;
-          lblDialCooking.textContent = "Gas Hob";
+          lblDialCooking.textContent = "Gas Stove / Hob";
         } else {
           homeEmissions += 0.03;
           lblDialCooking.textContent = "Induction Hob";
@@ -1166,12 +1330,33 @@
 
         // Electricity
         const elecVal = selectElectricity.value;
-        if (elecVal === "grid") {
-          homeEmissions += 0.55;
-          lblDialElectricity.textContent = "UK Grid Standard";
+        if (currentCountry === "malawi") {
+          homeEmissions += 0.01;
+          lblDialElectricity.textContent = "Off-Grid Solar / Hydro";
+        } else if (currentCountry === "us") {
+          if (elecVal === "grid") {
+            homeEmissions += 1.25; // Higher US household kWh + fossil grid (~370 g/kWh)
+            lblDialElectricity.textContent = "US Grid Average";
+          } else {
+            homeEmissions += 0.08;
+            lblDialElectricity.textContent = "100% Green / Rooftop Solar";
+          }
+        } else if (currentCountry === "china") {
+          if (elecVal === "grid") {
+            homeEmissions += 0.85; // High coal proportion
+            lblDialElectricity.textContent = "China Grid Average";
+          } else {
+            homeEmissions += 0.06;
+            lblDialElectricity.textContent = "100% Green / Solar";
+          }
         } else {
-          homeEmissions += 0.05;
-          lblDialElectricity.textContent = "100% Green / Solar";
+          if (elecVal === "grid") {
+            homeEmissions += 0.55;
+            lblDialElectricity.textContent = "UK Grid Standard";
+          } else {
+            homeEmissions += 0.05;
+            lblDialElectricity.textContent = "100% Green / Solar";
+          }
         }
 
         // --- 2. TRANSPORT EMISSIONS ---
@@ -1184,8 +1369,8 @@
         // Emission factor per mile
         let carGramsPerMile = 0;
         if (carVal === "suv") {
-          carGramsPerMile = 380; // large petrol SUV
-          lblDialCarType.textContent = "Large SUV";
+          carGramsPerMile = 380; // large petrol SUV / pickup
+          lblDialCarType.textContent = "Large SUV / Pickup";
         } else if (carVal === "petrol") {
           carGramsPerMile = 260; // average petrol
           lblDialCarType.textContent = "Petrol Car";
@@ -1193,7 +1378,7 @@
           carGramsPerMile = 170;
           lblDialCarType.textContent = "Hybrid";
         } else if (carVal === "ev") {
-          carGramsPerMile = 55; // EV on UK grid
+          carGramsPerMile = currentCountry === "us" ? 85 : 55;
           lblDialCarType.textContent = "Electric Vehicle (EV)";
         } else if (carVal === "car-free") {
           carGramsPerMile = 0;
@@ -1206,7 +1391,7 @@
         // Flights
         const shortFlights = parseInt(sliderShortFlights.value, 10) || 0;
         lblDialShortFlights.textContent = `${shortFlights} Return Flight${shortFlights === 1 ? "" : "s"}`;
-        transportEmissions += (shortFlights * 0.35); // ~350 kg CO2e per European return with contrails
+        transportEmissions += (shortFlights * 0.35); // ~350 kg CO2e per short-haul return with contrails
 
         const longFlights = parseInt(sliderLongFlights.value, 10) || 0;
         lblDialLongFlights.textContent = `${longFlights} Return Flight${longFlights === 1 ? "" : "s"}`;
@@ -1214,14 +1399,17 @@
 
         // --- 3. FOOD EMISSIONS ---
         let foodEmissions = 0;
-
         const dietVal = selectDiet.value;
-        if (dietVal === "heavy-meat") {
-          foodEmissions = 3.2;
+
+        if (currentCountry === "malawi") {
+          foodEmissions = 0.10;
+          lblDialDiet.textContent = "Staple Maize / Legumes (0.10 t)";
+        } else if (dietVal === "heavy-meat") {
+          foodEmissions = currentCountry === "us" ? 3.4 : 3.2;
           lblDialDiet.textContent = "Heavy Meat";
         } else if (dietVal === "average") {
-          foodEmissions = 2.3;
-          lblDialDiet.textContent = "Average UK Diet";
+          foodEmissions = 2.1;
+          lblDialDiet.textContent = "Average Diet";
         } else if (dietVal === "flexitarian") {
           foodEmissions = 1.4;
           lblDialDiet.textContent = "Flexitarian";
@@ -1234,20 +1422,31 @@
         }
 
         const wasteVal = selectWaste.value;
-        if (wasteVal === "typical") {
+        if (currentCountry === "malawi") {
+          lblDialWaste.textContent = "Near-Zero Waste";
+        } else if (wasteVal === "typical") {
           lblDialWaste.textContent = "Typical Waste";
         } else {
-          foodEmissions = Math.max(0.4, foodEmissions - 0.3);
+          foodEmissions = Math.max(0.2, foodEmissions - 0.3);
           lblDialWaste.textContent = "Zero-Waste Plan (-0.3 t)";
         }
 
         // --- TOTAL & REDUCTION ---
         const totalPersonal = homeEmissions + transportEmissions + foodEmissions;
-        const totalOverall = totalPersonal + SOCIETAL_BASELINE;
+        const totalOverall = totalPersonal + currentSocietalBaseline;
 
-        valTotalFootprint.innerHTML = `${totalOverall.toFixed(1)} <span style="font-size: 0.9rem; color: var(--text-muted);">t CO₂e/yr</span>`;
+        valTotalFootprint.innerHTML = `${totalOverall.toFixed(2)} <span style="font-size: 0.9rem; color: var(--text-muted);">t CO₂e/yr</span>`;
 
-        if (totalOverall <= 2.2) {
+        if (currentCountry === "malawi" && totalOverall <= 0.4) {
+          valTotalFootprint.style.color = "var(--emerald-light)";
+          subTotalComparison.textContent = "🇲🇼 Malawian baseline: ~0.2 t / yr — 1/10th of Paris 2.0t target! A stark case for Climate Justice.";
+        } else if (currentCountry === "us" && totalOverall >= 14.0) {
+          valTotalFootprint.style.color = "var(--rose)";
+          subTotalComparison.textContent = "🇺🇸 High-emissions US lifestyle: ~16.5 t / yr — over 8× higher than the Paris 2.0t target!";
+        } else if (currentCountry === "china" && totalOverall >= 7.0) {
+          valTotalFootprint.style.color = "var(--amber)";
+          subTotalComparison.textContent = "🇨🇳 Chinese average consumption: ~8.2 t / yr — reflects heavy industry and power grid mix.";
+        } else if (totalOverall <= 2.2) {
           valTotalFootprint.style.color = "var(--emerald-light)";
           subTotalComparison.textContent = "🌟 Aligned with Paris 1.5°C Global Target!";
         } else if (totalOverall <= 4.0) {
@@ -1255,56 +1454,74 @@
           subTotalComparison.textContent = "Great progress! Deep personal reductions achieved.";
         } else if (totalOverall <= 7.0) {
           valTotalFootprint.style.color = "var(--amber)";
-          subTotalComparison.textContent = "Substantially better than UK national average.";
+          subTotalComparison.textContent = "Substantially better than Western national average.";
         } else {
           valTotalFootprint.style.color = "var(--rose)";
           subTotalComparison.textContent = "Typical fossil-intensive Western lifestyle.";
         }
 
-        const savedTonnes = UK_BASELINE_TOTAL - totalOverall;
-        const savedPct = Math.max(0, (savedTonnes / UK_BASELINE_TOTAL) * 100);
+        const savedTonnes = currentCountryBaselineTotal - totalOverall;
+        const savedPct = Math.max(0, (savedTonnes / currentCountryBaselineTotal) * 100);
         valReductionPct.innerHTML = `${Math.round(savedPct)}% <span style="font-size: 0.9rem; color: var(--text-muted);">saved</span>`;
-        subReductionTonnes.textContent = savedTonnes > 0
-          ? `${savedTonnes.toFixed(1)} tonnes CO₂e eliminated / yr`
-          : "Matches UK standard average baseline";
+        if (currentCountry === "malawi") {
+          subReductionTonnes.textContent = "Living ~88% below the Paris 1.5°C threshold (0.25t vs 2.0t)";
+        } else {
+          subReductionTonnes.textContent = savedTonnes > 0
+            ? `${savedTonnes.toFixed(1)} tonnes CO₂e eliminated / yr`
+            : `Matches ${currentCountry.toUpperCase()} national baseline`;
+        }
 
         const diffFromParis = totalOverall - PARIS_TARGET;
         if (diffFromParis <= 0) {
           valTargetStatus.style.color = "var(--emerald-light)";
-          valTargetStatus.innerHTML = `Within Budget <span style="font-size: 0.8rem; color: var(--text-muted);">(${totalOverall.toFixed(1)}t ≤ 2.0t)</span>`;
+          valTargetStatus.innerHTML = `Within Budget <span style="font-size: 0.8rem; color: var(--text-muted);">(${totalOverall.toFixed(2)}t ≤ 2.0t)</span>`;
         } else {
           valTargetStatus.style.color = "var(--rose)";
-          valTargetStatus.innerHTML = `+${diffFromParis.toFixed(1)} t <span style="font-size: 0.8rem; color: var(--text-muted);">above 2.0t target</span>`;
+          valTargetStatus.innerHTML = `+${diffFromParis.toFixed(2)} t <span style="font-size: 0.8rem; color: var(--text-muted);">above 2.0t target</span>`;
+        }
+
+        if (valSocietalBaseline) {
+          valSocietalBaseline.innerHTML = `${currentSocietalBaseline.toFixed(2)} <span style="font-size: 0.9rem; color: var(--text-muted);">t CO₂e</span>`;
         }
 
         // Update Pillar Badges
-        badgePillarHome.textContent = `${homeEmissions.toFixed(1)} t CO₂e`;
-        badgePillarTransport.textContent = `${transportEmissions.toFixed(1)} t CO₂e`;
-        badgePillarFood.textContent = `${foodEmissions.toFixed(1)} t CO₂e`;
+        badgePillarHome.textContent = `${homeEmissions.toFixed(2)} t CO₂e`;
+        badgePillarTransport.textContent = `${transportEmissions.toFixed(2)} t CO₂e`;
+        badgePillarFood.textContent = `${foodEmissions.toFixed(2)} t CO₂e`;
 
         // Update Legend Labels
-        lblLegHome.textContent = `${homeEmissions.toFixed(1)} t`;
-        lblLegTransport.textContent = `${transportEmissions.toFixed(1)} t`;
-        lblLegFood.textContent = `${foodEmissions.toFixed(1)} t`;
+        lblLegHome.textContent = `${homeEmissions.toFixed(2)} t`;
+        lblLegTransport.textContent = `${transportEmissions.toFixed(2)} t`;
+        lblLegFood.textContent = `${foodEmissions.toFixed(2)} t`;
+        if (lblLegSociety) lblLegSociety.textContent = `${currentSocietalBaseline.toFixed(2)} t`;
 
-        // Progress Bar Visualizer (Scale: 0 to 12 tonnes)
-        const scaleMax = 12.0;
+        // Progress Bar Visualizer (Scale: 0 to 18 tonnes)
+        const scaleMax = 18.0;
         const pctHome = (homeEmissions / scaleMax) * 100;
         const pctTransport = (transportEmissions / scaleMax) * 100;
         const pctFood = (foodEmissions / scaleMax) * 100;
+        const pctSociety = (currentSocietalBaseline / scaleMax) * 100;
 
         barHome.style.width = `${pctHome}%`;
         barTransport.style.width = `${pctTransport}%`;
         barFood.style.width = `${pctFood}%`;
-        txtBarTotal.textContent = `${totalOverall.toFixed(1)} tonnes / 12.0t scale (Goal: ≤ 2.0t)`;
+        if (barSociety) barSociety.style.width = `${pctSociety}%`;
+        txtBarTotal.textContent = `${totalOverall.toFixed(2)} tonnes / 18.0t scale (Goal: ≤ 2.0t)`;
       }
 
       // Preset Applicator
       function applyPreset(preset) {
         document.querySelectorAll(".preset-pill").forEach(p => p.classList.remove("active"));
 
-        if (preset === "average") {
-          btnPresetAverage.classList.add("active");
+        if (preset === "uk" || preset === "average") {
+          currentCountry = "uk";
+          currentCountryBaselineTotal = 9.5;
+          currentSocietalBaseline = 1.5;
+          if (btnPresetAverage) btnPresetAverage.classList.add("active");
+          if (lblBaselineComparison) lblBaselineComparison.textContent = "Reduction From UK Baseline";
+          if (lblSocietalTitle) lblSocietalTitle.textContent = "UK Public Services Baseline";
+          if (subSocietalBaseline) subSocietalBaseline.textContent = "NHS, schools, water & roads (public policy required)";
+
           selectHeating.value = "gas-standard";
           selectInsulation.value = "moderate";
           selectCooking.value = "gas";
@@ -1317,36 +1534,60 @@
 
           selectDiet.value = "average";
           selectWaste.value = "typical";
-        } else if (preset === "quick-wins") {
-          btnPresetQuickWins.classList.add("active");
+          setCivicCountry("uk");
+        } else if (preset === "us") {
+          currentCountry = "us";
+          currentCountryBaselineTotal = 16.5;
+          currentSocietalBaseline = 3.5;
+          if (btnPresetUS) btnPresetUS.classList.add("active");
+          if (lblBaselineComparison) lblBaselineComparison.textContent = "Reduction From US Baseline";
+          if (lblSocietalTitle) lblSocietalTitle.textContent = "US Public Services Baseline";
+          if (subSocietalBaseline) subSocietalBaseline.textContent = "Interstate highways, federal defense, utilities & public institutions";
+
+          selectHeating.value = "oil-lpg";
+          selectInsulation.value = "poor";
+          selectCooking.value = "gas";
+          selectElectricity.value = "grid";
+
+          selectCarType.value = "suv";
+          sliderMiles.value = 13500;
+          sliderShortFlights.value = 3;
+          sliderLongFlights.value = 1;
+
+          selectDiet.value = "heavy-meat";
+          selectWaste.value = "typical";
+          setCivicCountry("us");
+        } else if (preset === "china") {
+          currentCountry = "china";
+          currentCountryBaselineTotal = 8.2;
+          currentSocietalBaseline = 2.5;
+          if (btnPresetChina) btnPresetChina.classList.add("active");
+          if (lblBaselineComparison) lblBaselineComparison.textContent = "Reduction From Chinese Baseline";
+          if (lblSocietalTitle) lblSocietalTitle.textContent = "China Public Services Baseline";
+          if (subSocietalBaseline) subSocietalBaseline.textContent = "High-speed rail grid, municipal utilities & heavy industrial base";
+
           selectHeating.value = "gas-condensing";
           selectInsulation.value = "moderate";
           selectCooking.value = "induction";
-          selectElectricity.value = "green";
+          selectElectricity.value = "grid";
 
           selectCarType.value = "hybrid";
-          sliderMiles.value = 6000;
+          sliderMiles.value = 5000;
           sliderShortFlights.value = 1;
           sliderLongFlights.value = 0;
 
-          selectDiet.value = "flexitarian";
+          selectDiet.value = "average";
           selectWaste.value = "low-waste";
-        } else if (preset === "suburban") {
-          btnPresetSuburban.classList.add("active");
-          selectHeating.value = "heat-pump-grid";
-          selectInsulation.value = "high";
-          selectCooking.value = "induction";
-          selectElectricity.value = "green";
+          setCivicCountry("china");
+        } else if (preset === "malawi") {
+          currentCountry = "malawi";
+          currentCountryBaselineTotal = 0.25;
+          currentSocietalBaseline = 0.05;
+          if (btnPresetMalawi) btnPresetMalawi.classList.add("active");
+          if (lblBaselineComparison) lblBaselineComparison.textContent = "Status vs Malawian Baseline";
+          if (lblSocietalTitle) lblSocietalTitle.textContent = "Malawi Public Services Baseline";
+          if (subSocietalBaseline) subSocietalBaseline.textContent = "Basic healthcare clinics & civic infrastructure (~50 kg CO₂e)";
 
-          selectCarType.value = "ev";
-          sliderMiles.value = 5000;
-          sliderShortFlights.value = 0;
-          sliderLongFlights.value = 0;
-
-          selectDiet.value = "vegetarian";
-          selectWaste.value = "low-waste";
-        } else if (preset === "trailblazer") {
-          btnPresetTrailblazer.classList.add("active");
           selectHeating.value = "heat-pump-green";
           selectInsulation.value = "high";
           selectCooking.value = "induction";
@@ -1359,6 +1600,73 @@
 
           selectDiet.value = "vegan";
           selectWaste.value = "low-waste";
+          setCivicCountry("malawi");
+        } else if (preset === "quick-wins") {
+          currentCountry = "uk";
+          currentCountryBaselineTotal = 9.5;
+          currentSocietalBaseline = 1.5;
+          if (btnPresetQuickWins) btnPresetQuickWins.classList.add("active");
+          if (lblBaselineComparison) lblBaselineComparison.textContent = "Reduction From UK Baseline";
+          if (lblSocietalTitle) lblSocietalTitle.textContent = "UK Public Services Baseline";
+          if (subSocietalBaseline) subSocietalBaseline.textContent = "NHS, schools, water & roads (public policy required)";
+
+          selectHeating.value = "gas-condensing";
+          selectInsulation.value = "moderate";
+          selectCooking.value = "induction";
+          selectElectricity.value = "green";
+
+          selectCarType.value = "hybrid";
+          sliderMiles.value = 6000;
+          sliderShortFlights.value = 1;
+          sliderLongFlights.value = 0;
+
+          selectDiet.value = "flexitarian";
+          selectWaste.value = "low-waste";
+          setCivicCountry("uk");
+        } else if (preset === "suburban") {
+          currentCountry = "uk";
+          currentCountryBaselineTotal = 9.5;
+          currentSocietalBaseline = 1.5;
+          if (btnPresetSuburban) btnPresetSuburban.classList.add("active");
+          if (lblBaselineComparison) lblBaselineComparison.textContent = "Reduction From UK Baseline";
+          if (lblSocietalTitle) lblSocietalTitle.textContent = "UK Public Services Baseline";
+          if (subSocietalBaseline) subSocietalBaseline.textContent = "NHS, schools, water & roads (public policy required)";
+
+          selectHeating.value = "heat-pump-grid";
+          selectInsulation.value = "high";
+          selectCooking.value = "induction";
+          selectElectricity.value = "green";
+
+          selectCarType.value = "ev";
+          sliderMiles.value = 5000;
+          sliderShortFlights.value = 0;
+          sliderLongFlights.value = 0;
+
+          selectDiet.value = "vegetarian";
+          selectWaste.value = "low-waste";
+          setCivicCountry("uk");
+        } else if (preset === "trailblazer") {
+          currentCountry = "uk";
+          currentCountryBaselineTotal = 9.5;
+          currentSocietalBaseline = 1.5;
+          if (btnPresetTrailblazer) btnPresetTrailblazer.classList.add("active");
+          if (lblBaselineComparison) lblBaselineComparison.textContent = "Reduction From UK Baseline";
+          if (lblSocietalTitle) lblSocietalTitle.textContent = "UK Public Services Baseline";
+          if (subSocietalBaseline) subSocietalBaseline.textContent = "NHS, schools, water & roads (public policy required)";
+
+          selectHeating.value = "heat-pump-green";
+          selectInsulation.value = "high";
+          selectCooking.value = "induction";
+          selectElectricity.value = "green";
+
+          selectCarType.value = "car-free";
+          sliderMiles.value = 0;
+          sliderShortFlights.value = 0;
+          sliderLongFlights.value = 0;
+
+          selectDiet.value = "vegan";
+          selectWaste.value = "low-waste";
+          setCivicCountry("uk");
         }
 
         updateCalculator();
@@ -1378,10 +1686,20 @@
         }
       });
 
-      if (btnPresetAverage) btnPresetAverage.addEventListener("click", () => applyPreset("average"));
+      if (btnPresetAverage) btnPresetAverage.addEventListener("click", () => applyPreset("uk"));
+      if (btnPresetUS) btnPresetUS.addEventListener("click", () => applyPreset("us"));
+      if (btnPresetChina) btnPresetChina.addEventListener("click", () => applyPreset("china"));
+      if (btnPresetMalawi) btnPresetMalawi.addEventListener("click", () => applyPreset("malawi"));
       if (btnPresetQuickWins) btnPresetQuickWins.addEventListener("click", () => applyPreset("quick-wins"));
       if (btnPresetSuburban) btnPresetSuburban.addEventListener("click", () => applyPreset("suburban"));
       if (btnPresetTrailblazer) btnPresetTrailblazer.addEventListener("click", () => applyPreset("trailblazer"));
+
+      document.querySelectorAll(".btn-civic-country").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const c = btn.dataset.country;
+          applyPreset(c);
+        });
+      });
 
       // Initial Run
       updateCalculator();
