@@ -1807,7 +1807,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v1.5</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v1.6</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -2894,7 +2894,7 @@
         <span>·</span>
         <a href="national_emergency_briefing.html" style="color: #f43f5e; text-decoration: none;">🚨 National Emergency Briefing</a>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v1.5</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v1.6</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -2927,7 +2927,8 @@
           <option value="page-sources-owid">Page 7: Emissions Sources (OWID)</option>
           <option value="page-solutions-storage">Page 8: Solutions &amp; Grid Storage</option>
           <option value="page-wind-payback">Page 9: Wind Carbon Payback (Scotland)</option>
-          <option value="page-methodology">Page 10: Global Temp Measurement Methodology</option>
+          <option value="page-uk-grid">Page 10: UK Electricity Supply &amp; Demand (Live Tracking &amp; CP2030)</option>
+          <option value="page-methodology">Page 11: Global Temp Measurement Methodology</option>
           <option value="page-addendum">Addendum: 2026 Warming vs. +1.5°C Breach</option>
         </select>
       </div>
@@ -2939,7 +2940,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v1.5</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v1.6</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -2979,7 +2980,7 @@
                   <strong style="color: #fbbf24;">Bill McKibben (350.org &amp; Third Act):</strong> The "Unburnable Carbon" mathematical paradox (<em>Global Warming's Terrifying New Math</em> 2012), the 350 ppm boundary (Hansen et al. 2008), and <em>The End of Nature</em> (1989). <a class="toc-link" data-target="page-carbon-budgets" style="color: var(--amber); text-decoration: underline; cursor: pointer;">Read Page 6 &rarr;</a>
                 </div>
                 <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
-                  <strong style="color: #f43f5e;">Dr. Katharine Hayhoe (TNC):</strong> Climate attribution science (linking GMST to extreme weather risk), U.S. National Climate Assessment lead author, and bridge-building communication (<em>Saving Us</em>). <a class="toc-link" data-target="page-methodology" style="color: var(--amber); text-decoration: underline; cursor: pointer;">Read Page 10 &rarr;</a>
+                  <strong style="color: #f43f5e;">Dr. Katharine Hayhoe (TNC):</strong> Climate attribution science (linking GMST to extreme weather risk), U.S. National Climate Assessment lead author, and bridge-building communication (<em>Saving Us</em>). <a class="toc-link" data-target="page-methodology" style="color: var(--amber); text-decoration: underline; cursor: pointer;">Read Page 11 &rarr;</a>
                 </div>
               </div>
               <div style="margin-top: 8px; font-size: 0.74rem; color: #94a3b8;">
@@ -3067,8 +3068,17 @@
                 </div>
               </li>
               <li>
+                <a class="toc-link" data-target="page-uk-grid">
+                  <span>🇬🇧</span> <strong>Page 10: Electricity Supply & Demand in the United Kingdom — Real-Time Tracking, Generation Mix, Demand Trajectories & Clean Power 2030</strong>
+                  <span class="badge badge-cyan" style="margin-left: 8px;">NESO / Gridwatch / iamkate / CP2030</span>
+                </a>
+                <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
+                  Comprehensive analysis of Great Britain's power grid. Features direct integration with live telemetry monitors (<code>Gridwatch</code> and <code>iamkate</code>), detailing the real-time generation mix (Wind ~30%, Gas CCGT ~31%, Nuclear ~13%, Solar, Interconnectors, zero coal after Ratcliffe-on-Soar closure). Explores the national electrification trajectory: why annual demand (~290–300 TWh today) surges to ~350–370 TWh by 2030 and ~550–650 TWh by 2050 as 20M heat pumps and road transport electrify (while overall primary energy consumption drops ~40% via the Electrification Efficiency Dividend). Analyzes winter peak demand (45–48 GW) vs. summer troughs (14–18 GW), managing winter <i>Dunkelflaute</i>, Scottish transmission bottlenecks (B6 constraint boundary), and the NESO Clean Power 2030 pathway (50 GW offshore wind, subsea HVDC Eastern Green Links, and rapid battery rollout).
+                </div>
+              </li>
+              <li>
                 <a class="toc-link" data-target="page-methodology">
-                  <span>🌡️</span> <strong>Page 10: Global Mean Temperature Measurement Methodology: Stations, Buoys, Satellites & Gridding</strong>
+                  <span>🌡️</span> <strong>Page 11: Global Mean Temperature Measurement Methodology: Stations, Buoys, Satellites & Gridding</strong>
                   <span class="badge badge-emerald" style="margin-left: 8px;">HadCRUT5 / GISTEMP / Berkeley Earth / ERA5</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
@@ -5040,9 +5050,273 @@
           </ul>
         </div>
 
-        <!-- PAGE 10: GLOBAL TEMPERATURE MEASUREMENT METHODOLOGY -->
+        <!-- PAGE 10: UK ELECTRICITY SUPPLY & DEMAND -->
+        <div class="doc-page" id="page-uk-grid">
+          <h3>Page 10: Electricity Supply &amp; Demand in the United Kingdom: Real-Time Tracking, Generation Mix, Demand Trajectories &amp; Clean Power 2030</h3>
+          <p>
+            The decarbonisation of the British electricity transmission system is widely cited by international energy agencies as one of the fastest transitions in modern industrial history: in 2012, coal supplied roughly 40% of Great Britain's power; on <strong>30 September 2024</strong>, Britain permanently closed its final coal-fired generator (Ratcliffe-on-Soar), becoming the first G7 economy to eliminate coal electricity entirely.
+          </p>
+          <p>
+            However, achieving a <strong>Clean Power 2030</strong> system and meeting Net Zero by 2050 requires doubling national clean generation capacity while tripling transmission flexibility to manage the electrification of 20+ million domestic heat pumps and 30+ million electric vehicles.
+          </p>
+
+          <!-- LIVE DASHBOARDS HIGHLIGHT BOX -->
+          <div style="background: rgba(0, 229, 255, 0.05); border: 1.5px solid rgba(0, 229, 255, 0.3); border-radius: 10px; padding: 16px 18px; margin: 18px 0 24px 0;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+              <strong style="color: var(--cyan); font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+                <span>⚡</span> Real-Time British Electricity Grid Monitors (Live Telemetry)
+              </strong>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; color: #34d399; background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.3); padding: 2px 8px; border-radius: 4px;">BM Reports / NESO Data Feeds</span>
+            </div>
+            <p style="font-size: 0.82rem; color: #cbd5e1; margin-top: 0; margin-bottom: 12px; line-height: 1.5;">
+              Great Britain's national transmission system operates under real-time transparency via Elexon Balancing Mechanism data. The following independent platforms provide live telemetry showing what is generating British electricity at this exact second:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                  <strong style="color: #38bdf8; font-size: 0.88rem;">📊 National Grid: Live Status (iamkate)</strong>
+                  <span style="font-size: 0.68rem; color: #94a3b8; font-family: ui-monospace, monospace;">grid.iamkate.com</span>
+                </div>
+                <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 10px 0; line-height: 1.45;">
+                  Created by Kate Morley using live Elexon &amp; NESO APIs. Provides real-time percentage shares, live grid carbon intensity (g CO₂/kWh), rolling 12-month and multi-year historical trends, generation records, and subsea interconnector flows.
+                </p>
+                <a href="https://grid.iamkate.com/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--cyan); font-weight: 700; text-decoration: underline;">
+                  Open grid.iamkate.com ↗
+                </a>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                  <strong style="color: #fbbf24; font-size: 0.88rem;">⚡ G.B. Gridwatch (Templar)</strong>
+                  <span style="font-size: 0.68rem; color: #94a3b8; font-family: ui-monospace, monospace;">gridwatch.templar.co.uk</span>
+                </div>
+                <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 10px 0; line-height: 1.45;">
+                  The classic British grid dial dashboard. Directly monitors instantaneous megawatts (MW) from gas CCGT, nuclear, wind, biomass, hydro, solar, and interconnectors, alongside system frequency (50.0 Hz) and French/Dutch links.
+                </p>
+                <a href="https://www.gridwatch.templar.co.uk/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--amber); font-weight: 700; text-decoration: underline;">
+                  Open gridwatch.templar.co.uk ↗
+                </a>
+              </div>
+            </div>
+            <div style="margin-top: 10px; font-size: 0.74rem; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 8px;">
+              💡 <em>This simulator's turn-by-turn carbon footprint footer also directly queries the official <strong>NESO Carbon Intensity API</strong> (<code>https://api.carbonintensity.org.uk/</code>) for live GB grid emissions factors.</em>
+            </div>
+          </div>
+
+          <h4>1. The Great Britain Power Generation Fleet &amp; Zero-Coal Milestone</h4>
+          <p>
+            On <strong>30 September 2024</strong>, Unit 4 at Uniper's Ratcliffe-on-Soar power station in Nottinghamshire desynchronised from the National Grid, concluding 142 years of British coal power since Thomas Edison built the Holborn Viaduct power station in 1882. Great Britain became the first G7 nation to permanently eradicate coal electricity.
+          </p>
+          <p>
+            Today, Great Britain's power generation fleet (operated by the newly nationalised <strong>National Energy System Operator — NESO</strong>, formerly National Grid ESO) delivers approximately <strong>290 to 300 TWh of electricity per year</strong>:
+          </p>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Generation Source</th>
+                <th>Installed Capacity (GW)</th>
+                <th>Annual Output (TWh/yr)</th>
+                <th>Share of Mix (%)</th>
+                <th>Lifecycle Carbon Intensity (g CO₂/kWh)</th>
+                <th>Operational Role &amp; Key Assets</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Offshore Wind</strong></td>
+                <td>~15.0 GW</td>
+                <td>~45 – 52 TWh</td>
+                <td><strong>~16% – 18%</strong></td>
+                <td>~11 – 14 g</td>
+                <td>World's 2nd largest operational fleet. Anchored by Dogger Bank (3.6 GW), Hornsea 1 &amp; 2 (2.6 GW), Seagreen (1.1 GW), and East Anglia One. High capacity factor (42%–50%).</td>
+              </tr>
+              <tr>
+                <td><strong>Onshore Wind</strong></td>
+                <td>~15.5 GW</td>
+                <td>~35 – 42 TWh</td>
+                <td><strong>~12% – 14%</strong></td>
+                <td>~8 – 15 g</td>
+                <td>Concentrated in Scotland and Wales (Whitelee 539 MW, Kilgallioch). Capacity factor 28%–38%. Cheapest source of new generation in the UK.</td>
+              </tr>
+              <tr>
+                <td><strong>Natural Gas (CCGT)</strong></td>
+                <td>~32.0 GW</td>
+                <td>~85 – 95 TWh</td>
+                <td><strong>~30% – 33%</strong></td>
+                <td>~370 – 490 g</td>
+                <td>Combined Cycle Gas Turbines (CCGT). Functions as the flexible marginal price-setter in wholesale markets; throttles up during low wind and winter peaks.</td>
+              </tr>
+              <tr>
+                <td><strong>Nuclear Baseload</strong></td>
+                <td>~5.9 GW</td>
+                <td>~35 – 42 TWh</td>
+                <td><strong>~12% – 14%</strong></td>
+                <td>~5 – 12 g</td>
+                <td>Continuous 24/7 low-carbon baseload from five stations: Sizewell B (PWR) and four Advanced Gas-cooled Reactors (AGRs: Torness, Heysham 1 &amp; 2, Hartlepool). Hinkley Point C (3.2 GW EPR, ~25 TWh/yr) under construction in Somerset.</td>
+              </tr>
+              <tr>
+                <td><strong>Biomass (Thermal)</strong></td>
+                <td>~3.2 GW</td>
+                <td>~14 – 18 TWh</td>
+                <td><strong>~5% – 6%</strong></td>
+                <td>Variable (~120–250 g supply chain)</td>
+                <td>Primarily Drax Power Station in Selby, burning compressed wood pellets. Dispatchable baseload with subsidies expiring 2027; developing Bioenergy with Carbon Capture and Storage (BECCS).</td>
+              </tr>
+              <tr>
+                <td><strong>Solar Photovoltaic (PV)</strong></td>
+                <td>~16.0 GW</td>
+                <td>~14 – 16 TWh</td>
+                <td><strong>~4% – 5%</strong></td>
+                <td>~20 – 45 g</td>
+                <td>Generates up to 25%–30% of daytime power on sunny summer middays (peak output >11 GW), but drops to near zero during dark winter weekday peaks.</td>
+              </tr>
+              <tr>
+                <td><strong>Subsea Interconnectors</strong></td>
+                <td>~10.4 GW</td>
+                <td>~25 – 35 TWh (net import)</td>
+                <td><strong>~8% – 12%</strong></td>
+                <td>Source grid (~30–60 g from FR/NO)</td>
+                <td>Undersea High-Voltage Direct Current (HVDC) links: France (IFA 2 GW, IFA2 1 GW, ElecLink 1 GW), Norway (North Sea Link 1.4 GW hydro), Belgium (Nemo Link 1 GW), Netherlands (BritNed 1 GW), Denmark (Viking Link 1.4 GW wind).</td>
+              </tr>
+              <tr>
+                <td><strong>Hydro &amp; Pumped Storage</strong></td>
+                <td>~4.5 GW (1.7 GW run-of-river, 2.8 GW pumped)</td>
+                <td>~5 – 7 TWh</td>
+                <td><strong>~2%</strong></td>
+                <td>~10 – 25 g</td>
+                <td>Scottish Highland hydro plus pumped storage stations (Dinorwig 1,728 MW / 9.1 GWh, Cruachan 440 MW, Ffestiniog 360 MW, Foyers 300 MW). Delivers black-start capability and sub-second grid balancing.</td>
+              </tr>
+              <tr>
+                <td><strong>Coal</strong></td>
+                <td><strong>0.0 GW</strong></td>
+                <td><strong>0.0 TWh</strong></td>
+                <td><strong>0.0%</strong></td>
+                <td>N/A (Historical ~900–1,050 g)</td>
+                <td><strong>Permanently ended 30 September 2024</strong> (Ratcliffe-on-Soar closure). UK coal power fell from 148 TWh (39% of grid) in 2012 to zero in 2024.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>2. Annual Demand Trends &amp; The Electrification Surge (2025–2050)</h4>
+          <p>
+            A common misconception is that British electricity consumption has grown continuously. In reality, British electricity demand <strong>peaked around 2005 at ~360 TWh/year</strong> and steadily declined to <strong>~290–300 TWh/year today</strong>:
+          </p>
+          <ul style="margin-left: 20px; font-size: 0.84rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+            <li><strong>Why Demand Fell (2005–2024):</strong> Widespread adoption of solid-state LED lighting (cutting lighting power by 85%), strict EU/UK Ecodesign appliance standards (inverters in fridges, washing machines, electronics), and the contraction of electricity-intensive domestic heavy manufacturing.</li>
+            <li><strong>The Electrification Inversion (2025–2050):</strong> As the UK transitions from burning fossil gas for domestic heat and refined oil for road transport, annual electricity consumption enters an era of structural growth:</li>
+          </ul>
+
+          <div class="code-box">
+            • <b>Current Baseline (2025):</b>              <b>~295 TWh/year</b> (Total GB electricity consumption)<br>
+            • <b>Clean Power 2030 Target (NESO CP2030):</b>   <b>~340 to 370 TWh/year</b> (+15% to +25% as EVs &amp; heat pumps scale)<br>
+            • <b>Decarbonised Power Milestone (2035):</b>     <b>~400 to 450 TWh/year</b> (+35% to +50% under CCC Sixth Carbon Budget)<br>
+            • <b>Full Net Zero System (2050):</b>             <b>~520 to 650+ TWh/year</b> (Doubling of electricity demand)
+          </div>
+
+          <p>
+            <strong>The Electrification Efficiency Dividend:</strong> Although electricity generation must roughly double by 2050, <em>total British primary energy input falls by approximately 35% to 45%</em>. Burning petrol in an internal combustion engine wastes ~75% of energy as friction and tailpipe heat; an electric motor converts >90% into motion. A condensing gas boiler burns 1.1 kWh of methane for every 1.0 kWh of heat; an air-to-water heat pump consumes 1.0 kWh of electricity to extract 3.0 to 4.0 kWh of heat from outside air (COP 3.0–4.0). Electrifying the UK eliminates the combustion of over <strong>300 billion kWh/year of imported oil and natural gas</strong>, replacing it with ~90 billion kWh of clean electricity.
+          </p>
+
+          <h4>3. Diurnal Profiles, Peak Demand &amp; The Winter "Dunkelflaute"</h4>
+          <p>
+            Electricity grids must match instantaneous supply and demand at 50.0 Hz in real time. Great Britain exhibits extreme seasonal and diurnal demand swings:
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 12px 0;">
+            <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 8px; padding: 12px 14px;">
+              <strong style="color: #f43f5e; font-size: 0.88rem; display: block; margin-bottom: 4px;">❄️ Winter Evening Peak: 45 to 48 GW</strong>
+              <span style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45; display: block;">
+                Occurs between <strong>16:30 and 18:30 on cold, dark weekdays in December and January</strong>. Driven by domestic lighting, cooking, commercial heating, and appliance loads coinciding before offices close. Solar generation is 0 GW.
+              </span>
+            </div>
+            <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 12px 14px;">
+              <strong style="color: #38bdf8; font-size: 0.88rem; display: block; margin-bottom: 4px;">☀️ Summer Night Trough: 14 to 18 GW</strong>
+              <span style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45; display: block;">
+                Occurs between <strong>03:00 and 05:00 on warm summer mornings</strong>. Industrial and commercial loads are minimal; residential lighting is zero. Baseload nuclear, wind, and run-of-river hydro easily exceed total demand.
+              </span>
+            </div>
+          </div>
+
+          <p>
+            <strong>The Engineering Challenge: Winter <em>Dunkelflaute</em>:</strong> A Dunkelflaute (German for "dark doldrums") occurs when a stationary high-pressure anticyclone settles over North-Western Europe in mid-winter. Temperatures drop below freezing (driving space-heating demand toward 50 GW), while wind speeds collapse across the North Sea and overcast skies suppress solar PV to &lt;5% capacity for 5 to 10 consecutive days.
+          </p>
+          <p>
+            Managing a zero-carbon Dunkelflaute without building dozens of new gas plants requires a multi-layered flexibility portfolio:
+          </p>
+          <ul style="margin-left: 20px; font-size: 0.84rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+            <li><strong>Long-Duration Energy Storage (LDES):</strong> Compressed air (CAES in Cheshire salt caverns), liquid air energy storage (Highview Power at Carrington 300 MWh), and new pumped hydro projects (SSE's Coire Glas 1.5 GW / 30 GWh in the Scottish Highlands).</li>
+            <li><strong>Low-Carbon Dispatchable Peakers:</strong> Existing CCGT stations retrofitted with Post-Combustion Carbon Capture and Storage (CCS in the Teesside and Humber clusters), or fast-start turbines burning electrolytic green hydrogen or biomethane.</li>
+            <li><strong>Bi-directional Interconnectors:</strong> Tapping Norwegian high-head hydro reservoirs via the North Sea Link and continental nuclear/wind surpluses.</li>
+            <li><strong>Automated Demand-Side Response (DSR):</strong> Half-hourly settlement and dynamic time-of-use tariffs (e.g. Octopus Agile) enabling millions of smart EV chargers and home battery systems to automatically throttle consumption or export back to the grid during peak hours.</li>
+          </ul>
+
+          <h4>4. NESO "Clean Power 2030" (CP2030) &amp; Transmission Bottlenecks</h4>
+          <p>
+            In November 2024, the newly constituted <strong>National Energy System Operator (NESO)</strong> published its definitive <em>Clean Power 2030 Advice</em> for the UK Government, concluding that a clean power system by 2030 is physically achievable and will lower wholesale electricity costs, provided planning and grid bottlenecks are rapidly dismantled:
+          </p>
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin: 12px 0;">
+            <strong style="color: var(--cyan); display: block; margin-bottom: 6px; font-size: 0.86rem;">🎯 The CP2030 Physical Expansion Milestones:</strong>
+            <ul style="margin-left: 18px; font-size: 0.8rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 4px;">
+              <li><strong>Offshore Wind:</strong> Expand from ~15 GW to <strong>43 – 50 GW</strong> by 2030 (building out Dogger Bank, Hornsea 3 &amp; 4, Moray West, Sofia, and initial ScotWind developments).</li>
+              <li><strong>Onshore Wind:</strong> Expand from ~15.5 GW to <strong>27 – 35 GW</strong> (lifting English planning restrictions and accelerating repowering in Scotland).</li>
+              <li><strong>Solar PV:</strong> Triple capacity from ~16 GW to <strong>45 – 50 GW</strong> (utility-scale ground mount and rooftop mandates).</li>
+              <li><strong>Grid-Scale Battery Storage:</strong> Expand from &gt;4.5 GW / 6 GWh to <strong>20 – 27 GW</strong> to provide sub-second frequency control and 2-to-4 hour peak shifting.</li>
+            </ul>
+          </div>
+
+          <p>
+            <strong>The Scottish Transmission Bottleneck &amp; The B6 Boundary:</strong> On blustery days, Scotland's onshore and offshore wind generation routinely exceeds 100% of total Scottish electrical demand. However, the transmission lines crossing the Anglo-Scottish border (the <strong>B6 constraint boundary</strong>) have a thermal transfer limit of roughly 6.5 GW.
+          </p>
+          <p>
+            When generation exceeds this export limit, NESO must order Scottish wind farms to feather their blades (curtailment), paying generators compensatory "curtailment payments" while simultaneously paying fossil gas plants in England and Wales to fire up to meet southern city demand. In 2023–2024, constraint costs reached <strong>£1.0 to £1.5 billion annually</strong>, paid for through consumer electricity standing charges.
+          </p>
+          <p>
+            <strong>The Solution: The Great Grid Upgrade &amp; Subsea HVDC Superhighways:</strong> National Grid Electricity Transmission (NGET) and SSEN Transmission are constructing major subsea HVDC bypass links down the North Sea coast:
+          </p>
+          <ul style="margin-left: 20px; font-size: 0.84rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+            <li><strong>Eastern Green Link 1 (EGL1):</strong> A 2 GW, 525 kV subsea HVDC cable running 190 km from Torness (East Lothian) to Hawthorn Pit (County Durham).</li>
+            <li><strong>Eastern Green Link 2 (EGL2):</strong> A 2 GW, 525 kV subsea link running 436 km from Peterhead (Aberdeenshire) to Drax (North Yorkshire) — the largest electricity transmission project in British history.</li>
+            <li><strong>Eastern Green Links 3 &amp; 4:</strong> Additional subsea links from Norfolk to Scotland planned for the early 2030s to unlock &gt;8 GW of cross-border throughput.</li>
+          </ul>
+
+          <h4>5. Authoritative Academic &amp; Statutory References</h4>
+          <ul style="margin-left: 20px; font-size: 0.84rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px;">
+            <li>
+              <strong>National Grid: Live Status (iamkate / Kate Morley):</strong><br>
+              <em>Real-time visualization of the British electricity generation mix, carbon intensity, and historical trends.</em><br>
+              <a href="https://grid.iamkate.com/" target="_blank" rel="noopener noreferrer" style="color: var(--cyan);">https://grid.iamkate.com/ ↗</a>
+            </li>
+            <li>
+              <strong>G.B. Gridwatch (Templar):</strong><br>
+              <em>Instantaneous telemetry dials monitoring Great Britain's power generation, interconnector flows, and system frequency.</em><br>
+              <a href="https://www.gridwatch.templar.co.uk/" target="_blank" rel="noopener noreferrer" style="color: var(--amber);">https://www.gridwatch.templar.co.uk/ ↗</a>
+            </li>
+            <li>
+              <strong>National Energy System Operator (NESO, 2024):</strong><br>
+              <em>"Clean Power 2030: Advice on Pathways to a Decarbonised Electricity System by 2030."</em> Department for Energy Security and Net Zero (DESNZ) Commission.<br>
+              <a href="https://www.neso.energy/" target="_blank" rel="noopener noreferrer">https://www.neso.energy/ ↗</a>
+            </li>
+            <li>
+              <strong>Climate Change Committee (CCC, 2020, 2023):</strong><br>
+              <em>"The Sixth Carbon Budget: The UK's Path to Net Zero" &amp; "Progress in Reducing Emissions: 2023 Report to Parliament."</em> Comprehensive electrification projections and seasonal storage analysis.<br>
+              <a href="https://www.theccc.org.uk/publication/sixth-carbon-budget/" target="_blank" rel="noopener noreferrer">https://www.theccc.org.uk/publication/sixth-carbon-budget/ ↗</a>
+            </li>
+            <li>
+              <strong>Department for Energy Security and Net Zero (DESNZ, 2024):</strong><br>
+              <em>"Digest of UK Energy Statistics (DUKES) &amp; Energy Trends: Electricity generation, supply and consumption."</em> Official UK government statutory energy statistical archive.<br>
+              <a href="https://www.gov.uk/government/collections/digest-of-uk-energy-statistics-dukes" target="_blank" rel="noopener noreferrer">https://www.gov.uk/government/collections/digest-of-uk-energy-statistics-dukes ↗</a>
+            </li>
+            <li>
+              <strong>National Grid ESO / University of Oxford / WWF (2017–2026):</strong><br>
+              <em>"Official Carbon Intensity API for Great Britain."</em> Regional 14-DNO carbon intensity forecasting and methodology.<br>
+              <a href="https://api.carbonintensity.org.uk/" target="_blank" rel="noopener noreferrer">https://api.carbonintensity.org.uk/ ↗</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- PAGE 11: GLOBAL TEMPERATURE MEASUREMENT METHODOLOGY -->
         <div class="doc-page" id="page-methodology">
-          <h3>Page 10: Global Mean Surface Temperature Measurement Methodology: Stations, Buoys, Satellites &amp; Gridding</h3>
+          <h3>Page 11: Global Mean Surface Temperature Measurement Methodology: Stations, Buoys, Satellites &amp; Gridding</h3>
           <p>
             A foundational question in observational climate science is: <em>"How can scientists claim to know the global average surface temperature to within a fraction of a degree, when the planet covers 510 million km²—71% of which is open ocean—and vast areas like Antarctica, the Sahara, and the Siberian tundra have sparse human settlements?"</em>
           </p>
