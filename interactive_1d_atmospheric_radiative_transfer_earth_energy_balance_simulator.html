@@ -8593,6 +8593,7 @@
         let hoveredMainTp = null;
         let isOverMeasLine = false;
         let isOverSafe350 = false;
+        let isOverZeffLine = false;
 
         const dtVal1958 = getHistoricalDeltaAt(1958);
         const dtVal2026 = getHistoricalDeltaAt(2026);
@@ -8625,7 +8626,7 @@
           const distTemp = Math.min(distMeas, distSim, (hoverDt !== null ? Math.abs(mousePos.y - dtToY(hoverDt)) : 999));
           const distCo2 = Math.abs(mousePos.y - co2LineY);
 
-          const isOverZeffLine = distZeff <= 12 && distZeff < distTemp && distZeff < distCo2;
+          isOverZeffLine = distZeff <= 16 && distZeff < distTemp && distZeff < distCo2;
           isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2 && distMeas <= distZeff);
           const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2 && distTemp <= distZeff;
           const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp && distCo2 < distZeff;
