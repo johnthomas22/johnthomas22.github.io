@@ -279,12 +279,30 @@
 
     .calc-header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: stretch;
       gap: 12px;
       border-bottom: 1px solid var(--border);
       padding-bottom: 14px;
+    }
+
+    .preset-controls-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .action-plan-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
     }
 
     .calc-title-box h2 {
@@ -469,7 +487,7 @@
       font-size: 0.76rem;
       color: var(--emerald-light);
     }
-    select.dial-select, input[type="range"] {
+    select.dial-select {
       width: 100%;
       background: #0f172a;
       border: 1px solid var(--border);
@@ -483,6 +501,71 @@
     }
     select.dial-select:focus {
       border-color: var(--emerald);
+    }
+
+    /* CUSTOM RANGE INPUT STYLING (FLUSH ZERO ALIGNMENT) */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: #17243f;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      outline: none;
+      cursor: pointer;
+      margin: 10px 0 6px 0;
+      padding: 0;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      background: transparent;
+      border: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #00e5ff;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.8);
+      cursor: pointer;
+      border: 2px solid #090e18;
+      margin-top: -5px; /* (8 - 18) / 2 = -5px */
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: #38bdf8;
+    }
+    input[type="range"]::-moz-range-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      background: transparent;
+      border: none;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #00e5ff;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.8);
+      cursor: pointer;
+      border: 2px solid #090e18;
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
+    input[type="range"]::-moz-range-thumb:hover {
+      transform: scale(1.2);
+      background: #38bdf8;
+    }
+    input[type="range"]:focus {
+      outline: none;
     }
     .dial-hint {
       font-size: 0.68rem;
@@ -805,19 +888,24 @@
           <h2><span>⚖️</span> Personal Carbon Dial &amp; Net-Zero Pathfinder</h2>
           <p>Adjust your household, mobility, and diet choices to see how close you can get to the Paris 1.5°C target (~2.0 tonnes/year).</p>
         </div>
-        <div class="preset-pill-group">
-          <span style="font-size: 0.74rem; font-weight: 700; color: #94a3b8; align-self: center; margin-right: 4px;">Compare Baselines:</span>
-          <button class="preset-pill active" id="btnPresetAverage" type="button">🇬🇧 UK (9.5 t)</button>
-          <button class="preset-pill" id="btnPresetUS" type="button">🇺🇸 US (16.5 t)</button>
-          <button class="preset-pill" id="btnPresetChina" type="button">🇨🇳 China (8.2 t)</button>
-          <button class="preset-pill" id="btnPresetMalawi" type="button">🇲🇼 Malawi (0.2 t)</button>
-          <button class="preset-pill" id="btnPresetMaldives" type="button">🇲🇻 Maldives (2.8 t)</button>
-          <button class="preset-pill" id="btnPresetTuvalu" type="button">🇹🇻 Tuvalu (1.1 t)</button>
-          <span style="border-left: 1px solid rgba(255, 255, 255, 0.18); margin: 0 4px; height: 18px; align-self: center;"></span>
-          <span style="font-size: 0.74rem; font-weight: 700; color: #94a3b8; align-self: center; margin-right: 4px;">UK Action Plans:</span>
-          <button class="preset-pill" id="btnPresetQuickWins" type="button">⚡ Quick Wins (5.8 t)</button>
-          <button class="preset-pill" id="btnPresetSuburban" type="button">🌿 Suburban Eco (3.3 t)</button>
-          <button class="preset-pill" id="btnPresetTrailblazer" type="button">🎯 Low-Carbon Pioneer (1.9 t)</button>
+
+        <div class="preset-controls-box">
+          <!-- ROW 1: BASELINE SELECTOR -->
+          <div class="preset-pill-group">
+            <span style="font-size: 0.74rem; font-weight: 700; color: #94a3b8; align-self: center; margin-right: 4px;">Compare Baselines:</span>
+            <button class="preset-pill active" id="btnPresetAverage" type="button">🇬🇧 UK (9.5 t)</button>
+            <button class="preset-pill" id="btnPresetUS" type="button">🇺🇸 US (16.5 t)</button>
+            <button class="preset-pill" id="btnPresetChina" type="button">🇨🇳 China (8.2 t)</button>
+            <button class="preset-pill" id="btnPresetMalawi" type="button">🇲🇼 Malawi (0.2 t)</button>
+            <button class="preset-pill" id="btnPresetMaldives" type="button">🇲🇻 Maldives (2.8 t)</button>
+            <button class="preset-pill" id="btnPresetTuvalu" type="button">🇹🇻 Tuvalu (1.1 t)</button>
+          </div>
+
+          <!-- ROW 2: ACTION PLANS (ON NEXT LINE, SYNCED TO SELECTED BASELINE) -->
+          <div class="action-plan-row">
+            <span id="lblActionPlanHeader" style="font-size: 0.74rem; font-weight: 700; color: #38bdf8; align-self: center; margin-right: 4px;">🇬🇧 UK Decarbonisation Pathways:</span>
+            <div id="actionPlanContainer" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
+          </div>
         </div>
       </div>
 
@@ -1619,6 +1707,336 @@
         barFood.style.width = `${pctFood}%`;
         if (barSociety) barSociety.style.width = `${pctSociety}%`;
         txtBarTotal.textContent = `${totalOverall.toFixed(2)} tonnes / 18.0t scale (Goal: ≤ 2.0t)`;
+
+        // Update slider track fills for seamless zero alignment
+        [sliderMiles, sliderShortFlights, sliderLongFlights].forEach(updateSliderProgress);
+      }
+
+      // Slider Fill Updater (ensures 0 is strictly flush with zero offset)
+      function updateSliderProgress(slider) {
+        if (!slider) return;
+        const min = parseFloat(slider.min) || 0;
+        const max = parseFloat(slider.max) || 100;
+        const val = parseFloat(slider.value) || 0;
+        const pct = Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
+        slider.style.background = `linear-gradient(to right, #00e5ff 0%, #00e5ff ${pct}%, #17243f ${pct}%, #17243f 100%)`;
+      }
+
+      // SYNCED ACTION PLANS BY BASELINE
+      const COUNTRY_PATHWAYS = {
+        uk: {
+          label: "🇬🇧 UK Decarbonisation Pathways:",
+          pathways: [
+            {
+              id: "uk-quick",
+              name: "⚡ Quick Wins (5.8 t)",
+              dials: {
+                heating: "gas-condensing",
+                insulation: "moderate",
+                cooking: "induction",
+                electricity: "green",
+                carType: "hybrid",
+                miles: 6000,
+                shortFlights: 1,
+                longFlights: 0,
+                diet: "flexitarian",
+                waste: "low-waste"
+              }
+            },
+            {
+              id: "uk-suburban",
+              name: "🌿 Suburban Eco (3.3 t)",
+              dials: {
+                heating: "heat-pump-grid",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "ev",
+                miles: 5000,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "vegetarian",
+                waste: "low-waste"
+              }
+            },
+            {
+              id: "uk-pioneer",
+              name: "🎯 Low-Carbon Pioneer (1.9 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "car-free",
+                miles: 0,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "vegan",
+                waste: "low-waste"
+              }
+            }
+          ]
+        },
+        us: {
+          label: "🇺🇸 US Decarbonisation Pathways:",
+          pathways: [
+            {
+              id: "us-hybrid",
+              name: "🚗 Hybrid & Efficiency (10.8 t)",
+              dials: {
+                heating: "gas-condensing",
+                insulation: "moderate",
+                cooking: "induction",
+                electricity: "grid",
+                carType: "hybrid",
+                miles: 8000,
+                shortFlights: 2,
+                longFlights: 0,
+                diet: "flexitarian",
+                waste: "typical"
+              }
+            },
+            {
+              id: "us-electrify",
+              name: "⚡ All-Electric & Heat Pump (5.6 t)",
+              dials: {
+                heating: "heat-pump-grid",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "ev",
+                miles: 7500,
+                shortFlights: 1,
+                longFlights: 0,
+                diet: "vegetarian",
+                waste: "low-waste"
+              }
+            },
+            {
+              id: "us-pioneer",
+              name: "🎯 US 1.5°C Trailblazer (2.4 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "car-free",
+                miles: 0,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "vegan",
+                waste: "low-waste"
+              }
+            }
+          ]
+        },
+        china: {
+          label: "🇨🇳 China Decarbonisation Pathways:",
+          pathways: [
+            {
+              id: "china-rail",
+              name: "🚄 High-Speed Rail & Induction (4.8 t)",
+              dials: {
+                heating: "heat-pump-grid",
+                insulation: "moderate",
+                cooking: "induction",
+                electricity: "grid",
+                carType: "hybrid",
+                miles: 3000,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "average",
+                waste: "low-waste"
+              }
+            },
+            {
+              id: "china-ev",
+              name: "⚡ Rooftop Solar & EV (3.2 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "ev",
+                miles: 4000,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "flexitarian",
+                waste: "low-waste"
+              }
+            },
+            {
+              id: "china-pioneer",
+              name: "🎯 Low-Carbon Pioneer (1.8 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "car-free",
+                miles: 0,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "vegan",
+                waste: "low-waste"
+              }
+            }
+          ]
+        },
+        malawi: {
+          label: "🇲🇼 Malawi Clean Energy Pathways:",
+          pathways: [
+            {
+              id: "malawi-cookstove",
+              name: "🪵 Clean Cookstove & Solar (0.18 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "car-free",
+                miles: 0,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "flexitarian",
+                waste: "low-waste"
+              }
+            },
+            {
+              id: "malawi-microgrid",
+              name: "🎯 Agro-Ecology & Microgrid (0.12 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "car-free",
+                miles: 0,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "vegan",
+                waste: "low-waste"
+              }
+            }
+          ]
+        },
+        maldives: {
+          label: "🇲🇻 Maldives Decarbonisation Pathways:",
+          pathways: [
+            {
+              id: "maldives-solar",
+              name: "☀️ Island Solar Microgrid (1.6 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "car-free",
+                miles: 0,
+                shortFlights: 1,
+                longFlights: 0,
+                diet: "flexitarian",
+                waste: "low-waste"
+              }
+            },
+            {
+              id: "maldives-pioneer",
+              name: "🎯 1.5°C SIDS Net-Zero Model (0.9 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "car-free",
+                miles: 0,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "vegan",
+                waste: "low-waste"
+              }
+            }
+          ]
+        },
+        tuvalu: {
+          label: "🇹🇻 Tuvalu Decarbonisation Pathways:",
+          pathways: [
+            {
+              id: "tuvalu-solar",
+              name: "☀️ Atoll Solar & Pulaka (0.6 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "car-free",
+                miles: 0,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "flexitarian",
+                waste: "low-waste"
+              }
+            },
+            {
+              id: "tuvalu-pioneer",
+              name: "🎯 Zero-Fossil Sanctuary (0.3 t)",
+              dials: {
+                heating: "heat-pump-green",
+                insulation: "high",
+                cooking: "induction",
+                electricity: "green",
+                carType: "car-free",
+                miles: 0,
+                shortFlights: 0,
+                longFlights: 0,
+                diet: "vegan",
+                waste: "low-waste"
+              }
+            }
+          ]
+        }
+      };
+
+      // Dynamic Action Plan Renderer
+      function renderActionPlans(country) {
+        const planDef = COUNTRY_PATHWAYS[country] || COUNTRY_PATHWAYS.uk;
+        const lblActionPlanHeader = document.getElementById("lblActionPlanHeader");
+        const actionPlanContainer = document.getElementById("actionPlanContainer");
+        if (!actionPlanContainer) return;
+
+        if (lblActionPlanHeader) {
+          lblActionPlanHeader.textContent = planDef.label;
+        }
+
+        actionPlanContainer.innerHTML = "";
+        planDef.pathways.forEach(pw => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "preset-pill";
+          btn.textContent = pw.name;
+          btn.setAttribute("data-pathway-id", pw.id);
+          btn.addEventListener("click", () => {
+            actionPlanContainer.querySelectorAll(".preset-pill").forEach(p => p.classList.remove("active"));
+            btn.classList.add("active");
+            applyPathwayDials(pw.dials);
+          });
+          actionPlanContainer.appendChild(btn);
+        });
+      }
+
+      function applyPathwayDials(dials) {
+        if (!dials) return;
+        if (dials.heating) selectHeating.value = dials.heating;
+        if (dials.insulation) selectInsulation.value = dials.insulation;
+        if (dials.cooking) selectCooking.value = dials.cooking;
+        if (dials.electricity) selectElectricity.value = dials.electricity;
+        if (dials.carType) selectCarType.value = dials.carType;
+        if (dials.miles !== undefined) sliderMiles.value = dials.miles;
+        if (dials.shortFlights !== undefined) sliderShortFlights.value = dials.shortFlights;
+        if (dials.longFlights !== undefined) sliderLongFlights.value = dials.longFlights;
+        if (dials.diet) selectDiet.value = dials.diet;
+        if (dials.waste) selectWaste.value = dials.waste;
+
+        updateCalculator();
       }
 
       // Preset Applicator
@@ -1647,6 +2065,7 @@
           selectDiet.value = "average";
           selectWaste.value = "typical";
           setCivicCountry("uk");
+          renderActionPlans("uk");
         } else if (preset === "us") {
           currentCountry = "us";
           currentCountryBaselineTotal = 16.5;
@@ -1669,6 +2088,7 @@
           selectDiet.value = "heavy-meat";
           selectWaste.value = "typical";
           setCivicCountry("us");
+          renderActionPlans("us");
         } else if (preset === "china") {
           currentCountry = "china";
           currentCountryBaselineTotal = 8.2;
@@ -1691,6 +2111,7 @@
           selectDiet.value = "average";
           selectWaste.value = "low-waste";
           setCivicCountry("china");
+          renderActionPlans("china");
         } else if (preset === "malawi") {
           currentCountry = "malawi";
           currentCountryBaselineTotal = 0.25;
@@ -1713,6 +2134,7 @@
           selectDiet.value = "vegan";
           selectWaste.value = "low-waste";
           setCivicCountry("malawi");
+          renderActionPlans("malawi");
         } else if (preset === "maldives") {
           currentCountry = "maldives";
           currentCountryBaselineTotal = 2.8;
@@ -1735,6 +2157,7 @@
           selectDiet.value = "flexitarian";
           selectWaste.value = "typical";
           setCivicCountry("maldives");
+          renderActionPlans("maldives");
         } else if (preset === "tuvalu") {
           currentCountry = "tuvalu";
           currentCountryBaselineTotal = 1.1;
@@ -1757,72 +2180,7 @@
           selectDiet.value = "flexitarian";
           selectWaste.value = "low-waste";
           setCivicCountry("tuvalu");
-        } else if (preset === "quick-wins") {
-          currentCountry = "uk";
-          currentCountryBaselineTotal = 9.5;
-          currentSocietalBaseline = 1.5;
-          if (btnPresetQuickWins) btnPresetQuickWins.classList.add("active");
-          if (lblBaselineComparison) lblBaselineComparison.textContent = "Reduction From UK Baseline";
-          if (lblSocietalTitle) lblSocietalTitle.textContent = "UK Public Services Baseline";
-          if (subSocietalBaseline) subSocietalBaseline.textContent = "NHS, schools, water & roads (public policy required)";
-
-          selectHeating.value = "gas-condensing";
-          selectInsulation.value = "moderate";
-          selectCooking.value = "induction";
-          selectElectricity.value = "green";
-
-          selectCarType.value = "hybrid";
-          sliderMiles.value = 6000;
-          sliderShortFlights.value = 1;
-          sliderLongFlights.value = 0;
-
-          selectDiet.value = "flexitarian";
-          selectWaste.value = "low-waste";
-          setCivicCountry("uk");
-        } else if (preset === "suburban") {
-          currentCountry = "uk";
-          currentCountryBaselineTotal = 9.5;
-          currentSocietalBaseline = 1.5;
-          if (btnPresetSuburban) btnPresetSuburban.classList.add("active");
-          if (lblBaselineComparison) lblBaselineComparison.textContent = "Reduction From UK Baseline";
-          if (lblSocietalTitle) lblSocietalTitle.textContent = "UK Public Services Baseline";
-          if (subSocietalBaseline) subSocietalBaseline.textContent = "NHS, schools, water & roads (public policy required)";
-
-          selectHeating.value = "heat-pump-grid";
-          selectInsulation.value = "high";
-          selectCooking.value = "induction";
-          selectElectricity.value = "green";
-
-          selectCarType.value = "ev";
-          sliderMiles.value = 5000;
-          sliderShortFlights.value = 0;
-          sliderLongFlights.value = 0;
-
-          selectDiet.value = "vegetarian";
-          selectWaste.value = "low-waste";
-          setCivicCountry("uk");
-        } else if (preset === "trailblazer") {
-          currentCountry = "uk";
-          currentCountryBaselineTotal = 9.5;
-          currentSocietalBaseline = 1.5;
-          if (btnPresetTrailblazer) btnPresetTrailblazer.classList.add("active");
-          if (lblBaselineComparison) lblBaselineComparison.textContent = "Reduction From UK Baseline";
-          if (lblSocietalTitle) lblSocietalTitle.textContent = "UK Public Services Baseline";
-          if (subSocietalBaseline) subSocietalBaseline.textContent = "NHS, schools, water & roads (public policy required)";
-
-          selectHeating.value = "heat-pump-green";
-          selectInsulation.value = "high";
-          selectCooking.value = "induction";
-          selectElectricity.value = "green";
-
-          selectCarType.value = "car-free";
-          sliderMiles.value = 0;
-          sliderShortFlights.value = 0;
-          sliderLongFlights.value = 0;
-
-          selectDiet.value = "vegan";
-          selectWaste.value = "low-waste";
-          setCivicCountry("uk");
+          renderActionPlans("tuvalu");
         }
 
         updateCalculator();
@@ -1848,9 +2206,6 @@
       if (btnPresetMalawi) btnPresetMalawi.addEventListener("click", () => applyPreset("malawi"));
       if (btnPresetMaldives) btnPresetMaldives.addEventListener("click", () => applyPreset("maldives"));
       if (btnPresetTuvalu) btnPresetTuvalu.addEventListener("click", () => applyPreset("tuvalu"));
-      if (btnPresetQuickWins) btnPresetQuickWins.addEventListener("click", () => applyPreset("quick-wins"));
-      if (btnPresetSuburban) btnPresetSuburban.addEventListener("click", () => applyPreset("suburban"));
-      if (btnPresetTrailblazer) btnPresetTrailblazer.addEventListener("click", () => applyPreset("trailblazer"));
 
       document.querySelectorAll(".btn-civic-country").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -1860,6 +2215,7 @@
       });
 
       // Initial Run
+      renderActionPlans("uk");
       updateCalculator();
     })();
   </script>
