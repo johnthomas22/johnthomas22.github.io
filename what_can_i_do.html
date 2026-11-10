@@ -658,6 +658,8 @@
             <button type="button" class="btn-civic-country" id="btnCivicUS" data-country="us">🇺🇸 US Resident</button>
             <button type="button" class="btn-civic-country" id="btnCivicChina" data-country="china">🇨🇳 Chinese Resident</button>
             <button type="button" class="btn-civic-country" id="btnCivicMalawi" data-country="malawi">🇲🇼 Malawian Resident</button>
+            <button type="button" class="btn-civic-country" id="btnCivicMaldives" data-country="maldives">🇲🇻 Maldivian Resident</button>
+            <button type="button" class="btn-civic-country" id="btnCivicTuvalu" data-country="tuvalu">🇹🇻 Tuvaluan Resident</button>
           </div>
         </div>
 
@@ -714,6 +716,34 @@
           <div style="font-size: 0.8rem; color: #94a3b8; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1);">
             <span>⚖️ <strong>Key Moral Demand: Climate Justice &amp; Loss and Damage Finance:</strong> Wealthy historical emitters (US, UK, EU) must deliver non-debt grant climate reparations to vulnerable nations.</span>
             <span>🌱 <strong>Domestic Action:</strong> Urge Members of the National Assembly of Malawi and civil society (CISONECC) to fund decentralized solar microgrids, clean cookstoves (to prevent deforestation and smoke inhalation), and drought-resistant agro-ecology.</span>
+          </div>
+        </div>
+
+        <!-- MALDIVES PANEL -->
+        <div id="civicPanelMaldives" class="civic-panel" style="display: none;">
+          <p style="font-size: 0.88rem; color: #f1f5f9; line-height: 1.6; margin-bottom: 8px;">
+            <strong>Thanks for reading.</strong> You are one of around 520,000 people across the 1,192 coral atolls of the Republic of Maldives (and 8 billion globally).
+          </p>
+          <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 8px;">
+            The Maldives is the <strong>lowest-lying nation on Earth</strong>, with over 80% of its land area sitting less than 1.0 to 1.5 metres above sea level. Total national emissions represent less than <strong>0.003% of the global total</strong>. Maldivians bear virtually zero historic culpability for planetary heating, yet face the existential threat of total inundation, coastal erosion, and saltwater contamination of fragile freshwater lenses. In 2009, the Maldivian Cabinet held the world's first underwater cabinet meeting to scream for global climate survival.
+          </p>
+          <div style="font-size: 0.8rem; color: #94a3b8; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1);">
+            <span>🌊 <strong>Key Moral Demand: Rapid 1.5°C Phase-Out &amp; Legal Accountability:</strong> High-emitting nations must rapidly phase out fossil fuels; small island survival is non-negotiable under international law (AOSIS, ITLOS &amp; ICJ climate rulings).</span>
+            <span>🛡️ <strong>Adaptation &amp; Finance:</strong> Demand grant-based Loss and Damage finance for coastal defense bunds, land reclamation (Hulhumalé "City of Hope"), and island solar-battery microgrids to replace imported diesel.</span>
+          </div>
+        </div>
+
+        <!-- TUVALU PANEL -->
+        <div id="civicPanelTuvalu" class="civic-panel" style="display: none;">
+          <p style="font-size: 0.88rem; color: #f1f5f9; line-height: 1.6; margin-bottom: 8px;">
+            <strong>Thanks for reading.</strong> You are one of around 11,200 people living across the 9 low-lying Pacific atolls and reef islands of Tuvalu (and 8 billion globally).
+          </p>
+          <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 8px;">
+            Tuvalu's average land height is barely 2 metres above sea level, and its national emissions are roughly <strong>0.00005% of global output</strong>. During recurring "King Tides", the Pacific Ocean literally percolates up through the porous coral ground, flooding streets, homes, and killing subsistence pulaka (taro) pits. At COP26, Tuvalu's Foreign Minister addressed world leaders standing knee-deep in the ocean. To safeguard its identity against potential physical drowning, Tuvalu created a sovereign digital twin in the Metaverse and negotiated the historic 2023 Falepili Union treaty.
+          </p>
+          <div style="font-size: 0.8rem; color: #94a3b8; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1);">
+            <span>⚖️ <strong>Key Moral Demand: Permanent Sovereign Statehood:</strong> Champion the Rising Nations Initiative—ensuring international recognition of Tuvalu's maritime borders, statehood, and sovereignty even if land is permanently submerged.</span>
+            <span>🤝 <strong>Loss &amp; Damage Reparations:</strong> Wealthy industrial polluters must fund full coastal adaptation (TCAP) and guarantee dignified climate migration pathways with uncompromised self-determination.</span>
           </div>
         </div>
       </div>
@@ -777,10 +807,12 @@
         </div>
         <div class="preset-pill-group">
           <span style="font-size: 0.74rem; font-weight: 700; color: #94a3b8; align-self: center; margin-right: 4px;">Compare Baselines:</span>
-          <button class="preset-pill active" id="btnPresetAverage" type="button">🇬🇧 UK Resident (9.5 t)</button>
-          <button class="preset-pill" id="btnPresetUS" type="button">🇺🇸 US Resident (16.5 t)</button>
-          <button class="preset-pill" id="btnPresetChina" type="button">🇨🇳 Chinese Resident (8.2 t)</button>
-          <button class="preset-pill" id="btnPresetMalawi" type="button">🇲🇼 Malawian Resident (0.2 t)</button>
+          <button class="preset-pill active" id="btnPresetAverage" type="button">🇬🇧 UK (9.5 t)</button>
+          <button class="preset-pill" id="btnPresetUS" type="button">🇺🇸 US (16.5 t)</button>
+          <button class="preset-pill" id="btnPresetChina" type="button">🇨🇳 China (8.2 t)</button>
+          <button class="preset-pill" id="btnPresetMalawi" type="button">🇲🇼 Malawi (0.2 t)</button>
+          <button class="preset-pill" id="btnPresetMaldives" type="button">🇲🇻 Maldives (2.8 t)</button>
+          <button class="preset-pill" id="btnPresetTuvalu" type="button">🇹🇻 Tuvalu (1.1 t)</button>
           <span style="border-left: 1px solid rgba(255, 255, 255, 0.18); margin: 0 4px; height: 18px; align-self: center;"></span>
           <span style="font-size: 0.74rem; font-weight: 700; color: #94a3b8; align-self: center; margin-right: 4px;">UK Action Plans:</span>
           <button class="preset-pill" id="btnPresetQuickWins" type="button">⚡ Quick Wins (5.8 t)</button>
@@ -1270,12 +1302,14 @@
       const btnPresetUS = document.getElementById("btnPresetUS");
       const btnPresetChina = document.getElementById("btnPresetChina");
       const btnPresetMalawi = document.getElementById("btnPresetMalawi");
+      const btnPresetMaldives = document.getElementById("btnPresetMaldives");
+      const btnPresetTuvalu = document.getElementById("btnPresetTuvalu");
       const btnPresetQuickWins = document.getElementById("btnPresetQuickWins");
       const btnPresetSuburban = document.getElementById("btnPresetSuburban");
       const btnPresetTrailblazer = document.getElementById("btnPresetTrailblazer");
 
       // Country & Baseline State
-      let currentCountry = "uk"; // "uk", "us", "china", "malawi"
+      let currentCountry = "uk"; // "uk", "us", "china", "malawi", "maldives", "tuvalu"
       let currentCountryBaselineTotal = 9.5; // tonnes CO2e
       let currentSocietalBaseline = 1.5; // tonnes CO2e
       const PARIS_TARGET = 2.0; // tonnes CO2e 2030 budget
@@ -1302,7 +1336,7 @@
 
         // Space & water heating
         const heatVal = selectHeating.value;
-        if (currentCountry === "malawi") {
+        if (currentCountry === "malawi" || currentCountry === "maldives" || currentCountry === "tuvalu") {
           homeEmissions += 0.04;
           lblDialHeating.textContent = "Tropical Climate / Solar";
         } else if (currentCountry === "us") {
@@ -1344,8 +1378,8 @@
 
         // Insulation modifier
         const insVal = selectInsulation.value;
-        if (currentCountry === "malawi") {
-          lblDialInsulation.textContent = "Natural Ventilation";
+        if (currentCountry === "malawi" || currentCountry === "maldives" || currentCountry === "tuvalu") {
+          lblDialInsulation.textContent = "Natural Island Breeze";
         } else if (insVal === "poor") {
           homeEmissions += 0.8;
           lblDialInsulation.textContent = "Poor / Draughty (+0.8 t)";
@@ -1361,6 +1395,12 @@
         if (currentCountry === "malawi") {
           homeEmissions += 0.03;
           lblDialCooking.textContent = "Clean Biomass / Solar";
+        } else if (currentCountry === "tuvalu") {
+          homeEmissions += 0.08;
+          lblDialCooking.textContent = "Kerosene / Gas Cylinder";
+        } else if (currentCountry === "maldives") {
+          homeEmissions += 0.12;
+          lblDialCooking.textContent = "LPG Cylinder / Electric";
         } else if (cookVal === "gas") {
           homeEmissions += 0.18;
           lblDialCooking.textContent = "Gas Stove / Hob";
@@ -1374,6 +1414,12 @@
         if (currentCountry === "malawi") {
           homeEmissions += 0.01;
           lblDialElectricity.textContent = "Off-Grid Solar / Hydro";
+        } else if (currentCountry === "maldives") {
+          homeEmissions += (elecVal === "grid" ? 0.65 : 0.05); // Atoll diesel generator grid mix
+          lblDialElectricity.textContent = elecVal === "grid" ? "Atoll Diesel Grid Mix" : "Island Solar PV";
+        } else if (currentCountry === "tuvalu") {
+          homeEmissions += (elecVal === "grid" ? 0.25 : 0.03); // Fongafale island micro-grid
+          lblDialElectricity.textContent = elecVal === "grid" ? "Island Mini-Grid" : "Off-Grid Solar";
         } else if (currentCountry === "us") {
           if (elecVal === "grid") {
             homeEmissions += 1.25; // Higher US household kWh + fossil grid (~370 g/kWh)
@@ -1427,7 +1473,16 @@
         }
 
         const carTonnes = (miles * carGramsPerMile) / 1000000;
-        transportEmissions += carTonnes;
+
+        if (currentCountry === "maldives") {
+          // Inter-island speedboats / dhoni ferries
+          transportEmissions += (carVal === "car-free" ? 0.45 : carTonnes);
+        } else if (currentCountry === "tuvalu") {
+          // Lagoon boat / motor scooter
+          transportEmissions += (carVal === "car-free" ? 0.12 : carTonnes);
+        } else {
+          transportEmissions += carTonnes;
+        }
 
         // Flights
         const shortFlights = parseInt(sliderShortFlights.value, 10) || 0;
@@ -1445,6 +1500,12 @@
         if (currentCountry === "malawi") {
           foodEmissions = 0.10;
           lblDialDiet.textContent = "Staple Maize / Legumes (0.10 t)";
+        } else if (currentCountry === "maldives") {
+          foodEmissions = dietVal === "heavy-meat" ? 1.6 : 0.70;
+          lblDialDiet.textContent = "Pescatarian (Tuna, Reef Fish & Rice)";
+        } else if (currentCountry === "tuvalu") {
+          foodEmissions = dietVal === "heavy-meat" ? 1.2 : 0.45;
+          lblDialDiet.textContent = "Pulaka (Taro), Fish & Coconut";
         } else if (dietVal === "heavy-meat") {
           foodEmissions = currentCountry === "us" ? 3.4 : 3.2;
           lblDialDiet.textContent = "Heavy Meat";
@@ -1463,7 +1524,7 @@
         }
 
         const wasteVal = selectWaste.value;
-        if (currentCountry === "malawi") {
+        if (currentCountry === "malawi" || currentCountry === "tuvalu") {
           lblDialWaste.textContent = "Near-Zero Waste";
         } else if (wasteVal === "typical") {
           lblDialWaste.textContent = "Typical Waste";
@@ -1481,6 +1542,12 @@
         if (currentCountry === "malawi" && totalOverall <= 0.4) {
           valTotalFootprint.style.color = "var(--emerald-light)";
           subTotalComparison.textContent = "🇲🇼 Malawian baseline: ~0.2 t / yr — 1/10th of Paris 2.0t target! A stark case for Climate Justice.";
+        } else if (currentCountry === "tuvalu") {
+          valTotalFootprint.style.color = "var(--emerald-light)";
+          subTotalComparison.textContent = "🇹🇻 Tuvaluan baseline: ~1.1 t / yr — well below Paris 2.0t target, yet facing territorial extinction from sea level rise!";
+        } else if (currentCountry === "maldives") {
+          valTotalFootprint.style.color = "var(--amber)";
+          subTotalComparison.textContent = "🇲🇻 Maldivian baseline: ~2.8 t / yr — lowest-lying nation on Earth (<0.003% global emissions) fighting rising seas.";
         } else if (currentCountry === "us" && totalOverall >= 14.0) {
           valTotalFootprint.style.color = "var(--rose)";
           subTotalComparison.textContent = "🇺🇸 High-emissions US lifestyle: ~16.5 t / yr — over 8× higher than the Paris 2.0t target!";
@@ -1506,6 +1573,10 @@
         valReductionPct.innerHTML = `${Math.round(savedPct)}% <span style="font-size: 0.9rem; color: var(--text-muted);">saved</span>`;
         if (currentCountry === "malawi") {
           subReductionTonnes.textContent = "Living ~88% below the Paris 1.5°C threshold (0.25t vs 2.0t)";
+        } else if (currentCountry === "tuvalu") {
+          subReductionTonnes.textContent = "Living ~45% below the Paris 1.5°C threshold (1.1t vs 2.0t)";
+        } else if (currentCountry === "maldives") {
+          subReductionTonnes.textContent = "Near Paris threshold (2.8t vs 2.0t) with negligible global contribution";
         } else {
           subReductionTonnes.textContent = savedTonnes > 0
             ? `${savedTonnes.toFixed(1)} tonnes CO₂e eliminated / yr`
@@ -1642,6 +1713,50 @@
           selectDiet.value = "vegan";
           selectWaste.value = "low-waste";
           setCivicCountry("malawi");
+        } else if (preset === "maldives") {
+          currentCountry = "maldives";
+          currentCountryBaselineTotal = 2.8;
+          currentSocietalBaseline = 0.8;
+          if (btnPresetMaldives) btnPresetMaldives.classList.add("active");
+          if (lblBaselineComparison) lblBaselineComparison.textContent = "Status vs Maldives Baseline";
+          if (lblSocietalTitle) lblSocietalTitle.textContent = "Maldives Coastal Infrastructure Baseline";
+          if (subSocietalBaseline) subSocietalBaseline.textContent = "Coastal sea walls, desalination plants & inter-atoll logistics (~0.8 t)";
+
+          selectHeating.value = "heat-pump-green";
+          selectInsulation.value = "high";
+          selectCooking.value = "gas";
+          selectElectricity.value = "grid";
+
+          selectCarType.value = "car-free";
+          sliderMiles.value = 0;
+          sliderShortFlights.value = 1;
+          sliderLongFlights.value = 0;
+
+          selectDiet.value = "flexitarian";
+          selectWaste.value = "typical";
+          setCivicCountry("maldives");
+        } else if (preset === "tuvalu") {
+          currentCountry = "tuvalu";
+          currentCountryBaselineTotal = 1.1;
+          currentSocietalBaseline = 0.2;
+          if (btnPresetTuvalu) btnPresetTuvalu.classList.add("active");
+          if (lblBaselineComparison) lblBaselineComparison.textContent = "Status vs Tuvalu Baseline";
+          if (lblSocietalTitle) lblSocietalTitle.textContent = "Tuvalu Atoll Infrastructure Baseline";
+          if (subSocietalBaseline) subSocietalBaseline.textContent = "Rainwater cisterns, community atoll energy & civic clinics (~0.2 t)";
+
+          selectHeating.value = "heat-pump-green";
+          selectInsulation.value = "high";
+          selectCooking.value = "gas";
+          selectElectricity.value = "grid";
+
+          selectCarType.value = "car-free";
+          sliderMiles.value = 0;
+          sliderShortFlights.value = 0;
+          sliderLongFlights.value = 0;
+
+          selectDiet.value = "flexitarian";
+          selectWaste.value = "low-waste";
+          setCivicCountry("tuvalu");
         } else if (preset === "quick-wins") {
           currentCountry = "uk";
           currentCountryBaselineTotal = 9.5;
@@ -1731,6 +1846,8 @@
       if (btnPresetUS) btnPresetUS.addEventListener("click", () => applyPreset("us"));
       if (btnPresetChina) btnPresetChina.addEventListener("click", () => applyPreset("china"));
       if (btnPresetMalawi) btnPresetMalawi.addEventListener("click", () => applyPreset("malawi"));
+      if (btnPresetMaldives) btnPresetMaldives.addEventListener("click", () => applyPreset("maldives"));
+      if (btnPresetTuvalu) btnPresetTuvalu.addEventListener("click", () => applyPreset("tuvalu"));
       if (btnPresetQuickWins) btnPresetQuickWins.addEventListener("click", () => applyPreset("quick-wins"));
       if (btnPresetSuburban) btnPresetSuburban.addEventListener("click", () => applyPreset("suburban"));
       if (btnPresetTrailblazer) btnPresetTrailblazer.addEventListener("click", () => applyPreset("trailblazer"));
