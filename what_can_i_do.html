@@ -1026,7 +1026,7 @@
               <span class="dial-val" id="lblDialElectricity">UK Grid Standard</span>
             </div>
             <select class="dial-select" id="selectElectricity">
-              <option value="grid" selected>Standard National Grid (~140 g CO₂/kWh)</option>
+              <option value="grid" id="optElectricityGrid" selected>Standard National Grid (~140 g CO₂/kWh)</option>
               <option value="green">100% Certified Green Tariff / Rooftop Solar PV</option>
             </select>
           </div>
@@ -1059,7 +1059,7 @@
               <span class="dial-val" id="lblDialMiles">7,500 miles/yr</span>
             </div>
             <input type="range" id="sliderMiles" min="0" max="20000" step="500" value="7500">
-            <span class="dial-hint">UK average is ~7,400 miles/year per vehicle.</span>
+            <span class="dial-hint" id="hintMiles">UK average is ~7,400 miles/year per vehicle.</span>
           </div>
 
           <div class="dial-group">
@@ -1068,7 +1068,7 @@
               <span class="dial-val" id="lblDialShortFlights">2 Return Flights</span>
             </div>
             <input type="range" id="sliderShortFlights" min="0" max="8" step="1" value="2">
-            <span class="dial-hint">UK/European flights (~0.35 t CO₂e per return flight with contrails).</span>
+            <span class="dial-hint" id="hintShortFlights">UK/European flights (~0.35 t CO₂e per return flight with contrails).</span>
           </div>
 
           <div class="dial-group">
@@ -1095,7 +1095,7 @@
             </div>
             <select class="dial-select" id="selectDiet">
               <option value="heavy-meat">Heavy Meat Eater (Beef/Lamb Daily)</option>
-              <option value="average" selected>Average UK Diet (Meat 3–4× per week)</option>
+              <option value="average" id="optDietAverage" selected>Average UK Diet (Meat 3–4× per week)</option>
               <option value="flexitarian">Low Meat / Flexitarian (Beef &lt;1× per month)</option>
               <option value="vegetarian">Vegetarian (Dairy &amp; Eggs, No Meat)</option>
               <option value="vegan">100% Plant-Based (Vegan)</option>
@@ -1109,10 +1109,10 @@
               <span class="dial-val" id="lblDialWaste">Typical Waste (~25%)</span>
             </div>
             <select class="dial-select" id="selectWaste">
-              <option value="typical" selected>Typical UK Household (~25% food discarded)</option>
+              <option value="typical" id="optWasteTypical" selected>Typical UK Household (~25% food discarded)</option>
               <option value="low-waste">Low Waste / Mindful Meal Planning (-0.3 t)</option>
             </select>
-            <span class="dial-hint">UK households discard 4.7 million tonnes of edible food each year.</span>
+            <span class="dial-hint" id="hintWaste">UK households discard 4.7 million tonnes of edible food each year.</span>
           </div>
 
           <div class="dial-group" style="background: rgba(0,0,0,0.25); padding: 8px 10px; border-radius: 6px;">
@@ -1596,10 +1596,10 @@
           lblDialDiet.textContent = "Pulaka (Taro), Fish & Coconut";
         } else if (dietVal === "heavy-meat") {
           foodEmissions = currentCountry === "us" ? 3.4 : 3.2;
-          lblDialDiet.textContent = "Heavy Meat";
+          lblDialDiet.textContent = currentCountry === "us" ? "Heavy US Meat Diet" : "Heavy Meat";
         } else if (dietVal === "average") {
-          foodEmissions = 2.1;
-          lblDialDiet.textContent = "Average Diet";
+          foodEmissions = currentCountry === "us" ? 2.6 : 2.1;
+          lblDialDiet.textContent = currentCountry === "us" ? "Average US Diet" : (currentCountry === "china" ? "Average China Diet" : "Average UK Diet");
         } else if (dietVal === "flexitarian") {
           foodEmissions = 1.4;
           lblDialDiet.textContent = "Flexitarian";
@@ -1615,7 +1615,7 @@
         if (currentCountry === "malawi" || currentCountry === "tuvalu") {
           lblDialWaste.textContent = "Near-Zero Waste";
         } else if (wasteVal === "typical") {
-          lblDialWaste.textContent = "Typical Waste";
+          lblDialWaste.textContent = currentCountry === "us" ? "Typical US Waste (~35%)" : "Typical Waste (~25%)";
         } else {
           foodEmissions = Math.max(0.2, foodEmissions - 0.3);
           lblDialWaste.textContent = "Zero-Waste Plan (-0.3 t)";
@@ -2039,6 +2039,75 @@
         updateCalculator();
       }
 
+      // Contextual Dial Content by Country (fixes regional prompts, hints and dropdown options)
+      const COUNTRY_DIAL_CONTEXT = {
+        uk: {
+          gridOption: "UK National Grid Standard (~140 g CO₂/kWh)",
+          milesHint: "UK average is ~7,400 miles/year per vehicle.",
+          shortFlightsHint: "UK/European flights (~0.35 t CO₂e per return flight with contrails).",
+          dietOption: "Average UK Diet (Meat 3–4× per week)",
+          wasteOption: "Typical UK Household (~25% food discarded)",
+          wasteHint: "UK households discard 4.7 million tonnes of edible food each year."
+        },
+        us: {
+          gridOption: "US Regional Grid Average (~380 g CO₂/kWh)",
+          milesHint: "US average is ~13,500 miles/year per driver (FHWA).",
+          shortFlightsHint: "Domestic US flights (~0.45 t CO₂e per return flight with contrails).",
+          dietOption: "Average US Diet (High Meat / Beef ~4× per week)",
+          wasteOption: "Typical US Household (~30–40% food discarded)",
+          wasteHint: "US households discard over 40 million tons of food annually (USDA/EPA)."
+        },
+        china: {
+          gridOption: "China State Grid Average (~550 g CO₂/kWh)",
+          milesHint: "China average is ~6,000 miles/year per private vehicle.",
+          shortFlightsHint: "Domestic flights (~0.35 t CO₂e); high-speed rail avoids ~80% of emissions.",
+          dietOption: "Average Chinese Diet (Pork, Poultry, Rice & Veg)",
+          wasteOption: "Typical Urban Household (~20% food discarded)",
+          wasteHint: "Over 35 million tonnes of food is wasted annually in Chinese urban food services."
+        },
+        malawi: {
+          gridOption: "Hydro & Decentralized Solar Microgrid",
+          milesHint: "Vehicle ownership is minimal; walking, cycling & minibuses dominate.",
+          shortFlightsHint: "Domestic regional transit (~0.25 t CO₂e).",
+          dietOption: "Typical Malawian Diet (Nsima / Maize & Legumes)",
+          wasteOption: "Near-Zero Waste Household (Subsistence Utilization)",
+          wasteHint: "Subsistence food culture prioritizes complete consumption with near-zero waste."
+        },
+        maldives: {
+          gridOption: "Island Diesel Generator Grid (~650 g CO₂/kWh)",
+          milesHint: "Motor vehicles limited to Malé/Hulhumalé; inter-atoll transit by boat.",
+          shortFlightsHint: "Inter-atoll seaplane / domestic flights (~0.30 t CO₂e).",
+          dietOption: "Typical Maldivian Diet (Skipjack Tuna, Reef Fish & Rice)",
+          wasteOption: "Typical Island Household (Strict Landfill Constraint)",
+          wasteHint: "Waste management on Thilafushi reef is an acute environmental challenge."
+        },
+        tuvalu: {
+          gridOption: "Atoll Diesel Generator Grid (~650 g CO₂/kWh)",
+          milesHint: "Total atoll road length is 8 km; bicycles and scooters dominate.",
+          shortFlightsHint: "Inter-island boat transit (~0.10 t CO₂e) or regional flights via Fiji.",
+          dietOption: "Traditional Tuvaluan Diet (Pulaka Taro, Fish & Coconut)",
+          wasteOption: "Near-Zero Waste Household (Traditional Agro-ecology)",
+          wasteHint: "Organic scraps are traditionally fed to livestock or composted for pulaka pits."
+        }
+      };
+
+      function updateCountryDialContext(country) {
+        const ctx = COUNTRY_DIAL_CONTEXT[country] || COUNTRY_DIAL_CONTEXT.uk;
+        const optElectricityGrid = document.getElementById("optElectricityGrid");
+        const hintMiles = document.getElementById("hintMiles");
+        const hintShortFlights = document.getElementById("hintShortFlights");
+        const optDietAverage = document.getElementById("optDietAverage");
+        const optWasteTypical = document.getElementById("optWasteTypical");
+        const hintWaste = document.getElementById("hintWaste");
+
+        if (optElectricityGrid) optElectricityGrid.textContent = ctx.gridOption;
+        if (hintMiles) hintMiles.textContent = ctx.milesHint;
+        if (hintShortFlights) hintShortFlights.textContent = ctx.shortFlightsHint;
+        if (optDietAverage) optDietAverage.textContent = ctx.dietOption;
+        if (optWasteTypical) optWasteTypical.textContent = ctx.wasteOption;
+        if (hintWaste) hintWaste.textContent = ctx.wasteHint;
+      }
+
       // Preset Applicator
       function applyPreset(preset) {
         document.querySelectorAll(".preset-pill").forEach(p => p.classList.remove("active"));
@@ -2183,6 +2252,7 @@
           renderActionPlans("tuvalu");
         }
 
+        updateCountryDialContext(currentCountry);
         updateCalculator();
       }
 
@@ -2215,6 +2285,7 @@
       });
 
       // Initial Run
+      updateCountryDialContext("uk");
       renderActionPlans("uk");
       updateCalculator();
     })();
