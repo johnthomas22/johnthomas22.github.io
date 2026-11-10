@@ -128,7 +128,6 @@
     .app-wrapper.budgets-mode {
       max-width: 1420px;
     }
-    .app-wrapper.budgets-mode .top-stats-strip,
     .app-wrapper.budgets-mode .intro-banner,
     .app-wrapper.budgets-mode .main-grid {
       display: none !important;
@@ -262,7 +261,6 @@
     .app-wrapper.dunkel-mode {
       max-width: 1420px;
     }
-    .app-wrapper.sources-mode .top-stats-strip,
     .app-wrapper.sources-mode .intro-banner,
     .app-wrapper.sources-mode .main-grid,
     .app-wrapper.sources-mode .budgets-view,
@@ -270,7 +268,6 @@
     .app-wrapper.sources-mode .dunkel-view {
       display: none !important;
     }
-    .app-wrapper.solutions-mode .top-stats-strip,
     .app-wrapper.solutions-mode .intro-banner,
     .app-wrapper.solutions-mode .main-grid,
     .app-wrapper.solutions-mode .budgets-view,
@@ -278,7 +275,6 @@
     .app-wrapper.solutions-mode .dunkel-view {
       display: none !important;
     }
-    .app-wrapper.dunkel-mode .top-stats-strip,
     .app-wrapper.dunkel-mode .intro-banner,
     .app-wrapper.dunkel-mode .main-grid,
     .app-wrapper.dunkel-mode .budgets-view,
@@ -2869,7 +2865,10 @@
                 <div><strong style="color: #38bdf8;">🧪 Hydrogen / Thermal</strong></div>
                 <div>Current: <strong>~0.5 TWh (500 GWh)</strong> · LCOS: <strong>$0.18–$0.35/kWh</strong></div>
                 <div>RTE: <strong>35–48%</strong> · Duration: <strong>Weeks–Months</strong></div>
-                <div style="font-size: 0.72rem; color: var(--text-muted);">Electrolysis into cavern gas storage. Solves multi-week winter "Dunkelflaute" when wind and solar output both lag.</div>
+                <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">Electrolysis into cavern gas storage. Solves multi-week winter "Dunkelflaute" when wind and solar output both lag.</div>
+                <button type="button" class="btn btn-secondary" onclick="setViewMode('dunkel');" style="width: 100%; font-size: 0.72rem; padding: 4px 8px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4); justify-content: center;">
+                  🇬🇧 Launch UK Dunkelflaute Simulator &rarr;
+                </button>
               </div>
             </div>
           </div>
@@ -2879,6 +2878,7 @@
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button class="btn btn-secondary" id="btnBackToSimFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
               <button class="btn btn-secondary" id="btnJumpToSourcesFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">🏭 Review Greenhouse Gas Sources</button>
+              <button class="btn btn-secondary" id="btnJumpToDunkelFromSolutions" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">🇬🇧 UK Dunkelflaute &amp; Storage &rarr;</button>
             </div>
             <button class="btn btn-modal" id="btnOpenGuideFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">📖 Open Solutions & Storage Guide →</button>
           </div>
@@ -3297,6 +3297,15 @@
                 Read Full Analysis in Guide Page 10 &rarr;
               </a>
             </div>
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-secondary" id="btnBackToSimFromDunkel" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
+              <button class="btn btn-secondary" id="btnBackToSolutionsFromDunkel" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">💡 Clean Energy Solutions</button>
+            </div>
+            <button class="btn btn-modal" id="btnOpenGuideFromDunkel" style="font-size: 0.78rem; padding: 6px 14px;">📖 Royal Society Report &amp; Storage Guide →</button>
           </div>
 
         </div>
@@ -10857,6 +10866,8 @@
         if (btnBackSim) btnBackSim.addEventListener("click", () => setViewMode("advanced"));
         const btnJumpSources = document.getElementById("btnJumpToSourcesFromSolutions");
         if (btnJumpSources) btnJumpSources.addEventListener("click", () => setViewMode("sources"));
+        const btnJumpDunkel = document.getElementById("btnJumpToDunkelFromSolutions");
+        if (btnJumpDunkel) btnJumpDunkel.addEventListener("click", () => setViewMode("dunkel"));
         const btnOpenGuide = document.getElementById("btnOpenGuideFromSolutions");
         if (btnOpenGuide) {
           btnOpenGuide.addEventListener("click", () => {
@@ -11151,6 +11162,18 @@
             sliderDunkelH2.value = Math.min(100, Math.max(1, Math.ceil(neededH2)));
 
             updateDunkelCalculations();
+          });
+        }
+
+        const btnBackSimDunkel = document.getElementById("btnBackToSimFromDunkel");
+        if (btnBackSimDunkel) btnBackSimDunkel.addEventListener("click", () => setViewMode("advanced"));
+        const btnBackSolDunkel = document.getElementById("btnBackToSolutionsFromDunkel");
+        if (btnBackSolDunkel) btnBackSolDunkel.addEventListener("click", () => setViewMode("solutions"));
+        const btnOpenGuideDunkel = document.getElementById("btnOpenGuideFromDunkel");
+        if (btnOpenGuideDunkel) {
+          btnOpenGuideDunkel.addEventListener("click", () => {
+            modalOverlay.style.display = "flex";
+            setDocPage("page-uk-grid");
           });
         }
 
