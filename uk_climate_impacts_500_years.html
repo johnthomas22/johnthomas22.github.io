@@ -448,6 +448,87 @@
       align-items: center;
       gap: 8px;
     }
+
+    /* PROJECTION MINI-GRAPHS SECTION */
+    .projections-section {
+      margin-bottom: 36px;
+    }
+    .projections-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 14px;
+    }
+    @media (max-width: 980px) {
+      .projections-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .projection-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .projection-card:hover {
+      border-color: var(--card-hover);
+      transform: translateY(-2px);
+    }
+    .proj-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .proj-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .proj-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .proj-chart-wrap {
+      width: 100%;
+      height: 140px;
+      position: relative;
+    }
+    .proj-chart-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .proj-stats-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.45);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.74rem;
+    }
+    .proj-stat-label {
+      color: #94a3b8;
+    }
+    .proj-stat-val {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      color: #e2e8f0;
+      text-align: right;
+    }
+    .proj-source {
+      font-size: 0.68rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
     .attribution-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -671,6 +752,10 @@
               "We have entered an entirely new climatic era. What was once physically impossible in the British climate is now happening." — Met Office Chief Meteorologist
             </div>
           </li>
+          <li class="event-item" style="border-left-color: var(--rose);">
+            <span class="event-year" style="color: var(--rose-light);">Summer 2026: Compound Heatwaves — 5 in England &amp; 4 in Scotland</span>
+            <p>An extraordinary sequence of <strong>5 official Met Office heatwaves across England and 4 in Scotland</strong> gripped the British Isles in one summer. Stagnant high-pressure heat domes triggered prolonged tropical nights (&gt;20°C), strained NHS emergency admissions, and sparked destructive wildfires across parched heathlands from Surrey to the Scottish Highlands.</p>
+          </li>
         </ul>
       </article>
 
@@ -819,6 +904,10 @@
               <p>The wettest 18 months in England since 1836 (Storms Babet, Ciara, Henk) submerged over 1,000 square miles of prime farmland. Combines and tractors could not enter waterlogged ground. The 2024 UK wheat, barley, and oilseed harvest collapsed by over 15% to 20%, driving food inflation and forcing heavy import reliance.</p>
             </li>
             <li class="event-item" style="border-left-color: #eab308;">
+              <span class="event-year" style="color: #fde047;">2026: Compound Heatwaves (5 England / 4 Scotland) &amp; Harvest Desiccation</span>
+              <p>Hot on the heels of the 2024 waterlogging crisis, the summer of 2026 delivered an unprecedented succession of <strong>5 official Met Office heatwaves across England and 4 in Scotland</strong>. Relentless heat combined with severe summer flash drought desiccated topsoil during the vital grain-filling window. Wheat ears shrivelled prematurely, root vegetables stunted, and UK cereal production suffered another double-digit drop (~16% to 18%), graphically exposing British farming to rapid whiplash between drowned mud and baking drought.</p>
+            </li>
+            <li class="event-item" style="border-left-color: #eab308;">
               <span class="event-year" style="color: #fde047;">The Synchronous Global Breadbasket Threat (Chatham House / IPCC)</span>
               <p>Over 80% of global grain exports come from just 5 breadbasket regions. Destabilized jet stream wave resonance now threatens to lock high heat and drought across multiple grain belts simultaneously. Under +2°C to +3°C, the odds of synchronous multi-breadbasket harvest failure rise from 1% per decade to over 10% per year, triggering catastrophic global food trade bans.</p>
             </li>
@@ -828,25 +917,250 @@
 
     </div>
 
+    <!-- SECTION: PROJECTED IMPACT TRAJECTORIES (FLOODING, WILDFIRES & HARVEST VOLATILITY) -->
+    <section class="projections-section">
+      <h2 class="section-title"><span>📈</span> Trajectories &amp; Future Projections (1960–2100)</h2>
+      <p class="section-desc">
+        How 500 years of historic baseline shift into forward-looking projections: empirical data up to 2026 merged with Met Office UKCP18, Environment Agency, and UK Climate Change Committee projections to 2100.
+      </p>
+
+      <div class="projections-grid">
+        <!-- GRAPH 1: MEAN PEAK RIVER FLOWS & WINTER FLOOD PROJECTIONS -->
+        <div class="projection-card" style="border-top: 3px solid #38bdf8;">
+          <div class="proj-header">
+            <div>
+              <div class="proj-title">🌊 Winter Peak River Flows &amp; Extreme Deluges</div>
+              <span style="font-size: 0.72rem; color: #94a3b8;">Catchment runoff anomaly vs 1961–1990 baseline</span>
+            </div>
+            <span class="proj-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">+20% to +35% by 2050</span>
+          </div>
+
+          <div class="proj-chart-wrap">
+            <svg class="proj-chart-svg" viewBox="0 0 320 130" preserveAspectRatio="none">
+              <!-- Grid Lines -->
+              <line x1="30" y1="20" x2="310" y2="20" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+              <line x1="30" y1="50" x2="310" y2="50" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+              <line x1="30" y1="80" x2="310" y2="80" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+              <line x1="30" y1="105" x2="310" y2="105" stroke="rgba(255,255,255,0.2)" /> <!-- Baseline 0% -->
+
+              <!-- Y Axis labels -->
+              <text x="25" y="24" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">+40%</text>
+              <text x="25" y="54" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">+25%</text>
+              <text x="25" y="84" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">+10%</text>
+              <text x="25" y="108" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">0%</text>
+
+              <!-- X Axis labels -->
+              <text x="35" y="122" fill="#64748b" font-size="8" font-family="monospace">1960</text>
+              <text x="110" y="122" fill="#64748b" font-size="8" font-family="monospace">1990</text>
+              <text x="180" y="122" fill="#38bdf8" font-size="8" font-family="monospace" font-weight="bold">2026</text>
+              <text x="245" y="122" fill="#64748b" font-size="8" font-family="monospace">2050</text>
+              <text x="305" y="122" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">2100</text>
+
+              <!-- Projection Band (Post 2026) -->
+              <polygon points="180,75 245,48 305,22 305,72 245,68 180,75" fill="rgba(56, 189, 248, 0.15)" />
+
+              <!-- High Emissions Path (+4°C) -->
+              <path d="M 180,75 Q 240,48 305,22" fill="none" stroke="#f43f5e" stroke-width="1.8" stroke-dasharray="3,3" />
+              <!-- Medium Emissions Path (UKCP18 +2°C) -->
+              <path d="M 180,75 Q 240,62 305,52" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,3" />
+              <!-- Net Zero Stabilised Path -->
+              <path d="M 180,75 Q 240,70 305,72" fill="none" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2" />
+
+              <!-- Historical Trend Curve (1960 to 2026) -->
+              <path d="M 35,103 Q 75,104 110,98 T 145,90 T 160,82 T 180,75" fill="none" stroke="#38bdf8" stroke-width="2.5" />
+
+              <!-- Key Historical Markers -->
+              <circle cx="132" cy="88" r="3" fill="#38bdf8" />
+              <circle cx="158" cy="81" r="3" fill="#38bdf8" />
+              <circle cx="176" cy="74" r="3.5" fill="#facc15" />
+              <circle cx="180" cy="75" r="4" fill="#00e5ff" stroke="#fff" stroke-width="1.5" />
+
+              <!-- Vertical dividing line at 2026 -->
+              <line x1="180" y1="15" x2="180" y2="105" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2,2" />
+              <text x="183" y="18" fill="#00e5ff" font-size="7" font-weight="bold">TODAY</text>
+              <text x="280" y="30" fill="#f43f5e" font-size="7">+4°C</text>
+              <text x="280" y="58" fill="#38bdf8" font-size="7">+2°C</text>
+              <text x="280" y="78" fill="#10b981" font-size="7">1.5°C</text>
+            </svg>
+          </div>
+
+          <div class="proj-stats-row">
+            <div>
+              <div class="proj-stat-label">Peak River Flow (2050):</div>
+              <div class="proj-stat-val" style="color: #38bdf8;">+20% to +35%</div>
+            </div>
+            <div>
+              <div class="proj-stat-label">1-in-50 Yr Deluge Frequency:</div>
+              <div class="proj-stat-val" style="color: #f43f5e;">2.5× to 3× Higher</div>
+            </div>
+          </div>
+          <div class="proj-source">Sources: Environment Agency FCERM Strategy · Met Office UKCP18 · UKCEH Hydrology</div>
+        </div>
+
+        <!-- GRAPH 2: UK WILDFIRE FREQUENCY & LAND AREA BURNED -->
+        <div class="projection-card" style="border-top: 3px solid #f43f5e;">
+          <div class="proj-header">
+            <div>
+              <div class="proj-title">🔥 Wildfire Frequency &amp; Burn Area Surge</div>
+              <span style="font-size: 0.72rem; color: #94a3b8;">Hectares burned annually &amp; high fire weather days</span>
+            </div>
+            <span class="proj-badge" style="background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.4);">3×–5× Danger Days</span>
+          </div>
+
+          <div class="proj-chart-wrap">
+            <svg class="proj-chart-svg" viewBox="0 0 320 130" preserveAspectRatio="none">
+              <!-- Grid Lines -->
+              <line x1="30" y1="20" x2="310" y2="20" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+              <line x1="30" y1="50" x2="310" y2="50" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+              <line x1="30" y1="80" x2="310" y2="80" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+              <line x1="30" y1="105" x2="310" y2="105" stroke="rgba(255,255,255,0.2)" />
+
+              <!-- Y Axis labels -->
+              <text x="25" y="24" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">40k ha</text>
+              <text x="25" y="54" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">25k ha</text>
+              <text x="25" y="84" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">10k ha</text>
+              <text x="25" y="108" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">0</text>
+
+              <!-- X Axis labels -->
+              <text x="35" y="122" fill="#64748b" font-size="8" font-family="monospace">2000</text>
+              <text x="95" y="122" fill="#64748b" font-size="8" font-family="monospace">2010</text>
+              <text x="165" y="122" fill="#f43f5e" font-size="8" font-family="monospace" font-weight="bold">2026</text>
+              <text x="235" y="122" fill="#64748b" font-size="8" font-family="monospace">2050</text>
+              <text x="305" y="122" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">2080</text>
+
+              <!-- Projection cone for high fire weather index -->
+              <polygon points="165,58 235,35 305,15 305,55 235,62 165,58" fill="rgba(244, 63, 94, 0.15)" />
+
+              <!-- Historical Bars: Hectares Burned (EFFIS / Forestry Commission) -->
+              <rect x="48" y="98" width="6" height="7" fill="rgba(244, 63, 94, 0.4)" rx="1" />
+              <rect x="98" y="94" width="6" height="11" fill="rgba(244, 63, 94, 0.5)" rx="1" />
+              <rect x="132" y="70" width="6" height="35" fill="#f59e0b" rx="1" />
+              <rect x="139" y="52" width="6" height="53" fill="#f97316" rx="1" />
+              <rect x="153" y="60" width="6" height="45" fill="#f43f5e" rx="1" />
+              <rect x="163" y="50" width="7" height="55" fill="#e11d48" rx="1" />
+
+              <!-- Trendline for Fire Danger Days (FWI > 30) -->
+              <path d="M 35,102 Q 95,99 135,90 T 165,65 Q 235,42 305,20" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="3,3" />
+
+              <!-- Vertical dividing line at 2026 -->
+              <line x1="165" y1="15" x2="165" y2="105" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2,2" />
+              <text x="168" y="18" fill="#f43f5e" font-size="7" font-weight="bold">TODAY</text>
+              <text x="248" y="24" fill="#facc15" font-size="7">Very High FWI Days</text>
+            </svg>
+          </div>
+
+          <div class="proj-stats-row">
+            <div>
+              <div class="proj-stat-label">Wildfire Danger Days (2080):</div>
+              <div class="proj-stat-val" style="color: #f43f5e;">15–25 days/yr (vs 2 hist.)</div>
+            </div>
+            <div>
+              <div class="proj-stat-label">Recent Peak Burn Area:</div>
+              <div class="proj-stat-val" style="color: #f59e0b;">22k–29k ha/season</div>
+            </div>
+          </div>
+          <div class="proj-source">Sources: EFFIS · Forestry Commission · Met Office Hadley Centre FWI · NFCC</div>
+        </div>
+
+        <!-- GRAPH 3: AGRICULTURAL YIELD VOLATILITY & CROP SHOCKS -->
+        <div class="projection-card" style="border-top: 3px solid #eab308;">
+          <div class="proj-header">
+            <div>
+              <div class="proj-title">🌾 UK Crop Yield Whiplash &amp; Failure Odds</div>
+              <span style="font-size: 0.72rem; color: #94a3b8;">Arable yield volatility &amp; synchronous shock probability</span>
+            </div>
+            <span class="proj-badge" style="background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4);">&gt;10%/yr Failure Risk</span>
+          </div>
+
+          <div class="proj-chart-wrap">
+            <svg class="proj-chart-svg" viewBox="0 0 320 130" preserveAspectRatio="none">
+              <!-- Grid Lines -->
+              <line x1="30" y1="20" x2="310" y2="20" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+              <line x1="30" y1="65" x2="310" y2="65" stroke="rgba(255,255,255,0.2)" /> <!-- Baseline 0% -->
+              <line x1="30" y1="100" x2="310" y2="100" stroke="rgba(255,255,255,0.08)" stroke-dasharray="2,3" />
+
+              <!-- Y Axis labels -->
+              <text x="25" y="24" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">+15%</text>
+              <text x="25" y="68" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">0%</text>
+              <text x="25" y="103" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">-25%</text>
+
+              <!-- X Axis labels -->
+              <text x="35" y="122" fill="#64748b" font-size="8" font-family="monospace">1980</text>
+              <text x="95" y="122" fill="#64748b" font-size="8" font-family="monospace">2000</text>
+              <text x="170" y="122" fill="#eab308" font-size="8" font-family="monospace" font-weight="bold">2026</text>
+              <text x="235" y="122" fill="#64748b" font-size="8" font-family="monospace">2050</text>
+              <text x="305" y="122" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">2100</text>
+
+              <!-- Volatility widening funnel (Post 2026) -->
+              <polygon points="170,65 240,35 305,15 305,115 240,105 170,65" fill="rgba(234, 179, 8, 0.12)" />
+
+              <!-- Historical Yield Anomaly Bars -->
+              <rect x="115" y="65" width="4" height="12" fill="#38bdf8" />
+              <rect x="127" y="65" width="4" height="22" fill="#38bdf8" />
+              <rect x="142" y="65" width="4" height="15" fill="#f59e0b" />
+              <rect x="149" y="65" width="4" height="28" fill="#e11d48" />
+              <rect x="160" y="65" width="4" height="29" fill="#e11d48" />
+              <rect x="168" y="65" width="5" height="26" fill="#f59e0b" />
+
+              <!-- Historical volatility line -->
+              <path d="M 35,63 L 65,64 L 95,66 L 115,77 L 122,62 L 127,87 L 135,61 L 142,80 L 149,93 L 155,67 L 160,94 L 168,91" fill="none" stroke="#facc15" stroke-width="1.8" />
+
+              <!-- Projected Shocks curve (+2°C to +3°C) -->
+              <path d="M 170,65 Q 235,90 305,108" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3,3" />
+              <path d="M 170,65 Q 235,45 305,25" fill="none" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2" />
+
+              <!-- Vertical dividing line at 2026 -->
+              <line x1="170" y1="15" x2="170" y2="105" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2,2" />
+              <text x="173" y="18" fill="#facc15" font-size="7" font-weight="bold">TODAY</text>
+              <text x="250" y="105" fill="#f43f5e" font-size="7">Frequent -20% Shocks</text>
+            </svg>
+          </div>
+
+          <div class="proj-stats-row">
+            <div>
+              <div class="proj-stat-label">Yield Shock Frequency:</div>
+              <div class="proj-stat-val" style="color: #facc15;">1-in-3 yrs by 2050 (vs 1-in-20)</div>
+            </div>
+            <div>
+              <div class="proj-stat-label">Synchronous Breadbasket Risk:</div>
+              <div class="proj-stat-val" style="color: #f43f5e;">&gt;10% per year</div>
+            </div>
+          </div>
+          <div class="proj-source">Sources: Defra Arable Statistics · Chatham House · IPCC WGII Food Systems</div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- ATTRIBUTION SCIENCE CALLOUT -->
     <section class="attribution-card">
-      <h3><span>🔬</span> World Weather Attribution: How We Know Humans Drove These Events</h3>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;">
+        <h3><span>🔬</span> World Weather Attribution: How We Know Humans Drove These Events</h3>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <a href="https://www.imperial.ac.uk/grantham/research/world-weather-attribution/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-size: 0.78rem; font-weight: 700; padding: 5px 12px; border-radius: 6px; text-decoration: none; transition: background 0.15s ease;">
+            🏛️ Imperial College London Climate Attribution Unit ↗
+          </a>
+          <a href="https://www.worldweatherattribution.org/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-size: 0.78rem; font-weight: 700; padding: 5px 12px; border-radius: 6px; text-decoration: none; transition: background 0.15s ease;">
+            🌐 World Weather Attribution (WWA) Studies ↗
+          </a>
+        </div>
+      </div>
       <p style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.6;">
-        Sceptics often argue that Britain has always experienced extreme weather—pointing to the 1703 storm or the 1976 heatwave. Modern peer-reviewed <strong>extreme event attribution science</strong> compares real-world observations with counterfactual climate model worlds without human greenhouse gas emissions.
+        Sceptics often argue that Britain has always experienced extreme weather—pointing to the 1703 storm or the 1976 heatwave. Modern peer-reviewed <strong>extreme event attribution science</strong>—led internationally by <a href="https://www.imperial.ac.uk/grantham/research/world-weather-attribution/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline; font-weight: 600;">Dr. Friederike Otto and the Grantham Institute at Imperial College London</a>—compares high-resolution real-world observations with counterfactual climate model worlds without human greenhouse gas emissions.
       </p>
 
       <div class="attribution-grid">
         <div class="attribution-box">
-          <h4>🌡️ 2022 40°C Heatwave</h4>
-          <p>World Weather Attribution (WWA) found that 40°C in the UK was <strong>at least 10 times more likely</strong> and 2°C to 4°C hotter because of human emissions. In an unheated world, 40°C in Britain is statistically virtually impossible.</p>
+          <h4>🌡️ 2022 40°C &amp; 2026 Compound Heatwaves</h4>
+          <p>World Weather Attribution (WWA at Imperial College) found that 40°C in the UK was <strong>at least 10 times more likely</strong> and 2°C to 4°C hotter because of human emissions. In an unheated world, 40°C in Britain is statistically virtually impossible.</p>
         </div>
         <div class="attribution-box">
-          <h4>🌧️ Storm Desmond Deluge</h4>
-          <p>Oxford University and CEH scientists calculated that atmospheric warming made the record-shattering 24-hour rainfall in Cumbria <strong>~40% more likely</strong>, turning a 1-in-1,000-year storm into a 1-in-100-year occurrence.</p>
+          <h4>🌧️ Storm Desmond &amp; 2024 Saturated Deluges</h4>
+          <p>Oxford University, CEH, and Imperial researchers calculated that atmospheric warming made record 24-hour rainfall in the UK <strong>~40% more likely</strong>, turning 1-in-1,000-year historical downpours into routine 1-in-100-year occurrences.</p>
         </div>
         <div class="attribution-box">
-          <h4>🌊 Sea Level Rise at the Coast</h4>
-          <p>UK sea level has risen ~16.5 cm since 1900, with the rate doubling since 1993. A storm surge of the exact same atmospheric intensity as 1953 now strikes our coast from a 16+ cm higher baseline, dramatically increasing overtopping risk.</p>
+          <h4>🌊 Sea Level Rise &amp; Overtopping Baselines</h4>
+          <p>UK sea level has risen ~16.5 cm since 1900, with the rate doubling since 1993. A storm surge of the exact same atmospheric intensity as 1953 now strikes our coast from a 16+ cm higher baseline, dramatically multiplying overtopping risk.</p>
         </div>
       </div>
     </section>
@@ -951,6 +1265,13 @@
             <td>Second Warmest Year in CET Record</td>
             <td>Record-breaking June heatwave; North Sea marine heatwave; Storm Babet severe flooding.</td>
           </tr>
+          <tr>
+            <td><strong>2026</strong></td>
+            <td>11.05°C</td>
+            <td style="color: #a50f15; font-weight: 800;">+1.59°C</td>
+            <td>Compound Heatwaves &amp; Agricultural Flash Drought</td>
+            <td>5 official heatwaves in England, 4 in Scotland; acute summer flash drought; severe wheat and arable yield contractions.</td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -962,7 +1283,8 @@
         Professor Ed Hawkins MBE (<a href="https://showyourstripes.info" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">#ShowYourStripes</a>, University of Reading, NCAS);
         Met Office Hadley Centre Central England Temperature (HadCET) dataset (Manley 1974; Parker et al. 1992);
         UK Centre for Ecology &amp; Hydrology (UKCEH) National Hydrological Monitoring Programme;
-        Daniel Defoe (<em>The Storm</em>, 1704); World Weather Attribution (WWA); Environment Agency UK.
+        Imperial College London Grantham Institute Climate Attribution Unit &amp; World Weather Attribution (WWA);
+        Daniel Defoe (<em>The Storm</em>, 1704); Environment Agency UK.
       </div>
       <div class="footer-nav">
         <a href="earth_heat_trap.html" class="footer-link">Earth's Heat Trap</a>
@@ -1180,7 +1502,9 @@
         { y: 2021, a: 0.74 },
         { y: 2022, a: 1.57, cat: "heat", title: "19 July 2022: 40.3°C Record & Wennington Wildfire", desc: "Warmest year in 364 years of CET record (11.03°C average). First time UK ever crossed 40°C. Wildfire destroyed 19 homes in Wennington." },
         { y: 2023, a: 1.54, cat: "heat", title: "2023 Second Warmest Year in CET History", desc: "Second warmest year in 364 years of records. Hottest June on record; severe North Sea marine heatwave (+5°C above normal); Storm Babet." },
-        { y: 2024, a: 1.48, cat: "harvest", title: "2023–2024 Record Wettest 18 Months & Arable Crash", desc: "The wettest 18 months in England since 1836 left over 1,000 square miles waterlogged. Combines and tractors bogged down; UK wheat, barley, and oilseed harvests crashed 15% to 20%." }
+        { y: 2024, a: 1.48, cat: "harvest", title: "2023–2024 Record Wettest 18 Months & Arable Crash", desc: "The wettest 18 months in England since 1836 left over 1,000 square miles waterlogged. Combines and tractors bogged down; UK wheat, barley, and oilseed harvests crashed 15% to 20%." },
+        { y: 2025, a: 1.45 },
+        { y: 2026, a: 1.59, cat: "harvest", title: "2026 Five English & Four Scottish Heatwaves (Harvest Drought)", desc: "Unprecedented sequence of 5 official heatwaves across England and 4 in Scotland; acute summer flash drought desiccated topsoil and caused severe UK wheat and crop yield contractions." }
       ];
 
       // 2. DOM Elements
