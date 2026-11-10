@@ -2882,99 +2882,8 @@
 
     </div>
 
-  </div>
 
-  <!-- POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR MODAL -->
-  <div class="modal-overlay" id="paleoModalOverlay">
-    <div class="paleo-modal-card">
-      <div class="modal-header" style="padding: 12px 22px; background: #080e1a;">
-        <div>
-          <div class="modal-title" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <span>🔍 500-Year Warming Rate vs. 1,000,000 Years of Paleoclimate History</span>
-            <span class="badge badge-cyan">Illustrative Reconstruction (Glacial–Interglacial Stages)</span>
-            <button id="openPaleoDocsLinkBtn" style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--emerald); color: var(--emerald); padding: 2px 9px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
-              📖 Data Sources & Resolution Docs →
-            </button>
-          </div>
-          <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">
-            Scroll through the last 1,000,000 years in 500-year windows to compare natural prehistoric climate change rates against the modern 1750–2250 CE trajectory.
-          </div>
-        </div>
-        <button id="closePaleoModalBtn" style="background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; line-height: 1;">&times;</button>
-      </div>
-
-      <div class="paleo-body">
-        <!-- Top Overview Strip: 1,000,000 Years Timeline + Scrollbar -->
-        <div class="paleo-controls-bar">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <div style="font-size: 0.8rem; font-weight: 700; color: #e2e8f0;">
-              1. Select or Scroll Any 500-Year Window Across the Last 1,000,000 Years:
-              <span id="paleoWindowLabel" style="color: var(--emerald); font-family: ui-monospace, monospace; margin-left: 6px;">15,000 to 14,500 yrs BP</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 12px; font-size: 0.75rem;">
-              <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--cyan); font-weight: 600;">
-                <input type="radio" name="paleoPlotMode" value="relative" checked>
-                Overlay Relative Change (ΔT & ΔCO₂ over 500 yrs — compares slope/speed)
-              </label>
-              <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text-muted); font-weight: 600;">
-                <input type="radio" name="paleoPlotMode" value="absolute">
-                Absolute Anomaly vs. 1750 Baseline
-              </label>
-            </div>
-          </div>
-
-          <!-- 1,000,000-Year Context Overview Canvas (Click or drag anywhere on it) -->
-          <div class="paleo-canvas-box" style="height: 115px; cursor: ew-resize;" title="Click or drag to scrub through 1,000,000 years of ice age cycles">
-            <canvas id="paleoOverviewCanvas"></canvas>
-          </div>
-
-          <!-- Fine Scrollbar Slider (-1,000,000 to -500 years BP) -->
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; color: var(--text-muted); white-space: nowrap;">1,000,000 yrs BP</span>
-            <input type="range" id="paleoScrollSlider" min="-1000000" max="-500" step="100" value="-15000" style="flex: 1;">
-            <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; color: var(--text-muted); white-space: nowrap;">Pre-Industrial (500 BP)</span>
-          </div>
-
-          <!-- Notable Paleoclimate Epoch Quick-Jump Buttons -->
-          <div class="epoch-presets">
-            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin-right: 4px;">Notable 500-Yr Windows:</span>
-            <button class="epoch-btn active" data-kyr="-15000">⚡ Fastest Natural Deglaciation (Termination I · 15,000 BP)</button>
-            <button class="epoch-btn" data-kyr="-11700">🌊 Younger Dryas Exit (11,700 BP)</button>
-            <button class="epoch-btn" data-kyr="-6000">🏛️ Holocene Optimum (6,000 BP)</button>
-            <button class="epoch-btn" data-kyr="-21000">❄️ Last Glacial Maximum (21,000 BP)</button>
-            <button class="epoch-btn" data-kyr="-128000">☀️ Eemian Interglacial Peak (128,000 BP)</button>
-            <button class="epoch-btn" data-kyr="-428000">🔥 Termination V Super-Deglaciation (428,000 BP)</button>
-            <button class="epoch-btn" data-kyr="-850000">🪨 Mid-Pleistocene 41k-yr Cycle (850,000 BP)</button>
-          </div>
-        </div>
-
-        <!-- Main Pop-Out 500-Year Comparison Chart -->
-        <div class="paleo-canvas-box" style="height: 350px;">
-          <canvas id="paleoCompareCanvas"></canvas>
-        </div>
-
-        <!-- Quantitative Rate Comparison Strip -->
-        <div class="paleo-metrics-strip">
-          <div class="stat-card" style="padding: 10px 14px;">
-            <div class="stat-header"><span>Selected Prehistoric 500-Yr Window</span><span class="badge badge-emerald">Paleoclimate Record</span></div>
-            <div class="stat-value" id="paleoStatChange" style="color: var(--emerald); font-size: 1.25rem;">-- <span style="font-size: 0.78rem; color: var(--text-muted);">per 500 yrs</span></div>
-            <div class="stat-sub" id="paleoStatSub">Computing...</div>
-          </div>
-          <div class="stat-card" style="padding: 10px 14px;">
-            <div class="stat-header"><span>Modern Simulated Trajectory (1750–2250 CE)</span><span class="badge badge-rose">Anthropogenic</span></div>
-            <div class="stat-value" id="modernStatChange" style="color: var(--rose); font-size: 1.25rem;">-- <span style="font-size: 0.78rem; color: var(--text-muted);">over 500 yrs</span></div>
-            <div class="stat-sub" id="modernStatSub">Computing...</div>
-          </div>
-          <div class="stat-card" style="padding: 10px 14px; border-color: rgba(0, 229, 255, 0.4);">
-            <div class="stat-header"><span>Speed / Rate Multiplier</span><span class="badge badge-cyan">Slope Ratio</span></div>
-            <div class="stat-value" id="ratioStatValue" style="color: var(--cyan); font-size: 1.25rem;">--</div>
-            <div class="stat-sub" id="ratioStatSub">Modern century warming rate vs. selected prehistoric 500-yr window</div>
-            <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 4px; line-height: 1.2;">* Note: Paleo proxies are smoothed at 20–500 yr resolution, so the "× faster" figure is a lower-resolution baseline comparison.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+  
     <!-- DEDICATED INTERACTIVE PAGE: UK DUNKELFLAUTE & STORAGE SIMULATOR (OXFORD & ROYAL SOCIETY MODEL) -->
     <div class="dunkel-view" id="dunkelView">
       
@@ -3335,6 +3244,99 @@
         <span title="Cryptographic Authorship Stamp (SHA-256)">SHA-256: <code style="font-family: ui-monospace, monospace; color: var(--cyan);">2308c58e...d02f</code></span>
       </div>
     </footer>
+  </div>
+
+  
+  <!-- POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR MODAL -->
+  <div class="modal-overlay" id="paleoModalOverlay">
+    <div class="paleo-modal-card">
+      <div class="modal-header" style="padding: 12px 22px; background: #080e1a;">
+        <div>
+          <div class="modal-title" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span>🔍 500-Year Warming Rate vs. 1,000,000 Years of Paleoclimate History</span>
+            <span class="badge badge-cyan">Illustrative Reconstruction (Glacial–Interglacial Stages)</span>
+            <button id="openPaleoDocsLinkBtn" style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--emerald); color: var(--emerald); padding: 2px 9px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
+              📖 Data Sources & Resolution Docs →
+            </button>
+          </div>
+          <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">
+            Scroll through the last 1,000,000 years in 500-year windows to compare natural prehistoric climate change rates against the modern 1750–2250 CE trajectory.
+          </div>
+        </div>
+        <button id="closePaleoModalBtn" style="background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; line-height: 1;">&times;</button>
+      </div>
+
+      <div class="paleo-body">
+        <!-- Top Overview Strip: 1,000,000 Years Timeline + Scrollbar -->
+        <div class="paleo-controls-bar">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #e2e8f0;">
+              1. Select or Scroll Any 500-Year Window Across the Last 1,000,000 Years:
+              <span id="paleoWindowLabel" style="color: var(--emerald); font-family: ui-monospace, monospace; margin-left: 6px;">15,000 to 14,500 yrs BP</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 0.75rem;">
+              <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--cyan); font-weight: 600;">
+                <input type="radio" name="paleoPlotMode" value="relative" checked>
+                Overlay Relative Change (ΔT & ΔCO₂ over 500 yrs — compares slope/speed)
+              </label>
+              <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text-muted); font-weight: 600;">
+                <input type="radio" name="paleoPlotMode" value="absolute">
+                Absolute Anomaly vs. 1750 Baseline
+              </label>
+            </div>
+          </div>
+
+          <!-- 1,000,000-Year Context Overview Canvas (Click or drag anywhere on it) -->
+          <div class="paleo-canvas-box" style="height: 115px; cursor: ew-resize;" title="Click or drag to scrub through 1,000,000 years of ice age cycles">
+            <canvas id="paleoOverviewCanvas"></canvas>
+          </div>
+
+          <!-- Fine Scrollbar Slider (-1,000,000 to -500 years BP) -->
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; color: var(--text-muted); white-space: nowrap;">1,000,000 yrs BP</span>
+            <input type="range" id="paleoScrollSlider" min="-1000000" max="-500" step="100" value="-15000" style="flex: 1;">
+            <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; color: var(--text-muted); white-space: nowrap;">Pre-Industrial (500 BP)</span>
+          </div>
+
+          <!-- Notable Paleoclimate Epoch Quick-Jump Buttons -->
+          <div class="epoch-presets">
+            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin-right: 4px;">Notable 500-Yr Windows:</span>
+            <button class="epoch-btn active" data-kyr="-15000">⚡ Fastest Natural Deglaciation (Termination I · 15,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-11700">🌊 Younger Dryas Exit (11,700 BP)</button>
+            <button class="epoch-btn" data-kyr="-6000">🏛️ Holocene Optimum (6,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-21000">❄️ Last Glacial Maximum (21,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-128000">☀️ Eemian Interglacial Peak (128,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-428000">🔥 Termination V Super-Deglaciation (428,000 BP)</button>
+            <button class="epoch-btn" data-kyr="-850000">🪨 Mid-Pleistocene 41k-yr Cycle (850,000 BP)</button>
+          </div>
+        </div>
+
+        <!-- Main Pop-Out 500-Year Comparison Chart -->
+        <div class="paleo-canvas-box" style="height: 350px;">
+          <canvas id="paleoCompareCanvas"></canvas>
+        </div>
+
+        <!-- Quantitative Rate Comparison Strip -->
+        <div class="paleo-metrics-strip">
+          <div class="stat-card" style="padding: 10px 14px;">
+            <div class="stat-header"><span>Selected Prehistoric 500-Yr Window</span><span class="badge badge-emerald">Paleoclimate Record</span></div>
+            <div class="stat-value" id="paleoStatChange" style="color: var(--emerald); font-size: 1.25rem;">-- <span style="font-size: 0.78rem; color: var(--text-muted);">per 500 yrs</span></div>
+            <div class="stat-sub" id="paleoStatSub">Computing...</div>
+          </div>
+          <div class="stat-card" style="padding: 10px 14px;">
+            <div class="stat-header"><span>Modern Simulated Trajectory (1750–2250 CE)</span><span class="badge badge-rose">Anthropogenic</span></div>
+            <div class="stat-value" id="modernStatChange" style="color: var(--rose); font-size: 1.25rem;">-- <span style="font-size: 0.78rem; color: var(--text-muted);">over 500 yrs</span></div>
+            <div class="stat-sub" id="modernStatSub">Computing...</div>
+          </div>
+          <div class="stat-card" style="padding: 10px 14px; border-color: rgba(0, 229, 255, 0.4);">
+            <div class="stat-header"><span>Speed / Rate Multiplier</span><span class="badge badge-cyan">Slope Ratio</span></div>
+            <div class="stat-value" id="ratioStatValue" style="color: var(--cyan); font-size: 1.25rem;">--</div>
+            <div class="stat-sub" id="ratioStatSub">Modern century warming rate vs. selected prehistoric 500-yr window</div>
+            <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 4px; line-height: 1.2;">* Note: Paleo proxies are smoothed at 20–500 yr resolution, so the "× faster" figure is a lower-resolution baseline comparison.</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- MULTI-PAGE MODAL DOCUMENTATION WITH CONTENTS & PROOFS (CLEAN UNICODE) -->
