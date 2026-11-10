@@ -1878,18 +1878,18 @@
       </div>
       <div class="header-nav-row">
         <div class="mode-switch-group" role="group" aria-label="View Mode">
+          <a href="national_emergency_briefing.html" class="mode-switch-btn" style="text-decoration: none; color: #f43f5e; border-color: rgba(244, 63, 94, 0.4);" title="National Emergency Briefing on Climate &amp; Nature">🚨 National Emergency Briefing</a>
           <button class="mode-switch-btn active" id="btnModeSimple">Introduction</button>
           <button class="mode-switch-btn" id="btnModeAdvanced">Warming Simulator</button>
           <button class="mode-switch-btn" id="btnModeBudgets">🛢️ Carbon Budgets</button>
           <button class="mode-switch-btn" id="btnModeSources">🏭 Greenhouse Gas Sources</button>
           <button class="mode-switch-btn" id="btnModeSolutions">💡 Energy Solutions</button>
           <button class="mode-switch-btn" id="btnModeDunkel" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);" title="UK Dunkelflaute &amp; Storage Simulator — Oxford &amp; Royal Society Model">🇬🇧 UK Dunkelflaute &amp; Storage</button>
-          <a href="uk_climate_impacts_500_years.html" class="mode-switch-btn" style="text-decoration: none; color: #fbbf24;" title="500 Years of UK Climate Impacts — Ed Hawkins Warming Stripes">📊 500-Year Impacts</a>
+          <a href="uk_climate_impacts_500_years.html" class="mode-switch-btn" style="text-decoration: none; color: #fbbf24;" title="UK Climate Impacts Across 5 Centuries — Ed Hawkins Warming Stripes">📊 Impacts</a>
           <a href="what_can_i_do.html?from=advanced" class="mode-switch-btn" style="text-decoration: none; color: #34d399; border-color: rgba(52, 211, 153, 0.4);" title="What Can I Do? Personal Carbon Dial &amp; Net-Zero Pathfinder">🌱 What Can I Do?</a>
           <a href="we_only_have_one_pale_blue_dot.html" class="mode-switch-btn" style="text-decoration: none; color: #34d399;" title="We Only Have One Pale Blue Dot — Resource Overshoot Simulator">🌍 Pale Blue Dot</a>
-          <a href="doughnut_economics.html" class="mode-switch-btn" style="text-decoration: none; color: #fbbf24;" title="Doughnut Economics — The Safe &amp; Just Space for Humanity">🍩 Doughnut Economics</a>
           <a href="climate_podcasts.html" class="mode-switch-btn" style="text-decoration: none; color: #a78bfa;" title="Climate Podcasts — Adaptation, Mitigation &amp; Science">🎙️ Podcasts</a>
-          <a href="national_emergency_briefing.html" class="mode-switch-btn" style="text-decoration: none; color: #f43f5e;" title="National Emergency Briefing on Climate &amp; Nature">🚨 National Emergency Briefing</a>
+          <a href="doughnut_economics.html" class="mode-switch-btn" style="text-decoration: none; color: #fbbf24;" title="Doughnut Economics — The Safe &amp; Just Space for Humanity">🍩 Doughnut Economics</a>
         </div>
       </div>
     </header>
@@ -5975,6 +5975,24 @@
     </button>
   </div>
 
+  <!-- EMISSIONS ALTITUDE (ZEFF) POPOVER TOOLTIP -->
+  <div class="safe-350-popover" id="zeffPopover" style="border-color: rgba(239, 68, 68, 0.45); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 18px rgba(239, 68, 68, 0.25);">
+    <div class="s350-header">
+      <div class="s350-title" style="color: #f87171;">🔴 Emissions Altitude (Escape Level, <i>z</i><sub>eff</sub>)</div>
+      <button class="s350-close" id="zeffCloseBtn" title="Close">&times;</button>
+    </div>
+    <div class="s350-stats" id="zeffStats" style="color: #fca5a5; font-size: 0.82rem; font-weight: 700; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 6px; margin-bottom: 8px;">
+      Escape Level: ~5,188 m (1958: ~5,028 m · 1750: ~4,961 m)
+    </div>
+    <div class="s350-note" id="zeffNote" style="font-size: 0.78rem; line-height: 1.5; color: #cbd5e1;">
+      <strong>The Planetary Thermal Blanket Mechanism:</strong><br>
+      The emissions altitude is the level in the troposphere from which outgoing thermal infrared radiation can finally escape unimpeded to space. As greenhouse gases thicken the air below, this escape level is pushed <strong>higher into colder atmospheric layers</strong>. Because colder air radiates less power (&sigma;&middot;<i>T</i><sup>4</sup>), less heat escapes, creating Earth's Energy Imbalance (EEI) until surface warming re-balances the planet.
+    </div>
+    <button type="button" class="s350-link-btn" id="zeffLinkBtn" style="border-color: rgba(239, 68, 68, 0.4); color: #f87171; background: rgba(239, 68, 68, 0.08);">
+      📖 Read About the Radiating Layer in Guide →
+    </button>
+  </div>
+
   <!-- SNOWBALL EARTH & EUNICE FOOTE POPOVER (Outside canvas-container, never truncated) -->
   <div class="snowball-foote-popover" id="snowballFootePopover">
     <div class="sf-header">
@@ -6170,9 +6188,11 @@
         scheduleHideTippingPointCard(150);
         scheduleHideMeasTempPopover(150);
         scheduleHideSafe350Popover(150);
+        scheduleHideZeffPopover(150);
         activeMeasHitbox = null;
         active350Hitbox = false;
         isHovering350Line = false;
+        isHoveringZeffLine = false;
       });
 
       // Stationary Greenhouse Gas Molecules (Density decreases exponentially with altitude, +100% density)
@@ -6939,6 +6959,107 @@
         });
       }
 
+      // Compute Emissions Altitude z_eff in metres for a given year & deltaTs
+      function getEmissionsAltitudeM(year, deltaTs, co2) {
+        const c = co2 || getHistoricalCO2(year);
+        const rf = ALPHA_RF * Math.log(c / CO2_BASE);
+        const olr = ASR + (LAMBDA_FEEDBACK * deltaTs) - rf;
+        const teffK = Math.pow(Math.max(10, olr) / SIGMA, 0.25);
+        const teffC = teffK - 273.15;
+        const currentTs = TS_BASE + deltaTs;
+        return Math.max(3000, Math.min(10000, (currentTs - teffC) / LAPSE_RATE));
+      }
+
+      // Interactive Emissions Altitude (z_eff) Popover Elements & State
+      const zeffPopoverEl = document.getElementById("zeffPopover");
+      const zeffCloseBtn = document.getElementById("zeffCloseBtn");
+      const zeffLinkBtn = document.getElementById("zeffLinkBtn");
+      const zeffStatsEl = document.getElementById("zeffStats");
+      let zeffHideTimer = null;
+      let isHoveringZeffPopover = false;
+      let isHoveringZeffLine = false;
+
+      function cancelHideZeffPopover() {
+        if (zeffHideTimer) {
+          clearTimeout(zeffHideTimer);
+          zeffHideTimer = null;
+        }
+      }
+
+      function scheduleHideZeffPopover(delay = 140) {
+        if (isHoveringZeffPopover || isHoveringZeffLine) return;
+        if (zeffHideTimer) return;
+        zeffHideTimer = setTimeout(() => {
+          zeffHideTimer = null;
+          if (!isHoveringZeffPopover && !isHoveringZeffLine) {
+            if (zeffPopoverEl) zeffPopoverEl.style.display = "none";
+          }
+        }, delay);
+      }
+
+      function showZeffPopover(year, zeffM, clientX, clientY) {
+        cancelHideZeffPopover();
+        if (!zeffPopoverEl) return;
+
+        if (zeffStatsEl) {
+          const deltaZ = Math.round(zeffM - 4961);
+          const sign = deltaZ >= 0 ? "+" : "";
+          zeffStatsEl.innerHTML = `Year ${Math.round(year)}: Escape Level ≈ <strong style="color: #ef4444;">${Math.round(zeffM).toLocaleString()} m</strong> (${(zeffM / 1000).toFixed(2)} km) · ${sign}${deltaZ} m vs. 1750`;
+        }
+
+        zeffPopoverEl.style.display = "block";
+        const cardW = zeffPopoverEl.offsetWidth || 365;
+        const cardH = zeffPopoverEl.offsetHeight || 195;
+        const pad = 12;
+
+        let left = clientX - cardW / 2;
+        let top = clientY - cardH - 14;
+
+        if (left < pad) left = pad;
+        if (left + cardW > window.innerWidth - pad) left = window.innerWidth - cardW - pad;
+        if (top < pad) {
+          top = clientY + 16;
+        }
+
+        zeffPopoverEl.style.left = `${Math.round(left)}px`;
+        zeffPopoverEl.style.top = `${Math.round(top)}px`;
+      }
+
+      if (zeffPopoverEl) {
+        zeffPopoverEl.addEventListener("mouseenter", () => {
+          isHoveringZeffPopover = true;
+          cancelHideZeffPopover();
+        });
+        zeffPopoverEl.addEventListener("mouseleave", () => {
+          isHoveringZeffPopover = false;
+          scheduleHideZeffPopover(120);
+        });
+      }
+
+      if (zeffCloseBtn) {
+        zeffCloseBtn.addEventListener("click", () => {
+          isHoveringZeffPopover = false;
+          isHoveringZeffLine = false;
+          cancelHideZeffPopover();
+          if (zeffPopoverEl) zeffPopoverEl.style.display = "none";
+        });
+      }
+
+      if (zeffLinkBtn) {
+        zeffLinkBtn.addEventListener("click", () => {
+          const modalOverlay = document.getElementById("modalOverlay");
+          if (modalOverlay) {
+            modalOverlay.style.display = "flex";
+            const pageRad = document.getElementById("page-model-physics");
+            if (pageRad) {
+              document.querySelectorAll(".doc-page").forEach(p => p.classList.remove("active"));
+              pageRad.classList.add("active");
+              pageRad.scrollIntoView();
+            }
+          }
+        });
+      }
+
       // Interactive Snowball Earth & Eunice Foote Popover
       const sfPopoverEl = document.getElementById("snowballFootePopover");
       const sfBodyEl = document.getElementById("sfBody");
@@ -7472,6 +7593,8 @@
         const w = rect.width;
         const h = rect.height;
         ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "#05080f";
+        ctx.fillRect(0, 0, w, h);
 
         const p = computePhysics();
         const isSimple = document.getElementById("appWrapper").classList.contains("simple-mode");
@@ -7707,17 +7830,24 @@
           const co2X = dtSimX + dtSimW + 14;
           if (isHeaderTwoLine) {
             ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, 44);
+            const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+            ctx.fillStyle = "#ef4444";
+            ctx.fillText("··· Emissions Alt. (z_eff)", legLeft + co2W + 14, 44);
             if (state.showEnergy) {
-              const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+              const zW = ctx.measureText("··· Emissions Alt. (z_eff)").width;
               ctx.fillStyle = "#00e5ff";
-              ctx.fillText("■ Atmospheric Energy (ZJ)", legLeft + co2W + 14, 44);
+              ctx.fillText("■ Atmospheric Energy (ZJ)", legLeft + co2W + 14 + zW + 14, 44);
             }
           } else {
             ctx.fillText("■ Atmospheric CO₂ (ppm)", co2X, legY);
+            const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+            ctx.fillStyle = "#ef4444";
+            const zX = co2X + co2W + 14;
+            ctx.fillText("··· Emissions Alt. (z_eff)", zX, legY);
             if (state.showEnergy) {
-              const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+              const zW = ctx.measureText("··· Emissions Alt. (z_eff)").width;
               ctx.fillStyle = "#00e5ff";
-              ctx.fillText("■ Atmospheric Energy (ZJ)", co2X + co2W + 14, legY);
+              ctx.fillText("■ Atmospheric Energy (ZJ)", zX + zW + 14, legY);
             }
           }
         } else {
@@ -7733,23 +7863,31 @@
           ctx.fillStyle = "#c084fc";
           if (isHeaderTwoLine) {
             ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, 44);
+            const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+            ctx.fillStyle = "#ef4444";
+            ctx.fillText("··· Emissions Alt. (z_eff)", legLeft + co2W + 14, 44);
             if (state.showEnergy) {
-              const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+              const zW = ctx.measureText("··· Emissions Alt. (z_eff)").width;
               ctx.fillStyle = "#00e5ff";
-              ctx.fillText("■ Atmospheric Energy (ZJ)", legLeft + co2W + 14, 44);
+              ctx.fillText("■ Atmospheric Energy (ZJ)", legLeft + co2W + 14 + zW + 14, 44);
             }
           } else {
             const co2LegendX = dtSimLegendX + dtSimLegendW + 14;
             ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
             const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
 
+            ctx.fillStyle = "#ef4444";
+            const zeffLegendX = co2LegendX + co2LegendW + 14;
+            ctx.fillText("··· Emissions Alt. (z_eff)", zeffLegendX, legY);
+            const zeffLegendW = ctx.measureText("··· Emissions Alt. (z_eff)").width;
+
             if (state.showEnergy) {
               ctx.fillStyle = "#00e5ff";
-              ctx.fillText("■ Atmospheric Energy (ZJ)", co2LegendX + co2LegendW + 14, legY);
-            } else if (tGridW > 960) {
+              ctx.fillText("■ Atmospheric Energy (ZJ)", zeffLegendX + zeffLegendW + 14, legY);
+            } else if (tGridW > 980) {
               ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
               ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
-              ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 14, legY);
+              ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", zeffLegendX + zeffLegendW + 14, legY);
             }
           }
         }
@@ -7803,6 +7941,8 @@
         function dtToY(dTemp) { return tGridBottom - ((dTemp - tempMin) / tempSpan) * tGridH; }
         function co2ToY(c) { return tGridBottom - ((c - co2Min) / co2Span) * tGridH; }
         function energyToY(zj) { return dtToY(zj / ATMOS_HEAT_COEFF_ZJ_PER_C - OFFSET_1850_1900); }
+        const zEffMin = 4800, zEffMax = 6000;
+        function zEffToY(zm) { return tGridBottom - ((zm - zEffMin) / (zEffMax - zEffMin)) * tGridH; }
 
         // Right-hand Y-Axis Labels for CO2 in Purple
         const co2Ticks = [];
@@ -8192,6 +8332,57 @@
           ctx.restore();
         }
 
+        // 7. Planetary Emissions Altitude (z_eff) Curve (Red Dotted Line)
+        if (!state.isZoomed || state.year >= 1958) {
+          ctx.save();
+          ctx.strokeStyle = "rgba(239, 68, 68, 0.88)";
+          ctx.lineWidth = 1.9;
+          ctx.setLineDash([3, 4]);
+          ctx.beginPath();
+          let zStarted = false;
+
+          const ptsForZeff = state.isZoomed
+            ? STATIC_HISTORICAL_RUN.filter(p => p.year >= 1958 && p.year <= 2026)
+            : STATIC_HISTORICAL_RUN;
+
+          ptsForZeff.forEach(pt => {
+            const zm = getEmissionsAltitudeM(pt.year, pt.deltaTs, pt.co2);
+            const cx = yrToX(pt.year);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, zEffToY(zm)));
+            if (!zStarted) { ctx.moveTo(cx, cy); zStarted = true; } else { ctx.lineTo(cx, cy); }
+          });
+          ctx.stroke();
+
+          // Dynamic continuation beyond 2026
+          if (!state.isZoomed && state.history && state.history.length > 0 && state.year > 2026) {
+            ctx.beginPath();
+            let zDynStarted = false;
+            for (let i = 0; i < state.history.length; i++) {
+              const pt = state.history[i];
+              if (pt.year >= 2026) {
+                const zm = getEmissionsAltitudeM(pt.year, pt.deltaTs, pt.co2);
+                const cx = yrToX(pt.year);
+                const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, zEffToY(zm)));
+                if (!zDynStarted) { ctx.moveTo(cx, cy); zDynStarted = true; } else { ctx.lineTo(cx, cy); }
+              }
+            }
+            if (zDynStarted) ctx.stroke();
+          }
+
+          // Emissions Altitude Right Y-Axis Subtle Tick Markers
+          const zTicks = [5000, 5200, 5400, 5600, 5800];
+          zTicks.forEach(zm => {
+            const zy = zEffToY(zm);
+            if (zy >= tGridTop + 10 && zy <= tGridBottom - 10) {
+              ctx.fillStyle = "rgba(239, 68, 68, 0.65)";
+              ctx.font = "bold 8.5px ui-monospace, monospace";
+              ctx.textAlign = "right";
+              ctx.fillText(`${(zm / 1000).toFixed(1)} km`, tGridRight - (state.isZoomed ? 6 : 56), zy - 2);
+            }
+          });
+          ctx.restore();
+        }
+
         // Helper to find temperature delta at a given year along the static historical curve (relative to 1850–1900 baseline)
         function getHistoricalDeltaAt(yr) {
           if (yr <= 2026) {
@@ -8530,10 +8721,17 @@
           const distSim = (simDt !== null && hoverYr >= 1958) ? Math.abs(mousePos.y - tempLineY) : 999;
           const distTemp = Math.min(distMeas, distSim, (hoverDt !== null ? Math.abs(mousePos.y - dtToY(hoverDt)) : 999));
           const distCo2 = Math.abs(mousePos.y - co2LineY);
-          isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2 && distMeas <= distEnergy);
-          const isOverEnergyLine = state.showEnergy && distEnergy <= 14 && distEnergy < distTemp && distEnergy < distCo2;
-          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2 && distTemp <= distEnergy;
-          const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp && distCo2 < distEnergy;
+
+          const curDeltaTs = (simDt !== null && hoverYr >= 1958) ? (simDt + OFFSET_1850_1900) : ((hoverDt !== null) ? (hoverDt + OFFSET_1850_1900) : 0);
+          const hoverZeff = getEmissionsAltitudeM(hoverYr, curDeltaTs, hoverCo2);
+          const zeffLineY = zEffToY(hoverZeff);
+          const distZeff = (!state.isZoomed || hoverYr >= 1958) ? Math.abs(mousePos.y - zeffLineY) : 999;
+          const isOverZeffLine = distZeff <= 12 && distZeff < distTemp && distZeff < distCo2 && (!state.showEnergy || distZeff < distEnergy);
+
+          isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2 && distMeas <= distEnergy && distMeas <= distZeff);
+          const isOverEnergyLine = state.showEnergy && distEnergy <= 14 && distEnergy < distTemp && distEnergy < distCo2 && distEnergy < distZeff;
+          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2 && distTemp <= distEnergy && distTemp <= distZeff;
+          const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp && distCo2 < distEnergy && distCo2 < distZeff;
 
           // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or left-side orange +0.26°C badge)
           const isOverKeeling = (
@@ -8677,6 +8875,30 @@
               pointX: mousePos.x,
               pointY: co2LineY
             };
+          } else if (isOverZeffLine) {
+            scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
+            isPointerHover = true;
+            isHoveringZeffLine = true;
+            showZeffPopover(hoverYr, hoverZeff, rect.left + mousePos.x, rect.top + zeffLineY);
+
+            // Glowing red indicator dot on Emissions Altitude curve
+            ctx.fillStyle = "rgba(239, 68, 68, 0.40)";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, zeffLineY, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#ef4444";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, zeffLineY, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, zeffLineY, 1.5, 0, Math.PI * 2);
+            ctx.fill();
           } else if (isOverEnergyLine) {
             scheduleHideMeasTempPopover(120);
             scheduleHideSafe350Popover(120);
@@ -8769,6 +8991,10 @@
           isHovering350Line = false;
           active350Hitbox = false;
           scheduleHideSafe350Popover(140);
+        }
+        if (!isOverZeffLine) {
+          isHoveringZeffLine = false;
+          scheduleHideZeffPopover(140);
         }
 
         if (activeTip) {

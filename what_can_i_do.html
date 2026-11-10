@@ -721,9 +721,11 @@
           <span style="font-size: 0.74rem; font-family: var(--font-mono); font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 7px; border-radius: 4px;">v1.9</span>
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <a href="uk_climate_impacts_500_years.html" class="btn-return-home" style="border-color: rgba(251, 191, 36, 0.35); color: #fbbf24;">📊 500-Year Climate Impacts →</a>
+          <a href="national_emergency_briefing.html" class="btn-return-home" style="border-color: rgba(244, 63, 94, 0.4); color: #f43f5e;">🚨 National Emergency Briefing</a>
           <a href="advanced.html" class="btn-return-home" id="btnReturnAdvanced" style="display: inline-flex; border-color: rgba(0, 229, 255, 0.45); color: var(--cyan);">🔬 Warming Simulator</a>
+          <a href="uk_climate_impacts_500_years.html" class="btn-return-home" style="border-color: rgba(251, 191, 36, 0.35); color: #fbbf24;">📊 Impacts →</a>
           <a href="earth_heat_trap.html" class="btn-return-home" id="btnReturnIntro">⚡ Earth's Heat Trap (Intro)</a>
+          <a href="doughnut_economics.html" class="btn-return-home" style="border-color: rgba(251, 191, 36, 0.35); color: #fbbf24;">🍩 Doughnut Economics</a>
         </div>
       </div>
 
@@ -1357,19 +1359,19 @@
     <!-- FOOTER -->
     <footer>
       <div class="footer-nav">
+        <a href="national_emergency_briefing.html" class="footer-link" style="color: #f43f5e;">🚨 National Emergency Briefing</a>
+        <span>·</span>
         <a href="earth_heat_trap.html" class="footer-link">⚡ Earth's Heat Trap (Plain-English Intro)</a>
         <span>·</span>
         <a href="advanced.html" class="footer-link">🔬 1D Radiative Transfer Simulator</a>
         <span>·</span>
+        <a href="uk_climate_impacts_500_years.html" class="footer-link" style="color: #fbbf24;">📊 Impacts</a>
+        <span>·</span>
         <a href="we_only_have_one_pale_blue_dot.html" class="footer-link">🌍 We Only Have One Pale Blue Dot</a>
-        <span>·</span>
-        <a href="doughnut_economics.html" class="footer-link" style="color: #fbbf24;">🍩 Doughnut Economics</a>
-        <span>·</span>
-        <a href="uk_climate_impacts_500_years.html" class="footer-link" style="color: #fbbf24;">📊 500-Year Climate Impacts</a>
         <span>·</span>
         <a href="climate_podcasts.html" class="footer-link" style="color: #c084fc;">🎙️ Climate Podcasts</a>
         <span>·</span>
-        <a href="national_emergency_briefing.html" class="footer-link" style="color: #f43f5e;">🚨 National Emergency Briefing</a>
+        <a href="doughnut_economics.html" class="footer-link" style="color: #fbbf24;">🍩 Doughnut Economics</a>
         <span>·</span>
         <span style="font-family: var(--font-mono); font-weight: 700; color: var(--emerald-light);">v1.9</span>
       </div>
@@ -2610,7 +2612,7 @@
         } else if (isFromImpacts) {
           const btnImpacts = document.querySelector(".btn-return-home[href*='uk_climate_impacts']");
           if (btnImpacts) {
-            btnImpacts.textContent = "← Return to 500-Year Impacts";
+            btnImpacts.textContent = "← Return to Impacts";
             btnImpacts.style.fontWeight = "800";
             btnImpacts.style.boxShadow = "0 0 12px rgba(251, 191, 36, 0.45)";
           }

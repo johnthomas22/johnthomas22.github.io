@@ -488,18 +488,18 @@
     .proj-title-row {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 10px;
     }
     .proj-title {
-      font-size: 0.98rem;
+      font-size: 0.90rem;
       font-weight: 800;
       color: #fff;
       display: flex;
       align-items: center;
       gap: 6px;
-      line-height: 1.25;
+      line-height: 1.3;
+      min-width: 0;
     }
     .proj-badge {
       font-size: 0.68rem;
@@ -509,9 +509,10 @@
       border-radius: 4px;
       white-space: nowrap;
       flex-shrink: 0;
+      margin-left: auto;
     }
     .proj-subtitle {
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       color: #94a3b8;
       line-height: 1.4;
       display: block;
@@ -616,44 +617,31 @@
       white-space: nowrap;
       padding-right: 24px !important;
     }
-    .cet-tooltip-wrap {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      cursor: help;
-    }
-    .cet-abbr {
+    .cet-abbr-badge {
       text-decoration: underline dotted #38bdf8;
       text-underline-offset: 3px;
       color: #38bdf8;
       font-weight: 700;
+      cursor: help;
+      display: inline-block;
     }
-    .cet-tooltip-wrap .cet-tooltip-content {
-      visibility: hidden;
-      opacity: 0;
-      width: 270px;
+    .cet-global-tooltip {
+      position: absolute;
+      display: none;
+      width: 280px;
+      max-width: 90vw;
       background: #090e17;
       color: #f1f5f9;
-      text-align: left;
-      font-size: 0.74rem;
+      font-size: 0.76rem;
       font-weight: 400;
       line-height: 1.45;
       padding: 10px 14px;
       border-radius: 8px;
-      border: 1px solid rgba(56, 189, 248, 0.45);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(56, 189, 248, 0.25);
-      position: absolute;
-      z-index: 100;
-      top: calc(100% + 8px);
-      left: 0;
-      transition: opacity 0.2s ease, visibility 0.2s ease;
+      border: 1px solid rgba(56, 189, 248, 0.55);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 18px rgba(56, 189, 248, 0.25);
+      z-index: 9999;
       pointer-events: none;
-      white-space: normal;
-    }
-    .cet-tooltip-wrap:hover .cet-tooltip-content,
-    .cet-tooltip-wrap:focus-within .cet-tooltip-content {
-      visibility: visible;
-      opacity: 1;
+      transition: opacity 0.15s ease;
     }
 
     /* CITATION & FOOTER */
@@ -697,10 +685,11 @@
           <span class="version-tag">v1.9</span>
         </div>
         <nav class="nav-links-row">
+          <a href="national_emergency_briefing.html" class="nav-btn nav-btn-briefing">🚨 National Emergency</a>
           <a href="earth_heat_trap.html" class="nav-btn nav-btn-home">← Earth's Heat Trap</a>
           <a href="advanced.html" class="nav-btn nav-btn-sim">🔬 Warming Simulator</a>
           <a href="what_can_i_do.html" class="nav-btn nav-btn-action">🌱 What Can I Do?</a>
-          <a href="national_emergency_briefing.html" class="nav-btn nav-btn-briefing">🚨 National Emergency</a>
+          <a href="doughnut_economics.html" class="nav-btn" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.4);">🍩 Doughnut Economics</a>
         </nav>
       </div>
 
@@ -1004,7 +993,7 @@
         <div class="projection-card" style="border-top: 3px solid #38bdf8;">
           <div class="proj-header">
             <div class="proj-title-row">
-              <div class="proj-title">🌊 Winter Peak River Flows &amp; Deluges</div>
+              <div class="proj-title">🌊 Winter River Deluges</div>
               <span class="proj-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">+20% to +35% by 2050</span>
             </div>
             <span class="proj-subtitle">Catchment runoff anomaly vs <span style="white-space: nowrap;">1961–1990 baseline</span></span>
@@ -1076,7 +1065,7 @@
         <div class="projection-card" style="border-top: 3px solid #f43f5e;">
           <div class="proj-header">
             <div class="proj-title-row">
-              <div class="proj-title">🔥 Wildfire Frequency &amp; Burn Area</div>
+              <div class="proj-title">🔥 Wildfire &amp; Burn Area Surge</div>
               <span class="proj-badge" style="background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.4);">3×–5× Danger Days</span>
             </div>
             <span class="proj-subtitle">Annual hectares burned &amp; severe fire weather days</span>
@@ -1141,7 +1130,7 @@
         <div class="projection-card" style="border-top: 3px solid #eab308;">
           <div class="proj-header">
             <div class="proj-title-row">
-              <div class="proj-title">🌾 Crop Yield Whiplash &amp; Failure Odds</div>
+              <div class="proj-title">🌾 Crop Volatility &amp; Shocks</div>
               <span class="proj-badge" style="background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4);">&gt;10%/yr Failure Risk</span>
             </div>
             <span class="proj-subtitle">Arable yield volatility &amp; synchronous shock probability</span>
@@ -1322,14 +1311,7 @@
           <tr>
             <th>Year</th>
             <th class="num-col">
-              <span class="cet-tooltip-wrap" tabindex="0">
-                <span class="cet-abbr">CET</span>
-                <span class="cet-tooltip-content">
-                  <strong style="color: #38bdf8;">Central England Temperature (HadCET)</strong><br>
-                  The world's longest continuous instrumental surface temperature series, recorded monthly by UK thermometers since 1659.
-                </span>
-              </span>
-              Annual Temp
+              <span class="cet-abbr-badge" id="cetAbbr" tabindex="0">CET</span> Annual Temp
             </th>
             <th class="num-col">Anomaly (vs 1961–90)</th>
             <th>Primary Climate Character</th>
@@ -1432,6 +1414,16 @@
       </table>
     </section>
 
+    <!-- GLOBAL FLOATING CET TOOLTIP (Body level, immune to table overflow clipping) -->
+    <div id="cetGlobalTooltip" class="cet-global-tooltip" role="tooltip" aria-hidden="true">
+      <div style="font-weight: 800; color: #38bdf8; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+        <span>🌡️</span> Central England Temperature (HadCET)
+      </div>
+      <div style="color: #cbd5e1; font-size: 0.75rem; line-height: 1.45;">
+        The world's longest continuous instrumental surface temperature series, recorded monthly by UK thermometers since <strong>1659</strong>.
+      </div>
+    </div>
+
     <!-- FOOTER CITATION -->
     <footer class="footer-box">
       <div>
@@ -1443,13 +1435,13 @@
         Daniel Defoe (<em>The Storm</em>, 1704); Environment Agency UK.
       </div>
       <div class="footer-nav">
+        <a href="national_emergency_briefing.html" class="footer-link">National Emergency Briefing</a>
+        <span>·</span>
         <a href="earth_heat_trap.html" class="footer-link">Earth's Heat Trap</a>
         <span>·</span>
         <a href="advanced.html" class="footer-link">Advanced Physics Simulator</a>
         <span>·</span>
         <a href="what_can_i_do.html" class="footer-link">What Can I Do?</a>
-        <span>·</span>
-        <a href="national_emergency_briefing.html" class="footer-link">National Emergency Briefing</a>
         <span>·</span>
         <a href="climate_podcasts.html" class="footer-link">Podcasts</a>
         <span>·</span>
@@ -1887,6 +1879,32 @@
           drawStripes();
         });
       });
+
+      // CET Benchmark Tooltip (Body-level positioning, immune to table overflow)
+      const cetAbbr = document.getElementById("cetAbbr");
+      const cetTooltip = document.getElementById("cetGlobalTooltip");
+      if (cetAbbr && cetTooltip) {
+        function showCetTooltip() {
+          const rect = cetAbbr.getBoundingClientRect();
+          cetTooltip.style.display = "block";
+          cetTooltip.style.opacity = "1";
+          const ttW = cetTooltip.offsetWidth || 280;
+          let left = rect.left + rect.width / 2 - ttW / 2;
+          if (left < 10) left = 10;
+          if (left + ttW > window.innerWidth - 10) left = window.innerWidth - ttW - 10;
+          let top = rect.bottom + 8 + window.scrollY;
+          cetTooltip.style.left = `${Math.round(left)}px`;
+          cetTooltip.style.top = `${Math.round(top)}px`;
+        }
+        function hideCetTooltip() {
+          cetTooltip.style.display = "none";
+          cetTooltip.style.opacity = "0";
+        }
+        cetAbbr.addEventListener("mouseenter", showCetTooltip);
+        cetAbbr.addEventListener("mouseleave", hideCetTooltip);
+        cetAbbr.addEventListener("focus", showCetTooltip);
+        cetAbbr.addEventListener("blur", hideCetTooltip);
+      }
 
       window.addEventListener("resize", drawStripes);
 
