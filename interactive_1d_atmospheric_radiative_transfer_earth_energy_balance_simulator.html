@@ -796,10 +796,6 @@
     .app-wrapper:not(.simple-mode) .speech-pin {
       display: none !important;
     }
-    .app-wrapper:not(.simple-mode) .speech-pin-action {
-      right: 14px;
-      top: 14px;
-    }
 
     .top-stats-strip {
       display: grid;
@@ -1040,7 +1036,7 @@
       border: 1.5px solid var(--emerald);
       color: var(--emerald);
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65), 0 0 10px rgba(16, 185, 129, 0.3);
-      transition: all 0.15s ease;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
       user-select: none;
       white-space: nowrap;
       text-decoration: none;
@@ -1055,6 +1051,7 @@
     .app-wrapper.simple-mode .speech-pin-action {
       right: 14px;
       top: 14px;
+      left: auto;
     }
     @media (max-width: 520px) {
       .speech-pin-action {
@@ -5359,7 +5356,7 @@
           </p>
           <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px;">
             <li>
-              <strong>A Powerful El Niño (ENSO):</strong> El Niño events temporarily vent vast quantities of ocean heat from the tropical Pacific into the troposphere, spiking global mean surface temperatures by +0.10 °C to +0.25 °C above the forced baseline. As El Niño decays into neutral or La Niña conditions, global temperatures naturally drop back toward the forced trend line.
+              <strong>Super El Niño Planetary Heat Discharge (ENSO):</strong> Rare "Super El Niño" events (such as 1982–83, 1997–98, 2015–16, and 2023–24, where the Oceanic Niño Index exceeds +2.0°C to +2.4°C) trigger an equatorial trade-wind collapse. This sloshes immense reservoirs of accumulated sub-surface Pacific heat eastwards, venting massive sensible and latent heat into the troposphere (+0.15°C to +0.25°C transient global surface temperature surge). These rare events act as empirical "preview windows" of future baselines—pushing 2023–2024 to become humanity's first 12-month period &gt;1.5°C above pre-industrial levels. Under continued warming, climate models project the frequency of extreme/Super El Niños to approximately double (Cai et al. <em>Nature Climate Change</em>; IPCC AR6).
             </li>
             <li>
               <strong>Solar Cycle 25 Maximum:</strong> The 11-year solar cycle reached its peak in 2024–2025, temporarily adding ~0.05 W/m² of top-of-atmosphere solar irradiance.
@@ -7612,6 +7609,13 @@
         // In Simple (Introduction) mode, only the atmospheric column is shown
           mainChartTpHitboxes = [];
           canvas.style.cursor = "default";
+          const btnWhat = document.getElementById("btnWhatCanIDo");
+          if (btnWhat) {
+            btnWhat.style.left = "auto";
+            btnWhat.style.right = "14px";
+            btnWhat.style.top = "14px";
+            btnWhat.style.display = "inline-flex";
+          }
           ctx.restore();
           return;
         }
@@ -7921,6 +7925,27 @@
           ctx.font = `bold ${keelingFontSize}px ui-monospace, monospace`;
           ctx.fillText("2050 Net Zero", 0, 0);
           ctx.restore();
+        }
+
+        // Floating action button position near 2050 Net Zero marker (or top right in zoom mode)
+        const btnWhat = document.getElementById("btnWhatCanIDo");
+        if (btnWhat) {
+          if (!state.isZoomed) {
+            const btnW = 195;
+            let btnLeft = nz2050X + 14;
+            if (btnLeft + btnW > tGridRight - 8) {
+              btnLeft = Math.max(tGridLeft + 10, tGridRight - btnW - 8);
+            }
+            btnWhat.style.left = `${Math.round(btnLeft)}px`;
+            btnWhat.style.right = "auto";
+            btnWhat.style.top = `${Math.round(tGridTop + 6)}px`;
+            btnWhat.style.display = "inline-flex";
+          } else {
+            btnWhat.style.left = "auto";
+            btnWhat.style.right = "14px";
+            btnWhat.style.top = "14px";
+            btnWhat.style.display = "inline-flex";
+          }
         }
 
         // Plot Accumulated History: Static Historical Baseline vs Dynamic Simulation
