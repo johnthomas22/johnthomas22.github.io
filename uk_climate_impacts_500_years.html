@@ -609,6 +609,52 @@
     .data-table tr:hover td {
       background: rgba(255, 255, 255, 0.03);
     }
+    .data-table th.num-col,
+    .data-table td.num-col {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      padding-right: 18px;
+    }
+    .cet-tooltip-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      cursor: help;
+    }
+    .cet-abbr {
+      text-decoration: underline dotted #38bdf8;
+      text-underline-offset: 3px;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .cet-tooltip-wrap .cet-tooltip-content {
+      visibility: hidden;
+      opacity: 0;
+      width: 260px;
+      background: #090e17;
+      color: #f1f5f9;
+      text-align: left;
+      font-size: 0.74rem;
+      font-weight: 400;
+      line-height: 1.45;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.2);
+      position: absolute;
+      z-index: 50;
+      bottom: 130%;
+      right: 0;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      pointer-events: none;
+      white-space: normal;
+    }
+    .cet-tooltip-wrap:hover .cet-tooltip-content,
+    .cet-tooltip-wrap:focus-within .cet-tooltip-content {
+      visibility: visible;
+      opacity: 1;
+    }
 
     /* CITATION & FOOTER */
     .footer-box {
@@ -1275,8 +1321,17 @@
         <thead>
           <tr>
             <th>Year</th>
-            <th>CET Annual Temp</th>
-            <th>Anomaly (vs 1961–90)</th>
+            <th class="num-col">
+              <span class="cet-tooltip-wrap" tabindex="0">
+                <abbr class="cet-abbr" title="Central England Temperature (HadCET) — the world's longest continuous instrumental temperature record, recorded continuously since 1659">CET</abbr>
+                <span class="cet-tooltip-content">
+                  <strong style="color: #38bdf8;">Central England Temperature (HadCET)</strong><br>
+                  The world's longest continuous instrumental surface temperature series, recorded monthly by UK thermometers since 1659.
+                </span>
+              </span>
+              Annual Temp
+            </th>
+            <th class="num-col">Anomaly (vs 1961–90)</th>
             <th>Primary Climate Character</th>
             <th>Documented Societal &amp; Ecosystem Impact</th>
           </tr>
@@ -1284,92 +1339,92 @@
         <tbody>
           <tr>
             <td><strong>1684</strong></td>
-            <td>7.38°C</td>
-            <td style="color: #6baed6; font-weight: 700;">-2.08°C</td>
+            <td class="num-col">7.4°C</td>
+            <td class="num-col" style="color: #6baed6; font-weight: 700;">-2.1°C</td>
             <td>Little Ice Age / Maunder Minimum Peak</td>
             <td>Great Thames Frost Fair; ox roasted on Thames ice; sea froze 2 miles out from Dover.</td>
           </tr>
           <tr>
             <td><strong>1703</strong></td>
-            <td>9.14°C</td>
-            <td style="color: #9ecae1;">-0.32°C</td>
+            <td class="num-col">9.1°C</td>
+            <td class="num-col" style="color: #9ecae1;">-0.3°C</td>
             <td>The Great Gale</td>
             <td>Up to 15,000 dead across Britain; 13 warships wrecked; Daniel Defoe documents the storm.</td>
           </tr>
           <tr>
             <td><strong>1740</strong></td>
-            <td>7.80°C</td>
-            <td style="color: #6baed6; font-weight: 700;">-1.66°C</td>
+            <td class="num-col">7.8°C</td>
+            <td class="num-col" style="color: #6baed6; font-weight: 700;">-1.7°C</td>
             <td>The Great Frost of 1740</td>
             <td>Entire winter rivers frozen; wheat crops killed in ground; widespread famine and fuel riots.</td>
           </tr>
           <tr>
             <td><strong>1816</strong></td>
-            <td>8.24°C</td>
-            <td style="color: #9ecae1; font-weight: 700;">-1.22°C</td>
+            <td class="num-col">8.2°C</td>
+            <td class="num-col" style="color: #9ecae1; font-weight: 700;">-1.2°C</td>
             <td>"Year Without a Summer" (Tambora)</td>
             <td>Volcanic sulfur veil blocks sun; snow in June; Mary Shelley writes <em>Frankenstein</em> indoors in Geneva.</td>
           </tr>
           <tr>
             <td><strong>1879</strong></td>
-            <td>7.90°C</td>
-            <td style="color: #6baed6; font-weight: 700;">-1.56°C</td>
+            <td class="num-col">7.9°C</td>
+            <td class="num-col" style="color: #6baed6; font-weight: 700;">-1.6°C</td>
             <td>Coldest Victorian Year</td>
             <td>Continuous rain and cold ruined English wheat harvest; marked end of agricultural prosperity.</td>
           </tr>
           <tr>
             <td><strong>1953</strong></td>
-            <td>9.90°C</td>
-            <td style="color: #fc9272;">+0.44°C</td>
+            <td class="num-col">9.9°C</td>
+            <td class="num-col" style="color: #fc9272;">+0.4°C</td>
             <td>East Coast Surge Inundation</td>
             <td>307 deaths in coastal communities; Canvey Island flooded; prompted the Thames Barrier.</td>
           </tr>
           <tr>
             <td><strong>1976</strong></td>
-            <td>10.08°C</td>
-            <td style="color: #fb6a4a; font-weight: 700;">+0.62°C</td>
+            <td class="num-col">10.1°C</td>
+            <td class="num-col" style="color: #fb6a4a; font-weight: 700;">+0.6°C</td>
             <td>Prolonged Summer Drought</td>
             <td>Standpipes in streets; reservoirs dry; 15 straight days &gt;32°C; Minister for Drought appointed.</td>
           </tr>
           <tr>
             <td><strong>2003</strong></td>
-            <td>10.46°C</td>
-            <td style="color: #de2d26; font-weight: 700;">+1.00°C</td>
+            <td class="num-col">10.5°C</td>
+            <td class="num-col" style="color: #de2d26; font-weight: 700;">+1.0°C</td>
             <td>European Super-Heatwave</td>
             <td>38.5°C Brogdale record; &gt;2,000 UK heat deaths; prompted UK's first Heat-Health Alert system.</td>
           </tr>
           <tr>
             <td><strong>2007</strong></td>
-            <td>10.36°C</td>
-            <td style="color: #de2d26; font-weight: 700;">+0.90°C</td>
+            <td class="num-col">10.4°C</td>
+            <td class="num-col" style="color: #de2d26; font-weight: 700;">+0.9°C</td>
             <td>Summer Deluge Emergency</td>
             <td>Wettest May-July in 240 years; Mythe water plant flooded; 350,000 people without clean water.</td>
           </tr>
           <tr>
             <td><strong>2015</strong></td>
-            <td>10.33°C</td>
-            <td style="color: #de2d26; font-weight: 700;">+0.87°C</td>
+            <td class="num-col">10.3°C</td>
+            <td class="num-col" style="color: #de2d26; font-weight: 700;">+0.9°C</td>
             <td>Storm Desmond &amp; Record Rainfall</td>
             <td>341.4 mm in 24h at Honister Pass (UK record); catastrophic flooding in Carlisle and Cumbria.</td>
           </tr>
           <tr>
             <td><strong>2022</strong></td>
-            <td>11.03°C</td>
-            <td style="color: #a50f15; font-weight: 800;">+1.57°C</td>
+            <td class="num-col">11.0°C</td>
+            <td class="num-col" style="color: #a50f15; font-weight: 800;">+1.6°C</td>
             <td>Warmest Year in 364 Years of CET Record</td>
             <td>First time CET averaged &gt;11°C; 40.3°C Coningsby record; Wennington wildfire; drought declarations.</td>
           </tr>
           <tr>
             <td><strong>2023</strong></td>
-            <td>11.00°C</td>
-            <td style="color: #a50f15; font-weight: 800;">+1.54°C</td>
+            <td class="num-col">11.0°C</td>
+            <td class="num-col" style="color: #a50f15; font-weight: 800;">+1.5°C</td>
             <td>Second Warmest Year in CET Record</td>
             <td>Record-breaking June heatwave; North Sea marine heatwave; Storm Babet severe flooding.</td>
           </tr>
           <tr>
             <td><strong>2026</strong></td>
-            <td>11.05°C</td>
-            <td style="color: #a50f15; font-weight: 800;">+1.59°C</td>
+            <td class="num-col">11.1°C</td>
+            <td class="num-col" style="color: #a50f15; font-weight: 800;">+1.6°C</td>
             <td>Compound Heatwaves &amp; Agricultural Flash Drought</td>
             <td>5 official heatwaves in England, 4 in Scotland; acute summer flash drought; severe wheat and arable yield contractions.</td>
           </tr>
@@ -1706,11 +1761,11 @@
         drawStripes();
 
         const item = data[idx];
-        const cetTemp = (9.46 + item.a).toFixed(2);
+        const cetTemp = (9.46 + item.a).toFixed(1);
         const sign = item.a > 0 ? "+" : "";
 
         ttYear.textContent = `${item.y}`;
-        ttAnomaly.textContent = `CET: ${cetTemp}°C (${sign}${item.a.toFixed(2)}°C vs 1961–90)`;
+        ttAnomaly.textContent = `CET: ${cetTemp}°C (${sign}${item.a.toFixed(1)}°C vs 1961–90)`;
 
         if (item.title) {
           ttEvent.innerHTML = `<strong style="color: #fbbf24;">${item.title}:</strong> ${item.desc}`;
