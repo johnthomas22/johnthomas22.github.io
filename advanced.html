@@ -7693,8 +7693,35 @@
         const tempMax = state.isZoomed ? 1.6 : 6.0;
         const tempSpan = tempMax - tempMin;
 
+        // Dynamic CO2 Vertical Axis Scaling
+        // Defaults to 600 ppm so the trajectory curve and milestone ticks have generous breathing room,
+        // and dynamically scales to fit the expected peak CO2 of the chosen scenario (or live simulation)
+        let expectedPeakCo2 = 427;
+        if (state.isNZ2050) {
+          expectedPeakCo2 = 457; // Ramps down to net zero by 2050, peaking at ~457 ppm
+        } else if (state.rate <= 0) {
+          expectedPeakCo2 = 427;
+        } else {
+          // Expected 21st-century trajectory peak (up to 2100)
+          expectedPeakCo2 = 427 + 74 * state.rate;
+        }
+
+        // Account for current live simulation state or history points that exceed this
+        if (state.history && state.history.length > 0) {
+          for (let i = 0; i < state.history.length; i++) {
+            if (state.history[i].co2 > expectedPeakCo2) {
+              expectedPeakCo2 = state.history[i].co2;
+            }
+          }
+        }
+        if (state.co2 > expectedPeakCo2) {
+          expectedPeakCo2 = state.co2;
+        }
+
         const co2Min = state.isZoomed ? 300 : 200;
-        const co2Max = state.isZoomed ? 440 : 1050;
+        // Default to 600 ppm minimum; smoothly scale up in 50 ppm increments if expected peak exceeds 570 ppm
+        const targetMax = Math.max(600, Math.ceil((expectedPeakCo2 + 25) / 50) * 50);
+        const co2Max = state.isZoomed ? 440 : targetMax;
         const co2Span = co2Max - co2Min;
 
         function yrToX(yr) { return tGridLeft + ((yr - yrStart) / yrSpan) * tGridW; }
@@ -7702,10 +7729,20 @@
         function co2ToY(c) { return tGridBottom - ((c - co2Min) / co2Span) * tGridH; }
 
         // Right-hand Y-Axis Labels for CO2 in Purple
-        const co2Ticks = state.isZoomed ? [320, 340, 360, 380, 400, 420] : [280, 400, 600, 800, 1000];
+        const co2Ticks = [];
+        if (state.isZoomed) {
+          [320, 340, 360, 380, 400, 420].forEach(c => co2Ticks.push(c));
+        } else {
+          const step = co2Max <= 700 ? 50 : 100;
+          for (let c = 250; c <= co2Max; c += step) {
+            if (c >= co2Min && c <= co2Max) co2Ticks.push(c);
+          }
+        }
+
         co2Ticks.forEach(cVal => {
+          if (cVal === 350) return; // Handled separately by 350 ppm Safe Boundary callout
           const cy = co2ToY(cVal);
-          if (cy >= tGridTop && cy <= tGridBottom) {
+          if (cy >= tGridTop + 8 && cy <= tGridBottom - 8) {
             ctx.strokeStyle = "rgba(192, 132, 252, 0.22)";
             ctx.setLineDash([2, 4]);
             ctx.beginPath();
