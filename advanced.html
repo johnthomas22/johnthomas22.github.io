@@ -744,17 +744,21 @@
       gap: 6px;
     }
 
-    /* Simulator Mode: Left Sidebar Metrics & Radiative Flux Card */
+    /* Simulator Mode: Metrics & Radiative Flux Card */
     .sim-stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
       gap: 10px;
+      height: 100%;
     }
     .sim-stats-grid .stat-card {
       padding: 10px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      min-height: 96px;
+      box-sizing: border-box;
     }
     .sim-stats-grid .stat-header {
       font-size: 0.68rem;
@@ -770,21 +774,24 @@
     @media (max-width: 480px) {
       .sim-stats-grid {
         grid-template-columns: 1fr;
+        grid-template-rows: auto;
       }
     }
 
     .radiative-flux-card {
       margin: 0;
-      padding: 10px 14px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      height: 100%;
+      box-sizing: border-box;
     }
     .flux-canvas-container {
       position: relative;
       width: 100%;
-      height: 155px;
-      min-height: 145px;
+      flex: 1;
+      min-height: 160px;
     }
     .flux-canvas-container canvas {
       position: absolute;
@@ -818,16 +825,42 @@
     .stat-sub { font-size: 0.7rem; color: var(--text-muted); }
 
     .main-grid {
-      display: grid;
-      grid-template-columns: 440px 1fr;
+      display: flex;
+      flex-direction: column;
       gap: 16px;
-    }
-    @media (max-width: 1080px) {
-      .top-stats-strip { grid-template-columns: repeat(2, 1fr); }
-      .main-grid { grid-template-columns: 1fr; }
+      width: 100%;
     }
 
-    .controls-panel { display: flex; flex-direction: column; gap: 14px; }
+    .controls-panel {
+      display: grid;
+      grid-template-columns: minmax(360px, 1.25fr) minmax(310px, 1fr) minmax(320px, 1.05fr);
+      gap: 16px;
+      align-items: stretch;
+      width: 100%;
+    }
+    .controls-panel > .card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+    @media (max-width: 1180px) {
+      .controls-panel {
+        grid-template-columns: 1.2fr 1fr;
+      }
+      .radiative-flux-card {
+        grid-column: 1 / -1;
+      }
+    }
+    @media (max-width: 768px) {
+      .controls-panel {
+        grid-template-columns: 1fr;
+      }
+      .radiative-flux-card {
+        grid-column: auto;
+      }
+    }
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -1000,7 +1033,7 @@
     .canvas-container {
       position: relative;
       width: 100%;
-      height: clamp(620px, 75vh, 920px);
+      height: clamp(540px, 64vh, 800px);
       background: #05080f;
       border-radius: 8px;
       overflow: hidden;
@@ -1008,8 +1041,8 @@
     }
     @media (max-width: 768px) {
       .canvas-container {
-        height: 760px;
-        min-height: 760px;
+        height: 640px;
+        min-height: 640px;
       }
       .app-wrapper.simple-mode .canvas-container {
         height: 460px;
