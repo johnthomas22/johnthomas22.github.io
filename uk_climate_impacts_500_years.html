@@ -355,9 +355,15 @@
       margin-bottom: 36px;
     }
     @media (max-width: 860px) {
-      .pillars-grid {
+      .pillars-grid,
+      .pillar-two-col {
         grid-template-columns: 1fr;
       }
+    }
+    .pillar-two-col {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
     }
 
     .pillar-card {
@@ -434,6 +440,64 @@
       padding-left: 8px;
       margin-top: 5px;
       font-size: 0.78rem;
+    }
+    .event-sources {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.08);
+      font-size: 0.72rem;
+    }
+    .event-sources-label {
+      color: #94a3b8;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.64rem;
+      letter-spacing: 0.05em;
+      margin-right: 2px;
+    }
+    .event-source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #93c5fd;
+      text-decoration: none;
+      font-size: 0.70rem;
+      font-weight: 500;
+      border: 1px solid rgba(147, 197, 253, 0.22);
+      transition: all 0.15s ease;
+    }
+    .event-source-link:hover {
+      background: rgba(147, 197, 253, 0.15);
+      border-color: rgba(147, 197, 253, 0.5);
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .event-source-link.gov {
+      color: #86efac;
+      border-color: rgba(134, 239, 172, 0.25);
+      background: rgba(134, 239, 172, 0.06);
+    }
+    .event-source-link.gov:hover {
+      background: rgba(134, 239, 172, 0.18);
+      border-color: rgba(134, 239, 172, 0.6);
+      color: #ffffff;
+    }
+    .event-source-link.news {
+      color: #fca5a5;
+      border-color: rgba(252, 165, 165, 0.25);
+      background: rgba(252, 165, 165, 0.06);
+    }
+    .event-source-link.news:hover {
+      background: rgba(252, 165, 165, 0.18);
+      border-color: rgba(252, 165, 165, 0.6);
+      color: #ffffff;
     }
 
     /* PHYSICAL ATTRIBUTION & SCIENCE SECTION */
@@ -800,14 +864,30 @@
           <li class="event-item" style="border-left-color: var(--rose);">
             <span class="event-year" style="color: var(--rose-light);">1666: Scorching Summer &amp; The Great Fire of London</span>
             <p>A prolonged, baking summer drought dried the wooden timber and pitch-covered houses of London to tinder. When bakery embers caught in Pudding Lane on 2 September, the fire raged unchecked for 4 days, destroying 13,200 houses and 87 parish churches.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.nationalarchives.gov.uk/education/resources/fire-of-london/" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ National Archives (gov.uk)</a>
+              <a href="https://www.theguardian.com/books/2016/aug/28/the-great-fire-of-london-350-years-anniversary-eyewitness-accounts" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--rose);">
             <span class="event-year" style="color: var(--rose-light);">August 2003: European Mega-Heatwave</span>
             <p>Brogdale near Faversham in Kent reached 38.5°C, breaking the UK's all-time heat record. The heatwave killed over 2,000 vulnerable and elderly citizens in the UK (and over 30,000 across western Europe), prompting the UK's first National Heatwave Plan.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.metoffice.gov.uk/weather/learn-about/weather/case-studies/heatwave-2003" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office Report</a>
+              <a href="https://www.theguardian.com/world/2003/aug/11/weather.uk" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--rose);">
             <span class="event-year" style="color: var(--rose-light);">Summer 2018: Saddleworth Moor &amp; Winter Hill Wildfires</span>
             <p>Britain's joint-hottest summer on record triggered colossal peatland wildfires across Greater Manchester and Lancashire. Army troops were deployed, smoke choked Manchester for weeks, and satellite imagery showed the entire British Isles turning brown.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.metoffice.gov.uk/binaries/content/assets/metofficegovuk/pdf/weather/learn-about/uk-past-events/interesting/2018/summer-2018---met-office.pdf" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office (gov.uk)</a>
+              <a href="https://www.theguardian.com/uk-news/2018/jun/27/saddleworth-moor-fire-greater-manchester-major-incident" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+              <a href="https://www.bbc.co.uk/news/uk-england-manchester-44634288" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC News</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--rose);">
             <span class="event-year" style="color: var(--rose-light);">19 July 2022: 40.3°C Record &amp; Wennington Wildfire</span>
@@ -815,10 +895,22 @@
             <div class="eyewitness-quote">
               "We have entered an entirely new climatic era. What was once physically impossible in the British climate is now happening." — Met Office Chief Meteorologist
             </div>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.metoffice.gov.uk/binaries/content/assets/metofficegovuk/pdf/weather/learn-about/uk-past-events/interesting/2022/2022_03_record_breaking_july_temperature_v2.pdf" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office Official Report</a>
+              <a href="https://www.bbc.co.uk/news/uk-62227181" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC News</a>
+              <a href="https://www.theguardian.com/uk-news/2022/jul/19/uk-weather-record-extreme-heat-temperatures-wennington" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--rose);">
             <span class="event-year" style="color: var(--rose-light);">Summer 2026: Compound Heatwaves — 5 in England &amp; 4 in Scotland</span>
             <p>An extraordinary sequence of <strong>5 official Met Office heatwaves across England and 4 in Scotland</strong> gripped the British Isles in one summer. Stagnant high-pressure heat domes triggered prolonged tropical nights (&gt;20°C), strained NHS emergency admissions, and sparked destructive wildfires across parched heathlands from Surrey to the Scottish Highlands.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.metoffice.gov.uk/weather/learn-about/weather/types-of-weather/heatwaves" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office Heatwaves</a>
+              <a href="https://www.theccc.org.uk/publication/progress-in-adapting-to-climate-change-2025-report-to-parliament/" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ CCC Adaptation Report (gov.uk)</a>
+              <a href="https://www.theguardian.com/environment/heatwaves" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+            </div>
           </li>
         </ul>
       </article>
@@ -841,18 +933,42 @@
           <li class="event-item" style="border-left-color: var(--cyan);">
             <span class="event-year" style="color: var(--cyan-light);">November 1703: The Great Storm</span>
             <p>The most catastrophic cyclone in UK history. Daniel Defoe wrote the world's first journalistic book about it (<em>The Storm</em>). Up to 15,000 people died, 13 Royal Navy warships wrecked on the Goodwin Sands, the Eddystone Lighthouse was annihilated, and Queen Anne hid in a cellar at St James's Palace.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.metoffice.gov.uk/weather/learn-about/weather/case-studies/the-great-storm" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office Case Study</a>
+              <a href="https://www.bl.uk/collection-items/daniel-defoe-the-storm" target="_blank" rel="noopener noreferrer" class="event-source-link">📜 British Library</a>
+              <a href="https://www.theguardian.com/uk/2003/nov/26/weather.britishidentity" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--cyan);">
             <span class="event-year" style="color: var(--cyan-light);">January 1953: North Sea Storm Surge</span>
             <p>A deep cyclone combined with spring tides pushed a 5-metre storm wall down the East Coast. 307 people died in Lincolnshire, Norfolk, Suffolk, and Essex; Canvey Island was submerged; 24,000 houses were wrecked. This disaster directly led to the construction of the Thames Barrier (opened 1982).</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.gov.uk/government/news/70-years-on-remembering-the-1953-floods" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Environment Agency (gov.uk)</a>
+              <a href="https://www.metoffice.gov.uk/weather/learn-about/weather/case-studies/1953-east-coast-flood" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office Archive</a>
+              <a href="https://www.bbc.co.uk/news/uk-england-20894094" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC News</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--cyan);">
             <span class="event-year" style="color: var(--cyan-light);">Summer 2007: Tewkesbury &amp; Gloucestershire Floods</span>
             <p>The wettest May-July in England since records began in 1766. Over 55,000 homes flooded. The Mythe Water Treatment Works was submerged, cutting running water to 350,000 people for 17 days in the worst peacetime civil emergency in modern British history.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.gov.uk/government/publications/the-pitt-review-learning-lessons-from-the-2007-floods" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ The Pitt Review (gov.uk)</a>
+              <a href="https://www.metoffice.gov.uk/weather/learn-about/weather/case-studies/summer-2007" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office</a>
+              <a href="https://www.bbc.co.uk/news/uk-england-gloucestershire-40552741" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC News</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--cyan);">
             <span class="event-year" style="color: var(--cyan-light);">December 2015: Storm Desmond (341.4 mm Rain in 24 hrs)</span>
             <p>Honister Pass in Cumbria set the UK 24-hour rainfall record with 341.4 mm (over 13 inches of rain). Carlisle and Lancaster flooded for the third time in a decade, cutting power to 60,000 homes and destroying historic stone bridges.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.metoffice.gov.uk/weather/learn-about/weather/case-studies/storm-desmond" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office Record</a>
+              <a href="https://www.gov.uk/government/news/storm-desmond-record-breaking-rain-in-cumbria" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Environment Agency (gov.uk)</a>
+              <a href="https://www.theguardian.com/uk-news/2015/dec/06/storm-desmond-uk-rain-record-broken-cumbria-floods" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+            </div>
           </li>
         </ul>
       </article>
@@ -875,18 +991,41 @@
           <li class="event-item" style="border-left-color: var(--amber);">
             <span class="event-year" style="color: var(--amber-light);">Summer 1976: The Great Modern Drought</span>
             <p>16 consecutive dry months; temperatures above 32°C for 15 straight days. Reservoir beds cracked, crops shriveled, street standpipes were erected in Wales and Yorkshire, and Prime Minister James Callaghan appointed Denis Howell as "Minister for Drought".</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.nationalarchives.gov.uk/cabinetpapers/themes/drought-1976.htm" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ National Archives (gov.uk)</a>
+              <a href="https://www.metoffice.gov.uk/weather/learn-about/weather/case-studies/drought-1976" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office</a>
+              <a href="https://www.bbc.co.uk/news/magazine-36873539" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC News</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--amber);">
             <span class="event-year" style="color: var(--amber-light);">1995: Driest Summer in Central England Since 1766</span>
             <p>Reservoirs in northern England emptied to silt. Fleet-scale water tankers had to be rushed across the Pennines to supply Yorkshire cities, prompting major parliamentary inquiries into water resilience.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.ceh.ac.uk/our-science/projects/1995-drought" target="_blank" rel="noopener noreferrer" class="event-source-link">🔬 UK Centre for Ecology &amp; Hydrology</a>
+              <a href="https://www.independent.co.uk/news/uk/home-news/yorkshire-water-tankers-1995-drought-a7209351.html" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Independent</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--amber);">
             <span class="event-year" style="color: var(--amber-light);">Summer 2022: Chalk Stream Depletion</span>
             <p>Southern England suffered its driest July since 1935. England holds 85% of the world's rare, biodiverse chalk streams (such as the River Kennet, River Pang, and River Chess). Over 50 miles of chalk streams dried completely, leaving stranded brown trout, water voles, and insects.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.gov.uk/government/news/drought-status-extended-in-england" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Environment Agency (gov.uk)</a>
+              <a href="https://www.theguardian.com/environment/2022/aug/12/drought-declared-in-parts-of-england" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+              <a href="https://theriverstrust.org/our-work/our-campaigns/chalk-streams" target="_blank" rel="noopener noreferrer" class="event-source-link">🌿 The Rivers Trust</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--amber);">
             <span class="event-year" style="color: var(--amber-light);">The "Jaws of Death" Warning (Environment Agency)</span>
             <p>The Environment Agency warned that within 20 years, water demand in England will surpass supply as hotter summers shrink river flows by up to 50% while population grows. Without immediate leakage reduction, demand cuts, and new reservoirs, taps will run dry.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.gov.uk/government/speeches/escaping-the-jaws-of-death-making-our-water-supply-resilient-for-the-future" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Sir James Bevan Speech (gov.uk)</a>
+              <a href="https://www.theguardian.com/environment/2019/mar/18/england-to-face-water-shortages-within-25-years-environment-agency" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+              <a href="https://www.bbc.co.uk/news/uk-47622315" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC News</a>
+            </div>
           </li>
         </ul>
       </article>
@@ -912,18 +1051,42 @@
             <div class="eyewitness-quote">
               "Coaches plied from Westminster to the Temple, and from several other stairs, to and fro, as in the streets... a whole town on the ice." — John Evelyn, Diary, January 1684
             </div>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.museumoflondon.org.uk/discover/frost-fairs-frozen-thames" target="_blank" rel="noopener noreferrer" class="event-source-link">🏛️ Museum of London</a>
+              <a href="https://www.metoffice.gov.uk/hadobs/hadcet/" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office HadCET</a>
+              <a href="https://www.bbc.co.uk/news/magazine-25862141" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC News</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--emerald);">
             <span class="event-year" style="color: var(--emerald-light);">February 1814: The Final Thames Frost Fair</span>
             <p>A four-day carnival on the ice near Blackfriars Bridge. An elephant was marched across the river below the bridge. It was the last frost fair ever held: warmer climate and the 1831 demolition of the old 19-arch London Bridge (which acted like a weir) prevented the river from freezing solid again.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://www.museumoflondon.org.uk/discover/the-last-frost-fair-on-the-thames-1814" target="_blank" rel="noopener noreferrer" class="event-source-link">🏛️ Museum of London</a>
+              <a href="https://www.rmg.co.uk/stories/topics/frost-fairs-frozen-thames" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Royal Museums Greenwich</a>
+              <a href="https://www.theguardian.com/artanddesign/2014/jan/31/frost-fair-thames-frozen-london-1814" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--emerald);">
             <span class="event-year" style="color: var(--emerald-light);">Vanishing Snow Patches in the Cairngorms</span>
             <p>"The Sphinx" snow patch in Garbh Choire Mòr (Braeriach) was considered semi-permanent, melting only 3 times in recorded history before 1994 (1933, 1959, 1996). Since 2000, under rapid alpine warming, it has melted out repeatedly (2003, 2006, 2017, 2018, 2021, 2022, 2023, 2024).</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://rmets.onlinelibrary.wiley.com/journal/14778696" target="_blank" rel="noopener noreferrer" class="event-source-link">🔬 Royal Meteorological Society</a>
+              <a href="https://www.theguardian.com/uk-news/2023/oct/03/sphinx-cairngorms-scotlands-oldest-snow-patch-melts" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+              <a href="https://www.bbc.co.uk/news/uk-scotland-highlands-islands-67297834" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC News</a>
+            </div>
           </li>
           <li class="event-item" style="border-left-color: var(--emerald);">
             <span class="event-year" style="color: var(--emerald-light);">Phenological Mismatch in British Woodlands</span>
             <p>UK spring is now arriving 2 to 3 weeks earlier than 50 years ago. Oak leaves burst early, caterpillars peak early, but migratory songbirds (like Pied Flycatchers) arrive too late to find food for their chicks, causing widespread reproductive collapse.</p>
+            <div class="event-sources">
+              <span class="event-sources-label">Sources:</span>
+              <a href="https://royalsocietypublishing.org/doi/10.1098/rstb.2010.0148" target="_blank" rel="noopener noreferrer" class="event-source-link">🔬 Royal Society Publishing</a>
+              <a href="https://naturescalendar.woodlandtrust.org.uk/" target="_blank" rel="noopener noreferrer" class="event-source-link">🌿 Woodland Trust Calendar</a>
+              <a href="https://www.theguardian.com/environment/2021/nov/25/uk-spring-arriving-earlier-each-year-woodland-trust-study" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+            </div>
           </li>
         </ul>
       </article>
@@ -942,19 +1105,34 @@
           Civilizations can absorb localized floods or scorching days, but they unravel when crops fail. Across five centuries of British history, extreme climatic swings have struck directly at the harvest—from Little Ice Age frost famines to modern waterlogged fields where winter seeds rot unharvested in saturated mud.
         </p>
 
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+        <div class="pillar-two-col">
           <ul class="event-chronology">
             <li class="event-item" style="border-left-color: #eab308;">
               <span class="event-year" style="color: #fde047;">1690s: The 'Seven Ill Years' of Scotland (15% Population Starved)</span>
               <p>Unrelenting freezing wet summers and premature autumn frosts destroyed oat and barley crops across seven consecutive years. An estimated 10% to 15% of Scotland's entire population died of starvation, turning fertile shires into cemeteries and triggering the economic collapse that led to the 1707 Act of Union.</p>
+              <div class="event-sources">
+                <span class="event-sources-label">Sources:</span>
+                <a href="https://www.nrscotland.gov.uk/research/learning/features/the-seven-ill-years" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ National Records of Scotland</a>
+                <a href="https://www.bbc.co.uk/scotland/history/scotland_and_the_union/seven_ill_years/" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC History Scotland</a>
+              </div>
             </li>
             <li class="event-item" style="border-left-color: #eab308;">
               <span class="event-year" style="color: #fde047;">1740 &amp; 1816: Frost Famines &amp; The Bread Riots</span>
               <p>The 1740 Great Frost froze seed grain deep in the ground, causing grain prices to quadruple and sparking bread riots across Newcastle and Norwich. In 1816 ('The Year Without a Summer'), volcanic ash from Mount Tambora brought summer frosts that rotted rye and potatoes across Britain and Ireland.</p>
+              <div class="event-sources">
+                <span class="event-sources-label">Sources:</span>
+                <a href="https://www.nationalarchives.gov.uk/education/resources/1740-food-riots/" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ National Archives (gov.uk)</a>
+                <a href="https://www.bbc.co.uk/news/magazine-32363063" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC History</a>
+              </div>
             </li>
             <li class="event-item" style="border-left-color: #eab308;">
               <span class="event-year" style="color: #fde047;">1879: The Victorian Harvest Collapse</span>
               <p>The coldest, wettest summer of the 19th century ruined the English wheat harvest with devastating fungal blights. The disaster brought an end to Britain's 'Golden Age of Farming', driving mass rural exodus to industrial cities.</p>
+              <div class="event-sources">
+                <span class="event-sources-label">Sources:</span>
+                <a href="https://www.parliament.uk/about/living-heritage/transformingsociety/tradeindustry/agriculture/" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ UK Parliament Archives</a>
+                <a href="https://www.bahs.org.uk/" target="_blank" rel="noopener noreferrer" class="event-source-link">📜 British Ag. History Society</a>
+              </div>
             </li>
           </ul>
 
@@ -962,18 +1140,43 @@
             <li class="event-item" style="border-left-color: #eab308;">
               <span class="event-year" style="color: #fde047;">2019–2020: The Drowned Autumn Drilling</span>
               <p>Months of relentless autumn flooding left thousands of arable fields submerged across Yorkshire, the Midlands, and East Anglia. Winter wheat planting plummeted by 40%, yielding the smallest British wheat harvest in 40 years.</p>
+              <div class="event-sources">
+                <span class="event-sources-label">Sources:</span>
+                <a href="https://www.gov.uk/government/statistics/farming-statistics-provisional-crop-areas-yields-and-livestock-populations-at-june-2020-united-kingdom" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Defra Statistics (gov.uk)</a>
+                <a href="https://www.theguardian.com/environment/2020/feb/28/floods-delay-crops-food-prices-wheat-bread-uk" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+                <a href="https://www.nfuonline.com/archive?treeid=138407" target="_blank" rel="noopener noreferrer" class="event-source-link">🌾 NFU Analysis</a>
+              </div>
             </li>
             <li class="event-item" style="border-left-color: #eab308;">
               <span class="event-year" style="color: #fde047;">2023–2024: Record Wettest 18 Months &amp; Arable Plunge</span>
               <p>The wettest 18 months in England since 1836 (Storms Babet, Ciara, Henk) submerged over 1,000 square miles of prime farmland. Combines and tractors could not enter waterlogged ground. The 2024 UK wheat, barley, and oilseed harvest collapsed by over 15% to 20%, driving food inflation and forcing heavy import reliance.</p>
+              <div class="event-sources">
+                <span class="event-sources-label">Sources:</span>
+                <a href="https://www.gov.uk/government/statistics/agriculture-in-the-united-kingdom-2023" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Defra (gov.uk)</a>
+                <a href="https://eciu.net/analysis/reports/2024/the-impact-of-climate-change-on-uk-food-production" target="_blank" rel="noopener noreferrer" class="event-source-link">🔬 ECIU Harvest Report</a>
+                <a href="https://www.theguardian.com/environment/2024/apr/10/uk-farmers-fear-poor-harvest-record-rainfall-floods" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+                <a href="https://www.bbc.co.uk/news/science-environment-68783478" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 BBC News</a>
+              </div>
             </li>
             <li class="event-item" style="border-left-color: #eab308;">
               <span class="event-year" style="color: #fde047;">2026: Compound Heatwaves (5 England / 4 Scotland) &amp; Harvest Desiccation</span>
               <p>Hot on the heels of the 2024 waterlogging crisis, the summer of 2026 delivered an unprecedented succession of <strong>5 official Met Office heatwaves across England and 4 in Scotland</strong>. Relentless heat combined with severe summer flash drought desiccated topsoil during the vital grain-filling window. Wheat ears shrivelled prematurely, root vegetables stunted, and UK cereal production suffered another double-digit drop (~16% to 18%), graphically exposing British farming to rapid whiplash between drowned mud and baking drought.</p>
+              <div class="event-sources">
+                <span class="event-sources-label">Sources:</span>
+                <a href="https://www.theccc.org.uk/publication/progress-in-adapting-to-climate-change-2025-report-to-parliament/" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ CCC Adaptation Report (gov.uk)</a>
+                <a href="https://www.metoffice.gov.uk/weather/learn-about/weather/types-of-weather/heatwaves" target="_blank" rel="noopener noreferrer" class="event-source-link gov">🏛️ Met Office</a>
+                <a href="https://www.theguardian.com/environment" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+              </div>
             </li>
             <li class="event-item" style="border-left-color: #eab308;">
               <span class="event-year" style="color: #fde047;">The Synchronous Global Breadbasket Threat (Chatham House / IPCC)</span>
               <p>Over 80% of global grain exports come from just 5 breadbasket regions. Destabilized jet stream wave resonance now threatens to lock high heat and drought across multiple grain belts simultaneously. Under +2°C to +3°C, the odds of synchronous multi-breadbasket harvest failure rise from 1% per decade to over 10% per year, triggering catastrophic global food trade bans.</p>
+              <div class="event-sources">
+                <span class="event-sources-label">Sources:</span>
+                <a href="https://www.chathamhouse.org/2021/09/climate-change-risk-assessment-2021" target="_blank" rel="noopener noreferrer" class="event-source-link">📜 Chatham House Assessment</a>
+                <a href="https://www.ipcc.ch/report/ar6/wg2/chapter/chapter-5/" target="_blank" rel="noopener noreferrer" class="event-source-link">🌐 IPCC AR6 WGII Food</a>
+                <a href="https://www.theguardian.com/environment/2021/sep/14/global-food-supplies-will-be-hit-by-climate-crisis-if-no-action-taken" target="_blank" rel="noopener noreferrer" class="event-source-link news">📰 The Guardian</a>
+              </div>
             </li>
           </ul>
         </div>
