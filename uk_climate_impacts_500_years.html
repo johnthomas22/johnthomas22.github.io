@@ -455,23 +455,18 @@
     }
     .projections-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 16px;
       margin-top: 14px;
-    }
-    @media (max-width: 980px) {
-      .projections-grid {
-        grid-template-columns: 1fr;
-      }
     }
     .projection-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 18px;
+      padding: 18px 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       transition: transform 0.15s ease, border-color 0.15s ease;
     }
     .projection-card:hover {
@@ -480,21 +475,42 @@
     }
     .proj-header {
       display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 10px;
+    }
+    .proj-title-row {
+      display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
     .proj-title {
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       font-weight: 800;
       color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.25;
     }
     .proj-badge {
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 2px 7px;
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      padding: 3px 8px;
       border-radius: 4px;
       white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .proj-subtitle {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      line-height: 1.4;
+      display: block;
+      width: 100%;
     }
     .proj-chart-wrap {
       width: 100%;
@@ -928,11 +944,11 @@
         <!-- GRAPH 1: MEAN PEAK RIVER FLOWS & WINTER FLOOD PROJECTIONS -->
         <div class="projection-card" style="border-top: 3px solid #38bdf8;">
           <div class="proj-header">
-            <div>
-              <div class="proj-title">🌊 Winter Peak River Flows &amp; Extreme Deluges</div>
-              <span style="font-size: 0.72rem; color: #94a3b8;">Catchment runoff anomaly vs 1961–1990 baseline</span>
+            <div class="proj-title-row">
+              <div class="proj-title">🌊 Winter Peak River Flows &amp; Deluges</div>
+              <span class="proj-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">+20% to +35% by 2050</span>
             </div>
-            <span class="proj-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">+20% to +35% by 2050</span>
+            <span class="proj-subtitle">Catchment runoff anomaly vs <span style="white-space: nowrap;">1961–1990 baseline</span></span>
           </div>
 
           <div class="proj-chart-wrap">
@@ -1000,11 +1016,11 @@
         <!-- GRAPH 2: UK WILDFIRE FREQUENCY & LAND AREA BURNED -->
         <div class="projection-card" style="border-top: 3px solid #f43f5e;">
           <div class="proj-header">
-            <div>
-              <div class="proj-title">🔥 Wildfire Frequency &amp; Burn Area Surge</div>
-              <span style="font-size: 0.72rem; color: #94a3b8;">Hectares burned annually &amp; high fire weather days</span>
+            <div class="proj-title-row">
+              <div class="proj-title">🔥 Wildfire Frequency &amp; Burn Area</div>
+              <span class="proj-badge" style="background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.4);">3×–5× Danger Days</span>
             </div>
-            <span class="proj-badge" style="background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.4);">3×–5× Danger Days</span>
+            <span class="proj-subtitle">Annual hectares burned &amp; severe fire weather days</span>
           </div>
 
           <div class="proj-chart-wrap">
@@ -1065,11 +1081,11 @@
         <!-- GRAPH 3: AGRICULTURAL YIELD VOLATILITY & CROP SHOCKS -->
         <div class="projection-card" style="border-top: 3px solid #eab308;">
           <div class="proj-header">
-            <div>
-              <div class="proj-title">🌾 UK Crop Yield Whiplash &amp; Failure Odds</div>
-              <span style="font-size: 0.72rem; color: #94a3b8;">Arable yield volatility &amp; synchronous shock probability</span>
+            <div class="proj-title-row">
+              <div class="proj-title">🌾 Crop Yield Whiplash &amp; Failure Odds</div>
+              <span class="proj-badge" style="background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4);">&gt;10%/yr Failure Risk</span>
             </div>
-            <span class="proj-badge" style="background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4);">&gt;10%/yr Failure Risk</span>
+            <span class="proj-subtitle">Arable yield volatility &amp; synchronous shock probability</span>
           </div>
 
           <div class="proj-chart-wrap">
