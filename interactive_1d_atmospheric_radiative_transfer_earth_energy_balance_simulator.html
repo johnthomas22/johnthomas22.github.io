@@ -1130,28 +1130,6 @@
       box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
       color: #fff;
     }
-    #lblToggleEnergy.chart-bottom-btn {
-      border-color: rgba(0, 229, 255, 0.45);
-      color: var(--cyan);
-      background: rgba(0, 229, 255, 0.08);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      user-select: none;
-    }
-    #lblToggleEnergy.chart-bottom-btn:hover {
-      background: rgba(0, 229, 255, 0.18);
-      border-color: var(--cyan);
-      box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
-      color: #fff;
-    }
-    #lblToggleEnergy.chart-bottom-btn.active {
-      background: rgba(0, 229, 255, 0.24);
-      border-color: var(--cyan);
-      color: #fff;
-      box-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
-    }
     .app-wrapper.simple-mode .chart-actions-bottom,
     .app-wrapper.simple-mode #btnZoomKeeling {
       display: none !important;
@@ -2087,10 +2065,6 @@
           <button type="button" class="chart-bottom-btn" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
             <span>🔍</span> 1-Million-Year Comparison
           </button>
-          <label class="chart-bottom-btn" id="lblToggleEnergy" title="Plot cumulative atmospheric heat energy increase (Zettajoules, 1 ZJ = 10²¹ Joules) over time as a bright blue curve">
-            <input type="checkbox" id="chkShowEnergy" style="accent-color: var(--cyan); cursor: pointer; width: 13px; height: 13px; margin: 0;" />
-            <span>⚡ <strong>Atmospheric Energy (ZJ)</strong></span>
-          </label>
           <a href="what_can_i_do.html?from=advanced" class="chart-bottom-btn" id="btnWhatCanIDoBottom" style="border-color: rgba(52, 211, 153, 0.45); color: #34d399; background: rgba(52, 211, 153, 0.08); text-decoration: none;" title="Explore individual &amp; civic climate pathways">
             <span>🌱</span> <strong>What Can I Do About It? →</strong>
           </a>
@@ -6154,17 +6128,11 @@
         return 1.14;
       }
 
-      // Atmospheric Heat Capacity Coefficient (Zettajoules per °C of surface warming)
-      // Reference: GCOS / von Schuckmann et al. (2020, 2023, ESSD); IPCC AR6 Chapter 7
-      // Combines sensible heat of atmospheric column (~5.2 ZJ/K) + Clausius-Clapeyron moisture expansion (~1.3 ZJ/K)
-      const ATMOS_HEAT_COEFF_ZJ_PER_C = 6.5;
-
       let state = {
         co2: BASELINE_1958_PT.co2,
         rate: 2.5,
         isNZ2050: false,
         isZoomed: false, // Instrumental Keeling Era zoom view (1958–2026)
-        showEnergy: false, // Optional bright blue curve for Atmospheric Heat Energy (ZJ)
         deltaTs: BASELINE_1958_PT.deltaTs,
         deltaTd: BASELINE_1958_PT.deltaTd,
         year: 1958,
@@ -7833,22 +7801,12 @@
             const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
             ctx.fillStyle = "#ef4444";
             ctx.fillText("··· Emissions Alt. (z_eff)", legLeft + co2W + 14, 44);
-            if (state.showEnergy) {
-              const zW = ctx.measureText("··· Emissions Alt. (z_eff)").width;
-              ctx.fillStyle = "#00e5ff";
-              ctx.fillText("■ Atmospheric Energy (ZJ)", legLeft + co2W + 14 + zW + 14, 44);
-            }
           } else {
             ctx.fillText("■ Atmospheric CO₂ (ppm)", co2X, legY);
             const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
             ctx.fillStyle = "#ef4444";
             const zX = co2X + co2W + 14;
             ctx.fillText("··· Emissions Alt. (z_eff)", zX, legY);
-            if (state.showEnergy) {
-              const zW = ctx.measureText("··· Emissions Alt. (z_eff)").width;
-              ctx.fillStyle = "#00e5ff";
-              ctx.fillText("■ Atmospheric Energy (ZJ)", zX + zW + 14, legY);
-            }
           }
         } else {
           ctx.fillStyle = "#f59e0b";
@@ -7866,11 +7824,6 @@
             const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
             ctx.fillStyle = "#ef4444";
             ctx.fillText("··· Emissions Alt. (z_eff)", legLeft + co2W + 14, 44);
-            if (state.showEnergy) {
-              const zW = ctx.measureText("··· Emissions Alt. (z_eff)").width;
-              ctx.fillStyle = "#00e5ff";
-              ctx.fillText("■ Atmospheric Energy (ZJ)", legLeft + co2W + 14 + zW + 14, 44);
-            }
           } else {
             const co2LegendX = dtSimLegendX + dtSimLegendW + 14;
             ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
@@ -7879,15 +7832,11 @@
             ctx.fillStyle = "#ef4444";
             const zeffLegendX = co2LegendX + co2LegendW + 14;
             ctx.fillText("··· Emissions Alt. (z_eff)", zeffLegendX, legY);
-            const zeffLegendW = ctx.measureText("··· Emissions Alt. (z_eff)").width;
 
-            if (state.showEnergy) {
-              ctx.fillStyle = "#00e5ff";
-              ctx.fillText("■ Atmospheric Energy (ZJ)", zeffLegendX + zeffLegendW + 14, legY);
-            } else if (tGridW > 980) {
+            if (tGridW > 880) {
               ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
               ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
-              ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", zeffLegendX + zeffLegendW + 14, legY);
+              ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", zeffLegendX + ctx.measureText("··· Emissions Alt. (z_eff)").width + 14, legY);
             }
           }
         }
@@ -7940,7 +7889,6 @@
         function yrToX(yr) { return tGridLeft + ((yr - yrStart) / yrSpan) * tGridW; }
         function dtToY(dTemp) { return tGridBottom - ((dTemp - tempMin) / tempSpan) * tGridH; }
         function co2ToY(c) { return tGridBottom - ((c - co2Min) / co2Span) * tGridH; }
-        function energyToY(zj) { return dtToY(zj / ATMOS_HEAT_COEFF_ZJ_PER_C - OFFSET_1850_1900); }
         const zEffMin = 4800, zEffMax = 6000;
         function zEffToY(zm) { return tGridBottom - ((zm - zEffMin) / (zEffMax - zEffMin)) * tGridH; }
 
@@ -8271,68 +8219,7 @@
           }
         }
 
-        // 6. Optional Atmospheric Heat Energy Curve (Bright Blue #00e5ff)
-        if (state.showEnergy) {
-          ctx.save();
-          ctx.strokeStyle = "#00e5ff";
-          ctx.lineWidth = 2.2;
-          ctx.shadowColor = "rgba(0, 229, 255, 0.60)";
-          ctx.shadowBlur = 6;
-          ctx.beginPath();
-          let eStarted = false;
-
-          // Static Historical Energy (1750–2026 or 1958–2026 in zoom mode)
-          const ptsForEnergy = state.isZoomed
-            ? STATIC_HISTORICAL_RUN.filter(p => p.year >= 1958 && p.year <= 2026)
-            : STATIC_HISTORICAL_RUN;
-
-          ptsForEnergy.forEach(pt => {
-            const ezj = Math.max(0, pt.deltaTs * ATMOS_HEAT_COEFF_ZJ_PER_C);
-            const cx = yrToX(pt.year);
-            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, energyToY(ezj)));
-            if (!eStarted) { ctx.moveTo(cx, cy); eStarted = true; } else { ctx.lineTo(cx, cy); }
-          });
-          ctx.stroke();
-
-          // Dynamic continuation beyond 2026
-          if (!state.isZoomed && state.history && state.history.length > 0 && state.year > 2026) {
-            ctx.beginPath();
-            let eDynStarted = false;
-            for (let i = 0; i < state.history.length; i++) {
-              const pt = state.history[i];
-              if (pt.year >= 2026) {
-                const ezj = Math.max(0, pt.deltaTs * ATMOS_HEAT_COEFF_ZJ_PER_C);
-                const cx = yrToX(pt.year);
-                const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, energyToY(ezj)));
-                if (!eDynStarted) { ctx.moveTo(cx, cy); eDynStarted = true; } else { ctx.lineTo(cx, cy); }
-              }
-            }
-            if (eDynStarted) ctx.stroke();
-          }
-
-          // Atmospheric Energy Y-Axis Tick Badges (Bright Blue #00e5ff on Left-Inner Grid Margin)
-          const energyTicks = state.isZoomed ? [2, 4, 6, 8, 10] : [5, 10, 15, 20, 25, 30, 35];
-          energyTicks.forEach(ez => {
-            const ey = energyToY(ez);
-            if (ey >= tGridTop + 12 && ey <= tGridBottom - 10) {
-              ctx.strokeStyle = "rgba(0, 229, 255, 0.18)";
-              ctx.setLineDash([2, 4]);
-              ctx.beginPath();
-              ctx.moveTo(tGridLeft, ey);
-              ctx.lineTo(tGridRight, ey);
-              ctx.stroke();
-              ctx.setLineDash([]);
-
-              ctx.fillStyle = "#00e5ff";
-              ctx.font = "bold 9px ui-monospace, monospace";
-              ctx.textAlign = "left";
-              ctx.fillText(`+${ez} ZJ`, tGridLeft + 6, ey - 3);
-            }
-          });
-          ctx.restore();
-        }
-
-        // 7. Planetary Emissions Altitude (z_eff) Curve (Red Dotted Line)
+        // 6. Planetary Emissions Altitude (z_eff) Curve (Red Dotted Line)
         if (!state.isZoomed || state.year >= 1958) {
           ctx.save();
           ctx.strokeStyle = "rgba(239, 68, 68, 0.88)";
@@ -8712,26 +8599,15 @@
           const tempLineY = (simDt !== null && hoverYr >= 1958) ? dtToY(simDt) : (hoverDt !== null ? dtToY(hoverDt) : -999);
           const measLineY = (measDt !== null && hoverYr >= 1958) ? dtToY(measDt) : tempLineY;
           const co2LineY = hoverCo2 !== null ? co2ToY(hoverCo2) : -999;
-          const hoverEZJ = (simDt !== null && hoverYr >= 1958)
-            ? Math.max(0, (simDt + OFFSET_1850_1900) * ATMOS_HEAT_COEFF_ZJ_PER_C)
-            : (hoverDt !== null ? Math.max(0, (hoverDt + OFFSET_1850_1900) * ATMOS_HEAT_COEFF_ZJ_PER_C) : 0);
-          const energyLineY = energyToY(hoverEZJ);
-          const distEnergy = state.showEnergy ? Math.abs(mousePos.y - energyLineY) : 999;
-          const distMeas = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026) ? Math.abs(mousePos.y - measLineY) : 999;
-          const distSim = (simDt !== null && hoverYr >= 1958) ? Math.abs(mousePos.y - tempLineY) : 999;
-          const distTemp = Math.min(distMeas, distSim, (hoverDt !== null ? Math.abs(mousePos.y - dtToY(hoverDt)) : 999));
-          const distCo2 = Math.abs(mousePos.y - co2LineY);
-
           const curDeltaTs = (simDt !== null && hoverYr >= 1958) ? (simDt + OFFSET_1850_1900) : ((hoverDt !== null) ? (hoverDt + OFFSET_1850_1900) : 0);
           const hoverZeff = getEmissionsAltitudeM(hoverYr, curDeltaTs, hoverCo2);
           const zeffLineY = zEffToY(hoverZeff);
           const distZeff = (!state.isZoomed || hoverYr >= 1958) ? Math.abs(mousePos.y - zeffLineY) : 999;
-          const isOverZeffLine = distZeff <= 12 && distZeff < distTemp && distZeff < distCo2 && (!state.showEnergy || distZeff < distEnergy);
+          const isOverZeffLine = distZeff <= 12 && distZeff < distTemp && distZeff < distCo2;
 
-          isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2 && distMeas <= distEnergy && distMeas <= distZeff);
-          const isOverEnergyLine = state.showEnergy && distEnergy <= 14 && distEnergy < distTemp && distEnergy < distCo2 && distEnergy < distZeff;
-          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2 && distTemp <= distEnergy && distTemp <= distZeff;
-          const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp && distCo2 < distEnergy && distCo2 < distZeff;
+          isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2 && distMeas <= distZeff);
+          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2 && distTemp <= distZeff;
+          const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp && distCo2 < distZeff;
 
           // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or left-side orange +0.26°C badge)
           const isOverKeeling = (
@@ -8899,36 +8775,6 @@
             ctx.beginPath();
             ctx.arc(mousePos.x, zeffLineY, 1.5, 0, Math.PI * 2);
             ctx.fill();
-          } else if (isOverEnergyLine) {
-            scheduleHideMeasTempPopover(120);
-            scheduleHideSafe350Popover(120);
-            activeMeasHitbox = null;
-            active350Hitbox = false;
-            isPointerHover = true;
-
-            // Glowing cyan indicator dot on energy curve
-            ctx.fillStyle = "rgba(0, 229, 255, 0.40)";
-            ctx.beginPath();
-            ctx.arc(mousePos.x, energyLineY, 7, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = "#00e5ff";
-            ctx.beginPath();
-            ctx.arc(mousePos.x, energyLineY, 3.5, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = "#ffffff";
-            ctx.beginPath();
-            ctx.arc(mousePos.x, energyLineY, 1.5, 0, Math.PI * 2);
-            ctx.fill();
-
-            const approxTotalTrappedZJ = Math.round(hoverEZJ * 60);
-            activeTip = {
-              text: `${Math.round(hoverYr)} Atmospheric Heat: +${hoverEZJ.toFixed(1)} ZJ (+${(hoverEZJ * 1000).toFixed(0)} EJ) · Total Trapped Earth Energy: ~${approxTotalTrappedZJ} ZJ (Ocean 89%, Atmosphere ~1.7%)`,
-              stroke: "#00e5ff",
-              pointX: mousePos.x,
-              pointY: energyLineY
-            };
           } else if (isOverKeeling) {
             scheduleHideMeasTempPopover(120);
             scheduleHideSafe350Popover(120);
@@ -11465,17 +11311,6 @@
 
       const btnZoomKeeling = document.getElementById("btnZoomKeeling");
       if (btnZoomKeeling) btnZoomKeeling.addEventListener("click", toggleZoomKeeling);
-
-      // Atmospheric Energy Trajectory Curve Checkbox Toggle
-      const chkShowEnergy = document.getElementById("chkShowEnergy");
-      if (chkShowEnergy) {
-        chkShowEnergy.addEventListener("change", e => {
-          state.showEnergy = e.target.checked;
-          const lbl = document.getElementById("lblToggleEnergy");
-          if (lbl) lbl.classList.toggle("active", state.showEnergy);
-          draw();
-        });
-      }
 
       // =========================================================================
       // POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR ENGINE
