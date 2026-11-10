@@ -100,7 +100,8 @@
 
     /* Mode Switcher (Simple Intro vs Advanced) */
     .mode-switch-group {
-      display: inline-flex;
+      display: flex;
+      flex-wrap: wrap;
       background: var(--card-inner);
       border: 1px solid var(--border);
       border-radius: 7px;
@@ -829,8 +830,8 @@
 
     .controls-panel {
       display: grid;
-      grid-template-columns: minmax(360px, 1.25fr) minmax(310px, 1fr) minmax(320px, 1.05fr);
-      gap: 16px;
+      grid-template-columns: minmax(300px, 1.15fr) minmax(260px, 1fr) minmax(280px, 1fr);
+      gap: 12px;
       align-items: stretch;
       width: 100%;
     }
@@ -841,15 +842,7 @@
       justify-content: space-between;
       box-sizing: border-box;
     }
-    @media (max-width: 1180px) {
-      .controls-panel {
-        grid-template-columns: 1.2fr 1fr;
-      }
-      .radiative-flux-card {
-        grid-column: 1 / -1;
-      }
-    }
-    @media (max-width: 768px) {
+    @media (max-width: 960px) {
       .controls-panel {
         grid-template-columns: 1fr;
       }
@@ -1896,7 +1889,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v1.9</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v2.0</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -2866,7 +2859,7 @@
                 <div>Current: <strong>~0.5 TWh (500 GWh)</strong> · LCOS: <strong>$0.18–$0.35/kWh</strong></div>
                 <div>RTE: <strong>35–48%</strong> · Duration: <strong>Weeks–Months</strong></div>
                 <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">Electrolysis into cavern gas storage. Solves multi-week winter "Dunkelflaute" when wind and solar output both lag.</div>
-                <button type="button" class="btn btn-secondary" onclick="setViewMode('dunkel');" style="width: 100%; font-size: 0.72rem; padding: 4px 8px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4); justify-content: center;">
+                <button type="button" class="btn btn-secondary" id="btnLaunchDunkelFromCard" onclick="setViewMode('dunkel');" style="width: 100%; font-size: 0.72rem; padding: 4px 8px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4); justify-content: center;">
                   🇬🇧 Launch UK Dunkelflaute Simulator &rarr;
                 </button>
               </div>
@@ -3332,7 +3325,7 @@
         <span>·</span>
         <a href="doughnut_economics.html" style="color: #fbbf24; text-decoration: none;">🍩 Doughnut Economics</a>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v1.9</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v2.0</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -3378,7 +3371,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v1.9</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v2.0</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -9596,6 +9589,7 @@
           draw();
         }
       }
+      window.setViewMode = setViewMode;
 
       btnModeSimple.addEventListener("click", () => setViewMode("simple"));
       btnModeAdvanced.addEventListener("click", () => setViewMode("advanced"));
@@ -10868,6 +10862,8 @@
         if (btnJumpSources) btnJumpSources.addEventListener("click", () => setViewMode("sources"));
         const btnJumpDunkel = document.getElementById("btnJumpToDunkelFromSolutions");
         if (btnJumpDunkel) btnJumpDunkel.addEventListener("click", () => setViewMode("dunkel"));
+        const btnLaunchCard = document.getElementById("btnLaunchDunkelFromCard");
+        if (btnLaunchCard) btnLaunchCard.addEventListener("click", () => setViewMode("dunkel"));
         const btnOpenGuide = document.getElementById("btnOpenGuideFromSolutions");
         if (btnOpenGuide) {
           btnOpenGuide.addEventListener("click", () => {
@@ -11334,6 +11330,7 @@
           modalBody.scrollTop = 0;
         }
       }
+      window.setDocPage = setDocPage;
 
       if (modalChapterSelect) {
         modalChapterSelect.addEventListener("change", e => {
