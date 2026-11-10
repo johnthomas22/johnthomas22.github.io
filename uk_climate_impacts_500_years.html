@@ -611,10 +611,10 @@
     }
     .data-table th.num-col,
     .data-table td.num-col {
-      text-align: right;
+      text-align: right !important;
       font-variant-numeric: tabular-nums;
       white-space: nowrap;
-      padding-right: 18px;
+      padding-right: 24px !important;
     }
     .cet-tooltip-wrap {
       position: relative;
@@ -631,21 +631,21 @@
     .cet-tooltip-wrap .cet-tooltip-content {
       visibility: hidden;
       opacity: 0;
-      width: 260px;
+      width: 270px;
       background: #090e17;
       color: #f1f5f9;
       text-align: left;
       font-size: 0.74rem;
       font-weight: 400;
       line-height: 1.45;
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-radius: 8px;
       border: 1px solid rgba(56, 189, 248, 0.45);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(56, 189, 248, 0.25);
       position: absolute;
-      z-index: 50;
-      bottom: 130%;
-      right: 0;
+      z-index: 100;
+      top: calc(100% + 8px);
+      left: 0;
       transition: opacity 0.2s ease, visibility 0.2s ease;
       pointer-events: none;
       white-space: normal;
@@ -1323,7 +1323,7 @@
             <th>Year</th>
             <th class="num-col">
               <span class="cet-tooltip-wrap" tabindex="0">
-                <abbr class="cet-abbr" title="Central England Temperature (HadCET) — the world's longest continuous instrumental temperature record, recorded continuously since 1659">CET</abbr>
+                <span class="cet-abbr">CET</span>
                 <span class="cet-tooltip-content">
                   <strong style="color: #38bdf8;">Central England Temperature (HadCET)</strong><br>
                   The world's longest continuous instrumental surface temperature series, recorded monthly by UK thermometers since 1659.

@@ -1130,6 +1130,28 @@
       box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
       color: #fff;
     }
+    #lblToggleEnergy.chart-bottom-btn {
+      border-color: rgba(0, 229, 255, 0.45);
+      color: var(--cyan);
+      background: rgba(0, 229, 255, 0.08);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      user-select: none;
+    }
+    #lblToggleEnergy.chart-bottom-btn:hover {
+      background: rgba(0, 229, 255, 0.18);
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+      color: #fff;
+    }
+    #lblToggleEnergy.chart-bottom-btn.active {
+      background: rgba(0, 229, 255, 0.24);
+      border-color: var(--cyan);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
+    }
     .app-wrapper.simple-mode .chart-actions-bottom,
     .app-wrapper.simple-mode #btnZoomKeeling {
       display: none !important;
@@ -2065,6 +2087,10 @@
           <button type="button" class="chart-bottom-btn" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
             <span>🔍</span> 1-Million-Year Comparison
           </button>
+          <label class="chart-bottom-btn" id="lblToggleEnergy" title="Plot cumulative atmospheric heat energy increase (Zettajoules, 1 ZJ = 10²¹ Joules) over time as a bright blue curve">
+            <input type="checkbox" id="chkShowEnergy" style="accent-color: var(--cyan); cursor: pointer; width: 13px; height: 13px; margin: 0;" />
+            <span>⚡ <strong>Atmospheric Energy (ZJ)</strong></span>
+          </label>
           <a href="what_can_i_do.html?from=advanced" class="chart-bottom-btn" id="btnWhatCanIDoBottom" style="border-color: rgba(52, 211, 153, 0.45); color: #34d399; background: rgba(52, 211, 153, 0.08); text-decoration: none;" title="Explore individual &amp; civic climate pathways">
             <span>🌱</span> <strong>What Can I Do About It? →</strong>
           </a>
@@ -5404,7 +5430,21 @@
             At 427 ppm CO₂ in 2026, the model computes an Earth Energy Imbalance of <strong>≈ +0.78 W/m²</strong> being absorbed by the ocean thermal sink (observational satellite & Argo ocean heat content estimates typically report ~0.8 to 1.0+ W/m² due to internal weather variability and aerosol changes), and the model's transient surface temperature anomaly lands precisely at <strong>+1.26 °C</strong> above the 1750 baseline (+1.14 °C above 1850–1900).
           </p>
 
-          <h4>5. Key References & Authoritative Reading</h4>
+          <h4>5. Atmospheric Heat Content &amp; Planetary Energy Accumulation (Zettajoules, ZJ)</h4>
+          <p>
+            The total excess energy trapped by human greenhouse gas emissions is quantified in <strong>Zettajoules (1 ZJ = 10²¹ Joules)</strong>. Driven by Earth's Energy Imbalance (EEI = ASR − OLR), the climate system accumulates thermal energy across four primary physical reservoirs (GCOS / von Schuckmann et al. 2020, 2023, <em>Earth System Science Data</em>; IPCC AR6 Chapter 7):
+          </p>
+          <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px;">
+            <li><strong>Global Ocean (~89% of heat, ~450+ ZJ):</strong> The primary planetary thermal flywheel, absorbing heat down into the intermediate and abyssal waters.</li>
+            <li><strong>Continental Landmasses (~5% of heat, ~25 ZJ):</strong> Subsurface ground heat storage.</li>
+            <li><strong>The Cryosphere (~4% of heat, ~20 ZJ):</strong> Latent heat consumed melting polar ice sheets, sea ice, and alpine glaciers.</li>
+            <li><strong>The Atmosphere (~1.5% to 2% of heat, ~8.5 ZJ in 2026):</strong> Sensible heating of the column air mass (<i>c</i><sub>p</sub>·<i>M</i><sub>air</sub> ≈ 5.2 ZJ/°C) plus latent heat of expanded water vapor (~1.3 ZJ/°C via Clausius-Clapeyron +7%/°C moisture scaling), totaling <strong>≈ 6.5 ZJ per °C of surface warming</strong>.</li>
+          </ul>
+          <p>
+            Toggling the <strong>"⚡ Atmospheric Energy (ZJ)"</strong> checkbox on the 500-year chart plots this thermodynamic energy curve directly as a bright blue trajectory alongside temperature and CO₂.
+          </p>
+
+          <h4>6. Key References &amp; Authoritative Reading</h4>
           <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px;">
             <li>
               <strong>Copernicus Climate Change Service (C3S) — How close are we to reaching a global warming of 1.5°C? (Global Temperature Trend Monitor):</strong><br>
@@ -6096,11 +6136,17 @@
         return 1.14;
       }
 
+      // Atmospheric Heat Capacity Coefficient (Zettajoules per °C of surface warming)
+      // Reference: GCOS / von Schuckmann et al. (2020, 2023, ESSD); IPCC AR6 Chapter 7
+      // Combines sensible heat of atmospheric column (~5.2 ZJ/K) + Clausius-Clapeyron moisture expansion (~1.3 ZJ/K)
+      const ATMOS_HEAT_COEFF_ZJ_PER_C = 6.5;
+
       let state = {
         co2: BASELINE_1958_PT.co2,
         rate: 2.5,
         isNZ2050: false,
         isZoomed: false, // Instrumental Keeling Era zoom view (1958–2026)
+        showEnergy: false, // Optional bright blue curve for Atmospheric Heat Energy (ZJ)
         deltaTs: BASELINE_1958_PT.deltaTs,
         deltaTd: BASELINE_1958_PT.deltaTd,
         year: 1958,
@@ -7658,11 +7704,21 @@
           const dtSimW = ctx.measureText("■ Simulated Warming (Two-Layer EBM)").width;
 
           ctx.fillStyle = "#c084fc";
+          const co2X = dtSimX + dtSimW + 14;
           if (isHeaderTwoLine) {
             ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, 44);
+            if (state.showEnergy) {
+              const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+              ctx.fillStyle = "#00e5ff";
+              ctx.fillText("■ Atmospheric Energy (ZJ)", legLeft + co2W + 14, 44);
+            }
           } else {
-            const co2X = dtSimX + dtSimW + 14;
             ctx.fillText("■ Atmospheric CO₂ (ppm)", co2X, legY);
+            if (state.showEnergy) {
+              const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+              ctx.fillStyle = "#00e5ff";
+              ctx.fillText("■ Atmospheric Energy (ZJ)", co2X + co2W + 14, legY);
+            }
           }
         } else {
           ctx.fillStyle = "#f59e0b";
@@ -7677,12 +7733,20 @@
           ctx.fillStyle = "#c084fc";
           if (isHeaderTwoLine) {
             ctx.fillText("■ Atmospheric CO₂ (ppm)", legLeft, 44);
+            if (state.showEnergy) {
+              const co2W = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
+              ctx.fillStyle = "#00e5ff";
+              ctx.fillText("■ Atmospheric Energy (ZJ)", legLeft + co2W + 14, 44);
+            }
           } else {
             const co2LegendX = dtSimLegendX + dtSimLegendW + 14;
             ctx.fillText("■ Atmospheric CO₂ (ppm)", co2LegendX, legY);
             const co2LegendW = ctx.measureText("■ Atmospheric CO₂ (ppm)").width;
 
-            if (tGridW > 960) {
+            if (state.showEnergy) {
+              ctx.fillStyle = "#00e5ff";
+              ctx.fillText("■ Atmospheric Energy (ZJ)", co2LegendX + co2LegendW + 14, legY);
+            } else if (tGridW > 960) {
               ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
               ctx.font = "italic 9px system-ui, -apple-system, sans-serif";
               ctx.fillText("(IPCC AR6 Observational Baseline · 1750 starts at -0.12°C)", co2LegendX + co2LegendW + 14, legY);
@@ -7738,6 +7802,7 @@
         function yrToX(yr) { return tGridLeft + ((yr - yrStart) / yrSpan) * tGridW; }
         function dtToY(dTemp) { return tGridBottom - ((dTemp - tempMin) / tempSpan) * tGridH; }
         function co2ToY(c) { return tGridBottom - ((c - co2Min) / co2Span) * tGridH; }
+        function energyToY(zj) { return dtToY(zj / ATMOS_HEAT_COEFF_ZJ_PER_C - OFFSET_1850_1900); }
 
         // Right-hand Y-Axis Labels for CO2 in Purple
         const co2Ticks = [];
@@ -8064,6 +8129,67 @@
             ctx.arc(curHeadX, curHeadY, 1.8, 0, Math.PI * 2);
             ctx.fill();
           }
+        }
+
+        // 6. Optional Atmospheric Heat Energy Curve (Bright Blue #00e5ff)
+        if (state.showEnergy) {
+          ctx.save();
+          ctx.strokeStyle = "#00e5ff";
+          ctx.lineWidth = 2.2;
+          ctx.shadowColor = "rgba(0, 229, 255, 0.60)";
+          ctx.shadowBlur = 6;
+          ctx.beginPath();
+          let eStarted = false;
+
+          // Static Historical Energy (1750–2026 or 1958–2026 in zoom mode)
+          const ptsForEnergy = state.isZoomed
+            ? STATIC_HISTORICAL_RUN.filter(p => p.year >= 1958 && p.year <= 2026)
+            : STATIC_HISTORICAL_RUN;
+
+          ptsForEnergy.forEach(pt => {
+            const ezj = Math.max(0, pt.deltaTs * ATMOS_HEAT_COEFF_ZJ_PER_C);
+            const cx = yrToX(pt.year);
+            const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, energyToY(ezj)));
+            if (!eStarted) { ctx.moveTo(cx, cy); eStarted = true; } else { ctx.lineTo(cx, cy); }
+          });
+          ctx.stroke();
+
+          // Dynamic continuation beyond 2026
+          if (!state.isZoomed && state.history && state.history.length > 0 && state.year > 2026) {
+            ctx.beginPath();
+            let eDynStarted = false;
+            for (let i = 0; i < state.history.length; i++) {
+              const pt = state.history[i];
+              if (pt.year >= 2026) {
+                const ezj = Math.max(0, pt.deltaTs * ATMOS_HEAT_COEFF_ZJ_PER_C);
+                const cx = yrToX(pt.year);
+                const cy = Math.max(tGridTop + 1, Math.min(tGridBottom, energyToY(ezj)));
+                if (!eDynStarted) { ctx.moveTo(cx, cy); eDynStarted = true; } else { ctx.lineTo(cx, cy); }
+              }
+            }
+            if (eDynStarted) ctx.stroke();
+          }
+
+          // Atmospheric Energy Y-Axis Tick Badges (Bright Blue #00e5ff on Left-Inner Grid Margin)
+          const energyTicks = state.isZoomed ? [2, 4, 6, 8, 10] : [5, 10, 15, 20, 25, 30, 35];
+          energyTicks.forEach(ez => {
+            const ey = energyToY(ez);
+            if (ey >= tGridTop + 12 && ey <= tGridBottom - 10) {
+              ctx.strokeStyle = "rgba(0, 229, 255, 0.18)";
+              ctx.setLineDash([2, 4]);
+              ctx.beginPath();
+              ctx.moveTo(tGridLeft, ey);
+              ctx.lineTo(tGridRight, ey);
+              ctx.stroke();
+              ctx.setLineDash([]);
+
+              ctx.fillStyle = "#00e5ff";
+              ctx.font = "bold 9px ui-monospace, monospace";
+              ctx.textAlign = "left";
+              ctx.fillText(`+${ez} ZJ`, tGridLeft + 6, ey - 3);
+            }
+          });
+          ctx.restore();
         }
 
         // Helper to find temperature delta at a given year along the static historical curve (relative to 1850–1900 baseline)
@@ -8395,13 +8521,19 @@
           const tempLineY = (simDt !== null && hoverYr >= 1958) ? dtToY(simDt) : (hoverDt !== null ? dtToY(hoverDt) : -999);
           const measLineY = (measDt !== null && hoverYr >= 1958) ? dtToY(measDt) : tempLineY;
           const co2LineY = hoverCo2 !== null ? co2ToY(hoverCo2) : -999;
+          const hoverEZJ = (simDt !== null && hoverYr >= 1958)
+            ? Math.max(0, (simDt + OFFSET_1850_1900) * ATMOS_HEAT_COEFF_ZJ_PER_C)
+            : (hoverDt !== null ? Math.max(0, (hoverDt + OFFSET_1850_1900) * ATMOS_HEAT_COEFF_ZJ_PER_C) : 0);
+          const energyLineY = energyToY(hoverEZJ);
+          const distEnergy = state.showEnergy ? Math.abs(mousePos.y - energyLineY) : 999;
           const distMeas = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026) ? Math.abs(mousePos.y - measLineY) : 999;
           const distSim = (simDt !== null && hoverYr >= 1958) ? Math.abs(mousePos.y - tempLineY) : 999;
           const distTemp = Math.min(distMeas, distSim, (hoverDt !== null ? Math.abs(mousePos.y - dtToY(hoverDt)) : 999));
           const distCo2 = Math.abs(mousePos.y - co2LineY);
-          isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2);
-          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2;
-          const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp;
+          isOverMeasLine = (measDt !== null && hoverYr >= 1958 && hoverYr <= 2026 && distMeas <= 14 && distMeas <= distCo2 && distMeas <= distEnergy);
+          const isOverEnergyLine = state.showEnergy && distEnergy <= 14 && distEnergy < distTemp && distEnergy < distCo2;
+          const isOverTempLine = (hoverDt !== null || simDt !== null) && distTemp <= 14 && distTemp <= distCo2 && distTemp <= distEnergy;
+          const isOverCo2Line = hoverCo2 !== null && distCo2 <= 10 && distCo2 < distTemp && distCo2 < distEnergy;
 
           // Check 1958 Keeling (dashed line, rotated orange label "1958 Keeling", or left-side orange +0.26°C badge)
           const isOverKeeling = (
@@ -8544,6 +8676,36 @@
               compact: true,
               pointX: mousePos.x,
               pointY: co2LineY
+            };
+          } else if (isOverEnergyLine) {
+            scheduleHideMeasTempPopover(120);
+            scheduleHideSafe350Popover(120);
+            activeMeasHitbox = null;
+            active350Hitbox = false;
+            isPointerHover = true;
+
+            // Glowing cyan indicator dot on energy curve
+            ctx.fillStyle = "rgba(0, 229, 255, 0.40)";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, energyLineY, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#00e5ff";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, energyLineY, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(mousePos.x, energyLineY, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            const approxTotalTrappedZJ = Math.round(hoverEZJ * 60);
+            activeTip = {
+              text: `${Math.round(hoverYr)} Atmospheric Heat: +${hoverEZJ.toFixed(1)} ZJ (+${(hoverEZJ * 1000).toFixed(0)} EJ) · Total Trapped Earth Energy: ~${approxTotalTrappedZJ} ZJ (Ocean 89%, Atmosphere ~1.7%)`,
+              stroke: "#00e5ff",
+              pointX: mousePos.x,
+              pointY: energyLineY
             };
           } else if (isOverKeeling) {
             scheduleHideMeasTempPopover(120);
@@ -11077,6 +11239,17 @@
 
       const btnZoomKeeling = document.getElementById("btnZoomKeeling");
       if (btnZoomKeeling) btnZoomKeeling.addEventListener("click", toggleZoomKeeling);
+
+      // Atmospheric Energy Trajectory Curve Checkbox Toggle
+      const chkShowEnergy = document.getElementById("chkShowEnergy");
+      if (chkShowEnergy) {
+        chkShowEnergy.addEventListener("change", e => {
+          state.showEnergy = e.target.checked;
+          const lbl = document.getElementById("lblToggleEnergy");
+          if (lbl) lbl.classList.toggle("active", state.showEnergy);
+          draw();
+        });
+      }
 
       // =========================================================================
       // POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR ENGINE
