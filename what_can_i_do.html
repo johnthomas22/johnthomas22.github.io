@@ -540,40 +540,58 @@
     .food-bars-wrap {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 10px;
+      margin-top: 12px;
     }
     .food-bar-row {
-      display: flex;
+      display: grid;
+      grid-template-columns: 210px 1fr 145px;
       align-items: center;
-      gap: 10px;
-      font-size: 0.78rem;
+      gap: 12px;
+      font-size: 0.8rem;
     }
     .food-bar-label {
-      width: 180px;
-      flex-shrink: 0;
       font-weight: 700;
       color: #e2e8f0;
+      white-space: nowrap;
     }
     .food-bar-track {
-      flex: 1;
       background: #0f172a;
-      height: 18px;
+      height: 16px;
       border-radius: 4px;
       overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       position: relative;
     }
     .food-bar-fill {
       height: 100%;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      padding-right: 6px;
-      justify-content: flex-end;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    .food-bar-val {
       font-family: var(--font-mono);
-      font-size: 0.68rem;
+      font-size: 0.76rem;
       font-weight: 800;
-      color: #000;
+      white-space: nowrap;
+      text-align: right;
+    }
+    @media (max-width: 680px) {
+      .food-bar-row {
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 4px 8px;
+      }
+      .food-bar-label {
+        grid-column: 1;
+      }
+      .food-bar-val {
+        grid-column: 2;
+        text-align: right;
+      }
+      .food-bar-track {
+        grid-column: 1 / -1;
+        height: 12px;
+      }
     }
 
     /* FOOTER */
@@ -1072,7 +1090,7 @@
         </div>
 
         <p>
-          A common intuition is that eating local food is the best way to cut carbon. While supporting local farmers is fantastic for community resilience and fresh produce, <strong>food transport accounts for only ~5% to 6% of food's total carbon footprint</strong> (Poore &amp; Nemecek, <em>Science</em> 2018). The emissions released during food production—enteric methane, deforestation, fertilisers, and manure—dominate by an order of magnitude.
+          A common intuition is that eating local food is the best way to cut carbon. While supporting local farmers is fantastic for community resilience and fresh produce, <a href="https://ourworldindata.org/food-choice-vs-eating-local" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;"><strong>food transport accounts for only ~5% to 6% of food's total carbon footprint</strong></a> (Poore &amp; Nemecek, <em>Science</em> 2018; Our World in Data). The emissions released during food production—enteric methane, deforestation, fertilisers, and manure—dominate by an order of magnitude.
         </p>
 
         <!-- THE 10,000 MILE FRUIT COMPARISON -->
@@ -1089,38 +1107,61 @@
             <div class="food-bar-row">
               <span class="food-bar-label">🥩 Beef (Local Grass-fed):</span>
               <div class="food-bar-track">
-                <div class="food-bar-fill" style="width: 100%; background: #f43f5e;">~80–100 kg CO₂e/kg</div>
+                <div class="food-bar-fill" style="width: 100%; background: #f43f5e;"></div>
               </div>
+              <span class="food-bar-val" style="color: #f43f5e;">~80–100 kg CO₂e/kg</span>
             </div>
             <div class="food-bar-row">
               <span class="food-bar-label">🐑 Lamb (UK Pasture):</span>
               <div class="food-bar-track">
-                <div class="food-bar-fill" style="width: 40%; background: #fb7185;">~35–40 kg CO₂e/kg</div>
+                <div class="food-bar-fill" style="width: 40%; background: #fb7185;"></div>
               </div>
+              <span class="food-bar-val" style="color: #fb7185;">~35–40 kg CO₂e/kg</span>
             </div>
             <div class="food-bar-row">
               <span class="food-bar-label">✈️ Fruit Flown 10,000 Miles:</span>
               <div class="food-bar-track">
-                <div class="food-bar-fill" style="width: 18%; background: #f59e0b;">~15–18 kg CO₂e/kg</div>
+                <div class="food-bar-fill" style="width: 18%; background: #f59e0b;"></div>
               </div>
+              <span class="food-bar-val" style="color: #f59e0b;">~15–18 kg CO₂e/kg</span>
             </div>
             <div class="food-bar-row">
               <span class="food-bar-label">🍗 Poultry / Eggs:</span>
               <div class="food-bar-track">
-                <div class="food-bar-fill" style="width: 8%; background: #38bdf8;">~5–7 kg CO₂e/kg</div>
+                <div class="food-bar-fill" style="width: 8%; background: #38bdf8;"></div>
               </div>
+              <span class="food-bar-val" style="color: #38bdf8;">~5–9 kg CO₂e/kg</span>
             </div>
             <div class="food-bar-row">
               <span class="food-bar-label">🚢 Fruit Shipped 10,000 Miles:</span>
               <div class="food-bar-track">
-                <div class="food-bar-fill" style="width: 1.5%; background: #10b981; min-width: 25px;">0.4 kg</div>
+                <div class="food-bar-fill" style="width: 2%; background: #10b981;"></div>
               </div>
+              <span class="food-bar-val" style="color: #10b981;">~0.4–0.7 kg CO₂e/kg</span>
             </div>
             <div class="food-bar-row">
               <span class="food-bar-label">🫘 Beans, Peas &amp; Lentils:</span>
               <div class="food-bar-track">
-                <div class="food-bar-fill" style="width: 1.5%; background: #10b981; min-width: 25px;">0.5 kg</div>
+                <div class="food-bar-fill" style="width: 2%; background: #10b981;"></div>
               </div>
+              <span class="food-bar-val" style="color: #10b981;">~0.4–0.9 kg CO₂e/kg</span>
+            </div>
+          </div>
+
+          <!-- SOURCE CITATION & OUR WORLD IN DATA LINKS -->
+          <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(245, 158, 11, 0.35); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 0.78rem;">
+            <div style="display: flex; align-items: center; gap: 6px; color: #cbd5e1;">
+              <span>📊</span>
+              <span><strong>Data Sources:</strong> <a href="https://ourworldindata.org/food-choice-vs-eating-local" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 700; text-decoration: underline;">Our World in Data</a> (Dr. Hannah Ritchie) &amp; Oxford University (<a href="https://doi.org/10.1126/science.aaq0216" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">Poore &amp; Nemecek, <em>Science</em> 2018</a>)</span>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <a href="https://ourworldindata.org/grapher/food-emissions-production-vs-transport" target="_blank" rel="noopener noreferrer" style="color: #fbbf24; font-weight: 700; text-decoration: underline; display: inline-flex; align-items: center; gap: 4px;">
+                📈 OWID Interactive Supply Chain Chart ↗
+              </a>
+              <span style="color: #64748b;">·</span>
+              <a href="https://ourworldindata.org/environmental-impacts-of-food" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 700; text-decoration: underline; display: inline-flex; align-items: center; gap: 4px;">
+                Environmental Impacts of Food ↗
+              </a>
             </div>
           </div>
         </div>
