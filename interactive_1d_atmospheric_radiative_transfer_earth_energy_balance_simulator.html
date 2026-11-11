@@ -6662,6 +6662,9 @@
     </button>
   </div>
 
+  <!-- EMISSIONS ALTITUDE (ZEFF) BRIEF TOOLTIP (Shows on line hover; hovering this opens full details) -->
+  <div id="zeffBriefTooltip" style="display: none; position: fixed; z-index: 2490; background: #070d17; border: 1.4px solid #ef4444; border-radius: 6px; padding: 8px 11px; max-width: 300px; color: #ffffff; font-size: 0.72rem; line-height: 1.45; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.85); cursor: help; pointer-events: auto;"></div>
+
   <!-- EMISSIONS ALTITUDE (ZEFF) POPOVER TOOLTIP -->
   <div class="safe-350-popover" id="zeffPopover" style="border-color: rgba(239, 68, 68, 0.45); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 18px rgba(239, 68, 68, 0.25);">
     <div class="s350-header">
@@ -6872,14 +6875,14 @@
       canvas.addEventListener("mouseleave", () => {
         mousePos.active = false;
         isHoveringMainTpBadge = false;
-        scheduleHideTippingPointCard(150);
-        scheduleHideMeasTempPopover(150);
-        scheduleHideSafe350Popover(150);
-        scheduleHideZeffPopover(150);
         activeMeasHitbox = null;
         active350Hitbox = false;
         isHovering350Line = false;
         isHoveringZeffLine = false;
+        scheduleHideTippingPointCard(150);
+        scheduleHideMeasTempPopover(150);
+        scheduleHideSafe350Popover(150);
+        scheduleHideZeffPopover(180);
       });
 
       // Stationary Greenhouse Gas Molecules (Density decreases exponentially with altitude, +100% density)
@@ -7657,14 +7660,17 @@
         return Math.max(3000, Math.min(10000, (currentTs - teffC) / LAPSE_RATE));
       }
 
-      // Interactive Emissions Altitude (z_eff) Popover Elements & State
+      // Interactive Emissions Altitude (z_eff) Two-Stage Tooltip & Popover
+      const zeffBriefTooltipEl = document.getElementById("zeffBriefTooltip");
       const zeffPopoverEl = document.getElementById("zeffPopover");
       const zeffCloseBtn = document.getElementById("zeffCloseBtn");
       const zeffLinkBtn = document.getElementById("zeffLinkBtn");
       const zeffStatsEl = document.getElementById("zeffStats");
       let zeffHideTimer = null;
+      let isHoveringZeffBrief = false;
       let isHoveringZeffPopover = false;
       let isHoveringZeffLine = false;
+      let lastZeffData = { yr: 1958, zeffM: 5028, clientX: 0, clientY: 0 };
 
       function cancelHideZeffPopover() {
         if (zeffHideTimer) {
@@ -7673,18 +7679,47 @@
         }
       }
 
-      function scheduleHideZeffPopover(delay = 140) {
-        if (isHoveringZeffPopover || isHoveringZeffLine) return;
+      function scheduleHideZeffPopover(delay = 160) {
+        if (isHoveringZeffBrief || isHoveringZeffPopover) return;
         if (zeffHideTimer) return;
         zeffHideTimer = setTimeout(() => {
           zeffHideTimer = null;
-          if (!isHoveringZeffPopover && !isHoveringZeffLine) {
+          if (!isHoveringZeffBrief && !isHoveringZeffPopover && !isHoveringZeffLine) {
+            if (zeffBriefTooltipEl) zeffBriefTooltipEl.style.display = "none";
+            if (zeffPopoverEl) zeffPopoverEl.style.display = "none";
+          } else if (isHoveringZeffLine && !isHoveringZeffBrief && !isHoveringZeffPopover) {
             if (zeffPopoverEl) zeffPopoverEl.style.display = "none";
           }
         }, delay);
       }
 
-      function showZeffPopover(year, zeffM, clientX, clientY) {
+      function showZeffBriefTooltip(year, zeffM, clientX, clientY) {
+        cancelHideZeffPopover();
+        if (!zeffBriefTooltipEl) return;
+        lastZeffData = { yr: year, zeffM, clientX, clientY };
+
+        const deltaZ = Math.round(zeffM - 4961);
+        const signZ = deltaZ >= 0 ? "+" : "";
+        zeffBriefTooltipEl.innerHTML = `<span style="color:#f87171;font-weight:700;">${Math.round(year)} CE</span> · Emissions Altitude (<i>z</i><sub>eff</sub>): <strong>${Math.round(zeffM).toLocaleString()} m</strong> (${(zeffM / 1000).toFixed(2)} km, ${signZ}${deltaZ} m vs 1750) — level where thermal IR escapes to space.`;
+
+        zeffBriefTooltipEl.style.display = "block";
+        const briefW = zeffBriefTooltipEl.offsetWidth || 280;
+        const briefH = zeffBriefTooltipEl.offsetHeight || 52;
+        const pad = 12;
+
+        let left = clientX - briefW - 6;
+        if (left < pad) left = clientX + 8;
+        if (left + briefW > window.innerWidth - pad) left = window.innerWidth - briefW - pad;
+
+        let top = clientY - briefH / 2;
+        if (top < pad) top = pad;
+        if (top + briefH > window.innerHeight - pad) top = window.innerHeight - briefH - pad;
+
+        zeffBriefTooltipEl.style.left = `${Math.round(left)}px`;
+        zeffBriefTooltipEl.style.top = `${Math.round(top)}px`;
+      }
+
+      function showZeffPopover(year, zeffM, anchorRect) {
         cancelHideZeffPopover();
         if (!zeffPopoverEl) return;
 
@@ -7699,17 +7734,31 @@
         const cardH = zeffPopoverEl.offsetHeight || 195;
         const pad = 12;
 
-        let left = clientX - cardW / 2;
-        let top = clientY - cardH - 14;
+        const r = anchorRect || (zeffBriefTooltipEl ? zeffBriefTooltipEl.getBoundingClientRect() : null);
+        let left = r ? (r.left + r.width / 2 - cardW / 2) : (lastZeffData.clientX - cardW / 2);
+        let top = r ? (r.top - cardH - 4) : (lastZeffData.clientY - cardH - 14);
 
         if (left < pad) left = pad;
         if (left + cardW > window.innerWidth - pad) left = window.innerWidth - cardW - pad;
         if (top < pad) {
-          top = clientY + 16;
+          top = r ? (r.bottom + 4) : (lastZeffData.clientY + 16);
         }
 
         zeffPopoverEl.style.left = `${Math.round(left)}px`;
         zeffPopoverEl.style.top = `${Math.round(top)}px`;
+      }
+
+      if (zeffBriefTooltipEl) {
+        zeffBriefTooltipEl.addEventListener("mouseenter", () => {
+          isHoveringZeffBrief = true;
+          cancelHideZeffPopover();
+          const bRect = zeffBriefTooltipEl.getBoundingClientRect();
+          showZeffPopover(lastZeffData.yr, lastZeffData.zeffM, bRect);
+        });
+        zeffBriefTooltipEl.addEventListener("mouseleave", () => {
+          isHoveringZeffBrief = false;
+          scheduleHideZeffPopover(160);
+        });
       }
 
       if (zeffPopoverEl) {
@@ -7719,21 +7768,28 @@
         });
         zeffPopoverEl.addEventListener("mouseleave", () => {
           isHoveringZeffPopover = false;
-          scheduleHideZeffPopover(120);
+          scheduleHideZeffPopover(160);
         });
       }
 
       if (zeffCloseBtn) {
         zeffCloseBtn.addEventListener("click", () => {
+          isHoveringZeffBrief = false;
           isHoveringZeffPopover = false;
           isHoveringZeffLine = false;
           cancelHideZeffPopover();
+          if (zeffBriefTooltipEl) zeffBriefTooltipEl.style.display = "none";
           if (zeffPopoverEl) zeffPopoverEl.style.display = "none";
         });
       }
 
       if (zeffLinkBtn) {
         zeffLinkBtn.addEventListener("click", () => {
+          isHoveringZeffBrief = false;
+          isHoveringZeffPopover = false;
+          isHoveringZeffLine = false;
+          if (zeffBriefTooltipEl) zeffBriefTooltipEl.style.display = "none";
+          if (zeffPopoverEl) zeffPopoverEl.style.display = "none";
           const modalOverlay = document.getElementById("modalOverlay");
           if (modalOverlay) {
             modalOverlay.style.display = "flex";
@@ -9282,6 +9338,7 @@
         let isOverMeasLine = false;
         let isOverSafe350 = false;
         let isOverZeffLine = false;
+        let showedZeffThisFrame = false;
 
         const dtVal1958 = getHistoricalDeltaAt(1958);
         const dtVal2026 = getHistoricalDeltaAt(2026);
@@ -9468,7 +9525,10 @@
             active350Hitbox = false;
             isPointerHover = true;
             isHoveringZeffLine = true;
-            showZeffPopover(hoverYr, hoverZeff, rect.left + mousePos.x, rect.top + zeffLineY);
+            showedZeffThisFrame = true;
+            if (!isHoveringZeffBrief && !isHoveringZeffPopover) {
+              showZeffBriefTooltip(hoverYr, hoverZeff, rect.left + mousePos.x, rect.top + zeffLineY);
+            }
 
             // Glowing red indicator dot on Emissions Altitude curve
             ctx.fillStyle = "rgba(239, 68, 68, 0.40)";
@@ -9485,15 +9545,6 @@
             ctx.beginPath();
             ctx.arc(mousePos.x, zeffLineY, 1.5, 0, Math.PI * 2);
             ctx.fill();
-
-            const deltaZ = Math.round(hoverZeff - 4961);
-            const signZ = deltaZ >= 0 ? "+" : "";
-            activeTip = {
-              text: `${Math.round(hoverYr)} CE · Emissions Altitude (z_eff): ${Math.round(hoverZeff).toLocaleString()} m (${(hoverZeff / 1000).toFixed(2)} km, ${signZ}${deltaZ} m vs 1750) — level where thermal IR escapes to space.`,
-              stroke: "#ef4444",
-              pointX: mousePos.x,
-              pointY: zeffLineY
-            };
           } else if (isOverKeeling) {
             scheduleHideMeasTempPopover(120);
             scheduleHideSafe350Popover(120);
@@ -9557,9 +9608,9 @@
           active350Hitbox = false;
           scheduleHideSafe350Popover(140);
         }
-        if (!isOverZeffLine) {
+        if (!showedZeffThisFrame) {
           isHoveringZeffLine = false;
-          scheduleHideZeffPopover(140);
+          scheduleHideZeffPopover(180);
         }
 
         if (activeTip) {
@@ -10228,6 +10279,13 @@
           isHoveringSafe350 = false;
           safe350PopoverEl.style.display = "none";
           active350Hitbox = false;
+        }
+        if (mode !== "advanced") {
+          isHoveringZeffBrief = false;
+          isHoveringZeffPopover = false;
+          isHoveringZeffLine = false;
+          if (zeffBriefTooltipEl) zeffBriefTooltipEl.style.display = "none";
+          if (zeffPopoverEl) zeffPopoverEl.style.display = "none";
         }
         if (isSimple && state.isZoomed) {
           state.isZoomed = false;
