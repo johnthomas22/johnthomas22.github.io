@@ -10108,7 +10108,7 @@
           document.getElementById("headerTitle").textContent = "UK Dünkelflaute & Energy Storage Simulator";
           document.getElementById("headerSubtitle").textContent = "Modeling British wind droughts, required storage volume, and the fiscal/tax cost of hydrogen salt caverns vs batteries";
           updateDunkelCalculations();
-          if (typeof renderHistoricalTreemap === 'function') setTimeout(renderHistoricalTreemap, 50);
+          if (typeof renderHistoricalTreemap === 'function') setTimeout(() => renderHistoricalTreemap(true), 50);
         }
 
         if (isSimple && tpCardEl) {
@@ -11959,7 +11959,10 @@
         return nodes;
       }
 
-      function renderHistoricalTreemap() {
+      let treemapCachedWidth = 0;
+      let treemapCachedHeight = 0;
+
+      function renderHistoricalTreemap(forceLayout = false) {
         const canvas = document.getElementById("historicalEmissionsCanvas");
         const container = document.getElementById("treemapCanvasContainer");
         if (!canvas || !container) return;
@@ -11969,22 +11972,29 @@
         const displayH = Math.max(300, Math.floor(rect.height || 560));
 
         const dpr = window.devicePixelRatio || 1;
-        canvas.width = displayW * dpr;
-        canvas.height = displayH * dpr;
+
+        // Only recreate layout and re-assign canvas buffer dimensions on resize or explicit layout updates
+        if (forceLayout || displayW !== treemapCachedWidth || displayH !== treemapCachedHeight || canvas.width !== displayW * dpr) {
+          treemapCachedWidth = displayW;
+          treemapCachedHeight = displayH;
+          canvas.width = displayW * dpr;
+          canvas.height = displayH * dpr;
+
+          const padding = 2;
+          treemapCalculatedLayout = calculateSquarifiedTreemap(
+            ALL_HISTORICAL_ITEMS,
+            padding,
+            padding,
+            displayW - padding * 2,
+            displayH - padding * 2
+          );
+        }
 
         const ctx = canvas.getContext("2d");
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.scale(dpr, dpr);
-
-        const padding = 2;
-        treemapCalculatedLayout = calculateSquarifiedTreemap(
-          ALL_HISTORICAL_ITEMS,
-          padding,
-          padding,
-          displayW - padding * 2,
-          displayH - padding * 2
-        );
-
-        ctx.clearRect(0, 0, displayW, displayH);
 
         const searchLower = (treemapSearchTerm || "").toLowerCase().trim();
 
@@ -12173,61 +12183,73 @@
 
             if (hit !== activeHoveredNode) {
               activeHoveredNode = hit;
-              renderHistoricalTreemap();
+              renderHistoricalTreemap(false);
             }
 
             if (hit) {
               canvas.style.cursor = hit.rank === 51 ? "pointer" : "crosshair";
+              canvas.title = `${hit.flag} ${hit.name} (${hit.code}) · ${hit.emissions.toFixed(1)} Gt CO₂ (${hit.share.toFixed(2)}%) · Rank #${hit.rank}`;
 
               if (hit.rank === 51) {
-                // Hide standard tooltip and show the rich interactive popover
+                // Rest of the World: Hide standard tooltip and show dedicated interactive popover
                 if (tooltip) tooltip.style.display = "none";
                 showRestOfWorldPopover(e.clientX, e.clientY, false);
               } else {
-                // If popover is not pinned, hide it and show standard tooltip
                 if (!isPinnedRestOfWorld) {
                   hideRestOfWorldPopover(false);
                 }
                 if (tooltip) {
                   tooltip.style.display = "block";
                   tooltip.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding-bottom: 4px;">
-                      <div style="font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
-                        <span>${hit.flag}</span> ${hit.name}
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding-bottom: 6px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.35rem; line-height: 1;">${hit.flag}</span>
+                        <div>
+                          <div style="font-weight: 800; font-size: 1.05rem; color: #ffffff; letter-spacing: -0.01em;">${hit.name}</div>
+                          <div style="font-size: 0.72rem; color: #38bdf8; font-weight: 700; font-family: ui-monospace, monospace;">ISO: ${hit.code} · ${hit.region}</div>
+                        </div>
                       </div>
-                      <span class="badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace;">#${hit.rank}</span>
+                      <span class="badge" style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 800; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; padding: 2px 7px;">#${hit.rank}</span>
                     </div>
+
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-                      <div>
-                        <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase;">Cumulative CO₂</div>
-                        <div style="font-size: 1.05rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">${hit.emissions.toFixed(1)} <span style="font-size: 0.72rem; color: #94a3b8;">Gt</span></div>
+                      <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 6px 8px;">
+                        <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Cumulative CO₂</div>
+                        <div style="font-size: 1.15rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">${hit.emissions.toFixed(1)} <span style="font-size: 0.74rem; color: #94a3b8; font-weight: 500;">Gt</span></div>
                       </div>
-                      <div>
-                        <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase;">Global Share</div>
-                        <div style="font-size: 1.05rem; font-weight: 800; color: #fbbf24; font-family: ui-monospace, monospace;">${hit.share.toFixed(2)}%</div>
+                      <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 6px 8px;">
+                        <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Global Share</div>
+                        <div style="font-size: 1.15rem; font-weight: 800; color: #fbbf24; font-family: ui-monospace, monospace;">${hit.share.toFixed(2)}%</div>
                       </div>
                     </div>
-                    <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px;">Region: <strong style="color: #fff;">${hit.region}</strong></div>
-                    <div style="font-size: 0.74rem; color: #cbd5e1; line-height: 1.4;">${hit.note}</div>
+
+                    <div style="font-size: 0.74rem; color: #cbd5e1; line-height: 1.45; background: rgba(0, 0, 0, 0.25); border-radius: 6px; padding: 6px 8px;">
+                      ${hit.note}
+                    </div>
                   `;
 
-                  const ttWidth = 280;
-                  const ttHeight = 160;
-                  let posX = mouseX + 15;
-                  let posY = mouseY + 15;
+                  // Responsive clamping
+                  const ttWidth = 310;
+                  const ttHeight = 180;
+                  let posX = mouseX + 16;
+                  let posY = mouseY - 40;
 
-                  if (posX + ttWidth > rect.width) {
-                    posX = mouseX - ttWidth - 15;
+                  if (posX + ttWidth > rect.width - 10) {
+                    posX = mouseX - ttWidth - 16;
                   }
-                  if (posY + ttHeight > rect.height) {
-                    posY = mouseY - ttHeight - 15;
-                  }
+                  if (posX < 8) posX = 8;
 
-                  tooltip.style.left = `${Math.max(8, posX)}px`;
-                  tooltip.style.top = `${Math.max(8, posY)}px`;
+                  if (posY + ttHeight > rect.height - 10) {
+                    posY = rect.height - ttHeight - 10;
+                  }
+                  if (posY < 8) posY = 8;
+
+                  tooltip.style.left = `${Math.round(posX)}px`;
+                  tooltip.style.top = `${Math.round(posY)}px`;
                 }
               }
             } else {
+              canvas.title = "";
               if (tooltip) tooltip.style.display = "none";
               canvas.style.cursor = "default";
               if (!isPinnedRestOfWorld) {
@@ -12538,14 +12560,14 @@
         chips.forEach(c => {
           c.classList.toggle("active", c.getAttribute("data-region") === region);
         });
-        renderHistoricalTreemap();
+        renderHistoricalTreemap(false);
       }
 
       function handleTreemapSearch(term) {
         treemapSearchTerm = term;
         const btnClear = document.getElementById("btnClearTreemapSearch");
         if (btnClear) btnClear.style.display = term ? "inline-block" : "none";
-        renderHistoricalTreemap();
+        renderHistoricalTreemap(false);
 
         // Also filter table rows if table is visible
         const sLower = (term || "").toLowerCase().trim();
@@ -12579,7 +12601,7 @@
         if (tableContainer) tableContainer.style.display = format === "table" ? "block" : "none";
 
         if (format === "treemap") {
-          setTimeout(renderHistoricalTreemap, 20);
+          setTimeout(() => renderHistoricalTreemap(true), 20);
         }
       }
 
