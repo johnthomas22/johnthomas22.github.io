@@ -3589,6 +3589,21 @@
               <option value="treemap">▦ Treemap Blocks</option>
               <option value="table">☰ Ranked Table</option>
             </select>
+
+            <!-- Popup List: Filter by Region -->
+            <select id="selectTreemapRegion" onchange="filterTreemapRegion(this.value)" class="treemap-scope-select" style="background: rgba(15, 23, 42, 0.95); color: #ffffff; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 5px 12px; font-size: 0.76rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);">
+              <option value="All">🌍 Filter by Region: All (51)</option>
+              <option value="North America">🇺🇸 North America (2)</option>
+              <option value="Europe">🇪🇺 Europe (14)</option>
+              <option value="Asia">🇨🇳 Asia (11)</option>
+              <option value="Eurasia">🇷🇺 Eurasia (5)</option>
+              <option value="Middle East">🇸🇦 Middle East (6)</option>
+              <option value="Latin America">🇧🇷 Latin America (6)</option>
+              <option value="Africa">🇿🇦 Africa (4)</option>
+              <option value="Oceania">🇦🇺 Oceania (1)</option>
+              <option value="Rest of World">🌐 Rest of World (170+)</option>
+            </select>
+
             <div class="treemap-search-box">
               <span style="font-size: 0.75rem; opacity: 0.6;">🔎</span>
               <input type="text" id="inputTreemapSearch" class="treemap-search-input" placeholder="Search country or code..." oninput="handleTreemapSearch(this.value)">
@@ -3597,23 +3612,8 @@
           </div>
 
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <button class="btn btn-modal" id="btnOpenRestWorldModal" style="font-size: 0.75rem; padding: 4px 12px; background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #c084fc;" onclick="openRestOfWorldModal()">🌐 Explore Rest of the World (170+ Nations) &rarr;</button>
+            <button class="btn btn-modal" id="btnOpenRestWorldModal" style="font-size: 0.75rem; padding: 5px 14px; background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #c084fc; font-weight: 700;" onclick="openRestOfWorldModal()">🌐 Explore Rest of the World (170+ Nations) &rarr;</button>
           </div>
-        </div>
-
-        <!-- Regional Filter Chips -->
-        <div class="treemap-chips-group" style="margin-bottom: 14px;">
-          <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; margin-right: 4px;">FILTER REGION:</span>
-          <button class="treemap-filter-chip active" data-region="All" onclick="filterTreemapRegion('All')">All (51)</button>
-          <button class="treemap-filter-chip" data-region="North America" onclick="filterTreemapRegion('North America')">🇺🇸 North America (2)</button>
-          <button class="treemap-filter-chip" data-region="Europe" onclick="filterTreemapRegion('Europe')">🇪🇺 Europe (14)</button>
-          <button class="treemap-filter-chip" data-region="Asia" onclick="filterTreemapRegion('Asia')">🇨🇳 Asia (11)</button>
-          <button class="treemap-filter-chip" data-region="Eurasia" onclick="filterTreemapRegion('Eurasia')">🇷🇺 Eurasia (5)</button>
-          <button class="treemap-filter-chip" data-region="Middle East" onclick="filterTreemapRegion('Middle East')">🇸🇦 Middle East (6)</button>
-          <button class="treemap-filter-chip" data-region="Latin America" onclick="filterTreemapRegion('Latin America')">🇧🇷 Latin America (6)</button>
-          <button class="treemap-filter-chip" data-region="Africa" onclick="filterTreemapRegion('Africa')">🇿🇦 Africa (4)</button>
-          <button class="treemap-filter-chip" data-region="Oceania" onclick="filterTreemapRegion('Oceania')">🇦🇺 Oceania (1)</button>
-          <button class="treemap-filter-chip" data-region="Rest of World" onclick="filterTreemapRegion('Rest of World')">🌐 Rest of World (170+)</button>
         </div>
 
         <!-- Treemap Canvas Container -->
@@ -3721,13 +3721,15 @@
         <span style="font-size: 0.72rem; opacity: 0.6;">🔎</span>
         <input type="text" id="inputPopoverSearch" class="treemap-search-input" style="width: 100%;" placeholder="Filter by nation name or code..." oninput="filterPopoverSearch(this.value)">
       </div>
-      <div class="treemap-chips-group" style="gap: 4px;">
-        <button class="treemap-filter-chip active" data-popover-region="All" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('All')">All (147+)</button>
-        <button class="treemap-filter-chip" data-popover-region="Africa" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Africa')">Africa</button>
-        <button class="treemap-filter-chip" data-popover-region="Asia" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Asia')">Asia</button>
-        <button class="treemap-filter-chip" data-popover-region="Latin America" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Latin America')">Americas</button>
-        <button class="treemap-filter-chip" data-popover-region="Europe" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Europe')">Europe</button>
-        <button class="treemap-filter-chip" data-popover-region="Oceania & SIDS" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Oceania & SIDS')">🏝️ Island States</button>
+      <div>
+        <select id="selectPopoverRegion" onchange="filterPopoverRegion(this.value)" class="treemap-scope-select" style="background: rgba(15, 23, 42, 0.95); color: #ffffff; border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 4px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer; outline: none; width: 100%;">
+          <option value="All">🌍 Filter Region: All (147+)</option>
+          <option value="Africa">🌍 Africa</option>
+          <option value="Asia">🌏 Asia</option>
+          <option value="Latin America">🌎 Americas</option>
+          <option value="Europe">🏰 Europe</option>
+          <option value="Oceania & SIDS">🏝️ Small Island States</option>
+        </select>
       </div>
     </div>
 
@@ -3778,14 +3780,15 @@
 
         <!-- Filter Controls -->
         <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-          <div class="treemap-chips-group">
-            <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; margin-right: 4px;">FILTER REGION:</span>
-            <button class="treemap-filter-chip active" data-modal-region="All" onclick="filterModalRegion('All')">All (170+)</button>
-            <button class="treemap-filter-chip" data-modal-region="Africa" onclick="filterModalRegion('Africa')">🌍 Africa (50+)</button>
-            <button class="treemap-filter-chip" data-modal-region="Asia" onclick="filterModalRegion('Asia')">🌏 Asia &amp; Mid East (26)</button>
-            <button class="treemap-filter-chip" data-modal-region="Latin America" onclick="filterModalRegion('Latin America')">🌎 Latin America (21)</button>
-            <button class="treemap-filter-chip" data-modal-region="Europe" onclick="filterModalRegion('Europe')">🏰 Europe (31)</button>
-            <button class="treemap-filter-chip" data-modal-region="Oceania & SIDS" onclick="filterModalRegion('Oceania & SIDS')">🏝️ Small Island States (SIDS)</button>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <select id="selectModalRegion" onchange="filterModalRegion(this.value)" class="treemap-scope-select" style="background: rgba(15, 23, 42, 0.95); color: #ffffff; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 5px 12px; font-size: 0.76rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);">
+              <option value="All">🌍 Filter by Region: All (170+ Nations)</option>
+              <option value="Africa">🌍 Africa (50+)</option>
+              <option value="Asia">🌏 Asia &amp; Mid East (26)</option>
+              <option value="Latin America">🌎 Latin America (21)</option>
+              <option value="Europe">🏰 Europe (31)</option>
+              <option value="Oceania & SIDS">🏝️ Small Island States (SIDS)</option>
+            </select>
           </div>
           <div class="treemap-search-box" style="width: 240px;">
             <span style="font-size: 0.75rem; opacity: 0.6;">🔎</span>
@@ -12895,10 +12898,8 @@
       // Filter Treemap by Region
       function filterTreemapRegion(region) {
         activeTreemapRegion = region;
-        const chips = document.querySelectorAll(".treemap-chips-group .treemap-filter-chip");
-        chips.forEach(c => {
-          c.classList.toggle("active", c.getAttribute("data-region") === region);
-        });
+        const selectRegion = document.getElementById("selectTreemapRegion");
+        if (selectRegion && selectRegion.value !== region) selectRegion.value = region;
         renderHistoricalTreemap();
       }
 
@@ -13089,10 +13090,8 @@
 
       function filterPopoverRegion(region) {
         activePopoverRegion = region;
-        const chips = document.querySelectorAll(".treemap-filter-chip[data-popover-region]");
-        chips.forEach(c => {
-          c.classList.toggle("active", c.getAttribute("data-popover-region") === region);
-        });
+        const selectPopReg = document.getElementById("selectPopoverRegion");
+        if (selectPopReg && selectPopReg.value !== region) selectPopReg.value = region;
         buildRestOfWorldPopoverList(activePopoverRegion, activePopoverSearch);
       }
 
@@ -13204,10 +13203,8 @@
 
       function filterModalRegion(region) {
         activeModalRegion = region;
-        const chips = document.querySelectorAll(".treemap-filter-chip[data-modal-region]");
-        chips.forEach(c => {
-          c.classList.toggle("active", c.getAttribute("data-modal-region") === region);
-        });
+        const selectModalReg = document.getElementById("selectModalRegion");
+        if (selectModalReg && selectModalReg.value !== region) selectModalReg.value = region;
         buildRestOfWorldModalGrid(activeModalRegion, activeModalSearch);
       }
 
