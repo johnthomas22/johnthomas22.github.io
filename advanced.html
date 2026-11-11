@@ -748,21 +748,44 @@
       background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), rgba(18, 27, 43, 0.95));
       border: 1px solid rgba(0, 229, 255, 0.28);
       border-radius: 10px;
-      padding: 14px 18px;
-      gap: 16px;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      padding: 11px 18px;
+      gap: 10px;
+      flex-direction: column;
+      align-items: stretch;
     }
     .app-wrapper.simple-mode .intro-banner {
       display: flex;
     }
+    .intro-banner-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      cursor: pointer;
+      user-select: none;
+    }
+    .intro-banner-heading {
+      color: var(--cyan);
+      font-weight: 800;
+      font-size: 0.92rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-bottom: 1px dotted rgba(0, 229, 255, 0.55);
+      padding-bottom: 1px;
+      transition: color 0.15s ease, border-bottom-color 0.15s ease;
+    }
+    .intro-banner-header:hover .intro-banner-heading {
+      color: #67e8f9;
+      border-bottom-color: #eab308;
+    }
     .intro-banner-text {
-      flex: 1;
-      min-width: 280px;
       font-size: 0.84rem;
-      line-height: 1.5;
+      line-height: 1.55;
       color: #e2e8f0;
+      padding-top: 8px;
+      border-top: 1px solid rgba(0, 229, 255, 0.15);
     }
     .intro-banner-controls {
       display: flex;
@@ -2247,10 +2270,13 @@
       </div>
     </header>
 
-    <!-- Gentle Intro Banner (Visible in Simple Mode) -->
+    <!-- Gentle Intro Banner (Visible in Simple Mode, Expandable) -->
     <div class="intro-banner" id="introBanner">
-      <div class="intro-banner-text">
-        <strong style="color: var(--cyan);">How the Greenhouse Effect Works:</strong>
+      <div class="intro-banner-header" id="introBannerHeader" onclick="toggleIntroBanner()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleIntroBanner();}" role="button" tabindex="0" aria-expanded="false" aria-controls="introBannerBody">
+        <span id="introBannerHeading" class="intro-banner-heading has-tooltip" data-tooltip="Click for more details on how the greenhouse effect works">💡 How the Greenhouse Effect Works</span>
+        <span id="introBannerToggleHint" style="font-size: 0.76rem; color: #94a3b8; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">▸ Click for details</span>
+      </div>
+      <div class="intro-banner-text" id="introBannerBody" style="display: none;">
         Incoming sunlight is high-energy <em>shortwave light</em>, which passes freely through greenhouse gases without heating them. When it hits Earth, <span class="has-tooltip" data-tooltip="Unless it's a white surface. Ice reflects up to 100% of solar radiation to space, which is why melting ice sheets is a really bad idea for limiting warming.">the surface converts</span> that light into <em>longwave thermal infrared heat</em>—a wavelength that CO₂ molecules trap on the way out. As CO₂ rises (<span class="has-tooltip" data-tooltip="ppm means 'parts per million'. Adding 2.5 ppm per year is equal to adding just 0.0000025% of CO₂ to the air each year — yet because CO₂ is such a potent greenhouse gas, this tiny percentage drives global warming.">+2.5 ppm/yr or 0.0000025%/yr</span>), it pushes the escape altitude into colder air, trapping excess energy below. Click numbered pins <strong>①–⑤</strong> to explore each physical stage.
       </div>
       <div class="intro-banner-controls">
@@ -10329,6 +10355,20 @@
         }
       }
       window.setViewMode = setViewMode;
+
+      function toggleIntroBanner() {
+        const header = document.getElementById("introBannerHeader");
+        const body = document.getElementById("introBannerBody");
+        const heading = document.getElementById("introBannerHeading");
+        const hint = document.getElementById("introBannerToggleHint");
+        if (!body) return;
+        const isExpanding = body.style.display === "none";
+        body.style.display = isExpanding ? "block" : "none";
+        if (header) header.setAttribute("aria-expanded", isExpanding ? "true" : "false");
+        if (hint) hint.innerHTML = isExpanding ? "▾ Hide details" : "▸ Click for details";
+        if (heading) heading.setAttribute("data-tooltip", isExpanding ? "Click to collapse details" : "Click for more details on how the greenhouse effect works");
+      }
+      window.toggleIntroBanner = toggleIntroBanner;
 
       btnModeSimple.addEventListener("click", () => setViewMode("simple"));
       btnModeAdvanced.addEventListener("click", () => setViewMode("advanced"));
