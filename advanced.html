@@ -6763,7 +6763,7 @@
   <!-- EMISSIONS ALTITUDE (ZEFF) POPOVER TOOLTIP -->
   <div class="safe-350-popover" id="zeffPopover" style="border-color: rgba(239, 68, 68, 0.45); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 18px rgba(239, 68, 68, 0.25);">
     <div class="s350-header">
-      <div class="s350-title" style="color: #f87171;">🔴 Emissions Altitude (Escape Level, <i>z</i><sub>eff</sub>)</div>
+      <div class="s350-title" style="color: #f87171;">🔴 Emissions Altitude (Heat Escape Level)</div>
       <button class="s350-close" id="zeffCloseBtn" title="Close">&times;</button>
     </div>
     <div class="s350-stats" id="zeffStats" style="color: #fca5a5; font-size: 0.82rem; font-weight: 700; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 6px; margin-bottom: 8px;">
@@ -7795,7 +7795,7 @@
 
         const deltaZ = Math.round(zeffM - 4961);
         const signZ = deltaZ >= 0 ? "+" : "";
-        zeffBriefTooltipEl.innerHTML = `<span style="color:#f87171;font-weight:700;">${Math.round(year)} CE</span> · Emissions Altitude (<i>z</i><sub>eff</sub>): <strong>${Math.round(zeffM).toLocaleString()} m</strong> (${(zeffM / 1000).toFixed(2)} km, ${signZ}${deltaZ} m vs 1750) — level where thermal IR escapes to space.`;
+        zeffBriefTooltipEl.innerHTML = `<span style="color:#f87171;font-weight:700;">${Math.round(year)} CE</span> · Emissions Altitude (Heat Escape Level): <strong>${Math.round(zeffM).toLocaleString()} m</strong> (${(zeffM / 1000).toFixed(2)} km, ${signZ}${deltaZ} m vs 1750) — level where thermal IR escapes to space.`;
 
         zeffBriefTooltipEl.style.display = "block";
         const briefW = zeffBriefTooltipEl.offsetWidth || 280;
