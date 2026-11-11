@@ -1876,7 +1876,194 @@
       .paleo-metrics-strip { grid-template-columns: 1fr; }
       .popout-chart-btn { bottom: 222px; right: 28px; font-size: 0.68rem; padding: 4px 8px; }
     }
-  </style>
+  
+    /* ==========================================================================
+       HISTORICAL CONTRIBUTIONS TO ATMOSPHERIC CARBON (1750-PRESENT) TREEMAP
+       ========================================================================== */
+    .historical-treemap-card {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 15, 30, 0.98) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+    .treemap-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 14px 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .treemap-chips-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .treemap-filter-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-muted);
+      border-radius: 20px;
+      padding: 4px 11px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .treemap-filter-chip:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #fff;
+    }
+    .treemap-filter-chip.active {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: #38bdf8;
+      color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    }
+    .treemap-search-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 4px 10px;
+    }
+    .treemap-search-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 0.78rem;
+      width: 170px;
+    }
+    .treemap-search-input::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+    .treemap-canvas-container {
+      position: relative;
+      width: 100%;
+      height: 560px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #060a12;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
+    }
+    #historicalEmissionsCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+    .treemap-floating-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(10, 18, 30, 0.95);
+      border: 1px solid #38bdf8;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 16px rgba(56, 189, 248, 0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.78rem;
+      color: #fff;
+      z-index: 100;
+      max-width: 320px;
+      display: none;
+      transition: opacity 0.1s ease;
+      line-height: 1.45;
+    }
+    .treemap-table-container {
+      display: none;
+      max-height: 560px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      background: rgba(5, 10, 20, 0.7);
+    }
+    .treemap-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      text-align: left;
+    }
+    .treemap-table th {
+      background: #0f172a;
+      position: sticky;
+      top: 0;
+      padding: 10px 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 2;
+    }
+    .treemap-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: #cbd5e1;
+    }
+    .treemap-table tr:hover td {
+      background: rgba(56, 189, 248, 0.08);
+    }
+    .treemap-table tr.highlight-uk td {
+      background: rgba(56, 189, 248, 0.15);
+      font-weight: 700;
+      color: #38bdf8;
+    }
+    .treemap-table tr.highlight-row td {
+      background: rgba(148, 163, 184, 0.1);
+      font-style: italic;
+    }
+    /* Rest of the World Modal */
+    .rest-world-modal-card {
+      background: #0c1322;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.15);
+      border-radius: 12px;
+      max-width: 980px;
+      width: 95%;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: fadeInModal 0.2s ease-out;
+    }
+    .rest-world-country-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 8px;
+      padding: 16px;
+      overflow-y: auto;
+      max-height: 52vh;
+    }
+    .rest-world-country-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 6px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.12s ease;
+    }
+    .rest-world-country-card:hover {
+      background: rgba(56, 189, 248, 0.1);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+    @media (max-width: 768px) {
+      .treemap-canvas-container {
+        height: 440px;
+      }
+    }
+</style>
 </head>
 <body>
 
@@ -1889,7 +2076,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v2.0</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v2.1</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -1906,7 +2093,7 @@
           <button class="mode-switch-btn" id="btnModeBudgets">🛢️ Carbon Budgets</button>
           <button class="mode-switch-btn" id="btnModeSources">🏭 Greenhouse Gas Sources</button>
           <button class="mode-switch-btn" id="btnModeSolutions">💡 Energy Solutions</button>
-          <button class="mode-switch-btn" id="btnModeDunkel" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);" title="UK Dunkelflaute &amp; Storage Simulator — Oxford &amp; Royal Society Model">🇬🇧 UK Dunkelflaute &amp; Storage</button>
+          <button class="mode-switch-btn" id="btnModeDunkel" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);" title="UK Dünkelflaute &amp; Storage Simulator — Oxford &amp; Royal Society Model">🇬🇧 UK Dünkelflaute &amp; Storage</button>
           <a href="uk_climate_impacts_500_years.html" class="mode-switch-btn" style="text-decoration: none; color: #fbbf24;" title="UK Climate Impacts Across 5 Centuries — Ed Hawkins Warming Stripes">📊 Impacts</a>
           <a href="what_can_i_do.html?from=advanced" class="mode-switch-btn" style="text-decoration: none; color: #34d399; border-color: rgba(52, 211, 153, 0.4);" title="What Can I Do? Personal Carbon Dial &amp; Net-Zero Pathfinder">🌱 What Can I Do?</a>
           <a href="we_only_have_one_pale_blue_dot.html" class="mode-switch-btn" style="text-decoration: none; color: #34d399;" title="We Only Have One Pale Blue Dot — Resource Overshoot Simulator">🌍 Pale Blue Dot</a>
@@ -2607,7 +2794,8 @@
           <!-- Bottom Navigation Bar -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn btn-secondary" id="btnBackToSimFromSources" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
+              <button class="btn btn-secondary" id="<button class="btn btn-secondary" onclick="setViewMode('dunkel'); setTimeout(() => { const el = document.getElementById('cardHistoricalEmissionsTreemap'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 120);" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">🌍 Historical Carbon Treemap &rarr;</button>
+              btnBackToSimFromSources" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
               <button class="btn btn-secondary" id="btnJumpToBudgetsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">🛢️ View Carbon Budgets</button>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -2858,9 +3046,9 @@
                 <div><strong style="color: #38bdf8;">🧪 Hydrogen / Thermal</strong></div>
                 <div>Current: <strong>~0.5 TWh (500 GWh)</strong> · LCOS: <strong>$0.18–$0.35/kWh</strong></div>
                 <div>RTE: <strong>35–48%</strong> · Duration: <strong>Weeks–Months</strong></div>
-                <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">Electrolysis into cavern gas storage. Solves multi-week winter "Dunkelflaute" when wind and solar output both lag.</div>
+                <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">Electrolysis into cavern gas storage. Solves multi-week winter "Dünkelflaute" when wind and solar output both lag.</div>
                 <button type="button" class="btn btn-secondary" id="btnLaunchDunkelFromCard" onclick="setViewMode('dunkel');" style="width: 100%; font-size: 0.72rem; padding: 4px 8px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4); justify-content: center;">
-                  🇬🇧 Launch UK Dunkelflaute Simulator &rarr;
+                  🇬🇧 Launch UK Dünkelflaute Simulator &rarr;
                 </button>
               </div>
             </div>
@@ -2868,10 +3056,14 @@
 
           <!-- Bottom Navigation Bar -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            
+          <button class="btn btn-secondary" onclick="setViewMode('dunkel'); setTimeout(() => { const el = document.getElementById('cardHistoricalEmissionsTreemap'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 120);" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">
+            🌍 Cumulative Historical Carbon Treemap (1750–Present) &rarr;
+          </button>
+<div style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button class="btn btn-secondary" id="btnBackToSimFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
               <button class="btn btn-secondary" id="btnJumpToSourcesFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">🏭 Review Greenhouse Gas Sources</button>
-              <button class="btn btn-secondary" id="btnJumpToDunkelFromSolutions" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">🇬🇧 UK Dunkelflaute &amp; Storage &rarr;</button>
+              <button class="btn btn-secondary" id="btnJumpToDunkelFromSolutions" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">🇬🇧 UK Dünkelflaute &amp; Storage &rarr;</button>
             </div>
             <button class="btn btn-modal" id="btnOpenGuideFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">📖 Open Solutions & Storage Guide →</button>
           </div>
@@ -2884,13 +3076,13 @@
 
 
   
-    <!-- DEDICATED INTERACTIVE PAGE: UK DUNKELFLAUTE & STORAGE SIMULATOR (OXFORD & ROYAL SOCIETY MODEL) -->
+    <!-- DEDICATED INTERACTIVE PAGE: UK DÜNKELFLAUTE & STORAGE SIMULATOR (OXFORD & ROYAL SOCIETY MODEL) -->
     <div class="dunkel-view" id="dunkelView">
       
       <!-- Top Real-Time Metrics Strip -->
       <div class="top-stats-strip" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 0;">
         <div class="stat-card">
-          <div class="stat-header"><span>Dunkelflaute Energy Deficit</span><span class="badge badge-amber" id="dunkelBadgeDeficit">Deficit to Bridge</span></div>
+          <div class="stat-header"><span>Dünkelflaute Energy Deficit</span><span class="badge badge-amber" id="dunkelBadgeDeficit">Deficit to Bridge</span></div>
           <div class="stat-value" id="dunkelStatDeficitVal" style="color: var(--amber);">12.5 <span style="font-size: 0.8rem; color: var(--text-muted);">TWh</span></div>
           <div class="stat-sub" id="dunkelStatDeficitSub">14 days @ 0.89 TWh/day net winter deficit</div>
         </div>
@@ -2911,20 +3103,20 @@
         </div>
       </div>
 
-      <!-- Main Dunkelflaute Layout Grid -->
+      <!-- Main Dünkelflaute Layout Grid -->
       <div class="dunkel-grid">
 
         <!-- Left Column: Interactive Dials & Allocation Sliders -->
         <div class="card" style="margin-bottom: 0;">
           <div class="card-title-row">
             <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
-              <span>🇬🇧</span> UK Grid Demand &amp; Dunkelflaute Controls
+              <span>🇬🇧</span> UK Grid Demand &amp; Dünkelflaute Controls
             </div>
             <span class="badge badge-cyan">Oxford &amp; Royal Society Model</span>
           </div>
 
           <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0; margin-bottom: 12px; line-height: 1.45;">
-            Configure Great Britain's annual electricity demand and select a winter wind-drought (<em>Dunkelflaute</em>) duration to calculate the required energy storage volume and test your technology allocation.
+            Configure Great Britain's annual electricity demand and select a winter wind-drought (<em>Dünkelflaute</em>) duration to calculate the required energy storage volume and test your technology allocation. <span style="font-size: 0.74rem; color: #94a3b8;">(German: <em>Dunkelflaute</em>; conventionally written <em>Dünkelflaute</em> in English energy literature)</span>
           </p>
 
           <!-- 1. Annual Demand Presets & Slider -->
@@ -2947,10 +3139,10 @@
             </div>
           </div>
 
-          <!-- 2. Dunkelflaute Duration Presets & Slider -->
+          <!-- 2. Dünkelflaute Duration Presets & Slider -->
           <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <label for="sliderDunkelDays" style="font-size: 0.85rem; font-weight: 700; color: #fff;">2. Dunkelflaute Duration (Wind &amp; Solar Lull):</label>
+              <label for="sliderDunkelDays" style="font-size: 0.85rem; font-weight: 700; color: #fff;">2. Dünkelflaute Duration (Wind &amp; Solar Lull):</label>
               <span id="lblDunkelDays" style="font-family: ui-monospace, monospace; font-size: 0.85rem; font-weight: 700; color: var(--amber);">14 Days</span>
             </div>
             <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
@@ -3067,7 +3259,7 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
               <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 6px; padding: 10px 12px;">
-                <span style="font-size: 0.7rem; color: #f43f5e; text-transform: uppercase; font-weight: 700;">Required Dunkelflaute Energy:</span>
+                <span style="font-size: 0.7rem; color: #f43f5e; text-transform: uppercase; font-weight: 700;">Required Dünkelflaute Energy:</span>
                 <div id="dunkelCardReqVal" style="font-size: 1.35rem; font-weight: 800; color: #f43f5e; font-family: ui-monospace, monospace;">12.5 TWh</div>
                 <span id="dunkelCardReqSub" style="font-size: 0.72rem; color: #cbd5e1;">Peak discharge needed: ~45 GW</span>
               </div>
@@ -3131,7 +3323,7 @@
               <span id="dunkelBadgeBatDiff" style="font-size: 0.68rem; font-family: ui-monospace, monospace; color: #f43f5e; background: rgba(244,63,94,0.15); padding: 1px 6px; border-radius: 4px;">71× More Expensive</span>
             </div>
             <p style="font-size: 0.78rem; color: #cbd5e1; margin: 0 0 8px 0; line-height: 1.45;">
-              If Great Britain attempted to meet this <span id="dunkelTxtBatDeficit" style="font-weight: 700; color: #fff;">12.5 TWh</span> Dunkelflaute deficit using <strong>grid-scale lithium-ion batteries alone</strong>, the capital cost would be:
+              If Great Britain attempted to meet this <span id="dunkelTxtBatDeficit" style="font-weight: 700; color: #fff;">12.5 TWh</span> Dünkelflaute deficit using <strong>grid-scale lithium-ion batteries alone</strong>, the capital cost would be:
             </p>
             <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
               <span id="dunkelValAllBat" style="font-size: 1.4rem; font-weight: 800; color: #f43f5e; font-family: ui-monospace, monospace;">£1,890 Billion</span>
@@ -3218,6 +3410,136 @@
 
       </div>
 
+      <!-- =====================================================================
+           CUMULATIVE HISTORICAL CONTRIBUTIONS TO ATMOSPHERIC CARBON (1750-PRESENT)
+           ===================================================================== -->
+      <div class="card historical-treemap-card" id="cardHistoricalEmissionsTreemap">
+        <div class="card-title-row" style="flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+          <div class="card-title" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem;">
+            <span>🌍</span> Cumulative Historical Contribution to Atmospheric Carbon (1750–Present)
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+            <span class="badge badge-cyan" style="font-size: 0.72rem;">Global Carbon Project &amp; OWID</span>
+            <span class="badge badge-amber" style="font-size: 0.72rem;">Total: ~1,820 Gt CO₂</span>
+            <span class="badge badge-purple" style="font-size: 0.72rem; background: rgba(192, 132, 252, 0.15); border-color: #c084fc; color: #c084fc;">🇬🇧 UK #5 All-Time (80 Gt · 4.4%)</span>
+          </div>
+        </div>
+
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0; margin-bottom: 14px; line-height: 1.55;">
+          Relative fossil fuel combustion and industrial cement $\text{CO}_2$ emissions by sovereign state since 1750. 
+          The area of each proportional block directly corresponds to that nation's cumulative share of total atmospheric carbon. 
+          The <strong>Top 50 nations</strong> account for <strong>91.8%</strong> of all historical industrial carbon, while the remaining <strong>170+ nations &amp; territories</strong> share just <strong>8.2%</strong>.
+        </p>
+
+        <!-- Historical Imperative Banner -->
+        <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 0.8rem; line-height: 1.5; color: #cbd5e1;">
+          <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #38bdf8; margin-bottom: 4px;">
+            <span>🇬🇧</span> Why is this on the Dünkelflaute &amp; Storage Page? Britain's Carbon Heritage &amp; Technological Duty
+          </div>
+          <div>
+            Because Great Britain ignited the Industrial Revolution in 1750 with coal-fired steam engines, blast furnaces, and railways, the UK has emitted 
+            <strong>~80 Billion tonnes of CO₂</strong>—ranking <strong>#5 all-time globally</strong> (greater than all 54 nations of Africa combined), despite comprising less than 1% of the world's population today. 
+            This historical carbon footprint underpins Britain's moral, economic, and scientific responsibility to master seasonal energy storage and solve the winter <strong>Dünkelflaute</strong> with zero-carbon innovation, pioneering an exportable blueprint for every industrial power grid on Earth.
+          </div>
+        </div>
+
+        <!-- 4 Quick Stats Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px;">
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
+            <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Top 50 Nations</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--cyan); font-family: ui-monospace, monospace;">1,670.7 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span></div>
+            <div style="font-size: 0.72rem; color: #94a3b8;">91.8% of all-time global emissions</div>
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
+            <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Rest of the World (170+ Nations)</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: #a78bfa; font-family: ui-monospace, monospace;">149.3 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span></div>
+            <div style="font-size: 0.72rem; color: #94a3b8;">8.2% total · &gt;3.2 Billion people</div>
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
+            <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">United Kingdom (Cradle of 1750)</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">80.0 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span></div>
+            <div style="font-size: 0.72rem; color: #94a3b8;">Rank #5 · 4.40% of all atmospheric CO₂</div>
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
+            <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Top 2 Emitters (USA &amp; China)</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--amber); font-family: ui-monospace, monospace;">720.0 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span></div>
+            <div style="font-size: 0.72rem; color: #94a3b8;">39.56% of total (US 23.9% · CN 15.7%)</div>
+          </div>
+        </div>
+
+        <!-- Toolbar & Filter Controls -->
+        <div class="treemap-toolbar">
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div class="btn-group" role="group" aria-label="View Style">
+              <button class="btn btn-secondary active" id="btnTreemapViewBlocks" style="font-size: 0.75rem; padding: 4px 10px;" onclick="setHistoricalViewFormat('treemap')">▦ Treemap Blocks</button>
+              <button class="btn btn-secondary" id="btnTreemapViewTable" style="font-size: 0.75rem; padding: 4px 10px;" onclick="setHistoricalViewFormat('table')">☰ Ranked Table</button>
+            </div>
+            <div class="treemap-search-box">
+              <span style="font-size: 0.75rem; opacity: 0.6;">🔎</span>
+              <input type="text" id="inputTreemapSearch" class="treemap-search-input" placeholder="Search country or code..." oninput="handleTreemapSearch(this.value)">
+              <button type="button" id="btnClearTreemapSearch" style="background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 0.75rem; display: none;" onclick="clearTreemapSearch()">&times;</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-modal" id="btnOpenRestWorldModal" style="font-size: 0.75rem; padding: 4px 12px; background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #c084fc;" onclick="openRestOfWorldModal()">🌐 Explore Rest of the World (170+ Nations) &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Regional Filter Chips -->
+        <div class="treemap-chips-group" style="margin-bottom: 14px;">
+          <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; margin-right: 4px;">FILTER REGION:</span>
+          <button class="treemap-filter-chip active" data-region="All" onclick="filterTreemapRegion('All')">All (51)</button>
+          <button class="treemap-filter-chip" data-region="North America" onclick="filterTreemapRegion('North America')">🇺🇸 North America (2)</button>
+          <button class="treemap-filter-chip" data-region="Europe" onclick="filterTreemapRegion('Europe')">🇪🇺 Europe (14)</button>
+          <button class="treemap-filter-chip" data-region="Asia" onclick="filterTreemapRegion('Asia')">🇨🇳 Asia (11)</button>
+          <button class="treemap-filter-chip" data-region="Eurasia" onclick="filterTreemapRegion('Eurasia')">🇷🇺 Eurasia (5)</button>
+          <button class="treemap-filter-chip" data-region="Middle East" onclick="filterTreemapRegion('Middle East')">🇸🇦 Middle East (6)</button>
+          <button class="treemap-filter-chip" data-region="Latin America" onclick="filterTreemapRegion('Latin America')">🇧🇷 Latin America (6)</button>
+          <button class="treemap-filter-chip" data-region="Africa" onclick="filterTreemapRegion('Africa')">🇿🇦 Africa (4)</button>
+          <button class="treemap-filter-chip" data-region="Oceania" onclick="filterTreemapRegion('Oceania')">🇦🇺 Oceania (1)</button>
+          <button class="treemap-filter-chip" data-region="Rest of World" onclick="filterTreemapRegion('Rest of World')">🌐 Rest of World (170+)</button>
+        </div>
+
+        <!-- Treemap Canvas Container -->
+        <div class="treemap-canvas-container" id="treemapCanvasContainer">
+          <canvas id="historicalEmissionsCanvas"></canvas>
+          <div class="treemap-floating-tooltip" id="historicalTreemapTooltip"></div>
+        </div>
+
+        <!-- Ranked Table Container (Toggled via button) -->
+        <div class="treemap-table-container" id="treemapTableContainer">
+          <table class="treemap-table">
+            <thead>
+              <tr>
+                <th style="width: 60px;">Rank</th>
+                <th>Country</th>
+                <th>Region</th>
+                <th style="text-align: right;">Cumulative Emissions (Gt CO₂)</th>
+                <th style="text-align: right;">Share of Global Total (%)</th>
+                <th>Historical Energy &amp; Industrial Context</th>
+              </tr>
+            </thead>
+            <tbody id="historicalTableBody">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footnote & Attribution -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 0.72rem; color: var(--text-muted); flex-wrap: wrap; gap: 8px;">
+          <div>
+            Data source: <strong>Global Carbon Project (GCP)</strong>, CDIAC, and <strong>Our World in Data (OWID)</strong>. Cumulative territorial fossil fuel and cement $\text{CO}_2$ emissions (1750–2023). Excludes land-use change (deforestation) and international aviation/shipping bunker fuels unless noted.
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <span style="color: #38bdf8; cursor: pointer;" onclick="openRestOfWorldModal()">Browse 170+ other sovereign states &rarr;</span>
+          </div>
+        </div>
+
+      </div>
+
+
+
     </div>
 
 
@@ -3238,7 +3560,7 @@
         <span>·</span>
         <a href="doughnut_economics.html" style="color: #fbbf24; text-decoration: none;">🍩 Doughnut Economics</a>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v2.0</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v2.1</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -3251,6 +3573,71 @@
   </div>
 
   
+  
+  <!-- =====================================================================
+       REST OF THE WORLD (170+ NATIONS) EXPLORER MODAL
+       ===================================================================== -->
+  <div class="modal-overlay" id="modalRestOfWorld" style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(8px);">
+    <div class="rest-world-modal-card">
+      <div class="modal-header" style="padding: 16px 20px; background: #080e1a; border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 700; color: #fff;">
+            <span>🌐</span> Rest of the World: 170+ Nations &amp; Territories
+          </div>
+          <div style="font-size: 0.76rem; color: #94a3b8; margin-top: 2px;">
+            Cumulative fossil $\text{CO}_2$ emissions (1750–2023) for sovereign states and territories beyond the Top 50
+          </div>
+        </div>
+        <button type="button" class="btn-modal-close" onclick="closeRestOfWorldModal()" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; width: 32px; height: 32px; border-radius: 6px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+      </div>
+
+      <div style="padding: 16px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;">
+        
+        <!-- Climate Justice & Asymmetry Banner -->
+        <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px 14px; font-size: 0.8rem; line-height: 1.5; color: #fde68a;">
+          <div style="font-weight: 700; color: #f59e0b; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <span>⚠️</span> The Extreme Asymmetry of Global Historical Emissions
+          </div>
+          <div>
+            The 170+ countries and territories catalogued below collectively represent <strong>over 3.2 billion citizens</strong> (more than 40% of humanity), 
+            yet together they have produced just <strong>8.2% (149.3 Gt CO₂)</strong> of cumulative industrial atmospheric carbon since 1750. 
+            Small Island Developing States (such as <strong>Tuvalu, Kiribati, Maldives, Vanuatu, and Fiji</strong>) have contributed less than <strong>0.001% each</strong>, 
+            yet bear an existential burden of accelerating sea level rise, saltwater intrusion, and supercharged tropical cyclones.
+          </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <div class="treemap-chips-group">
+            <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; margin-right: 4px;">FILTER REGION:</span>
+            <button class="treemap-filter-chip active" data-modal-region="All" onclick="filterModalRegion('All')">All (170+)</button>
+            <button class="treemap-filter-chip" data-modal-region="Africa" onclick="filterModalRegion('Africa')">🌍 Africa (50+)</button>
+            <button class="treemap-filter-chip" data-modal-region="Asia" onclick="filterModalRegion('Asia')">🌏 Asia &amp; Mid East (26)</button>
+            <button class="treemap-filter-chip" data-modal-region="Latin America" onclick="filterModalRegion('Latin America')">🌎 Latin America (21)</button>
+            <button class="treemap-filter-chip" data-modal-region="Europe" onclick="filterModalRegion('Europe')">🏰 Europe (31)</button>
+            <button class="treemap-filter-chip" data-modal-region="Oceania & SIDS" onclick="filterModalRegion('Oceania & SIDS')">🏝️ Small Island States (SIDS)</button>
+          </div>
+          <div class="treemap-search-box" style="width: 240px;">
+            <span style="font-size: 0.75rem; opacity: 0.6;">🔎</span>
+            <input type="text" id="inputModalSearch" class="treemap-search-input" style="width: 100%;" placeholder="Filter by nation name or code..." oninput="filterModalSearch(this.value)">
+          </div>
+        </div>
+
+        <!-- Country Cards Grid -->
+        <div class="rest-world-country-grid" id="modalCountryGrid">
+          <!-- Populated by JS -->
+        </div>
+
+      </div>
+
+      <div style="padding: 12px 20px; background: #080e1a; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem; color: #94a3b8;">
+        <div>Showing <span id="lblModalCount" style="color: #fff; font-weight: 700;">170+</span> sovereign nations and territories</div>
+        <button type="button" class="btn btn-secondary" onclick="closeRestOfWorldModal()" style="font-size: 0.78rem; padding: 5px 14px;">Close Window</button>
+      </div>
+    </div>
+  </div>
+
+
   <!-- POP-OUT PALEOCLIMATE 1-MILLION-YEAR / 500-YEAR RATE COMPARATOR MODAL -->
   <div class="modal-overlay" id="paleoModalOverlay">
     <div class="paleo-modal-card">
@@ -3377,7 +3764,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v2.0</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v2.1</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -3510,7 +3897,7 @@
                   <span class="badge badge-cyan" style="margin-left: 8px;">NESO / Gridwatch / iamkate / CP2030</span>
                 </a>
                 <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 24px;">
-                  Comprehensive analysis of Great Britain's power grid. Features direct integration with live telemetry monitors (<code>Gridwatch</code> and <code>iamkate</code>), detailing the real-time generation mix (Wind ~30%, Gas CCGT ~31%, Nuclear ~13%, Solar, Interconnectors, zero coal after Ratcliffe-on-Soar closure). Explores the national electrification trajectory: why annual demand (~290–300 TWh today) surges to ~350–370 TWh by 2030 and ~550–650 TWh by 2050 as 20M heat pumps and road transport electrify (while overall primary energy consumption drops ~40% via the Electrification Efficiency Dividend). Analyzes winter peak demand (45–48 GW) vs. summer troughs (14–18 GW), managing winter <i>Dunkelflaute</i>, Scottish transmission bottlenecks (B6 constraint boundary), and the NESO Clean Power 2030 pathway (50 GW offshore wind, subsea HVDC Eastern Green Links, and rapid battery rollout).
+                  Comprehensive analysis of Great Britain's power grid. Features direct integration with live telemetry monitors (<code>Gridwatch</code> and <code>iamkate</code>), detailing the real-time generation mix (Wind ~30%, Gas CCGT ~31%, Nuclear ~13%, Solar, Interconnectors, zero coal after Ratcliffe-on-Soar closure). Explores the national electrification trajectory: why annual demand (~290–300 TWh today) surges to ~350–370 TWh by 2030 and ~550–650 TWh by 2050 as 20M heat pumps and road transport electrify (while overall primary energy consumption drops ~40% via the Electrification Efficiency Dividend). Analyzes winter peak demand (45–48 GW) vs. summer troughs (14–18 GW), managing winter <i>Dünkelflaute</i>, Scottish transmission bottlenecks (B6 constraint boundary), and the NESO Clean Power 2030 pathway (50 GW offshore wind, subsea HVDC Eastern Green Links, and rapid battery rollout).
                 </div>
               </li>
               <li>
@@ -5037,7 +5424,7 @@
 
           <h4>3. Physics, Costs & Mechanics of the Six Grid Storage Technologies</h4>
           <p>
-            Because solar and wind generation vary with weather and daylight, energy storage and grid firming are required to prevent outages (such as during multi-day winter wind/solar lulls, or <em>Dunkelflaute</em>):
+            Because solar and wind generation vary with weather and daylight, energy storage and grid firming are required to prevent outages (such as during multi-day winter wind/solar lulls, or <em>Dünkelflaute</em>):
           </p>
           <table class="data-table">
             <thead>
@@ -5109,7 +5496,7 @@
           <ul style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-muted);">
             <li><strong>Current 2026 Fleet:</strong> Reflects today's installed operational baseline (~11,650 TWh/yr clean power: hydro 4,300, nuclear 2,650, wind 2,300, solar 1,600, bio/geo 800 TWh; backed by ~10.6 TWh of storage, primarily pumped hydro).</li>
             <li><strong>IEA Net Zero 2050:</strong> The international consensus pathway aligning with Paris Agreement targets: aggressive wind (18,000 TWh) and solar (24,000 TWh) deployment supported by expanded nuclear (5,500 TWh), hydro (7,000 TWh), geothermal/biomass (3,500 TWh), and ~40 TWh of diversified storage.</li>
-            <li><strong>100% Renewables:</strong> Relying purely on wind (26,000 TWh) and solar (38,000 TWh) alongside existing hydro (6,500 TWh). Because wind and solar output fluctuate with daylight and multi-week weather systems (<em>Dunkelflaute</em>), this scenario requires massive overbuilding of generation and ~91 TWh of long-duration and seasonal grid storage (hydrogen, pumped hydro, CAES) to eliminate outage risks.</li>
+            <li><strong>100% Renewables:</strong> Relying purely on wind (26,000 TWh) and solar (38,000 TWh) alongside existing hydro (6,500 TWh). Because wind and solar output fluctuate with daylight and multi-week weather systems (<em>Dünkelflaute</em>), this scenario requires massive overbuilding of generation and ~91 TWh of long-duration and seasonal grid storage (hydrogen, pumped hydro, CAES) to eliminate outage risks.</li>
             <li><strong>High Nuclear Baseload:</strong> Heavy buildout of firm, weather-independent nuclear fission (20,000 TWh / ~2,500 GW) paired with moderate renewables. Because continuous 24/7 firm baseload matches the bulk of baseline industrial and residential demand, required grid storage drops to ~30 TWh and land surface footprint is minimized.</li>
             <li><strong>Balanced (Solar/Wind + Baseload):</strong> Combines ultra-low-cost variable wind (16,000 TWh) and solar (22,000 TWh) for bulk energy with dispatchable 24/7 firm clean baseload (10,000 TWh nuclear, 6,000 TWh hydro, 3,000 TWh geothermal/biomass). By supplying the "last 15% to 20%" of inflexible demand from firm baseload, the system cuts required long-duration storage by ~50% compared to a pure variable renewable architecture while avoiding over-reliance on any single technology.</li>
           </ul>
@@ -5669,7 +6056,7 @@
             <strong>The Electrification Efficiency Dividend:</strong> Although electricity generation must roughly double by 2050, <em>total British primary energy input falls by approximately 35% to 45%</em>. Burning petrol in an internal combustion engine wastes ~75% of energy as friction and tailpipe heat; an electric motor converts >90% into motion. A condensing gas boiler burns 1.1 kWh of methane for every 1.0 kWh of heat; an air-to-water heat pump consumes 1.0 kWh of electricity to extract 3.0 to 4.0 kWh of heat from outside air (COP 3.0–4.0). Electrifying the UK eliminates the combustion of over <strong>300 billion kWh/year of imported oil and natural gas</strong>, replacing it with ~90 billion kWh of clean electricity.
           </p>
 
-          <h4>3. Diurnal Profiles, Peak Demand &amp; The Winter "Dunkelflaute"</h4>
+          <h4>3. Diurnal Profiles, Peak Demand &amp; The Winter "Dünkelflaute"</h4>
           <p>
             Electricity grids must match instantaneous supply and demand at 50.0 Hz in real time. Great Britain exhibits extreme seasonal and diurnal demand swings:
           </p>
@@ -5689,7 +6076,7 @@
           </div>
 
           <p>
-            <strong>The Engineering Challenge: Winter <em>Dunkelflaute</em> &amp; The Royal Society 37-Year Weather Analysis:</strong> A Dunkelflaute (German for "dark doldrums") occurs when a stationary high-pressure anticyclone settles over North-Western Europe in mid-winter. Temperatures drop below freezing (driving space-heating demand toward 50 GW), while wind speeds collapse across the North Sea and overcast skies suppress solar PV to &lt;5% capacity for 5 to 20+ consecutive days.
+            <strong>The Engineering Challenge: Winter <em>Dünkelflaute</em> &amp; The Royal Society 37-Year Weather Analysis:</strong> A Dünkelflaute (German: <em>Dunkelflaute</em>, "dark doldrums") occurs when a stationary high-pressure anticyclone settles over North-Western Europe in mid-winter. Temperatures drop below freezing (driving space-heating demand toward 50 GW), while wind speeds collapse across the North Sea and overcast skies suppress solar PV to &lt;5% capacity for 5 to 20+ consecutive days.
           </p>
           <div style="background: rgba(0, 229, 255, 0.05); border-left: 3px solid var(--cyan); padding: 12px 16px; margin: 12px 0; border-radius: 0 8px 8px 0; font-size: 0.85rem; line-height: 1.55;">
             <strong style="color: var(--cyan); font-size: 0.92rem;">🔬 The Landmark Oxford / Royal Society Study: Sir Chris Llewellyn Smith FRS (2023)</strong>
@@ -5703,7 +6090,7 @@
             </ul>
             <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
               <button type="button" onclick="document.getElementById('modalOverlay').style.display='none'; setViewMode('dunkel');" style="padding: 7px 14px; font-size: 0.8rem; font-weight: 700; background: linear-gradient(135deg, #0ea5e9, #0284c7); border: none; border-radius: 6px; color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.35);">
-                ⚡ Launch Interactive Dunkelflaute &amp; Hydrogen Storage Simulator &rarr;
+                ⚡ Launch Interactive Dünkelflaute &amp; Hydrogen Storage Simulator &rarr;
               </button>
               <a href="https://royalsociety.org/news-resources/projects/low-carbon-energy-programme/large-scale-electricity-storage/" target="_blank" rel="noopener noreferrer" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 600; color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.4); border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
                 📖 The Royal Society Report ↗
@@ -5714,7 +6101,7 @@
             </div>
           </div>
           <p>
-            Managing a zero-carbon Dunkelflaute without building dozens of new unabated gas plants requires a multi-layered flexibility portfolio:
+            Managing a zero-carbon Dünkelflaute without building dozens of new unabated gas plants requires a multi-layered flexibility portfolio:
           </p>
           <ul style="margin-left: 20px; font-size: 0.84rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
             <li><strong>Long-Duration Energy Storage (LDES):</strong> Compressed air (CAES in Cheshire salt caverns), liquid air energy storage (Highview Power at Carrington 300 MWh), and new pumped hydro projects (SSE's Coire Glas 1.5 GW / 30 GWh in the Scottish Highlands).</li>
@@ -9561,9 +9948,10 @@
           document.getElementById("headerSubtitle").textContent = "What does it take to replace 41 Gt/yr of fossil energy? Generation mix & storage balancing";
           updateSolutionsCalculations();
         } else if (isDunkel) {
-          document.getElementById("headerTitle").textContent = "UK Dunkelflaute & Energy Storage Simulator";
+          document.getElementById("headerTitle").textContent = "UK Dünkelflaute & Energy Storage Simulator";
           document.getElementById("headerSubtitle").textContent = "Modeling British wind droughts, required storage volume, and the fiscal/tax cost of hydrogen salt caverns vs batteries";
           updateDunkelCalculations();
+          if (typeof renderHistoricalTreemap === 'function') setTimeout(renderHistoricalTreemap, 50);
         }
 
         if (isSimple && tpCardEl) {
@@ -11077,6 +11465,801 @@
         if (fiscalPerHousehold) fiscalPerHousehold.textContent = `£${(costPerHousehold / 12).toFixed(2)} / month`;
       }
 
+      
+      // =========================================================================
+      // CUMULATIVE HISTORICAL ATMOSPHERIC CARBON (1750-PRESENT) TREEMAP
+      // Data Source: Global Carbon Project (GCP), CDIAC & Our World in Data (OWID)
+      // =========================================================================
+
+      const TOP_50_EMITTERS = [
+        { rank: 1, name: "United States", code: "US", flag: "🇺🇸", region: "North America", emissions: 435.0, share: 23.90, note: "World leader in cumulative historical emissions; rapid 20th-century electrification, coal grid, and automobile expansion." },
+        { rank: 2, name: "China", code: "CN", flag: "🇨🇳", region: "Asia", emissions: 285.0, share: 15.66, note: "Rapid post-1980 industrial acceleration; now the world’s largest annual emitter driven by coal-fueled manufacturing." },
+        { rank: 3, name: "Russia", code: "RU", flag: "🇷🇺", region: "Eurasia", emissions: 123.0, share: 6.76, note: "Heavy Soviet heavy-industry legacy, vast gas pipelines, steelworks, and oil extraction." },
+        { rank: 4, name: "Germany", code: "DE", flag: "🇩🇪", region: "Europe", emissions: 95.0, share: 5.22, note: "Europe’s largest historical industrial powerhouse; coal-rich Ruhr valley and extensive automotive/chemical industry." },
+        { rank: 5, name: "United Kingdom", code: "GB", flag: "🇬🇧", region: "Europe", emissions: 80.0, share: 4.40, note: "Cradle of the Industrial Revolution in 1750; led world emissions for over a century with coal mines, steam engines, and railways." },
+        { rank: 6, name: "Japan", code: "JP", flag: "🇯🇵", region: "Asia", emissions: 70.0, share: 3.85, note: "Post-WWII rapid industrialization; heavy manufacturing, automotive, and steel production." },
+        { rank: 7, name: "India", code: "IN", flag: "🇮🇳", region: "Asia", emissions: 61.0, share: 3.35, note: "Home to 1.4B people; rapid recent electrification though historical cumulative per-capita emissions remain ~1/10th of the West." },
+        { rank: 8, name: "Canada", code: "CA", flag: "🇨🇦", region: "North America", emissions: 36.5, share: 2.01, note: "Extensive oil sands extraction, mining, and vast cold-climate transportation network." },
+        { rank: 9, name: "France", code: "FR", flag: "🇫🇷", region: "Europe", emissions: 35.8, share: 1.97, note: "Early coal adopter; drastically reduced power emissions via massive 1970s nuclear rollout." },
+        { rank: 10, name: "Ukraine", code: "UA", flag: "🇺🇦", region: "Eurasia", emissions: 31.0, share: 1.70, note: "Donbas coal basin, metallurgy, and heavy Soviet industrial infrastructure." },
+        { rank: 11, name: "Poland", code: "PL", flag: "🇵🇱", region: "Europe", emissions: 29.0, share: 1.59, note: "Historically dominated by Silesian hard coal and lignite power generation." },
+        { rank: 12, name: "South Africa", code: "ZA", flag: "🇿🇦", region: "Africa", emissions: 23.5, share: 1.29, note: "Africa’s highest historical emitter; Eskom coal-fired grid and Sasol coal-to-liquids synfuel refineries." },
+        { rank: 13, name: "Italy", code: "IT", flag: "🇮🇹", region: "Europe", emissions: 23.0, share: 1.26, note: "Po Valley industrial triangle (Milan, Turin, Genoa), automotive, and thermal power." },
+        { rank: 14, name: "Iran", code: "IR", flag: "🇮🇷", region: "Middle East", emissions: 20.5, share: 1.13, note: "Vast oil and gas production; domestic subsidized fossil consumption." },
+        { rank: 15, name: "Australia", code: "AU", flag: "🇦🇺", region: "Oceania", emissions: 20.0, share: 1.10, note: "Major global coal and LNG exporter; historically carbon-intensive domestic electricity grid." },
+        { rank: 16, name: "Mexico", code: "MX", flag: "🇲🇽", region: "Latin America", emissions: 19.5, share: 1.07, note: "Latin America’s largest cumulative emitter; oil refining (Pemex) and manufacturing belt." },
+        { rank: 17, name: "South Korea", code: "KR", flag: "🇰🇷", region: "Asia", emissions: 19.0, share: 1.04, note: "Miracle on the Han River; world-leading semiconductor, shipbuilding, and automotive exports." },
+        { rank: 18, name: "Brazil", code: "BR", flag: "🇧🇷", region: "Latin America", emissions: 17.5, share: 0.96, note: "Fossil CO2; total historical warming impact is substantially higher when Amazon land-use/deforestation is included." },
+        { rank: 19, name: "Saudi Arabia", code: "SA", flag: "🇸🇦", region: "Middle East", emissions: 17.0, share: 0.93, note: "World’s leading petroleum producer; domestic desalination, petrochemicals, and refining." },
+        { rank: 20, name: "Indonesia", code: "ID", flag: "🇮🇩", region: "Asia", emissions: 16.5, share: 0.91, note: "Expanding coal power fleet; rapid industrial and nickel mineral processing." },
+        { rank: 21, name: "Spain", code: "ES", flag: "🇪🇸", region: "Europe", emissions: 15.0, share: 0.82, note: "Post-1960s rapid economic modernization, cement boom, and thermal power." },
+        { rank: 22, name: "Kazakhstan", code: "KZ", flag: "🇰🇿", region: "Eurasia", emissions: 14.0, share: 0.77, note: "Vast coal reserves (Ekibastuz) and major Caspian oil/gas extraction." },
+        { rank: 23, name: "Belgium", code: "BE", flag: "🇧🇪", region: "Europe", emissions: 12.5, share: 0.69, note: "First continental European nation to undergo the Industrial Revolution (Wallonia coal and steel)." },
+        { rank: 24, name: "Netherlands", code: "NL", flag: "🇳🇱", region: "Europe", emissions: 12.0, share: 0.66, note: "Groningen giant gas field extraction and Rotterdam petrochemical refining hub." },
+        { rank: 25, name: "Turkey", code: "TR", flag: "🇹🇷", region: "Middle East", emissions: 12.0, share: 0.66, note: "Lignite power generation and expanding manufacturing and steel base." },
+        { rank: 26, name: "Czech Republic", code: "CZ", flag: "🇨🇿", region: "Europe", emissions: 11.5, share: 0.63, note: "Historic Bohemian industrial center; heavy brown coal reliance." },
+        { rank: 27, name: "Taiwan", code: "TW", flag: "🇹🇼", region: "Asia", emissions: 10.0, share: 0.55, note: "Global semiconductor fabrication (TSMC) and high-tech electronics manufacturing." },
+        { rank: 28, name: "Argentina", code: "AR", flag: "🇦🇷", region: "Latin America", emissions: 9.0, share: 0.49, note: "Early 20th-century economic modernization; gas-dominated domestic power grid." },
+        { rank: 29, name: "Romania", code: "RO", flag: "🇷🇴", region: "Europe", emissions: 8.5, share: 0.47, note: "Historical Ploiești oil production and Communist-era heavy chemical industry." },
+        { rank: 30, name: "Egypt", code: "EG", flag: "🇪🇬", region: "Africa", emissions: 7.5, share: 0.41, note: "North Africa’s most populous economy; domestic natural gas and oil use." },
+        { rank: 31, name: "Thailand", code: "TH", flag: "🇹🇭", region: "Asia", emissions: 7.2, share: 0.40, note: "Southeast Asian automotive and electronics export manufacturing." },
+        { rank: 32, name: "Malaysia", code: "MY", flag: "🇲🇾", region: "Asia", emissions: 7.0, share: 0.38, note: "Petronas offshore gas fields, LNG exports, and rapid industrialization." },
+        { rank: 33, name: "Venezuela", code: "VE", flag: "🇻🇪", region: "Latin America", emissions: 6.8, share: 0.37, note: "World’s largest proven crude oil reserves; heavy Orinoco belt production." },
+        { rank: 34, name: "Uzbekistan", code: "UZ", flag: "🇺🇿", region: "Eurasia", emissions: 6.5, share: 0.36, note: "Central Asian gas extraction and Soviet-era agro-industrial processing." },
+        { rank: 35, name: "Austria", code: "AT", flag: "🇦🇹", region: "Europe", emissions: 6.0, share: 0.33, note: "Danubian heavy industry, Voestalpine steel, and Alpine transit transport." },
+        { rank: 36, name: "Sweden", code: "SE", flag: "🇸🇪", region: "Europe", emissions: 5.6, share: 0.31, note: "Early iron mining; largely decarbonized grid via hydro and nuclear." },
+        { rank: 37, name: "Hungary", code: "HU", flag: "🇭🇺", region: "Europe", emissions: 5.4, share: 0.30, note: "Post-war heavy machinery and chemical industrialization." },
+        { rank: 38, name: "United Arab Emirates", code: "AE", flag: "🇦🇪", region: "Middle East", emissions: 5.2, share: 0.29, note: "Rapid late-20th-century petroleum expansion and global aviation/shipping hub." },
+        { rank: 39, name: "Algeria", code: "DZ", flag: "🇩🇿", region: "Africa", emissions: 5.0, share: 0.27, note: "Hassi Messaoud oil and Hassi R’Mel giant gas fields." },
+        { rank: 40, name: "Pakistan", code: "PK", flag: "🇵🇰", region: "Asia", emissions: 4.9, share: 0.27, note: "240M population; highly climate-vulnerable despite low historical cumulative emissions." },
+        { rank: 41, name: "Vietnam", code: "VN", flag: "🇻🇳", region: "Asia", emissions: 4.8, share: 0.26, note: "Rapid 21st-century manufacturing boom and coal-fired industrial growth." },
+        { rank: 42, name: "Greece", code: "GR", flag: "🇬🇷", region: "Europe", emissions: 4.6, share: 0.25, note: "Ptolemaida lignite power stations and maritime transport." },
+        { rank: 43, name: "Belarus", code: "BY", flag: "🇧🇾", region: "Eurasia", emissions: 4.5, share: 0.25, note: "Mozyr oil refining, potash mining, and heavy machinery." },
+        { rank: 44, name: "Colombia", code: "CO", flag: "🇨🇴", region: "Latin America", emissions: 4.4, share: 0.24, note: "Cerrejón open-cast thermal coal mining and oil extraction." },
+        { rank: 45, name: "Philippines", code: "PH", flag: "🇵🇭", region: "Asia", emissions: 4.2, share: 0.23, note: "115M people; archipelagic nation facing severe typhoons despite <0.25% share." },
+        { rank: 46, name: "Iraq", code: "IQ", flag: "🇮🇶", region: "Middle East", emissions: 4.0, share: 0.22, note: "Basra oil fields and significant associated petroleum gas flaring." },
+        { rank: 47, name: "Chile", code: "CL", flag: "🇨🇱", region: "Latin America", emissions: 3.9, share: 0.21, note: "Global copper mining, thermoelectric power, and mineral refining." },
+        { rank: 48, name: "Kuwait", code: "KW", flag: "🇰🇼", region: "Middle East", emissions: 3.8, share: 0.21, note: "Burgan oil field and high per-capita energy consumption." },
+        { rank: 49, name: "Nigeria", code: "NG", flag: "🇳🇬", region: "Africa", emissions: 3.6, share: 0.20, note: "Africa’s largest population (220M); Niger Delta petroleum extraction and flaring." },
+        { rank: 50, name: "Bulgaria", code: "BG", flag: "🇧🇬", region: "Europe", emissions: 3.5, share: 0.19, note: "Maritsa East lignite power complex and historic heavy chemical industry." }
+      ];
+
+      const BLOCK_REST_OF_WORLD = {
+        rank: 51,
+        name: "Rest of the World (170+ Nations)",
+        code: "ROW",
+        flag: "🌐",
+        region: "Rest of World",
+        emissions: 149.3,
+        share: 8.20,
+        note: "Over 170 sovereign states & territories collectively representing >3.2 billion citizens (each <0.2% individually). Click to explore the complete catalog!"
+      };
+
+      const ALL_HISTORICAL_ITEMS = [...TOP_50_EMITTERS, BLOCK_REST_OF_WORLD];
+
+      // Catalog of 150+ remaining sovereign states & territories for modal
+      const REST_OF_WORLD_NATIONS = [
+        // Europe & Transcontinental
+        { name: "Albania", code: "AL", flag: "🇦🇱", region: "Europe", emissions: 0.30, share: 0.016 },
+        { name: "Andorra", code: "AD", flag: "🇦🇩", region: "Europe", emissions: 0.02, share: 0.001 },
+        { name: "Armenia", code: "AM", flag: "🇦🇲", region: "Europe", emissions: 0.35, share: 0.019 },
+        { name: "Azerbaijan", code: "AZ", flag: "🇦🇿", region: "Eurasia", emissions: 3.10, share: 0.170 },
+        { name: "Bosnia & Herzegovina", code: "BA", flag: "🇧🇦", region: "Europe", emissions: 1.15, share: 0.063 },
+        { name: "Croatia", code: "HR", flag: "🇭🇷", region: "Europe", emissions: 1.30, share: 0.071 },
+        { name: "Cyprus", code: "CY", flag: "🇨🇾", region: "Europe", emissions: 0.32, share: 0.018 },
+        { name: "Denmark", code: "DK", flag: "🇩🇰", region: "Europe", emissions: 3.40, share: 0.187 },
+        { name: "Estonia", code: "EE", flag: "🇪🇪", region: "Europe", emissions: 1.45, share: 0.080 },
+        { name: "Finland", code: "FI", flag: "🇫🇮", region: "Europe", emissions: 2.85, share: 0.157 },
+        { name: "Georgia", code: "GE", flag: "🇬🇪", region: "Europe", emissions: 0.55, share: 0.030 },
+        { name: "Iceland", code: "IS", flag: "🇮🇸", region: "Europe", emissions: 0.12, share: 0.007 },
+        { name: "Ireland", code: "IE", flag: "🇮🇪", region: "Europe", emissions: 2.40, share: 0.132 },
+        { name: "Kosovo", code: "XK", flag: "🇽🇰", region: "Europe", emissions: 0.28, share: 0.015 },
+        { name: "Latvia", code: "LV", flag: "🇱🇻", region: "Europe", emissions: 0.60, share: 0.033 },
+        { name: "Liechtenstein", code: "LI", flag: "🇱🇮", region: "Europe", emissions: 0.01, share: 0.001 },
+        { name: "Lithuania", code: "LT", flag: "🇱🇹", region: "Europe", emissions: 0.85, share: 0.047 },
+        { name: "Luxembourg", code: "LU", flag: "🇱🇺", region: "Europe", emissions: 0.95, share: 0.052 },
+        { name: "Malta", code: "MT", flag: "🇲🇹", region: "Europe", emissions: 0.08, share: 0.004 },
+        { name: "Moldova", code: "MD", flag: "🇲🇩", region: "Europe", emissions: 0.70, share: 0.038 },
+        { name: "Monaco", code: "MC", flag: "🇲🇨", region: "Europe", emissions: 0.01, share: 0.001 },
+        { name: "Montenegro", code: "ME", flag: "🇲🇪", region: "Europe", emissions: 0.12, share: 0.007 },
+        { name: "North Macedonia", code: "MK", flag: "🇲🇰", region: "Europe", emissions: 0.52, share: 0.029 },
+        { name: "Norway", code: "NO", flag: "🇳🇴", region: "Europe", emissions: 2.95, share: 0.162 },
+        { name: "Portugal", code: "PT", flag: "🇵🇹", region: "Europe", emissions: 3.15, share: 0.173 },
+        { name: "San Marino", code: "SM", flag: "🇸🇲", region: "Europe", emissions: 0.01, share: 0.001 },
+        { name: "Serbia", code: "RS", flag: "🇷🇸", region: "Europe", emissions: 2.80, share: 0.154 },
+        { name: "Slovakia", code: "SK", flag: "🇸🇰", region: "Europe", emissions: 2.80, share: 0.154 },
+        { name: "Slovenia", code: "SI", flag: "🇸🇮", region: "Europe", emissions: 0.82, share: 0.045 },
+        { name: "Switzerland", code: "CH", flag: "🇨🇭", region: "Europe", emissions: 3.20, share: 0.176 },
+        { name: "Vatican City", code: "VA", flag: "🇻🇦", region: "Europe", emissions: 0.001, share: 0.0001 },
+
+        // Asia & Middle East (excluding Top 50)
+        { name: "Afghanistan", code: "AF", flag: "🇦🇫", region: "Asia", emissions: 0.22, share: 0.012 },
+        { name: "Bahrain", code: "BH", flag: "🇧🇭", region: "Middle East", emissions: 1.55, share: 0.085 },
+        { name: "Bangladesh", code: "BD", flag: "🇧🇩", region: "Asia", emissions: 2.20, share: 0.121 },
+        { name: "Bhutan", code: "BT", flag: "🇧🇹", region: "Asia", emissions: 0.03, share: 0.002 },
+        { name: "Brunei", code: "BN", flag: "🇧🇳", region: "Asia", emissions: 0.38, share: 0.021 },
+        { name: "Cambodia", code: "KH", flag: "🇰🇭", region: "Asia", emissions: 0.26, share: 0.014 },
+        { name: "Israel", code: "IL", flag: "🇮🇱", region: "Middle East", emissions: 3.10, share: 0.170 },
+        { name: "Jordan", code: "JO", flag: "🇯🇴", region: "Middle East", emissions: 0.95, share: 0.052 },
+        { name: "Kyrgyzstan", code: "KG", flag: "🇰🇬", region: "Eurasia", emissions: 0.65, share: 0.036 },
+        { name: "Laos", code: "LA", flag: "🇱🇦", region: "Asia", emissions: 0.32, share: 0.018 },
+        { name: "Lebanon", code: "LB", flag: "🇱🇧", region: "Middle East", emissions: 0.88, share: 0.048 },
+        { name: "Maldives", code: "MV", flag: "🇲🇻", region: "Oceania & SIDS", emissions: 0.04, share: 0.002 },
+        { name: "Mongolia", code: "MN", flag: "🇲🇳", region: "Asia", emissions: 0.85, share: 0.047 },
+        { name: "Myanmar (Burma)", code: "MM", flag: "🇲🇲", region: "Asia", emissions: 0.95, share: 0.052 },
+        { name: "Nepal", code: "NP", flag: "🇳🇵", region: "Asia", emissions: 0.24, share: 0.013 },
+        { name: "North Korea", code: "KP", flag: "🇰🇵", region: "Asia", emissions: 3.40, share: 0.187 },
+        { name: "Oman", code: "OM", flag: "🇴🇲", region: "Middle East", emissions: 2.10, share: 0.115 },
+        { name: "Palestine", code: "PS", flag: "🇵🇸", region: "Middle East", emissions: 0.09, share: 0.005 },
+        { name: "Qatar", code: "QA", flag: "🇶🇦", region: "Middle East", emissions: 3.35, share: 0.184 },
+        { name: "Singapore", code: "SG", flag: "🇸🇬", region: "Asia", emissions: 2.45, share: 0.135 },
+        { name: "Sri Lanka", code: "LK", flag: "🇱🇰", region: "Asia", emissions: 0.52, share: 0.029 },
+        { name: "Syria", code: "SY", flag: "🇸🇾", region: "Middle East", emissions: 1.85, share: 0.102 },
+        { name: "Tajikistan", code: "TJ", flag: "🇹🇯", region: "Eurasia", emissions: 0.55, share: 0.030 },
+        { name: "Timor-Leste", code: "TL", flag: "🇹🇱", region: "Asia", emissions: 0.02, share: 0.001 },
+        { name: "Turkmenistan", code: "TM", flag: "🇹🇲", region: "Eurasia", emissions: 3.30, share: 0.181 },
+        { name: "Yemen", code: "YE", flag: "🇾🇪", region: "Middle East", emissions: 0.65, share: 0.036 },
+
+        // Africa (50+ nations)
+        { name: "Angola", code: "AO", flag: "🇦🇴", region: "Africa", emissions: 1.25, share: 0.069 },
+        { name: "Benin", code: "BJ", flag: "🇧🇯", region: "Africa", emissions: 0.14, share: 0.008 },
+        { name: "Botswana", code: "BW", flag: "🇧🇼", region: "Africa", emissions: 0.32, share: 0.018 },
+        { name: "Burkina Faso", code: "BF", flag: "🇧🇫", region: "Africa", emissions: 0.12, share: 0.007 },
+        { name: "Burundi", code: "BI", flag: "🇧🇮", region: "Africa", emissions: 0.02, share: 0.001 },
+        { name: "Cameroon", code: "CM", flag: "🇨🇲", region: "Africa", emissions: 0.42, share: 0.023 },
+        { name: "Cape Verde", code: "CV", flag: "🇨🇻", region: "Oceania & SIDS", emissions: 0.03, share: 0.002 },
+        { name: "Central African Rep.", code: "CF", flag: "🇨🇫", region: "Africa", emissions: 0.02, share: 0.001 },
+        { name: "Chad", code: "TD", flag: "🇹🇩", region: "Africa", emissions: 0.06, share: 0.003 },
+        { name: "Comoros", code: "KM", flag: "🇰🇲", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
+        { name: "Congo (Brazzaville)", code: "CG", flag: "🇨🇬", region: "Africa", emissions: 0.25, share: 0.014 },
+        { name: "DR Congo", code: "CD", flag: "🇨🇩", region: "Africa", emissions: 0.45, share: 0.025 },
+        { name: "Djibouti", code: "DJ", flag: "🇩🇯", region: "Africa", emissions: 0.03, share: 0.002 },
+        { name: "Equatorial Guinea", code: "GQ", flag: "🇬🇶", region: "Africa", emissions: 0.32, share: 0.018 },
+        { name: "Eritrea", code: "ER", flag: "🇪🇷", region: "Africa", emissions: 0.03, share: 0.002 },
+        { name: "Eswatini", code: "SZ", flag: "🇸🇿", region: "Africa", emissions: 0.06, share: 0.003 },
+        { name: "Ethiopia", code: "ET", flag: "🇪🇹", region: "Africa", emissions: 0.65, share: 0.036 },
+        { name: "Gabon", code: "GA", flag: "🇬🇦", region: "Africa", emissions: 0.35, share: 0.019 },
+        { name: "Gambia", code: "GM", flag: "🇬🇲", region: "Africa", emissions: 0.02, share: 0.001 },
+        { name: "Ghana", code: "GH", flag: "🇬🇭", region: "Africa", emissions: 0.55, share: 0.030 },
+        { name: "Guinea", code: "GN", flag: "🇬🇳", region: "Africa", emissions: 0.12, share: 0.007 },
+        { name: "Guinea-Bissau", code: "GW", flag: "🇬🇼", region: "Africa", emissions: 0.01, share: 0.001 },
+        { name: "Ivory Coast", code: "CI", flag: "🇨🇮", region: "Africa", emissions: 0.45, share: 0.025 },
+        { name: "Kenya", code: "KE", flag: "🇰🇪", region: "Africa", emissions: 0.68, share: 0.037 },
+        { name: "Lesotho", code: "LS", flag: "🇱🇸", region: "Africa", emissions: 0.04, share: 0.002 },
+        { name: "Liberia", code: "LR", flag: "🇱🇷", region: "Africa", emissions: 0.03, share: 0.002 },
+        { name: "Libya", code: "LY", flag: "🇱🇾", region: "Africa", emissions: 2.65, share: 0.146 },
+        { name: "Madagascar", code: "MG", flag: "🇲🇬", region: "Africa", emissions: 0.15, share: 0.008 },
+        { name: "Malawi", code: "MW", flag: "🇲🇼", region: "Africa", emissions: 0.06, share: 0.003 },
+        { name: "Mali", code: "ML", flag: "🇲🇱", region: "Africa", emissions: 0.12, share: 0.007 },
+        { name: "Mauritania", code: "MR", flag: "🇲🇷", region: "Africa", emissions: 0.14, share: 0.008 },
+        { name: "Mauritius", code: "MU", flag: "🇲🇺", region: "Oceania & SIDS", emissions: 0.16, share: 0.009 },
+        { name: "Morocco", code: "MA", flag: "🇲🇦", region: "Africa", emissions: 2.30, share: 0.126 },
+        { name: "Mozambique", code: "MZ", flag: "🇲🇿", region: "Africa", emissions: 0.22, share: 0.012 },
+        { name: "Namibia", code: "NA", flag: "🇳🇦", region: "Africa", emissions: 0.16, share: 0.009 },
+        { name: "Niger", code: "NE", flag: "🇳🇪", region: "Africa", emissions: 0.09, share: 0.005 },
+        { name: "Rwanda", code: "RW", flag: "🇷🇼", region: "Africa", emissions: 0.04, share: 0.002 },
+        { name: "São Tomé & Príncipe", code: "ST", flag: "🇸🇹", region: "Oceania & SIDS", emissions: 0.005, share: 0.0003 },
+        { name: "Senegal", code: "SN", flag: "🇸🇳", region: "Africa", emissions: 0.35, share: 0.019 },
+        { name: "Seychelles", code: "SC", flag: "🇸🇨", region: "Oceania & SIDS", emissions: 0.02, share: 0.001 },
+        { name: "Sierra Leone", code: "SL", flag: "🇸🇱", region: "Africa", emissions: 0.03, share: 0.002 },
+        { name: "Somalia", code: "SO", flag: "🇸🇴", region: "Africa", emissions: 0.03, share: 0.002 },
+        { name: "South Sudan", code: "SS", flag: "🇸🇸", region: "Africa", emissions: 0.05, share: 0.003 },
+        { name: "Sudan", code: "SD", flag: "🇸🇩", region: "Africa", emissions: 0.65, share: 0.036 },
+        { name: "Tanzania", code: "TZ", flag: "🇹🇿", region: "Africa", emissions: 0.42, share: 0.023 },
+        { name: "Togo", code: "TG", flag: "🇹🇬", region: "Africa", emissions: 0.08, share: 0.004 },
+        { name: "Tunisia", code: "TN", flag: "🇹🇳", region: "Africa", emissions: 1.25, share: 0.069 },
+        { name: "Uganda", code: "UG", flag: "🇺🇬", region: "Africa", emissions: 0.22, share: 0.012 },
+        { name: "Zambia", code: "ZM", flag: "🇿🇲", region: "Africa", emissions: 0.35, share: 0.019 },
+        { name: "Zimbabwe", code: "ZW", flag: "🇿🇼", region: "Africa", emissions: 0.82, share: 0.045 },
+
+        // Latin America & Caribbean (excluding Top 50)
+        { name: "Bahamas", code: "BS", flag: "🇧🇸", region: "Oceania & SIDS", emissions: 0.08, share: 0.004 },
+        { name: "Barbados", code: "BB", flag: "🇧🇧", region: "Oceania & SIDS", emissions: 0.05, share: 0.003 },
+        { name: "Belize", code: "BZ", flag: "🇧🇿", region: "Oceania & SIDS", emissions: 0.03, share: 0.002 },
+        { name: "Bolivia", code: "BO", flag: "🇧🇴", region: "Latin America", emissions: 0.95, share: 0.052 },
+        { name: "Costa Rica", code: "CR", flag: "🇨🇷", region: "Latin America", emissions: 0.35, share: 0.019 },
+        { name: "Cuba", code: "CU", flag: "🇨🇺", region: "Latin America", emissions: 1.65, share: 0.091 },
+        { name: "Dominican Republic", code: "DO", flag: "🇩🇴", region: "Latin America", emissions: 0.95, share: 0.052 },
+        { name: "Ecuador", code: "EC", flag: "🇪🇨", region: "Latin America", emissions: 1.85, share: 0.102 },
+        { name: "El Salvador", code: "SV", flag: "🇸🇻", region: "Latin America", emissions: 0.32, share: 0.018 },
+        { name: "Guatemala", code: "GT", flag: "🇬🇹", region: "Latin America", emissions: 0.65, share: 0.036 },
+        { name: "Guyana", code: "GY", flag: "🇬🇾", region: "Latin America", emissions: 0.15, share: 0.008 },
+        { name: "Haiti", code: "HT", flag: "🇭🇹", region: "Latin America", emissions: 0.12, share: 0.007 },
+        { name: "Honduras", code: "HN", flag: "🇭🇳", region: "Latin America", emissions: 0.38, share: 0.021 },
+        { name: "Jamaica", code: "JM", flag: "🇯🇲", region: "Oceania & SIDS", emissions: 0.38, share: 0.021 },
+        { name: "Nicaragua", code: "NI", flag: "🇳🇮", region: "Latin America", emissions: 0.22, share: 0.012 },
+        { name: "Panama", code: "PA", flag: "🇵🇦", region: "Latin America", emissions: 0.45, share: 0.025 },
+        { name: "Paraguay", code: "PY", flag: "🇵🇾", region: "Latin America", emissions: 0.30, share: 0.016 },
+        { name: "Peru", code: "PE", flag: "🇵🇪", region: "Latin America", emissions: 2.35, share: 0.129 },
+        { name: "Suriname", code: "SR", flag: "🇸🇷", region: "Latin America", emissions: 0.10, share: 0.005 },
+        { name: "Trinidad & Tobago", code: "TT", flag: "🇹🇹", region: "Oceania & SIDS", emissions: 1.75, share: 0.096 },
+        { name: "Uruguay", code: "UY", flag: "🇺🇾", region: "Latin America", emissions: 0.40, share: 0.022 },
+
+        // Oceania & Small Island Developing States (SIDS)
+        { name: "Antigua & Barbuda", code: "AG", flag: "🇦🇬", region: "Oceania & SIDS", emissions: 0.02, share: 0.001 },
+        { name: "Dominica", code: "DM", flag: "🇩🇲", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
+        { name: "Fiji", code: "FJ", flag: "🇫🇯", region: "Oceania & SIDS", emissions: 0.06, share: 0.003 },
+        { name: "Grenada", code: "GD", flag: "🇬🇩", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
+        { name: "Kiribati", code: "KI", flag: "🇰🇮", region: "Oceania & SIDS", emissions: 0.003, share: 0.0002 },
+        { name: "Marshall Islands", code: "MH", flag: "🇲🇭", region: "Oceania & SIDS", emissions: 0.005, share: 0.0003 },
+        { name: "Micronesia", code: "FM", flag: "🇫🇲", region: "Oceania & SIDS", emissions: 0.006, share: 0.0003 },
+        { name: "Nauru", code: "NR", flag: "🇳🇷", region: "Oceania & SIDS", emissions: 0.002, share: 0.0001 },
+        { name: "New Zealand", code: "NZ", flag: "🇳🇿", region: "Oceania", emissions: 2.15, share: 0.118 },
+        { name: "Palau", code: "PW", flag: "🇵🇼", region: "Oceania & SIDS", emissions: 0.006, share: 0.0003 },
+        { name: "Papua New Guinea", code: "PG", flag: "🇵🇬", region: "Oceania", emissions: 0.35, share: 0.019 },
+        { name: "Saint Kitts & Nevis", code: "KN", flag: "🇰🇳", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
+        { name: "Saint Lucia", code: "LC", flag: "🇱🇨", region: "Oceania & SIDS", emissions: 0.02, share: 0.001 },
+        { name: "St Vincent & Grenadines", code: "VC", flag: "🇻🇨", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
+        { name: "Samoa", code: "WS", flag: "🇼🇸", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
+        { name: "Solomon Islands", code: "SB", flag: "🇸🇧", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
+        { name: "Tonga", code: "TO", flag: "🇹🇴", region: "Oceania & SIDS", emissions: 0.006, share: 0.0003 },
+        { name: "Tuvalu", code: "TV", flag: "🇹🇻", region: "Oceania & SIDS", emissions: 0.001, share: 0.0001 },
+        { name: "Vanuatu", code: "VU", flag: "🇻🇺", region: "Oceania & SIDS", emissions: 0.005, share: 0.0003 }
+      ];
+
+      // Regional Palette Configuration
+      const REGION_COLORS = {
+        "North America": { fill: "#0284c7", stroke: "#38bdf8", glow: "rgba(56, 189, 248, 0.4)" },
+        "Europe":        { fill: "#059669", stroke: "#34d399", glow: "rgba(52, 211, 153, 0.4)" },
+        "Asia":          { fill: "#d97706", stroke: "#fbbf24", glow: "rgba(251, 191, 36, 0.4)" },
+        "Eurasia":       { fill: "#7c3aed", stroke: "#c084fc", glow: "rgba(192, 132, 252, 0.4)" },
+        "Middle East":   { fill: "#ca8a04", stroke: "#facc15", glow: "rgba(250, 204, 21, 0.4)" },
+        "Latin America": { fill: "#db2777", stroke: "#f472b6", glow: "rgba(244, 114, 182, 0.4)" },
+        "Africa":        { fill: "#16a34a", stroke: "#4ade80", glow: "rgba(74, 222, 128, 0.4)" },
+        "Oceania":       { fill: "#4f46e5", stroke: "#818cf8", glow: "rgba(129, 140, 248, 0.4)" },
+        "Rest of World": { fill: "#334155", stroke: "#38bdf8", glow: "rgba(56, 189, 248, 0.5)" }
+      };
+
+      let activeTreemapRegion = "All";
+      let treemapSearchTerm = "";
+      let activeHoveredNode = null;
+      let treemapCalculatedLayout = [];
+      let treemapInitialized = false;
+
+      // Squarified Treemap Layout Engine (Bruls, Huizing, van Wijk)
+      function calculateSquarifiedTreemap(items, x, y, width, height) {
+        if (!items || items.length === 0 || width <= 0 || height <= 0) return [];
+        const totalVal = items.reduce((s, d) => s + d.emissions, 0);
+        const totalArea = width * height;
+
+        const nodes = items.map(d => ({
+          ...d,
+          area: (d.emissions / totalVal) * totalArea,
+          x: 0, y: 0, w: 0, h: 0
+        })).sort((a, b) => b.area - a.area);
+
+        function worst(row, side) {
+          if (row.length === 0) return Infinity;
+          const rowArea = row.reduce((s, d) => s + d.area, 0);
+          const side2 = side * side;
+          let maxAspect = 0;
+          for (const d of row) {
+            const a = d.area;
+            const aspect = Math.max((side2 * a) / (rowArea * rowArea), (rowArea * rowArea) / (side2 * a));
+            if (aspect > maxAspect) maxAspect = aspect;
+          }
+          return maxAspect;
+        }
+
+        function layoutRow(row, rx, ry, rw, rh, isHorizontal) {
+          const rowArea = row.reduce((s, d) => s + d.area, 0);
+          if (isHorizontal) {
+            const rowHeight = rowArea / rw;
+            let curX = rx;
+            for (const d of row) {
+              const itemW = d.area / rowHeight;
+              d.x = curX;
+              d.y = ry;
+              d.w = itemW;
+              d.h = rowHeight;
+              curX += itemW;
+            }
+            return { rx, ry: ry + rowHeight, rw, rh: rh - rowHeight };
+          } else {
+            const rowWidth = rowArea / rh;
+            let curY = ry;
+            for (const d of row) {
+              const itemH = d.area / rowWidth;
+              d.x = rx;
+              d.y = curY;
+              d.w = rowWidth;
+              d.h = itemH;
+              curY += itemH;
+            }
+            return { rx: rx + rowWidth, ry, rw: rw - rowWidth, rh };
+          }
+        }
+
+        let curX = x, curY = y, curW = width, curH = height;
+        let row = [];
+        let remaining = [...nodes];
+
+        while (remaining.length > 0) {
+          const isHorizontal = curW >= curH;
+          const side = isHorizontal ? curW : curH;
+          const nextItem = remaining[0];
+
+          const currentWorst = worst(row, side);
+          const candidateWorst = worst([...row, nextItem], side);
+
+          if (row.length === 0 || candidateWorst <= currentWorst) {
+            row.push(remaining.shift());
+          } else {
+            const nextRect = layoutRow(row, curX, curY, curW, curH, !isHorizontal);
+            curX = nextRect.rx;
+            curY = nextRect.ry;
+            curW = nextRect.rw;
+            curH = nextRect.rh;
+            row = [];
+          }
+        }
+
+        if (row.length > 0) {
+          const isHorizontal = curW >= curH;
+          layoutRow(row, curX, curY, curW, curH, !isHorizontal);
+        }
+
+        return nodes;
+      }
+
+      function renderHistoricalTreemap() {
+        const canvas = document.getElementById("historicalEmissionsCanvas");
+        const container = document.getElementById("treemapCanvasContainer");
+        if (!canvas || !container) return;
+
+        const rect = container.getBoundingClientRect();
+        const displayW = Math.max(300, Math.floor(rect.width));
+        const displayH = Math.max(300, Math.floor(rect.height || 560));
+
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = displayW * dpr;
+        canvas.height = displayH * dpr;
+
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+
+        const padding = 2;
+        treemapCalculatedLayout = calculateSquarifiedTreemap(
+          ALL_HISTORICAL_ITEMS,
+          padding,
+          padding,
+          displayW - padding * 2,
+          displayH - padding * 2
+        );
+
+        ctx.clearRect(0, 0, displayW, displayH);
+
+        const searchLower = (treemapSearchTerm || "").toLowerCase().trim();
+
+        // Draw each block
+        treemapCalculatedLayout.forEach(node => {
+          const isHovered = activeHoveredNode && activeHoveredNode.rank === node.rank;
+          const palette = REGION_COLORS[node.region] || REGION_COLORS["Europe"];
+          
+          let matchesFilter = true;
+          if (activeTreemapRegion !== "All" && node.region !== activeTreemapRegion) {
+            matchesFilter = false;
+          }
+          if (searchLower) {
+            const matchName = node.name.toLowerCase().includes(searchLower);
+            const matchCode = (node.code || "").toLowerCase().includes(searchLower);
+            const matchRegion = node.region.toLowerCase().includes(searchLower);
+            if (!matchName && !matchCode && !matchRegion) {
+              matchesFilter = false;
+            }
+          }
+
+          ctx.save();
+
+          // Alpha fade for filtered out items
+          if (!matchesFilter) {
+            ctx.globalAlpha = 0.22;
+          }
+
+          const bx = Math.round(node.x);
+          const by = Math.round(node.y);
+          const bw = Math.max(1, Math.round(node.w) - 2);
+          const bh = Math.max(1, Math.round(node.h) - 2);
+
+          // Fill rectangle
+          if (node.rank === 51) {
+            // Distinct style for Rest of the World
+            const grad = ctx.createLinearGradient(bx, by, bx + bw, by + bh);
+            grad.addColorStop(0, "#1e293b");
+            grad.addColorStop(1, "#334155");
+            ctx.fillStyle = grad;
+          } else {
+            const grad = ctx.createLinearGradient(bx, by, bx, by + bh);
+            grad.addColorStop(0, palette.fill);
+            grad.addColorStop(1, palette.fill + "cc");
+            ctx.fillStyle = grad;
+          }
+          ctx.fillRect(bx, by, bw, bh);
+
+          // Stroke border
+          if (isHovered) {
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = palette.glow || "rgba(255, 255, 255, 0.5)";
+            ctx.shadowBlur = 12;
+            ctx.strokeRect(bx, by, bw, bh);
+          } else if (node.rank === 51) {
+            ctx.strokeStyle = "#38bdf8";
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 3]);
+            ctx.strokeRect(bx, by, bw, bh);
+            ctx.setLineDash([]);
+          } else {
+            ctx.strokeStyle = "rgba(0, 0, 0, 0.4)";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(bx, by, bw, bh);
+          }
+
+          // Text labels rendering inside block
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "#ffffff";
+
+          if (bw > 30 && bh > 22) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(bx + 4, by + 4, bw - 8, bh - 8);
+            ctx.clip();
+
+            if (node.rank === 51) {
+              // Rest of the World custom multiline label
+              ctx.font = "bold 13px system-ui, sans-serif";
+              ctx.fillText("🌐 Rest of the World (170+ Nations)", bx + 8, by + 18);
+              if (bh > 45) {
+                ctx.font = "11px system-ui, sans-serif";
+                ctx.fillStyle = "#38bdf8";
+                ctx.fillText("149.3 Gt CO₂ (8.2%) · >3.2B People", bx + 8, by + 34);
+              }
+              if (bh > 65) {
+                ctx.font = "italic 10px system-ui, sans-serif";
+                ctx.fillStyle = "#cbd5e1";
+                ctx.fillText("💡 Click this block to browse full 170+ catalog →", bx + 8, by + 50);
+              }
+            } else if (bw >= 110 && bh >= 65) {
+              // Large block: Flag + Full Name + Gt + %
+              ctx.font = "bold 13px system-ui, sans-serif";
+              ctx.fillText(`${node.flag} ${node.name}`, bx + 8, by + 18);
+              
+              ctx.font = "bold 12px ui-monospace, monospace";
+              ctx.fillStyle = "#ffffff";
+              ctx.fillText(`${node.emissions.toFixed(1)} Gt`, bx + 8, by + 36);
+
+              ctx.font = "11px system-ui, sans-serif";
+              ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+              ctx.fillText(`${node.share.toFixed(1)}% · #${node.rank}`, bx + 8, by + 52);
+            } else if (bw >= 65 && bh >= 42) {
+              // Medium block: Flag + Code + Gt
+              ctx.font = "bold 11px system-ui, sans-serif";
+              ctx.fillText(`${node.flag} ${node.code}`, bx + 6, by + 16);
+              ctx.font = "10px ui-monospace, monospace";
+              ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+              ctx.fillText(`${node.emissions.toFixed(1)} Gt`, bx + 6, by + 30);
+            } else if (bw >= 32 && bh >= 22) {
+              // Small block: Flag or Code
+              ctx.font = "10px system-ui, sans-serif";
+              ctx.fillText(bw >= 40 ? `${node.flag} ${node.code}` : node.code, bx + 4, by + 14);
+            }
+
+            ctx.restore();
+          }
+
+          ctx.restore();
+        });
+      }
+
+      function initHistoricalEmissionsTreemap() {
+        if (treemapInitialized) return;
+        treemapInitialized = true;
+
+        const canvas = document.getElementById("historicalEmissionsCanvas");
+        const container = document.getElementById("treemapCanvasContainer");
+        const tooltip = document.getElementById("historicalTreemapTooltip");
+
+        // Build Table rows
+        const tableBody = document.getElementById("historicalTableBody");
+        if (tableBody) {
+          let rowsHtml = "";
+          ALL_HISTORICAL_ITEMS.forEach(item => {
+            const isUk = item.rank === 5;
+            const isRow = item.rank === 51;
+            const rowClass = isUk ? "highlight-uk" : (isRow ? "highlight-row" : "");
+            rowsHtml += `
+              <tr class="${rowClass}" id="treemapRow_${item.rank}">
+                <td><strong>#${item.rank}</strong></td>
+                <td><span style="margin-right: 6px;">${item.flag}</span> <strong>${item.name}</strong> <span style="font-size: 0.7rem; color: #94a3b8;">(${item.code})</span></td>
+                <td><span class="badge" style="font-size: 0.68rem;">${item.region}</span></td>
+                <td style="text-align: right; font-family: ui-monospace, monospace; font-weight: 700;">${item.emissions.toFixed(1)} Gt</td>
+                <td style="text-align: right; font-family: ui-monospace, monospace; font-weight: 700;">${item.share.toFixed(2)}%</td>
+                <td style="font-size: 0.74rem; color: #cbd5e1;">${item.note}</td>
+              </tr>
+            `;
+          });
+          // Total summary row
+          rowsHtml += `
+            <tr style="background: rgba(255, 255, 255, 0.05); font-weight: 800; border-top: 2px solid rgba(255, 255, 255, 0.2);">
+              <td colspan="3"><strong>TOTAL GLOBAL HISTORICAL EMISSIONS (1750–2023)</strong></td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">1,820.0 Gt</td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">100.00%</td>
+              <td style="font-size: 0.74rem; color: #94a3b8;">Fossil fuel combustion &amp; industrial cement processes since 1750 (GCP &amp; OWID)</td>
+            </tr>
+          `;
+          tableBody.innerHTML = rowsHtml;
+        }
+
+        // Build Rest of World modal grid
+        buildRestOfWorldModalGrid();
+
+        if (canvas && container) {
+          // Hover interactions
+          canvas.addEventListener("mousemove", (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            let hit = null;
+            for (let i = treemapCalculatedLayout.length - 1; i >= 0; i--) {
+              const node = treemapCalculatedLayout[i];
+              if (
+                mouseX >= node.x &&
+                mouseX <= node.x + node.w &&
+                mouseY >= node.y &&
+                mouseY <= node.y + node.h
+              ) {
+                hit = node;
+                break;
+              }
+            }
+
+            if (hit !== activeHoveredNode) {
+              activeHoveredNode = hit;
+              renderHistoricalTreemap();
+            }
+
+            if (hit && tooltip) {
+              canvas.style.cursor = hit.rank === 51 ? "pointer" : "crosshair";
+              tooltip.style.display = "block";
+              
+              let tooltipHtml = `
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding-bottom: 4px;">
+                  <div style="font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                    <span>${hit.flag}</span> ${hit.name}
+                  </div>
+                  <span class="badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace;">#${hit.rank}</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                  <div>
+                    <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase;">Cumulative CO₂</div>
+                    <div style="font-size: 1.05rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">${hit.emissions.toFixed(1)} <span style="font-size: 0.72rem; color: #94a3b8;">Gt</span></div>
+                  </div>
+                  <div>
+                    <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase;">Global Share</div>
+                    <div style="font-size: 1.05rem; font-weight: 800; color: #fbbf24; font-family: ui-monospace, monospace;">${hit.share.toFixed(2)}%</div>
+                  </div>
+                </div>
+                <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px;">Region: <strong style="color: #fff;">${hit.region}</strong></div>
+                <div style="font-size: 0.74rem; color: #cbd5e1; line-height: 1.4;">${hit.note}</div>
+              `;
+
+              if (hit.rank === 51) {
+                tooltipHtml += `
+                  <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(56, 189, 248, 0.3); font-size: 0.74rem; font-weight: 700; color: #38bdf8; text-align: center;">
+                    👉 Click this block to browse all 170+ nations
+                  </div>
+                `;
+              }
+
+              tooltip.innerHTML = tooltipHtml;
+
+              // Tooltip positioning clamped within container
+              const ttWidth = 280;
+              const ttHeight = 160;
+              let posX = mouseX + 15;
+              let posY = mouseY + 15;
+
+              if (posX + ttWidth > rect.width) {
+                posX = mouseX - ttWidth - 15;
+              }
+              if (posY + ttHeight > rect.height) {
+                posY = mouseY - ttHeight - 15;
+              }
+
+              tooltip.style.left = `${Math.max(8, posX)}px`;
+              tooltip.style.top = `${Math.max(8, posY)}px`;
+            } else if (tooltip) {
+              tooltip.style.display = "none";
+              canvas.style.cursor = "default";
+            }
+          });
+
+          canvas.addEventListener("mouseleave", () => {
+            activeHoveredNode = null;
+            if (tooltip) tooltip.style.display = "none";
+            renderHistoricalTreemap();
+          });
+
+          // Click handling
+          canvas.addEventListener("click", () => {
+            if (activeHoveredNode && activeHoveredNode.rank === 51) {
+              openRestOfWorldModal();
+            }
+          });
+
+          // Resize Observer
+          if (window.ResizeObserver) {
+            const ro = new ResizeObserver(() => {
+              renderHistoricalTreemap();
+            });
+            ro.observe(container);
+          } else {
+            window.addEventListener("resize", renderHistoricalTreemap);
+          }
+        }
+
+        renderHistoricalTreemap();
+      }
+
+      function buildRestOfWorldModalGrid(regionFilter = "All", searchFilter = "") {
+        const grid = document.getElementById("modalCountryGrid");
+        const countLbl = document.getElementById("lblModalCount");
+        if (!grid) return;
+
+        const sLower = (searchFilter || "").toLowerCase().trim();
+
+        let filtered = REST_OF_WORLD_NATIONS.filter(item => {
+          if (regionFilter !== "All" && item.region !== regionFilter) return false;
+          if (sLower) {
+            const mName = item.name.toLowerCase().includes(sLower);
+            const mCode = item.code.toLowerCase().includes(sLower);
+            const mRegion = item.region.toLowerCase().includes(sLower);
+            if (!mName && !mCode && !mRegion) return false;
+          }
+          return true;
+        });
+
+        // Sort descending by emissions
+        filtered.sort((a, b) => b.emissions - a.emissions);
+
+        if (countLbl) {
+          countLbl.textContent = `${filtered.length} of ${REST_OF_WORLD_NATIONS.length}`;
+        }
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #94a3b8; font-size: 0.85rem;">No countries matched "${searchFilter}" in region "${regionFilter}".</div>`;
+          return;
+        }
+
+        let cardsHtml = "";
+        filtered.forEach(c => {
+          const isSids = c.region === "Oceania & SIDS";
+          const emDisplay = c.emissions >= 1.0 ? `${c.emissions.toFixed(2)} Gt` : `${Math.round(c.emissions * 1000)} Mt`;
+          cardsHtml += `
+            <div class="rest-world-country-card">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.1rem;">${c.flag}</span>
+                <div>
+                  <div style="font-weight: 700; font-size: 0.78rem; color: #fff;">${c.name}</div>
+                  <div style="font-size: 0.68rem; color: #94a3b8;">${c.code} · ${c.region}</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-family: ui-monospace, monospace; font-weight: 700; font-size: 0.78rem; color: ${isSids ? '#38bdf8' : '#a78bfa'};">${emDisplay}</div>
+                <div style="font-size: 0.66rem; color: #94a3b8;">${c.share.toFixed(3)}%</div>
+              </div>
+            </div>
+          `;
+        });
+        grid.innerHTML = cardsHtml;
+      }
+
+      function filterTreemapRegion(region) {
+        activeTreemapRegion = region;
+        const chips = document.querySelectorAll(".treemap-filter-chip[data-region]");
+        chips.forEach(c => {
+          c.classList.toggle("active", c.getAttribute("data-region") === region);
+        });
+        renderHistoricalTreemap();
+      }
+
+      function handleTreemapSearch(term) {
+        treemapSearchTerm = term;
+        const btnClear = document.getElementById("btnClearTreemapSearch");
+        if (btnClear) btnClear.style.display = term ? "inline-block" : "none";
+        renderHistoricalTreemap();
+
+        // Also filter table rows if table is visible
+        const sLower = (term || "").toLowerCase().trim();
+        const rows = document.querySelectorAll("#historicalTableBody tr");
+        rows.forEach(r => {
+          if (!sLower) {
+            r.style.display = "";
+          } else {
+            const text = r.textContent.toLowerCase();
+            r.style.display = text.includes(sLower) ? "" : "none";
+          }
+        });
+      }
+
+      function clearTreemapSearch() {
+        const input = document.getElementById("inputTreemapSearch");
+        if (input) input.value = "";
+        handleTreemapSearch("");
+      }
+
+      function setHistoricalViewFormat(format) {
+        const btnBlocks = document.getElementById("btnTreemapViewBlocks");
+        const btnTable = document.getElementById("btnTreemapViewTable");
+        const canvasContainer = document.getElementById("treemapCanvasContainer");
+        const tableContainer = document.getElementById("treemapTableContainer");
+
+        if (btnBlocks) btnBlocks.classList.toggle("active", format === "treemap");
+        if (btnTable) btnTable.classList.toggle("active", format === "table");
+
+        if (canvasContainer) canvasContainer.style.display = format === "treemap" ? "block" : "none";
+        if (tableContainer) tableContainer.style.display = format === "table" ? "block" : "none";
+
+        if (format === "treemap") {
+          setTimeout(renderHistoricalTreemap, 20);
+        }
+      }
+
+      let activeModalRegion = "All";
+      let activeModalSearch = "";
+
+      function openRestOfWorldModal() {
+        const modal = document.getElementById("modalRestOfWorld");
+        if (modal) {
+          modal.style.display = "flex";
+          document.body.style.overflow = "hidden";
+          buildRestOfWorldModalGrid(activeModalRegion, activeModalSearch);
+        }
+      }
+
+      function closeRestOfWorldModal() {
+        const modal = document.getElementById("modalRestOfWorld");
+        if (modal) {
+          modal.style.display = "none";
+          document.body.style.overflow = "";
+        }
+      }
+
+      function filterModalRegion(region) {
+        activeModalRegion = region;
+        const chips = document.querySelectorAll(".treemap-filter-chip[data-modal-region]");
+        chips.forEach(c => {
+          c.classList.toggle("active", c.getAttribute("data-modal-region") === region);
+        });
+        buildRestOfWorldModalGrid(activeModalRegion, activeModalSearch);
+      }
+
+      function filterModalSearch(term) {
+        activeModalSearch = term;
+        buildRestOfWorldModalGrid(activeModalRegion, activeModalSearch);
+      }
+
+      // Close modal on Escape key
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeRestOfWorldModal();
+        }
+      });
+
+      // Export to window
+      window.initHistoricalEmissionsTreemap = initHistoricalEmissionsTreemap;
+      window.renderHistoricalTreemap = renderHistoricalTreemap;
+      window.filterTreemapRegion = filterTreemapRegion;
+      window.handleTreemapSearch = handleTreemapSearch;
+      window.clearTreemapSearch = clearTreemapSearch;
+      window.setHistoricalViewFormat = setHistoricalViewFormat;
+      window.openRestOfWorldModal = openRestOfWorldModal;
+      window.closeRestOfWorldModal = closeRestOfWorldModal;
+      window.filterModalRegion = filterModalRegion;
+      window.filterModalSearch = filterModalSearch;
+
+
       function initDunkelView() {
         if (!sliderDunkelDemand) return;
 
@@ -11087,7 +12270,8 @@
         dunkelSliders.forEach(s => {
           if (s) {
             s.addEventListener("input", () => {
-              updateDunkelCalculations();
+              initHistoricalEmissionsTreemap();
+        updateDunkelCalculations();
             });
           }
         });
