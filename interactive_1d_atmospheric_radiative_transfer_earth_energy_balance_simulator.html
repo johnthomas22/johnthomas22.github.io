@@ -3536,37 +3536,27 @@
           </div>
         </div>
 
-        <!-- Metric Explanation & UK Comparison Notice -->
-        <div id="lblActiveScopeNotice" style="background: rgba(56, 189, 248, 0.08); border-left: 3px solid #38bdf8; padding: 10px 14px; border-radius: 0 6px 6px 0; margin-bottom: 14px; font-size: 0.8rem; color: #cbd5e1; line-height: 1.5;">
-          <!-- Dynamically populated by JS based on selected metric -->
+        <!-- Heading Row with Badges & Pop-up Full Explanation Button -->
+        <div class="card-title-row" style="flex-wrap: wrap; gap: 10px; margin-bottom: 12px; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div class="card-title" id="lblTreemapCardTitle" onclick="openEmissionsExplanationModal()" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem; cursor: pointer; user-select: none;" title="Click to view full explanation of this metric and climate context">
+              <span>🌍</span> <span id="lblTreemapCardTitleText">Current Annual Emissions by Country (Latest Data · 2023)</span>
+            </div>
+            <div id="treemapBadgeGroup" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+              <span class="badge badge-cyan" id="badgeTreemapSource" style="font-size: 0.72rem;">Global Carbon Project &amp; EDGAR/OWID (2023)</span>
+              <span class="badge badge-amber" id="badgeTreemapTotal" style="font-size: 0.72rem;">Total: 37.4 Gt CO₂/yr</span>
+              <span class="badge badge-purple" id="badgeTreemapUK" style="font-size: 0.72rem; background: rgba(192, 132, 252, 0.15); border-color: #c084fc; color: #c084fc;">🇬🇧 UK #17 Annually (0.33 Gt · 0.88%)</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="openEmissionsExplanationModal()" style="font-size: 0.76rem; padding: 5px 12px; font-weight: 700; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4); display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border-radius: 6px; background: rgba(56, 189, 248, 0.1);" title="Click for full explanation of this metric and climate context">
+            <span>ℹ️</span> Full Explanation &rarr;
+          </button>
         </div>
 
-        <div class="card-title-row" style="flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
-          <div class="card-title" id="lblTreemapCardTitle" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem;">
-            <span>🌍</span> Current Annual Emissions by Country (Latest Data · 2023)
-          </div>
-          <div id="treemapBadgeGroup" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-            <span class="badge badge-cyan" id="badgeTreemapSource" style="font-size: 0.72rem;">Global Carbon Project &amp; EDGAR/OWID (2023)</span>
-            <span class="badge badge-amber" id="badgeTreemapTotal" style="font-size: 0.72rem;">Total: 37.4 Gt CO₂/yr</span>
-            <span class="badge badge-purple" id="badgeTreemapUK" style="font-size: 0.72rem; background: rgba(192, 132, 252, 0.15); border-color: #c084fc; color: #c084fc;">🇬🇧 UK #17 Annually (0.33 Gt · 0.88%)</span>
-          </div>
-        </div>
-
-        <p id="lblTreemapDescription" style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0; margin-bottom: 14px; line-height: 1.55;">
-          Annual fossil fuel combustion and industrial cement CO₂ emissions by sovereign state for 2023. 
-          The area of each proportional block directly corresponds to that nation's current annual carbon emissions (37.40 Gt/yr). 
-          The <strong>Top 50 nations</strong> account for <strong>89.8%</strong> of all current global carbon, while the remaining <strong>170+ nations &amp; territories</strong> share just <strong>10.2%</strong>.
-        </p>
-
-        <!-- Narrative Banner: Annual Flow vs Historical Bathtub & Per Capita -->
-        <div id="bannerTreemapNarrative" style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 0.8rem; line-height: 1.5; color: #cbd5e1;">
-          <div id="bannerTreemapNarrativeTitle" style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #38bdf8; margin-bottom: 4px;">
-            <span>⚖️</span> The Annual Flow vs Historical "Carbon Bathtub" Dilemma &amp; Per-Capita Equity
-          </div>
-          <div id="bannerTreemapNarrativeBody">
-            While China leads current annual emissions at <strong>30.5% (11.4 Gt/yr)</strong> and the USA is #2 at <strong>12.6% (4.7 Gt/yr)</strong>, global warming is governed by the total cumulative carbon stock in the atmosphere—where the USA (23.9%) and Europe (~22%) are overwhelmingly responsible. Furthermore, per-capita intensity reveals dramatic contrasts: oil-rich Gulf states (Qatar <strong>44.0 t/person</strong>, UAE <strong>23.5 t</strong>, Saudi Arabia <strong>18.2 t</strong>) and western nations (Australia <strong>14.6 t</strong>, USA <strong>13.9 t</strong>) emit multiple times more per person than China (<strong>8.1 t</strong>), the UK (<strong>4.8 t</strong>), India (<strong>2.1 t</strong>), or African nations (<strong>&lt;1.0 t</strong>).
-          </div>
-        </div>
+        <!-- Hidden Explanatory Text Elements (Kept for backwards compatibility, full content moved to pop-up modal) -->
+        <div id="lblActiveScopeNotice" style="display: none;"></div>
+        <div id="lblTreemapDescription" style="display: none;"></div>
+        <div id="bannerTreemapNarrative" style="display: none;"><div id="bannerTreemapNarrativeTitle"></div><div id="bannerTreemapNarrativeBody"></div></div>
 
         <!-- 4 Quick Stats Strip -->
         <div id="treemapQuickStatsStrip" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px;">
@@ -3813,6 +3803,48 @@
       <div style="padding: 12px 20px; background: #080e1a; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem; color: #94a3b8;">
         <div>Showing <span id="lblModalCount" style="color: #fff; font-weight: 700;">170+</span> sovereign nations and territories</div>
         <button type="button" class="btn btn-secondary" onclick="closeRestOfWorldModal()" style="font-size: 0.78rem; padding: 5px 14px;">Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       EMISSIONS METRICS & CLIMATE CONTEXT EXPLANATION MODAL (ALL 3 SCOPES)
+       ===================================================================== -->
+  <div class="modal-overlay" id="modalEmissionsExplanation" style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; inset: 0; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(8px);">
+    <div class="rest-world-modal-card" style="max-width: 860px; width: 95%;">
+      <div class="modal-header" style="padding: 16px 20px; background: #080e1a; border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 700; color: #fff;">
+            <span>📊</span> Emissions Metrics &amp; Climate Responsibility
+          </div>
+          <div style="font-size: 0.76rem; color: #94a3b8; margin-top: 2px;">
+            Full methodology, ranking logic, British historical accountability, and equity dynamics
+          </div>
+        </div>
+        <button type="button" class="btn-modal-close" onclick="closeEmissionsExplanationModal()" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; width: 32px; height: 32px; border-radius: 6px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+      </div>
+
+      <!-- Scope Switcher Tabs (All 3 metrics) -->
+      <div style="display: flex; gap: 8px; padding: 12px 20px; background: rgba(15, 23, 42, 0.75); border-bottom: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
+        <button type="button" class="btn btn-secondary active" id="modalTabAnnual" onclick="setModalExplanationScope('annual')" style="font-size: 0.78rem; padding: 6px 14px; font-weight: 700;">
+          📅 Current Annual (2023)
+        </button>
+        <button type="button" class="btn btn-secondary" id="modalTabHistorical" onclick="setModalExplanationScope('historical')" style="font-size: 0.78rem; padding: 6px 14px; font-weight: 700;">
+          ⏳ Cumulative Historical (1750–2023)
+        </button>
+        <button type="button" class="btn btn-secondary" id="modalTabPerCapita" onclick="setModalExplanationScope('percapita')" style="font-size: 0.78rem; padding: 6px 14px; font-weight: 700;">
+          👤 Per-Capita Intensity (2023)
+        </button>
+      </div>
+
+      <!-- Scrollable Tab Content Container -->
+      <div id="modalExplanationContent" style="padding: 18px 22px; overflow-y: auto; max-height: 65vh; display: flex; flex-direction: column; gap: 14px; font-size: 0.84rem; line-height: 1.6; color: #cbd5e1;">
+        <!-- Populated dynamically by setModalExplanationScope -->
+      </div>
+
+      <div style="padding: 12px 20px; background: #080e1a; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem; color: #94a3b8;">
+        <div>Sources: <strong>Global Carbon Project (GCP)</strong>, <strong>EDGAR</strong>, CDIAC &amp; <strong>Our World in Data (OWID)</strong></div>
+        <button type="button" class="btn btn-secondary" onclick="closeEmissionsExplanationModal()" style="font-size: 0.78rem; padding: 5px 14px;">Close Window</button>
       </div>
     </div>
   </div>
@@ -12030,6 +12062,12 @@
         const selectEl = document.getElementById("selectEmissionsMetric");
         if (selectEl && selectEl.value !== scope) selectEl.value = scope;
 
+        // Keep explanation modal in sync if open
+        const modalExpl = document.getElementById("modalEmissionsExplanation");
+        if (modalExpl && modalExpl.style.display === "flex") {
+          setModalExplanationScope(scope);
+        }
+
         updateTreemapMetadataAndStats();
         buildTreemapTable();
         buildRestOfWorldModalGrid(activeModalRegion, activeModalSearch);
@@ -12588,6 +12626,12 @@
         const tooltip = document.getElementById("historicalTreemapTooltip");
 
         // Sync initial UI metadata & stats
+        // Keep explanation modal in sync if open
+        const modalExpl = document.getElementById("modalEmissionsExplanation");
+        if (modalExpl && modalExpl.style.display === "flex") {
+          setModalExplanationScope(scope);
+        }
+
         updateTreemapMetadataAndStats();
 
         // Build Table rows
@@ -13182,12 +13226,197 @@
         });
       }
 
+      const modalExplEl = document.getElementById("modalEmissionsExplanation");
+      if (modalExplEl) {
+        modalExplEl.addEventListener("click", (e) => {
+          if (e.target === modalExplEl) {
+            closeEmissionsExplanationModal();
+          }
+        });
+      }
+
       window.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
           hideRestOfWorldPopover(true);
           closeRestOfWorldModal();
+          closeEmissionsExplanationModal();
         }
       });
+
+      // =====================================================================
+      // EMISSIONS METRIC EXPLANATION MODAL (ALL THREE SCOPES)
+      // =====================================================================
+      function openEmissionsExplanationModal(targetScope) {
+        const modal = document.getElementById("modalEmissionsExplanation");
+        if (!modal) return;
+        const scope = targetScope || activeEmissionsScope || "annual";
+        setModalExplanationScope(scope);
+        modal.style.display = "flex";
+      }
+
+      function closeEmissionsExplanationModal() {
+        const modal = document.getElementById("modalEmissionsExplanation");
+        if (modal) modal.style.display = "none";
+      }
+
+      function setModalExplanationScope(scope) {
+        const tabAnnual = document.getElementById("modalTabAnnual");
+        const tabHistorical = document.getElementById("modalTabHistorical");
+        const tabPerCapita = document.getElementById("modalTabPerCapita");
+
+        if (tabAnnual) {
+          const isA = scope === "annual";
+          tabAnnual.classList.toggle("active", isA);
+          tabAnnual.style.borderColor = isA ? "#38bdf8" : "rgba(255, 255, 255, 0.15)";
+          tabAnnual.style.background = isA ? "rgba(56, 189, 248, 0.2)" : "transparent";
+          tabAnnual.style.color = isA ? "#38bdf8" : "#94a3b8";
+        }
+        if (tabHistorical) {
+          const isH = scope === "historical";
+          tabHistorical.classList.toggle("active", isH);
+          tabHistorical.style.borderColor = isH ? "#c084fc" : "rgba(255, 255, 255, 0.15)";
+          tabHistorical.style.background = isH ? "rgba(192, 132, 252, 0.2)" : "transparent";
+          tabHistorical.style.color = isH ? "#c084fc" : "#94a3b8";
+        }
+        if (tabPerCapita) {
+          const isP = scope === "percapita";
+          tabPerCapita.classList.toggle("active", isP);
+          tabPerCapita.style.borderColor = isP ? "#34d399" : "rgba(255, 255, 255, 0.15)";
+          tabPerCapita.style.background = isP ? "rgba(52, 211, 153, 0.2)" : "transparent";
+          tabPerCapita.style.color = isP ? "#34d399" : "#94a3b8";
+        }
+
+        const container = document.getElementById("modalExplanationContent");
+        if (!container) return;
+
+        if (scope === "annual") {
+          container.innerHTML = `
+            <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 14px 16px;">
+              <h4 style="margin: 0 0 6px 0; color: #38bdf8; font-size: 0.98rem; display: flex; align-items: center; gap: 6px;">
+                <span>📅</span> 1. Current Annual Emissions (2023 Benchmark · Gt CO₂/yr)
+              </h4>
+              <p style="margin: 0; color: #cbd5e1; font-size: 0.83rem; line-height: 1.55;">
+                This view sizes and ranks sovereign states strictly by their <strong>current annual rate of territorial fossil fuel combustion and industrial cement calcination (37.40 Gt CO₂/yr total globally in 2023)</strong>. 
+                The area of each proportional block directly corresponds to that nation's fraction of current annual global emissions. 
+                The <strong>Top 50 nations</strong> account for <strong>89.8% (33.58 Gt/yr)</strong>, while the remaining <strong>170+ nations &amp; territories</strong> share just <strong>10.2% (3.82 Gt/yr)</strong>.
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;">
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 700; color: var(--amber); margin-bottom: 4px; font-size: 0.82rem;">🏭 The Global Heavyweights Today</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+                  <strong>China (#1)</strong> produces <strong>11.40 Gt/yr (30.48%)</strong>, driven by rapid industrialisation, steel, cement, and coal power. 
+                  The <strong>USA (#2)</strong> produces <strong>4.70 Gt/yr (12.57%)</strong>, followed by <strong>India (#3)</strong> at <strong>3.00 Gt/yr (8.02%)</strong> and <strong>Russia (#4)</strong> at <strong>1.80 Gt/yr (4.81%)</strong>.
+                </div>
+              </div>
+
+              <div style="background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 700; color: #38bdf8; margin-bottom: 4px; font-size: 0.82rem;">🇬🇧 The United Kingdom Today</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+                  The UK emits <strong>0.33 Gt CO₂/yr (0.88% of world total)</strong>, ranking <strong>#17 globally</strong>. 
+                  British territorial emissions have plummeted by <strong>&gt;53% since 1990</strong> due to the total phase-out of coal-fired electricity, expanded North Sea wind fleets, and industrial efficiency.
+                </div>
+              </div>
+            </div>
+
+            <div style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 8px; padding: 12px 14px; font-size: 0.8rem; line-height: 1.55; color: #e9d5ff;">
+              <strong style="color: #c084fc; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <span>⚖️</span> The "Carbon Bathtub" Dilemma: Why Current Rate (Flow) Is Not the Whole Story
+              </strong>
+              While emerging economies now lead in annual carbon <em>flow</em> (the faucet filling the bathtub), global mean surface warming is physically governed by the total cumulative <em>stock</em> of CO₂ in the atmosphere (the water accumulated in the tub). Over 75% of excess atmospheric carbon accumulated since 1750 originated in Europe and North America.
+            </div>
+
+            <div style="font-size: 0.75rem; color: #94a3b8; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 8px;">
+              <strong>Accounting Scope:</strong> Territorial combustion of fossil fuels (coal, oil, gas) plus industrial chemical cement calcination. Excludes land-use change (deforestation) and international bunker fuels unless noted. Source: Global Carbon Project (GCP 2023) &amp; EDGAR.
+            </div>
+          `;
+        } else if (scope === "historical") {
+          container.innerHTML = `
+            <div style="background: rgba(192, 132, 252, 0.08); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 8px; padding: 14px 16px;">
+              <h4 style="margin: 0 0 6px 0; color: #c084fc; font-size: 0.98rem; display: flex; align-items: center; gap: 6px;">
+                <span>⏳</span> 2. Cumulative Historical Atmospheric Carbon Debt (1750–2023 Stock)
+              </h4>
+              <p style="margin: 0; color: #cbd5e1; font-size: 0.83rem; line-height: 1.55;">
+                This view sizes and ranks nations strictly by their <strong>cumulative historical carbon contribution since the start of the Industrial Revolution in 1750 (~1,820 Gt CO₂ total)</strong>. 
+                Block area directly represents each country's historical share of the total anthropogenic carbon dioxide burden driving planetary warming today. 
+                The <strong>Top 50 nations</strong> account for <strong>91.8% (~1,671 Gt)</strong>, while the remaining <strong>170+ nations &amp; territories</strong> share just <strong>8.2% (149 Gt)</strong>.
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;">
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 700; color: #c084fc; margin-bottom: 4px; font-size: 0.82rem;">🏛️ The Historical Leaders</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+                  The <strong>United States (#1)</strong> leads all-time at <strong>435 Gt (23.90%)</strong>—almost a quarter of all human industrial emissions. 
+                  <strong>China (#2)</strong> has contributed <strong>285 Gt (15.66%)</strong>, followed by <strong>Russia (#3)</strong> at <strong>123 Gt (6.76%)</strong> and <strong>Germany (#4)</strong> at <strong>95 Gt (5.22%)</strong>.
+                </div>
+              </div>
+
+              <div style="background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 700; color: #38bdf8; margin-bottom: 4px; font-size: 0.82rem;">🇬🇧 Great Britain: Cradle of the Industrial Revolution</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+                  Great Britain ignited modern industrialisation with coal steam engines and blast furnaces in 1750. As a result, the UK has emitted <strong>80.0 Gt CO₂</strong>—ranking <strong>#5 all-time globally (4.40%)</strong>, greater than all 54 nations of Africa combined, despite having &lt;1% of world population today.
+                </div>
+              </div>
+            </div>
+
+            <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 12px 14px; font-size: 0.8rem; line-height: 1.55; color: #cbd5e1;">
+              <strong style="color: #38bdf8; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <span>🔬</span> Why This Matters on the UK Dünkelflaute &amp; Storage Page
+              </strong>
+              This 5× divergence—0.88% annual share today vs 4.40% historical debt—is precisely why Great Britain has an undeniable moral, economic, and scientific responsibility to solve seasonal energy storage and conquer the winter <strong>Dünkelflaute</strong> with zero-carbon technology, pioneering an exportable blueprint for every industrial power grid on Earth.
+            </div>
+
+            <div style="font-size: 0.75rem; color: #94a3b8; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 8px;">
+              <strong>Accounting Scope:</strong> Cumulative territorial fossil fuel combustion and cement processes (1750–2023). Source: Global Carbon Project (GCP 2023), CDIAC, and Our World in Data (OWID).
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div style="background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 8px; padding: 14px 16px;">
+              <h4 style="margin: 0 0 6px 0; color: #34d399; font-size: 0.98rem; display: flex; align-items: center; gap: 6px;">
+                <span>👤</span> 3. Per-Capita Carbon Footprint Intensity (2023 · Tonnes CO₂ / Person / Year)
+              </h4>
+              <p style="margin: 0; color: #cbd5e1; font-size: 0.83rem; line-height: 1.55;">
+                This view sizes and ranks sovereign states strictly by <strong>emissions per citizen (global average: 4.7 tonnes CO₂/person/yr)</strong>. 
+                Block area directly corresponds to an individual citizen's average annual carbon intensity in that jurisdiction. 
+                It exposes the profound climate equity divide between small, carbon-heavy petro-economies and developing nations with vast populations.
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;">
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 700; color: #34d399; margin-bottom: 4px; font-size: 0.82rem;">🛢️ Oil-Rich Gulf &amp; Resource States</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+                  <strong>Qatar (#1)</strong> emits an astonishing <strong>44.0 t/person/yr</strong>—over 9× the global average—due to energy-intensive gas liquefaction, air conditioning, and water desalination. 
+                  The <strong>UAE (#2 at 23.5t)</strong>, <strong>Kuwait (#3 at 21.6t)</strong>, and <strong>Saudi Arabia (#6 at 18.2t)</strong> similarly top the global rankings.
+                </div>
+              </div>
+
+              <div style="background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 700; color: #38bdf8; margin-bottom: 4px; font-size: 0.82rem;">🌍 Western Economies vs Developing World</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+                  <strong>Australia (14.6t)</strong> and the <strong>USA (13.9t)</strong> emit ~3× the world average. 
+                  <strong>China (8.1t)</strong> is slightly above world average, while the <strong>UK (4.8t, #29)</strong> is near the global mean. 
+                  In stark contrast, <strong>India emits just 2.1t/person</strong> and sub-Saharan Africa averages <strong>&lt;0.8t/person</strong>.
+                </div>
+              </div>
+            </div>
+
+            <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px 14px; font-size: 0.8rem; line-height: 1.55; color: #fde68a;">
+              <strong style="color: #f59e0b; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <span>⚖️</span> Climate Justice &amp; Population Disparity
+              </strong>
+              If every citizen on Earth emitted at the rate of the average American or Australian, global annual emissions would exceed <strong>110 Gt CO₂/yr</strong> (instantly destroying the 1.5°C carbon budget). Conversely, if the world emitted at India's per-capita intensity, emissions would drop by over 55%.
+            </div>
+
+            <div style="font-size: 0.75rem; color: #94a3b8; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 8px;">
+              <strong>Accounting Scope:</strong> Territorial emissions divided by UN Population Division estimates for 2023. Excludes international aviation/shipping and embedded trade emissions. Source: Global Carbon Project (GCP) &amp; Our World in Data.
+            </div>
+          `;
+        }
+      }
 
       // Export to window
       window.setEmissionsScope = setEmissionsScope;
@@ -13206,6 +13435,9 @@
       window.togglePinRestOfWorld = togglePinRestOfWorld;
       window.filterPopoverRegion = filterPopoverRegion;
       window.filterPopoverSearch = filterPopoverSearch;
+      window.openEmissionsExplanationModal = openEmissionsExplanationModal;
+      window.closeEmissionsExplanationModal = closeEmissionsExplanationModal;
+      window.setModalExplanationScope = setModalExplanationScope;
 
 
       function initDunkelView() {
