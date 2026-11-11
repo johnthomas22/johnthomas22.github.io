@@ -10211,7 +10211,7 @@
       const btnModeSolutions = document.getElementById("btnModeSolutions");
       const btnModeDunkel = document.getElementById("btnModeDunkel");
 
-      function setViewMode(mode) {
+      function setViewMode(mode, skipHistoryUpdate) {
         const isSimple = mode === "simple";
         const isAdvanced = mode === "advanced";
         const isBudgets = mode === "budgets";
@@ -10305,6 +10305,21 @@
 
         if (!isBudgets && !isSources && !isSolutions && !isDunkel) {
           draw();
+        }
+
+        if (!skipHistoryUpdate) {
+          try {
+            const desiredHash = isAdvanced ? "" : ("#" + mode);
+            const urlObj = new URL(window.location.href);
+            urlObj.searchParams.delete("view");
+            urlObj.searchParams.delete("page");
+            urlObj.searchParams.delete("tab");
+            urlObj.hash = desiredHash;
+            const nextUrl = urlObj.pathname + urlObj.search + urlObj.hash;
+            if (nextUrl !== window.location.pathname + window.location.search + window.location.hash) {
+              history.replaceState(null, "", nextUrl);
+            }
+          } catch (_) {}
         }
       }
       window.setViewMode = setViewMode;
@@ -14576,6 +14591,51 @@
 
       // Launch initialized to 1958 Keeling in paused state waiting for user to click Start
       resetSimulation(false);
+
+      // Deep-link URL routing (?view=dunkel or #dunkel, etc.)
+      function applyUrlViewRoute() {
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const hashRaw = decodeURIComponent(window.location.hash || "").replace(/^#/, "").toLowerCase();
+          const paramRaw = (params.get("view") || params.get("page") || params.get("tab") || "").toLowerCase();
+          const raw = paramRaw || hashRaw;
+
+          const aliasMap = {
+            "dunkel": "dunkel",
+            "dunkelflaute": "dunkel",
+            "dünkelflaute": "dunkel",
+            "uk-dunkelflaute": "dunkel",
+            "storage": "dunkel",
+            "treemap": "dunkel",
+            "emissions": "dunkel",
+            "budgets": "budgets",
+            "sources": "sources",
+            "solutions": "solutions",
+            "simple": "simple",
+            "intro": "simple",
+            "advanced": "advanced",
+            "simulator": "advanced"
+          };
+
+          const targetMode = aliasMap[raw];
+          if (targetMode) {
+            setViewMode(targetMode, true);
+            const metricRaw = (params.get("metric") || "").toLowerCase();
+            if (targetMode === "dunkel" && (metricRaw === "annual" || metricRaw === "historical" || metricRaw === "percapita")) {
+              if (typeof setEmissionsScope === "function") setEmissionsScope(metricRaw);
+            }
+            if (raw === "treemap" || raw === "emissions" || hashRaw === "treemap") {
+              setTimeout(() => {
+                const el = document.getElementById("cardHistoricalEmissionsTreemap");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+              }, 150);
+            }
+          }
+        } catch (_) {}
+      }
+      applyUrlViewRoute();
+      window.addEventListener("hashchange", applyUrlViewRoute);
+
       requestAnimationFrame(update);
     })();
   </script>
