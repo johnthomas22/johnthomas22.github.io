@@ -592,6 +592,47 @@
       cursor: help;
     }
 
+    /* Global Interactive Unit Tooltips (TWh, GWh, Gt/yr, Gt) */
+    .unit-tooltip-term {
+      border-bottom: 1px dotted rgba(56, 189, 248, 0.75);
+      cursor: help;
+      transition: color 0.15s ease, border-bottom-color 0.15s ease;
+    }
+    .unit-tooltip-term:hover {
+      color: #38bdf8;
+      border-bottom-color: #eab308;
+    }
+    .global-unit-tooltip {
+      position: fixed;
+      z-index: 25000;
+      pointer-events: none;
+      display: none;
+      background: rgba(11, 19, 34, 0.98);
+      border: 1.5px solid #38bdf8;
+      border-radius: 8px;
+      padding: 10px 14px;
+      max-width: 340px;
+      width: max-content;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 15px rgba(56, 189, 248, 0.22);
+      font-family: system-ui, -apple-system, sans-serif;
+      text-align: left;
+      line-height: 1.45;
+    }
+    .global-unit-tooltip-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .global-unit-tooltip-body {
+      font-size: 0.74rem;
+      color: #e2e8f0;
+      font-weight: 400;
+    }
+
     /* Rich Interactive Tooltip & Snowball Earth Popover (Outside canvas, never truncated) */
     .rich-tooltip-wrap {
       position: relative;
@@ -3536,11 +3577,11 @@
           </div>
         </div>
 
-        <!-- Heading Row with Badges & Pop-up Full Explanation Button -->
+        <!-- Heading Row with Badges (Click Heading for Full Explanation Modal) -->
         <div class="card-title-row" style="flex-wrap: wrap; gap: 10px; margin-bottom: 12px; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <div class="card-title" id="lblTreemapCardTitle" onclick="openEmissionsExplanationModal()" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem; cursor: pointer; user-select: none;" title="Click to view full explanation of this metric and climate context">
-              <span>🌍</span> <span id="lblTreemapCardTitleText">Current Annual Emissions by Country (Latest Data · 2023)</span>
+            <div class="card-title" id="lblTreemapCardTitle" onclick="openEmissionsExplanationModal()" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem; cursor: pointer; user-select: none; border-bottom: 1px dashed rgba(56, 189, 248, 0.45); padding-bottom: 2px;" title="Click this heading for full explanation of this metric and climate context">
+              <span>🌍</span> <span id="lblTreemapCardTitleText">Current Annual Emissions by Country (Latest Data · 2023)</span> <span style="font-size: 0.78rem; color: #38bdf8; opacity: 0.85;">ⓘ</span>
             </div>
             <div id="treemapBadgeGroup" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
               <span class="badge badge-cyan" id="badgeTreemapSource" style="font-size: 0.72rem;">Global Carbon Project &amp; EDGAR/OWID (2023)</span>
@@ -3548,9 +3589,6 @@
               <span class="badge badge-purple" id="badgeTreemapUK" style="font-size: 0.72rem; background: rgba(192, 132, 252, 0.15); border-color: #c084fc; color: #c084fc;">🇬🇧 UK #17 Annually (0.33 Gt · 0.88%)</span>
             </div>
           </div>
-          <button type="button" class="btn btn-secondary" onclick="openEmissionsExplanationModal()" style="font-size: 0.76rem; padding: 5px 12px; font-weight: 700; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4); display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border-radius: 6px; background: rgba(56, 189, 248, 0.1);" title="Click for full explanation of this metric and climate context">
-            <span>ℹ️</span> Full Explanation &rarr;
-          </button>
         </div>
 
         <!-- Hidden Explanatory Text Elements (Kept for backwards compatibility, full content moved to pop-up modal) -->
@@ -12127,9 +12165,11 @@
         // Card Title
         const cardTitle = document.getElementById("lblTreemapCardTitle");
         if (cardTitle) {
-          if (isAnnual) cardTitle.innerHTML = `<span>🌍</span> Current Annual Emissions by Country (Latest Data · 2023)`;
-          else if (isHist) cardTitle.innerHTML = `<span>🌍</span> Cumulative Historical Contribution to Atmospheric Carbon (1750–Present)`;
-          else cardTitle.innerHTML = `<span>🌍</span> Per-Capita Emissions Intensity by Country (2023 · Tonnes CO₂/person/yr)`;
+          let titleText = "";
+          if (isAnnual) titleText = "Current Annual Emissions by Country (Latest Data · 2023)";
+          else if (isHist) titleText = "Cumulative Historical Contribution to Atmospheric Carbon (1750–Present)";
+          else titleText = "Per-Capita Emissions Intensity by Country (2023 · Tonnes CO₂/person/yr)";
+          cardTitle.innerHTML = `<span>🌍</span> <span>${titleText}</span> <span style="font-size: 0.78rem; color: #38bdf8; opacity: 0.85;">ⓘ</span>`;
         }
 
         // Badges
@@ -14479,6 +14519,179 @@
       // Launch initialized to 1958 Keeling in paused state waiting for user to click Start
       resetSimulation(false);
       requestAnimationFrame(update);
+    })();
+  </script>
+
+  <!-- Global Floating Tooltip for Energy & Carbon Units (TWh, GWh, Gt/yr, Gt) -->
+  <div id="globalUnitTooltip" class="global-unit-tooltip" role="tooltip"></div>
+  <script>
+    (function initGlobalUnitTooltips() {
+      const tooltipEl = document.getElementById("globalUnitTooltip");
+      if (!tooltipEl) return;
+
+      const UNIT_DEFS = {
+        "TWh": {
+          title: "⚡ TWh — Terawatt-hour (1 Trillion Watt-hours)",
+          body: "A Watt is a measure of energy used per second. A Watt-hour is a measure of a quantity of electricity, one Watt for one hour. <strong>1 TWh = 1,000 GWh = 1 billion kWh</strong> — roughly enough electricity to power ~350,000 average UK homes for a full year."
+        },
+        "GWh": {
+          title: "🔋 GWh — Gigawatt-hour (1 Billion Watt-hours)",
+          body: "A Watt is a measure of energy used per second. A Watt-hour is a measure of a quantity of electricity, one Watt for one hour. <strong>1 GWh = 1,000,000 kWh</strong> (1/1,000th of a TWh) — roughly enough electricity to power ~350 average UK homes for a year."
+        },
+        "Gt/yr": {
+          title: "🏭 Gt/yr — Gigatonnes per Year (Annual Flow Rate)",
+          body: "<strong>1 billion metric tonnes emitted per year</strong> (1 Gt = 1,000,000,000 tonnes). Measures the annual flow of CO₂ or greenhouse gases entering the atmosphere. Every ~17 Gt/yr of gross emissions adds roughly +1.0 ppm/yr after ocean &amp; land sink uptake."
+        },
+        "Gt": {
+          title: "⚖️ Gt — Gigatonne (1 Billion Metric Tonnes)",
+          body: "<strong>1 billion metric tonnes</strong> (1,000,000,000 tonnes — roughly the mass of 10,000 aircraft carriers). Measures cumulative CO₂ mass or fossil reserves. Earth’s atmosphere weighs 5.15 million Gt; keeping 7.82 Gt of CO₂ airborne raises atmospheric CO₂ by +1.0 ppm."
+        }
+      };
+
+      const UNIT_REGEX = /\b(TWh(?:\s*\/\s*(?:yr|year))?|GWh(?:\s*\/\s*(?:yr|year))?|Gt(?:\s*CO[₂2]e?)?\s*\/\s*(?:yr|year)|Gt(?:\s*CO[₂2]e?)?)\b/g;
+      const SKIP_TAGS = new Set(["SCRIPT", "STYLE", "TEXTAREA", "INPUT", "SELECT", "OPTION", "SVG", "CANVAS", "TITLE", "CODE", "PRE", "NOSCRIPT"]);
+
+      function getUnitKey(token) {
+        if (token.startsWith("TWh")) return "TWh";
+        if (token.startsWith("GWh")) return "GWh";
+        if (/\/\s*(?:yr|year)$/.test(token)) return "Gt/yr";
+        return "Gt";
+      }
+
+      function shouldSkipNode(node) {
+        let cur = node.parentNode;
+        while (cur && cur.nodeType === 1) {
+          if (SKIP_TAGS.has(cur.tagName)) return true;
+          if (cur.id === "globalUnitTooltip" || cur.id === "historicalTreemapTooltip") return true;
+          if (cur.classList && (cur.classList.contains("unit-tooltip-term") || cur.classList.contains("has-tooltip") || cur.classList.contains("unit-flex-preserve"))) return true;
+          if (cur.isContentEditable) return true;
+          cur = cur.parentNode;
+        }
+        return false;
+      }
+
+      function wrapTextNode(textNode) {
+        const text = textNode.nodeValue;
+        if (!text || (!text.includes("TWh") && !text.includes("GWh") && !text.includes("Gt"))) return;
+        UNIT_REGEX.lastIndex = 0;
+        let match = UNIT_REGEX.exec(text);
+        if (!match) return;
+
+        const frag = document.createDocumentFragment();
+        let lastIndex = 0;
+        do {
+          if (match.index > lastIndex) {
+            frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+          }
+          const matchedText = match[0];
+          const span = document.createElement("span");
+          span.className = "unit-tooltip-term";
+          span.setAttribute("data-unit-key", getUnitKey(matchedText));
+          span.textContent = matchedText;
+          frag.appendChild(span);
+          lastIndex = match.index + matchedText.length;
+        } while ((match = UNIT_REGEX.exec(text)) !== null);
+
+        if (lastIndex < text.length) {
+          frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+
+        if (textNode.parentNode) {
+          const pEl = textNode.parentElement;
+          const pDisp = pEl ? window.getComputedStyle(pEl).display : "";
+          if (pDisp.includes("flex") || pDisp.includes("grid")) {
+            const wrapper = document.createElement("span");
+            wrapper.className = "unit-flex-preserve";
+            wrapper.style.display = "inline";
+            wrapper.appendChild(frag);
+            textNode.parentNode.replaceChild(wrapper, textNode);
+          } else {
+            textNode.parentNode.replaceChild(frag, textNode);
+          }
+        }
+      }
+
+      let isMutating = false;
+      function enhanceSubtree(root) {
+        if (!root || isMutating) return;
+        isMutating = true;
+        try {
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+          const toWrap = [];
+          let n;
+          while ((n = walker.nextNode())) {
+            if (!shouldSkipNode(n) && n.nodeValue && (n.nodeValue.includes("TWh") || n.nodeValue.includes("GWh") || n.nodeValue.includes("Gt"))) {
+              toWrap.push(n);
+            }
+          }
+          for (let i = 0; i < toWrap.length; i++) {
+            wrapTextNode(toWrap[i]);
+          }
+        } finally {
+          isMutating = false;
+        }
+      }
+
+      function showUnitTooltip(termEl) {
+        const key = termEl.getAttribute("data-unit-key");
+        const def = UNIT_DEFS[key];
+        if (!def) return;
+
+        tooltipEl.innerHTML = `<div class="global-unit-tooltip-title">${def.title}</div><div class="global-unit-tooltip-body">${def.body}</div>`;
+        tooltipEl.style.display = "block";
+
+        const rect = termEl.getBoundingClientRect();
+        const tipRect = tooltipEl.getBoundingClientRect();
+
+        let left = rect.left + rect.width / 2 - tipRect.width / 2;
+        left = Math.max(10, Math.min(window.innerWidth - tipRect.width - 10, left));
+
+        let top = rect.top - tipRect.height - 8;
+        if (top < 10) {
+          top = rect.bottom + 8;
+        }
+
+        tooltipEl.style.left = `${left}px`;
+        tooltipEl.style.top = `${top}px`;
+      }
+
+      function hideUnitTooltip() {
+        tooltipEl.style.display = "none";
+      }
+
+      document.addEventListener("mouseover", (e) => {
+        const term = e.target && e.target.closest ? e.target.closest(".unit-tooltip-term") : null;
+        if (term) {
+          showUnitTooltip(term);
+        }
+      });
+
+      document.addEventListener("mouseout", (e) => {
+        const term = e.target && e.target.closest ? e.target.closest(".unit-tooltip-term") : null;
+        if (term) {
+          const rel = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest(".unit-tooltip-term") : null;
+          if (rel !== term) hideUnitTooltip();
+        }
+      });
+
+      window.addEventListener("scroll", hideUnitTooltip, { passive: true });
+      window.addEventListener("keydown", (e) => { if (e.key === "Escape") hideUnitTooltip(); });
+
+      const observer = new MutationObserver((mutations) => {
+        if (isMutating) return;
+        for (const m of mutations) {
+          for (const node of m.addedNodes) {
+            if (node.nodeType === 1) enhanceSubtree(node);
+            else if (node.nodeType === 3 && !shouldSkipNode(node)) {
+              isMutating = true;
+              try { wrapTextNode(node); } finally { isMutating = false; }
+            }
+          }
+        }
+      });
+
+      enhanceSubtree(document.body);
+      observer.observe(document.body, { childList: true, subtree: true });
     })();
   </script>
 
