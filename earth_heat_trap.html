@@ -655,6 +655,28 @@
       box-shadow: 0 0 16px rgba(6, 182, 212, 0.5);
       transform: translateY(-1px);
     }
+
+    /* Feedback Modal Inputs */
+    .feedback-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(15, 23, 42, 0.92);
+      color: #f1f5f9;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-family: inherit;
+      font-size: 0.86rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .feedback-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.22);
+    }
+    .feedback-input::placeholder {
+      color: #64748b;
+    }
   </style>
 </head>
 <body>
@@ -972,6 +994,9 @@
         <a href="doughnut_economics.html" class="btn-advanced-link" style="border-color: #fbbf24; color: #fbbf24;" id="btnDoughnutLink">
           🍩 Doughnut Economics (Safe &amp; Just Space) →
         </a>
+        <button type="button" class="btn-advanced-link" style="border-color: #38bdf8; color: #38bdf8; cursor: pointer; font-family: inherit;" id="btnFeedbackLink" onclick="openFeedbackModal()">
+          💬 Send Feedback &amp; Suggestions →
+        </button>
       </div>
       <div style="margin-top: 10px; font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -1767,6 +1792,146 @@
   }
   handleRootHashtagRoute();
   window.addEventListener("hashchange", handleRootHashtagRoute);
+</script>
+
+<!-- ANONYMOUS WEB3FORMS FEEDBACK MODAL -->
+<div id="modalFeedback" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle" style="display: none; align-items: center; justify-content: center; z-index: 10050; position: fixed; inset: 0; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(8px); padding: 16px;" onclick="if (event.target === this) closeFeedbackModal();">
+  <div style="background: #0c1322; border: 1px solid rgba(56, 189, 248, 0.35); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.15); border-radius: 12px; max-width: 520px; width: 100%; overflow: hidden;">
+    <div style="padding: 16px 20px; background: #080e1a; border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div id="feedbackModalTitle" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem; font-weight: 700; color: #fff;">
+          <span>💬</span> Send Feedback
+        </div>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 2px;">
+          Questions, bug reports, data corrections, or suggestions — sent without exposing any email address.
+        </div>
+      </div>
+      <button type="button" onclick="closeFeedbackModal()" aria-label="Close feedback modal" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; width: 32px; height: 32px; border-radius: 6px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+    </div>
+    <form id="feedbackForm" onsubmit="submitFeedbackForm(event)" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+      <input type="hidden" name="access_key" value="8f3e6aed-675e-4bc9-94c5-6fa21869496c">
+      <input type="checkbox" name="botcheck" style="display: none;" tabindex="-1" autocomplete="off">
+
+      <div>
+        <label for="fbTopic" style="display: block; font-size: 0.78rem; font-weight: 700; color: #cbd5e1; margin-bottom: 5px;">Topic</label>
+        <select id="fbTopic" name="topic" class="feedback-input" style="cursor: pointer;">
+          <option value="Suggestion / Feature Idea">💡 Suggestion / Feature Idea</option>
+          <option value="Bug / Display Issue">🐞 Bug / Display Issue</option>
+          <option value="Science / Data Question">🔬 Science / Data Question</option>
+          <option value="General Comment">💬 General Comment</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label for="fbName" style="display: block; font-size: 0.78rem; font-weight: 700; color: #cbd5e1; margin-bottom: 5px;">Name <span style="font-weight: 400; color: #64748b;">(optional)</span></label>
+          <input id="fbName" name="name" type="text" class="feedback-input" placeholder="Anonymous">
+        </div>
+        <div>
+          <label for="fbEmail" style="display: block; font-size: 0.78rem; font-weight: 700; color: #cbd5e1; margin-bottom: 5px;">Reply Email <span style="font-weight: 400; color: #64748b;">(optional)</span></label>
+          <input id="fbEmail" name="email" type="email" class="feedback-input" placeholder="Only if you want a reply">
+        </div>
+      </div>
+
+      <div>
+        <label for="fbMessage" style="display: block; font-size: 0.78rem; font-weight: 700; color: #cbd5e1; margin-bottom: 5px;">Message <span style="color: #f43f5e;">*</span></label>
+        <textarea id="fbMessage" name="message" rows="4" required class="feedback-input" placeholder="Share your thoughts, spotted issues, or ideas..." style="resize: vertical; min-height: 92px;"></textarea>
+      </div>
+
+      <div id="fbStatus" style="display: none; border-radius: 8px; padding: 9px 12px; font-size: 0.82rem; line-height: 1.4;"></div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 2px;">
+        <button type="button" onclick="closeFeedbackModal()" style="background: rgba(148, 163, 184, 0.12); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 8px; padding: 8px 16px; font-size: 0.84rem; font-weight: 600; cursor: pointer;">Cancel</button>
+        <button type="submit" id="fbSubmitBtn" style="background: linear-gradient(135deg, #0284c7, #0ea5e9); color: #fff; border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 8px; padding: 8px 18px; font-size: 0.84rem; font-weight: 700; cursor: pointer;">Send Feedback</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Web3Forms Feedback Modal Controller -->
+<script>
+  function openFeedbackModal() {
+    const modal = document.getElementById("modalFeedback");
+    const status = document.getElementById("fbStatus");
+    if (status) {
+      status.style.display = "none";
+      status.textContent = "";
+    }
+    if (modal) {
+      modal.style.display = "flex";
+      const msg = document.getElementById("fbMessage");
+      if (msg) setTimeout(() => msg.focus(), 50);
+    }
+  }
+
+  function closeFeedbackModal() {
+    const modal = document.getElementById("modalFeedback");
+    if (modal) modal.style.display = "none";
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const modal = document.getElementById("modalFeedback");
+      if (modal && modal.style.display === "flex") closeFeedbackModal();
+    }
+  });
+
+  async function submitFeedbackForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById("fbSubmitBtn");
+    const status = document.getElementById("fbStatus");
+    if (!form || !btn || !status) return;
+
+    const origText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Sending...";
+    btn.style.opacity = "0.7";
+    status.style.display = "none";
+
+    const topic = (form.topic && form.topic.value) ? form.topic.value : "Feedback";
+    const payload = {
+      access_key: form.access_key ? form.access_key.value : "8f3e6aed-675e-4bc9-94c5-6fa21869496c",
+      subject: "[Climate Sim] " + topic,
+      from_name: "Climate Simulator Visitor",
+      topic: topic,
+      name: form.name && form.name.value.trim() ? form.name.value.trim() : "Anonymous",
+      email: form.email && form.email.value.trim() ? form.email.value.trim() : undefined,
+      message: form.message ? form.message.value.trim() : "",
+      page: window.location.pathname + (window.location.hash || ""),
+      botcheck: form.botcheck ? form.botcheck.checked : false
+    };
+    if (!payload.email) delete payload.email;
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        status.style.display = "block";
+        status.style.background = "rgba(16, 185, 129, 0.14)";
+        status.style.border = "1px solid rgba(16, 185, 129, 0.45)";
+        status.style.color = "#6ee7b7";
+        status.textContent = "✅ Thank you! Your feedback has been sent successfully.";
+        form.reset();
+      } else {
+        throw new Error((data && data.message) || "Submission failed");
+      }
+    } catch (err) {
+      status.style.display = "block";
+      status.style.background = "rgba(244, 63, 94, 0.14)";
+      status.style.border = "1px solid rgba(244, 63, 94, 0.45)";
+      status.style.color = "#fda4af";
+      status.textContent = "⚠️ Could not send feedback (" + (err && err.message ? err.message : "network error") + "). Please try again.";
+    } finally {
+      btn.disabled = false;
+      btn.textContent = origText;
+      btn.style.opacity = "1";
+    }
+  }
 </script>
 
 <!-- PWA Service Worker Registration -->
