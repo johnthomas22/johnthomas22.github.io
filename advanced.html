@@ -3243,9 +3243,9 @@
           <div class="stat-sub" id="dunkelStatDeficitSub">14 days @ 0.89 TWh/day net winter deficit</div>
         </div>
         <div class="stat-card">
-          <div class="stat-header"><span>Storage Delivery &amp; Reliability</span><span class="badge badge-emerald" id="dunkelBadgeCoverage">Reliability Score</span></div>
+          <div class="stat-header"><span>Simulated Fleet Delivery</span><span class="badge badge-emerald" id="dunkelBadgeCoverage">Slider Model</span></div>
           <div class="stat-value" id="dunkelStatCoverageVal" style="color: var(--emerald);">100% <span style="font-size: 0.8rem; color: var(--text-muted);">Covered</span></div>
-          <div class="stat-sub" id="dunkelStatCoverageSub">Zero blackout risk · 12.6 TWh delivered</div>
+          <div class="stat-sub" id="dunkelStatCoverageSub">Target model · 12.6 TWh delivered</div>
         </div>
         <div class="stat-card">
           <div class="stat-header"><span>Total Storage Capex</span><span class="badge badge-cyan" id="dunkelBadgeCapex">Infrastructure</span></div>
@@ -3414,7 +3414,7 @@
           <div class="card" style="margin-bottom: 0;">
             <div class="card-title-row">
               <div class="card-title" style="display: flex; align-items: center; gap: 8px;">
-                <span>⚖️</span> Storage Fleet Deliverability vs. Deficit
+                <span>⚖️</span> Target Storage Fleet vs. Deficit
               </div>
               <span id="dunkelBadgeBalance" class="badge badge-emerald">Balanced</span>
             </div>
@@ -3425,8 +3425,8 @@
                 <div id="dunkelCardReqVal" style="font-size: 1.35rem; font-weight: 800; color: #f43f5e; font-family: ui-monospace, monospace;">12.5 TWh</div>
                 <span id="dunkelCardReqSub" style="font-size: 0.72rem; color: #cbd5e1;">Peak discharge needed: ~45 GW</span>
               </div>
-              <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 6px; padding: 10px 12px;">
-                <span style="font-size: 0.7rem; color: #34d399; text-transform: uppercase; font-weight: 700;">Effective Storage Delivered:</span>
+              <div id="dunkelCardDeliveredBox" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 6px; padding: 10px 12px;">
+                <span id="dunkelCardDeliveredTitle" style="font-size: 0.7rem; color: #34d399; text-transform: uppercase; font-weight: 700;">Simulated Delivery (From Sliders):</span>
                 <div id="dunkelCardDeliveredVal" style="font-size: 1.35rem; font-weight: 800; color: #34d399; font-family: ui-monospace, monospace;">12.6 TWh</div>
                 <span id="dunkelCardDeliveredSub" style="font-size: 0.72rem; color: #cbd5e1;">100% of demand covered</span>
               </div>
@@ -3437,10 +3437,10 @@
               <thead>
                 <tr>
                   <th>Technology</th>
-                  <th>Installed Capacity</th>
+                  <th>Allocated Capacity</th>
                   <th>Delivered Output</th>
                   <th>Round-Trip Eff.</th>
-                  <th>Technology Capex</th>
+                  <th>Est. Build Capex</th>
                 </tr>
               </thead>
               <tbody>
@@ -3474,6 +3474,10 @@
                 </tr>
               </tbody>
             </table>
+
+            <div id="dunkelFleetRealityNotice" style="margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: 0.74rem; line-height: 1.45; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); color: #cbd5e1;">
+              <!-- Populated dynamically by JS -->
+            </div>
           </div>
 
           <!-- Card 2: The "What if We Used Batteries Alone?" Eye-Opener -->
@@ -3487,9 +3491,9 @@
             <p style="font-size: 0.78rem; color: #cbd5e1; margin: 0 0 8px 0; line-height: 1.45;">
               If Great Britain attempted to meet this <span id="dunkelTxtBatDeficit" style="font-weight: 700; color: #fff;">12.5 TWh</span> Dünkelflaute deficit using <strong>grid-scale lithium-ion batteries alone</strong>, the capital cost would be:
             </p>
-            <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+            <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
               <span id="dunkelValAllBat" style="font-size: 1.4rem; font-weight: 800; color: #f43f5e; font-family: ui-monospace, monospace;">£1,890 Billion</span>
-              <span style="font-size: 0.78rem; color: #fda4af;">(£1.89 Trillion — nearly the entire UK national debt)</span>
+              <span id="dunkelValAllBatNote" style="font-size: 0.78rem; color: #fda4af;">(£1.89 Trillion — comparable to UK national debt)</span>
             </div>
             <div style="font-size: 0.74rem; color: #94a3b8; line-height: 1.4;">
               By contrast, storing green hydrogen in <strong>underground salt caverns</strong> provides the same multi-week energy security for <strong id="dunkelValH2Compare" style="color: #34d399;">~£26 Billion</strong>. Batteries are vital for fast 2-to-4 hour intraday balancing, but chemically and economically impossible for multi-week seasonal storage.
@@ -11703,15 +11707,18 @@
         const statDeficitSub = document.getElementById("dunkelStatDeficitSub");
         if (statDeficitSub) statDeficitSub.textContent = `${days} days @ ${netDailyDeficit.toFixed(2)} TWh/day net winter deficit`;
 
+        const delFmt = delTotal >= 1 ? delTotal.toFixed(1) : delTotal.toFixed(2);
+        const pctFmt = coveragePct >= 10 || coveragePct === 0 ? coveragePct.toFixed(0) : coveragePct.toFixed(1);
+
         const statCoverageVal = document.getElementById("dunkelStatCoverageVal");
         if (statCoverageVal) {
           const isFull = coveragePct >= 99.5;
           statCoverageVal.style.color = isFull ? "var(--emerald)" : "var(--rose)";
-          statCoverageVal.innerHTML = `${Math.min(100, Math.round(coveragePct))}% <span style="font-size: 0.8rem; color: var(--text-muted);">${isFull ? "Covered" : "Deficit"}</span>`;
+          statCoverageVal.innerHTML = `${Math.min(100, coveragePct >= 1 ? Math.round(coveragePct) : Number(coveragePct.toFixed(1)))}% <span style="font-size: 0.8rem; color: var(--text-muted);">${isFull ? "Covered" : "Deficit"}</span>`;
         }
         const statCoverageSub = document.getElementById("dunkelStatCoverageSub");
         if (statCoverageSub) {
-          statCoverageSub.textContent = coveragePct >= 99.5 ? `Zero blackout risk · ${delTotal.toFixed(1)} TWh delivered` : `Shortfall: ${(reqEnergy - delTotal).toFixed(1)} TWh unsupplied (${delTotal.toFixed(1)} TWh delivered)`;
+          statCoverageSub.textContent = coveragePct >= 99.5 ? `Target model · ${delFmt} TWh delivered` : `Shortfall: ${(reqEnergy - delTotal).toFixed(1)} TWh gas-filled (${delFmt} TWh clean storage)`;
         }
 
         const statCapexVal = document.getElementById("dunkelStatCapexVal");
@@ -11721,7 +11728,7 @@
 
         const statFiscalVal = document.getElementById("dunkelStatFiscalVal");
         if (statFiscalVal) statFiscalVal.innerHTML = `+${taxRatePence.toFixed(2)}p <span style="font-size: 0.8rem; color: var(--text-muted);">Basic Tax</span>`;
-        const statFiscalSub = document.getElementById("dunkelStatFiscalSub");
+        const statFiscalSub = document.getElementById("dunkelFiscalSub") || document.getElementById("dunkelStatFiscalSub");
         if (statFiscalSub) statFiscalSub.textContent = `£${Math.round(costPerTaxpayer)}/yr per taxpayer · £${(costPerHousehold / 12).toFixed(2)}/mo per household`;
 
         // Card 1: Deliverability Table & Badges
@@ -11730,19 +11737,43 @@
         const cardReqSub = document.getElementById("dunkelCardReqSub");
         if (cardReqSub) cardReqSub.textContent = `Peak discharge needed: ~${Math.round(peakGW)} GW`;
 
+        const cardDeliveredBox = document.getElementById("dunkelCardDeliveredBox");
+        const cardDeliveredTitle = document.getElementById("dunkelCardDeliveredTitle");
         const cardDeliveredVal = document.getElementById("dunkelCardDeliveredVal");
-        if (cardDeliveredVal) cardDeliveredVal.textContent = `${delTotal.toFixed(1)} TWh`;
         const cardDeliveredSub = document.getElementById("dunkelCardDeliveredSub");
-        if (cardDeliveredSub) cardDeliveredSub.textContent = `${coveragePct.toFixed(0)}% of demand covered`;
+        const isCovered = coveragePct >= 99.5;
+        if (cardDeliveredBox && cardDeliveredTitle && cardDeliveredVal) {
+          cardDeliveredBox.style.background = isCovered ? "rgba(16, 185, 129, 0.08)" : "rgba(245, 158, 11, 0.08)";
+          cardDeliveredBox.style.borderColor = isCovered ? "rgba(16, 185, 129, 0.25)" : "rgba(245, 158, 11, 0.35)";
+          cardDeliveredTitle.style.color = isCovered ? "#34d399" : "#fbbf24";
+          cardDeliveredVal.style.color = isCovered ? "#34d399" : "#fbbf24";
+        }
+        if (cardDeliveredVal) cardDeliveredVal.textContent = `${delFmt} TWh`;
+        if (cardDeliveredSub) cardDeliveredSub.textContent = `${pctFmt}% of demand covered`;
 
         const badgeBalance = document.getElementById("dunkelBadgeBalance");
         if (badgeBalance) {
-          if (coveragePct >= 99.5) {
+          if (isCovered) {
             badgeBalance.className = "badge badge-emerald";
-            badgeBalance.textContent = "Balanced";
+            badgeBalance.textContent = "Balanced (Target)";
           } else {
             badgeBalance.className = "badge badge-rose";
             badgeBalance.textContent = `Shortfall -${(reqEnergy - delTotal).toFixed(1)} TWh`;
+          }
+        }
+
+        const realityNotice = document.getElementById("dunkelFleetRealityNotice");
+        if (realityNotice) {
+          if (!isCovered) {
+            realityNotice.style.background = "rgba(245, 158, 11, 0.1)";
+            realityNotice.style.borderColor = "rgba(245, 158, 11, 0.35)";
+            realityNotice.style.color = "#fde68a";
+            realityNotice.innerHTML = `<strong>⚠️ Reality Check:</strong> Britain does <strong>not</strong> currently have TWh-scale storage built (today’s clean fleet delivers only ~<strong>0.03 TWh</strong>). Burning imported natural gas (CCGTs) fills this <strong>${(reqEnergy - delTotal).toFixed(1)} TWh</strong> winter wind-drought gap today. Click <strong>"⚡ Auto-Balance Target Fleet"</strong> to model what must be built to replace gas.`;
+          } else {
+            realityNotice.style.background = "rgba(56, 189, 248, 0.08)";
+            realityNotice.style.borderColor = "rgba(56, 189, 248, 0.25)";
+            realityNotice.style.color = "#cbd5e1";
+            realityNotice.innerHTML = `<strong>📐 Simulated Target Buildout:</strong> The figures above reflect the <em>proposed future fleet</em> set in Section 3—<strong>NOT</strong> existing capacity built in Britain today (Britain’s actual 2025 clean storage is ~0.03 TWh). Click <strong>"📍 Actual Today (0.036 TWh)"</strong> or <strong>"Current 2025"</strong> to see today’s reality.`;
           }
         }
 
@@ -11787,6 +11818,12 @@
 
         const valAllBat = document.getElementById("dunkelValAllBat");
         if (valAllBat) valAllBat.textContent = `£${Math.round(capexAllBat).toLocaleString()} Billion`;
+        const valAllBatNote = document.getElementById("dunkelValAllBatNote");
+        if (valAllBatNote) {
+          valAllBatNote.textContent = capexAllBat >= 1000
+            ? `(£${(capexAllBat / 1000).toFixed(2)} Trillion — comparable to UK national debt)`
+            : `(More than UK’s annual healthcare & education budget combined)`;
+        }
         const valH2Compare = document.getElementById("dunkelValH2Compare");
         if (valH2Compare) valH2Compare.textContent = `~£${Math.round(capexAllH2)} Billion`;
         const badgeBatDiff = document.getElementById("dunkelBadgeBatDiff");
@@ -13587,6 +13624,21 @@
                 const b = document.getElementById(o.id);
                 if (b) b.classList.toggle("active", o.id === dp.id);
               });
+              if (dp.id === "presetDunkelDemand2025") {
+                // Load Britain's real existing 2025 clean electricity storage fleet (~0.036 TWh installed -> ~0.03 TWh delivered)
+                if (sliderDunkelPHS) sliderDunkelPHS.value = 30;
+                if (sliderDunkelBESS) sliderDunkelBESS.value = 6;
+                if (sliderDunkelCAES) sliderDunkelCAES.value = 0;
+                if (sliderDunkelH2) sliderDunkelH2.value = 0;
+              } else if (sliderDunkelH2 && parseFloat(sliderDunkelH2.value) === 0 && sliderDunkelCAES && parseFloat(sliderDunkelCAES.value) === 0) {
+                // Populate future target fleet when transitioning from 2025 actuals to 2030/2035/2050 targets
+                const days = (sliderDunkelDays && Number.isFinite(parseFloat(sliderDunkelDays.value))) ? parseFloat(sliderDunkelDays.value) : 14;
+                const reqEnergy = Math.max(0, (dp.val / 365) * 1.15 - 0.24) * days;
+                if (sliderDunkelPHS) sliderDunkelPHS.value = 90;
+                if (sliderDunkelBESS) sliderDunkelBESS.value = 50;
+                if (sliderDunkelCAES) sliderDunkelCAES.value = 500;
+                sliderDunkelH2.value = Math.min(100, Math.max(1, Math.ceil(Math.max(0, reqEnergy - 0.42) / 0.38)));
+              }
               updateDunkelCalculations();
             });
           }
