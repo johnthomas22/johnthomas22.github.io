@@ -1911,12 +1911,9 @@
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        status.style.display = "block";
-        status.style.background = "rgba(16, 185, 129, 0.14)";
-        status.style.border = "1px solid rgba(16, 185, 129, 0.45)";
-        status.style.color = "#6ee7b7";
-        status.textContent = "✅ Thank you! Your feedback has been sent successfully.";
         form.reset();
+        closeFeedbackModal();
+        showFeedbackToast("✅ Thank you! Your feedback has been sent successfully.");
       } else {
         throw new Error((data && data.message) || "Submission failed");
       }
@@ -1931,6 +1928,24 @@
       btn.textContent = origText;
       btn.style.opacity = "1";
     }
+  }
+
+  function showFeedbackToast(msg) {
+    let toast = document.getElementById("fbToast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "fbToast";
+      toast.style.cssText = "position: fixed; bottom: 24px; right: 24px; z-index: 10060; background: #0c192c; color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.5); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65); padding: 12px 18px; border-radius: 10px; font-size: 0.88rem; font-weight: 600; transition: opacity 0.3s ease; pointer-events: none;";
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.opacity = "1";
+    toast.style.display = "block";
+    clearTimeout(toast._hideTimer);
+    toast._hideTimer = setTimeout(() => {
+      toast.style.opacity = "0";
+      setTimeout(() => { toast.style.display = "none"; }, 320);
+    }, 4000);
   }
 </script>
 
