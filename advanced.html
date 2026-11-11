@@ -10097,7 +10097,13 @@
           document.getElementById("headerTitle").textContent = "UK Dünkelflaute & Energy Storage Simulator";
           document.getElementById("headerSubtitle").textContent = "Modeling British wind droughts, required storage volume, and the fiscal/tax cost of hydrogen salt caverns vs batteries";
           updateDunkelCalculations();
-          if (typeof renderHistoricalTreemap === 'function') setTimeout(() => renderHistoricalTreemap(true), 50);
+          if (typeof initHistoricalEmissionsTreemap === 'function') {
+            initHistoricalEmissionsTreemap();
+          }
+          if (typeof renderHistoricalTreemap === 'function') {
+            setTimeout(() => renderHistoricalTreemap(true), 40);
+            setTimeout(() => renderHistoricalTreemap(true), 150);
+          }
         }
 
         if (isSimple && tpCardEl) {
@@ -12675,8 +12681,7 @@
         dunkelSliders.forEach(s => {
           if (s) {
             s.addEventListener("input", () => {
-              initHistoricalEmissionsTreemap();
-        updateDunkelCalculations();
+              updateDunkelCalculations();
             });
           }
         });
@@ -12766,6 +12771,11 @@
 
 
         updateDunkelCalculations();
+        try {
+          initHistoricalEmissionsTreemap();
+        } catch (err) {
+          console.error("Error in initHistoricalEmissionsTreemap from initDunkelView:", err);
+        }
       }
 
       try {
@@ -12782,6 +12792,11 @@
         initDunkelView();
       } catch (err) {
         console.error("Error initializing Dunkelflaute view:", err);
+      }
+      try {
+        initHistoricalEmissionsTreemap();
+      } catch (err) {
+        console.error("Error initializing Historical Emissions Treemap on load:", err);
       }
 
       // Simulation Controls
