@@ -2179,7 +2179,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <div class="brand-title" id="headerTitle">Earth's Energy Imbalance</div>
-              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v2.1</span>
+              <span class="version-badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px; letter-spacing: 0.04em;">v2.2</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted);" id="headerSubtitle">How greenhouse gases trap heat and warm the planet</div>
           </div>
@@ -2894,11 +2894,27 @@
             </div>
           </div>
 
+          <!-- Country Breakdown Block Chart Promo Banner -->
+          <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(15, 23, 42, 0.8)); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 8px; padding: 14px 18px; margin-top: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <div style="font-weight: 800; font-size: 0.95rem; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
+                <span>🌍</span> Looking for Country-by-Country Annual &amp; Historical Emissions?
+              </div>
+              <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 4px; line-height: 1.45;">
+                Explore our interactive proportional block chart (treemap) detailing the <strong>Top 50 emitting countries + Rest of the World (170+ nations)</strong> for both <strong>2023 Annual Emissions</strong> (37.4 Gt/yr) and <strong>Cumulative Historical Carbon</strong> (1,820 Gt).
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="setViewMode('dunkel'); if (typeof setEmissionsScope === 'function') setEmissionsScope('annual'); setTimeout(() => { const el = document.getElementById('cardHistoricalEmissionsTreemap'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 120);" style="padding: 8px 16px; font-size: 0.82rem; font-weight: 700; color: #38bdf8; border-color: #38bdf8; background: rgba(56, 189, 248, 0.15); display: inline-flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap;">
+              📊 Open Country Emissions Block Chart &rarr;
+            </button>
+          </div>
+
           <!-- Bottom Navigation Bar -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button class="btn btn-secondary" id="btnBackToSimFromSources" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
               <button class="btn btn-secondary" id="btnJumpToBudgetsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">🛢️ View Carbon Budgets</button>
+              <button class="btn btn-secondary" onclick="setViewMode('dunkel'); if (typeof setEmissionsScope === 'function') setEmissionsScope('annual'); setTimeout(() => { const el = document.getElementById('cardHistoricalEmissionsTreemap'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 120);" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">🌍 Country Emissions Block Chart &rarr;</button>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button class="btn btn-modal" id="btnOpenGuideFromSources" style="font-size: 0.78rem; padding: 6px 14px;">📖 Open Sources & Methane Guide →</button>
@@ -3503,59 +3519,67 @@
       </div>
 
       <!-- =====================================================================
-           CUMULATIVE HISTORICAL CONTRIBUTIONS TO ATMOSPHERIC CARBON (1750-PRESENT)
+           COUNTRY EMISSIONS BLOCK CHART: CURRENT ANNUAL (2023) & CUMULATIVE HISTORICAL (1750-PRESENT)
            ===================================================================== -->
       <div class="card historical-treemap-card" id="cardHistoricalEmissionsTreemap">
+        <!-- Prominent Scope Switcher -->
+        <div class="emissions-scope-switcher" style="display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 14px; background: rgba(0,0,0,0.45); padding: 6px; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25); flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary active" id="btnScopeAnnual" onclick="setEmissionsScope('annual')" style="flex: 1; min-width: 240px; padding: 8px 16px; font-weight: 700; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>📅</span> Current Annual Emissions (2023 · 37.4 Gt/yr)
+          </button>
+          <button type="button" class="btn btn-secondary" id="btnScopeHistorical" onclick="setEmissionsScope('historical')" style="flex: 1; min-width: 240px; padding: 8px 16px; font-weight: 700; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>⏳</span> Cumulative Historical Emissions (1750–2023 · 1,820 Gt)
+          </button>
+        </div>
+
         <div class="card-title-row" style="flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
-          <div class="card-title" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem;">
-            <span>🌍</span> Cumulative Historical Contribution to Atmospheric Carbon (1750–Present)
+          <div class="card-title" id="lblTreemapCardTitle" style="display: flex; align-items: center; gap: 8px; font-size: 1.05rem;">
+            <span>🌍</span> Current Annual Emissions by Country (Latest Data · 2023)
           </div>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-            <span class="badge badge-cyan" style="font-size: 0.72rem;">Global Carbon Project &amp; OWID</span>
-            <span class="badge badge-amber" style="font-size: 0.72rem;">Total: ~1,820 Gt CO₂</span>
-            <span class="badge badge-purple" style="font-size: 0.72rem; background: rgba(192, 132, 252, 0.15); border-color: #c084fc; color: #c084fc;">🇬🇧 UK #5 All-Time (80 Gt · 4.4%)</span>
+          <div id="treemapBadgeGroup" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+            <span class="badge badge-cyan" id="badgeTreemapSource" style="font-size: 0.72rem;">Global Carbon Project &amp; EDGAR/OWID (2023)</span>
+            <span class="badge badge-amber" id="badgeTreemapTotal" style="font-size: 0.72rem;">Total: 37.4 Gt CO₂/yr</span>
+            <span class="badge badge-purple" id="badgeTreemapUK" style="font-size: 0.72rem; background: rgba(192, 132, 252, 0.15); border-color: #c084fc; color: #c084fc;">🇬🇧 UK #17 Annually (0.33 Gt · 0.88%)</span>
           </div>
         </div>
 
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0; margin-bottom: 14px; line-height: 1.55;">
-          Relative fossil fuel combustion and industrial cement $\text{CO}_2$ emissions by sovereign state since 1750. 
-          The area of each proportional block directly corresponds to that nation's cumulative share of total atmospheric carbon. 
-          The <strong>Top 50 nations</strong> account for <strong>91.8%</strong> of all historical industrial carbon, while the remaining <strong>170+ nations &amp; territories</strong> share just <strong>8.2%</strong>.
+        <p id="lblTreemapDescription" style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0; margin-bottom: 14px; line-height: 1.55;">
+          Annual fossil fuel combustion and industrial cement $\text{CO}_2$ emissions by sovereign state for 2023. 
+          The area of each proportional block directly corresponds to that nation's current annual carbon emissions (37.40 Gt/yr). 
+          The <strong>Top 50 nations</strong> account for <strong>89.8%</strong> of all current global carbon, while the remaining <strong>170+ nations &amp; territories</strong> share just <strong>10.2%</strong>.
         </p>
 
-        <!-- Historical Imperative Banner -->
-        <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 0.8rem; line-height: 1.5; color: #cbd5e1;">
-          <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #38bdf8; margin-bottom: 4px;">
-            <span>🇬🇧</span> Why is this on the Dünkelflaute &amp; Storage Page? Britain's Carbon Heritage &amp; Technological Duty
+        <!-- Narrative Banner: Annual Flow vs Historical Bathtub & Per Capita -->
+        <div id="bannerTreemapNarrative" style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 0.8rem; line-height: 1.5; color: #cbd5e1;">
+          <div id="bannerTreemapNarrativeTitle" style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #38bdf8; margin-bottom: 4px;">
+            <span>⚖️</span> The Annual Flow vs Historical "Carbon Bathtub" Dilemma &amp; Per-Capita Equity
           </div>
-          <div>
-            Because Great Britain ignited the Industrial Revolution in 1750 with coal-fired steam engines, blast furnaces, and railways, the UK has emitted 
-            <strong>~80 Billion tonnes of CO₂</strong>—ranking <strong>#5 all-time globally</strong> (greater than all 54 nations of Africa combined), despite comprising less than 1% of the world's population today. 
-            This historical carbon footprint underpins Britain's moral, economic, and scientific responsibility to master seasonal energy storage and solve the winter <strong>Dünkelflaute</strong> with zero-carbon innovation, pioneering an exportable blueprint for every industrial power grid on Earth.
+          <div id="bannerTreemapNarrativeBody">
+            While China leads current annual emissions at <strong>30.5% (11.4 Gt/yr)</strong> and the USA is #2 at <strong>12.6% (4.7 Gt/yr)</strong>, global warming is governed by the total cumulative carbon stock in the atmosphere—where the USA (23.9%) and Europe (~22%) are overwhelmingly responsible. Furthermore, per-capita intensity reveals dramatic contrasts: oil-rich Gulf states (Qatar <strong>44.0 t/person</strong>, UAE <strong>23.5 t</strong>, Saudi Arabia <strong>18.2 t</strong>) and western nations (Australia <strong>14.6 t</strong>, USA <strong>13.9 t</strong>) emit multiple times more per person than China (<strong>8.1 t</strong>), the UK (<strong>4.8 t</strong>), India (<strong>2.1 t</strong>), or African nations (<strong>&lt;1.0 t</strong>).
           </div>
         </div>
 
         <!-- 4 Quick Stats Strip -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px;">
+        <div id="treemapQuickStatsStrip" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px;">
           <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
-            <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Top 50 Nations</div>
-            <div style="font-size: 1.2rem; font-weight: 800; color: var(--cyan); font-family: ui-monospace, monospace;">1,670.7 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span></div>
-            <div style="font-size: 0.72rem; color: #94a3b8;">91.8% of all-time global emissions</div>
+            <div id="lblStat1Title" style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Top 50 Nations (Annual)</div>
+            <div id="lblStat1Val" style="font-size: 1.2rem; font-weight: 800; color: var(--cyan); font-family: ui-monospace, monospace;">33.58 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span></div>
+            <div id="lblStat1Sub" style="font-size: 0.72rem; color: #94a3b8;">89.8% of 2023 global emissions</div>
           </div>
           <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
-            <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Rest of the World (170+ Nations)</div>
-            <div style="font-size: 1.2rem; font-weight: 800; color: #a78bfa; font-family: ui-monospace, monospace;">149.3 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span></div>
-            <div style="font-size: 0.72rem; color: #94a3b8;">8.2% total · &gt;3.2 Billion people</div>
+            <div id="lblStat2Title" style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Rest of the World (170+ Nations)</div>
+            <div id="lblStat2Val" style="font-size: 1.2rem; font-weight: 800; color: #a78bfa; font-family: ui-monospace, monospace;">3.82 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span></div>
+            <div id="lblStat2Sub" style="font-size: 0.72rem; color: #94a3b8;">10.2% total · &gt;3.2 Billion people</div>
           </div>
           <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
-            <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">United Kingdom (Cradle of 1750)</div>
-            <div style="font-size: 1.2rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">80.0 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span></div>
-            <div style="font-size: 0.72rem; color: #94a3b8;">Rank #5 · 4.40% of all atmospheric CO₂</div>
+            <div id="lblStat3Title" style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">United Kingdom (Current)</div>
+            <div id="lblStat3Val" style="font-size: 1.2rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">0.33 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span></div>
+            <div id="lblStat3Sub" style="font-size: 0.72rem; color: #94a3b8;">Rank #17 · 0.88% of world (down >53% since 1990)</div>
           </div>
           <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 12px;">
-            <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Top 2 Emitters (USA &amp; China)</div>
-            <div style="font-size: 1.2rem; font-weight: 800; color: var(--amber); font-family: ui-monospace, monospace;">720.0 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span></div>
-            <div style="font-size: 0.72rem; color: #94a3b8;">39.56% of total (US 23.9% · CN 15.7%)</div>
+            <div id="lblStat4Title" style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Top 2 Emitters (China &amp; USA)</div>
+            <div id="lblStat4Val" style="font-size: 1.2rem; font-weight: 800; color: var(--amber); font-family: ui-monospace, monospace;">16.10 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span></div>
+            <div id="lblStat4Sub" style="font-size: 0.72rem; color: #94a3b8;">43.05% of total (CN 30.5% · US 12.6%)</div>
           </div>
         </div>
 
@@ -3603,13 +3627,14 @@
         <div class="treemap-table-container" id="treemapTableContainer">
           <table class="treemap-table">
             <thead>
-              <tr>
-                <th style="width: 60px;">Rank</th>
+              <tr id="treemapTableHeadRow">
+                <th style="width: 55px;">Rank</th>
                 <th>Country</th>
                 <th>Region</th>
-                <th style="text-align: right;">Cumulative Emissions (Gt CO₂)</th>
-                <th style="text-align: right;">Share of Global Total (%)</th>
-                <th>Historical Energy &amp; Industrial Context</th>
+                <th style="text-align: right;" id="thEmissionsCol">Annual Emissions (Gt CO₂/yr)</th>
+                <th style="text-align: right;" id="thShareCol">Share of Global (%)</th>
+                <th style="text-align: right;" id="thPerCapitaCol">Per Capita (t/person/yr)</th>
+                <th id="thContextCol">Key Drivers &amp; Sectoral Context</th>
               </tr>
             </thead>
             <tbody id="historicalTableBody">
@@ -3652,7 +3677,7 @@
         <span>·</span>
         <a href="doughnut_economics.html" style="color: #fbbf24; text-decoration: none;">🍩 Doughnut Economics</a>
         <span>·</span>
-        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v2.1</span>
+        <span style="font-family: ui-monospace, monospace; font-weight: 700; color: var(--cyan);">v2.2</span>
       </div>
       <div style="font-size: 0.76rem; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span>&copy; 2026 Earth Energy Balance Simulator Project</span>
@@ -3910,7 +3935,7 @@
           <div class="toc-card">
             <h3 style="margin-top: 0; border: none; color: #fff; display: flex; align-items: center; justify-content: space-between;">
               <span>Documentation Overview</span>
-              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v2.1</span>
+              <span style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px;">v2.2</span>
             </h3>
             
             <!-- User Commentary & Context Note -->
@@ -11619,64 +11644,142 @@
 
       
       // =========================================================================
-      // CUMULATIVE HISTORICAL ATMOSPHERIC CARBON (1750-PRESENT) TREEMAP
-      // Data Source: Global Carbon Project (GCP), CDIAC & Our World in Data (OWID)
+      // DUAL-MODE COUNTRY EMISSIONS BLOCK CHART:
+      // 1) CURRENT ANNUAL EMISSIONS (LATEST DATA · 2023 · 37.40 Gt CO₂/yr)
+      // 2) CUMULATIVE HISTORICAL EMISSIONS (1750–2023 · 1,820 Gt CO₂)
+      // Data Sources: Global Carbon Project (GCP 2023), EDGAR & Our World in Data (OWID)
       // =========================================================================
 
-      const TOP_50_EMITTERS = [
-        { rank: 1, name: "United States", code: "US", flag: "🇺🇸", region: "North America", emissions: 435.0, share: 23.90, note: "World leader in cumulative historical emissions; rapid 20th-century electrification, coal grid, and automobile expansion." },
-        { rank: 2, name: "China", code: "CN", flag: "🇨🇳", region: "Asia", emissions: 285.0, share: 15.66, note: "Rapid post-1980 industrial acceleration; now the world’s largest annual emitter driven by coal-fueled manufacturing." },
-        { rank: 3, name: "Russia", code: "RU", flag: "🇷🇺", region: "Eurasia", emissions: 123.0, share: 6.76, note: "Heavy Soviet heavy-industry legacy, vast gas pipelines, steelworks, and oil extraction." },
-        { rank: 4, name: "Germany", code: "DE", flag: "🇩🇪", region: "Europe", emissions: 95.0, share: 5.22, note: "Europe’s largest historical industrial powerhouse; coal-rich Ruhr valley and extensive automotive/chemical industry." },
-        { rank: 5, name: "United Kingdom", code: "GB", flag: "🇬🇧", region: "Europe", emissions: 80.0, share: 4.40, note: "Cradle of the Industrial Revolution in 1750; led world emissions for over a century with coal mines, steam engines, and railways." },
-        { rank: 6, name: "Japan", code: "JP", flag: "🇯🇵", region: "Asia", emissions: 70.0, share: 3.85, note: "Post-WWII rapid industrialization; heavy manufacturing, automotive, and steel production." },
-        { rank: 7, name: "India", code: "IN", flag: "🇮🇳", region: "Asia", emissions: 61.0, share: 3.35, note: "Home to 1.4B people; rapid recent electrification though historical cumulative per-capita emissions remain ~1/10th of the West." },
-        { rank: 8, name: "Canada", code: "CA", flag: "🇨🇦", region: "North America", emissions: 36.5, share: 2.01, note: "Extensive oil sands extraction, mining, and vast cold-climate transportation network." },
-        { rank: 9, name: "France", code: "FR", flag: "🇫🇷", region: "Europe", emissions: 35.8, share: 1.97, note: "Early coal adopter; drastically reduced power emissions via massive 1970s nuclear rollout." },
-        { rank: 10, name: "Ukraine", code: "UA", flag: "🇺🇦", region: "Eurasia", emissions: 31.0, share: 1.70, note: "Donbas coal basin, metallurgy, and heavy Soviet industrial infrastructure." },
-        { rank: 11, name: "Poland", code: "PL", flag: "🇵🇱", region: "Europe", emissions: 29.0, share: 1.59, note: "Historically dominated by Silesian hard coal and lignite power generation." },
-        { rank: 12, name: "South Africa", code: "ZA", flag: "🇿🇦", region: "Africa", emissions: 23.5, share: 1.29, note: "Africa’s highest historical emitter; Eskom coal-fired grid and Sasol coal-to-liquids synfuel refineries." },
-        { rank: 13, name: "Italy", code: "IT", flag: "🇮🇹", region: "Europe", emissions: 23.0, share: 1.26, note: "Po Valley industrial triangle (Milan, Turin, Genoa), automotive, and thermal power." },
-        { rank: 14, name: "Iran", code: "IR", flag: "🇮🇷", region: "Middle East", emissions: 20.5, share: 1.13, note: "Vast oil and gas production; domestic subsidized fossil consumption." },
-        { rank: 15, name: "Australia", code: "AU", flag: "🇦🇺", region: "Oceania", emissions: 20.0, share: 1.10, note: "Major global coal and LNG exporter; historically carbon-intensive domestic electricity grid." },
-        { rank: 16, name: "Mexico", code: "MX", flag: "🇲🇽", region: "Latin America", emissions: 19.5, share: 1.07, note: "Latin America’s largest cumulative emitter; oil refining (Pemex) and manufacturing belt." },
-        { rank: 17, name: "South Korea", code: "KR", flag: "🇰🇷", region: "Asia", emissions: 19.0, share: 1.04, note: "Miracle on the Han River; world-leading semiconductor, shipbuilding, and automotive exports." },
-        { rank: 18, name: "Brazil", code: "BR", flag: "🇧🇷", region: "Latin America", emissions: 17.5, share: 0.96, note: "Fossil CO2; total historical warming impact is substantially higher when Amazon land-use/deforestation is included." },
-        { rank: 19, name: "Saudi Arabia", code: "SA", flag: "🇸🇦", region: "Middle East", emissions: 17.0, share: 0.93, note: "World’s leading petroleum producer; domestic desalination, petrochemicals, and refining." },
-        { rank: 20, name: "Indonesia", code: "ID", flag: "🇮🇩", region: "Asia", emissions: 16.5, share: 0.91, note: "Expanding coal power fleet; rapid industrial and nickel mineral processing." },
-        { rank: 21, name: "Spain", code: "ES", flag: "🇪🇸", region: "Europe", emissions: 15.0, share: 0.82, note: "Post-1960s rapid economic modernization, cement boom, and thermal power." },
-        { rank: 22, name: "Kazakhstan", code: "KZ", flag: "🇰🇿", region: "Eurasia", emissions: 14.0, share: 0.77, note: "Vast coal reserves (Ekibastuz) and major Caspian oil/gas extraction." },
-        { rank: 23, name: "Belgium", code: "BE", flag: "🇧🇪", region: "Europe", emissions: 12.5, share: 0.69, note: "First continental European nation to undergo the Industrial Revolution (Wallonia coal and steel)." },
-        { rank: 24, name: "Netherlands", code: "NL", flag: "🇳🇱", region: "Europe", emissions: 12.0, share: 0.66, note: "Groningen giant gas field extraction and Rotterdam petrochemical refining hub." },
-        { rank: 25, name: "Turkey", code: "TR", flag: "🇹🇷", region: "Middle East", emissions: 12.0, share: 0.66, note: "Lignite power generation and expanding manufacturing and steel base." },
-        { rank: 26, name: "Czech Republic", code: "CZ", flag: "🇨🇿", region: "Europe", emissions: 11.5, share: 0.63, note: "Historic Bohemian industrial center; heavy brown coal reliance." },
-        { rank: 27, name: "Taiwan", code: "TW", flag: "🇹🇼", region: "Asia", emissions: 10.0, share: 0.55, note: "Global semiconductor fabrication (TSMC) and high-tech electronics manufacturing." },
-        { rank: 28, name: "Argentina", code: "AR", flag: "🇦🇷", region: "Latin America", emissions: 9.0, share: 0.49, note: "Early 20th-century economic modernization; gas-dominated domestic power grid." },
-        { rank: 29, name: "Romania", code: "RO", flag: "🇷🇴", region: "Europe", emissions: 8.5, share: 0.47, note: "Historical Ploiești oil production and Communist-era heavy chemical industry." },
-        { rank: 30, name: "Egypt", code: "EG", flag: "🇪🇬", region: "Africa", emissions: 7.5, share: 0.41, note: "North Africa’s most populous economy; domestic natural gas and oil use." },
-        { rank: 31, name: "Thailand", code: "TH", flag: "🇹🇭", region: "Asia", emissions: 7.2, share: 0.40, note: "Southeast Asian automotive and electronics export manufacturing." },
-        { rank: 32, name: "Malaysia", code: "MY", flag: "🇲🇾", region: "Asia", emissions: 7.0, share: 0.38, note: "Petronas offshore gas fields, LNG exports, and rapid industrialization." },
-        { rank: 33, name: "Venezuela", code: "VE", flag: "🇻🇪", region: "Latin America", emissions: 6.8, share: 0.37, note: "World’s largest proven crude oil reserves; heavy Orinoco belt production." },
-        { rank: 34, name: "Uzbekistan", code: "UZ", flag: "🇺🇿", region: "Eurasia", emissions: 6.5, share: 0.36, note: "Central Asian gas extraction and Soviet-era agro-industrial processing." },
-        { rank: 35, name: "Austria", code: "AT", flag: "🇦🇹", region: "Europe", emissions: 6.0, share: 0.33, note: "Danubian heavy industry, Voestalpine steel, and Alpine transit transport." },
-        { rank: 36, name: "Sweden", code: "SE", flag: "🇸🇪", region: "Europe", emissions: 5.6, share: 0.31, note: "Early iron mining; largely decarbonized grid via hydro and nuclear." },
-        { rank: 37, name: "Hungary", code: "HU", flag: "🇭🇺", region: "Europe", emissions: 5.4, share: 0.30, note: "Post-war heavy machinery and chemical industrialization." },
-        { rank: 38, name: "United Arab Emirates", code: "AE", flag: "🇦🇪", region: "Middle East", emissions: 5.2, share: 0.29, note: "Rapid late-20th-century petroleum expansion and global aviation/shipping hub." },
-        { rank: 39, name: "Algeria", code: "DZ", flag: "🇩🇿", region: "Africa", emissions: 5.0, share: 0.27, note: "Hassi Messaoud oil and Hassi R’Mel giant gas fields." },
-        { rank: 40, name: "Pakistan", code: "PK", flag: "🇵🇰", region: "Asia", emissions: 4.9, share: 0.27, note: "240M population; highly climate-vulnerable despite low historical cumulative emissions." },
-        { rank: 41, name: "Vietnam", code: "VN", flag: "🇻🇳", region: "Asia", emissions: 4.8, share: 0.26, note: "Rapid 21st-century manufacturing boom and coal-fired industrial growth." },
-        { rank: 42, name: "Greece", code: "GR", flag: "🇬🇷", region: "Europe", emissions: 4.6, share: 0.25, note: "Ptolemaida lignite power stations and maritime transport." },
-        { rank: 43, name: "Belarus", code: "BY", flag: "🇧🇾", region: "Eurasia", emissions: 4.5, share: 0.25, note: "Mozyr oil refining, potash mining, and heavy machinery." },
-        { rank: 44, name: "Colombia", code: "CO", flag: "🇨🇴", region: "Latin America", emissions: 4.4, share: 0.24, note: "Cerrejón open-cast thermal coal mining and oil extraction." },
-        { rank: 45, name: "Philippines", code: "PH", flag: "🇵🇭", region: "Asia", emissions: 4.2, share: 0.23, note: "115M people; archipelagic nation facing severe typhoons despite <0.25% share." },
-        { rank: 46, name: "Iraq", code: "IQ", flag: "🇮🇶", region: "Middle East", emissions: 4.0, share: 0.22, note: "Basra oil fields and significant associated petroleum gas flaring." },
-        { rank: 47, name: "Chile", code: "CL", flag: "🇨🇱", region: "Latin America", emissions: 3.9, share: 0.21, note: "Global copper mining, thermoelectric power, and mineral refining." },
-        { rank: 48, name: "Kuwait", code: "KW", flag: "🇰🇼", region: "Middle East", emissions: 3.8, share: 0.21, note: "Burgan oil field and high per-capita energy consumption." },
-        { rank: 49, name: "Nigeria", code: "NG", flag: "🇳🇬", region: "Africa", emissions: 3.6, share: 0.20, note: "Africa’s largest population (220M); Niger Delta petroleum extraction and flaring." },
-        { rank: 50, name: "Bulgaria", code: "BG", flag: "🇧🇬", region: "Europe", emissions: 3.5, share: 0.19, note: "Maritsa East lignite power complex and historic heavy chemical industry." }
+      // Scope State: 'annual' (default) | 'historical'
+      let activeEmissionsScope = 'annual';
+
+      // -------------------------------------------------------------------------
+      // 1. DATASET: 2023 CURRENT ANNUAL EMISSIONS (37.40 Gt CO₂/yr Global Total)
+      // -------------------------------------------------------------------------
+      const TOP_50_ANNUAL_EMITTERS = [
+        { rank: 1, name: "China", code: "CN", flag: "🇨🇳", region: "Asia", emissions: 11.40, share: 30.48, perCapita: 8.1, note: "World's largest annual emitter; extensive coal power fleet and heavy manufacturing / export industry." },
+        { rank: 2, name: "United States", code: "US", flag: "🇺🇸", region: "North America", emissions: 4.70, share: 12.57, perCapita: 13.9, note: "Second largest annual emitter; high per-capita footprint from transport, natural gas, and power." },
+        { rank: 3, name: "India", code: "IN", flag: "🇮🇳", region: "Asia", emissions: 3.00, share: 8.02, perCapita: 2.1, note: "Fastest growing major emitter; coal-dominated electricity expansion for 1.4B people, though per-capita is ~1/4 of China." },
+        { rank: 4, name: "Russia", code: "RU", flag: "🇷🇺", region: "Eurasia", emissions: 1.80, share: 4.81, perCapita: 12.5, note: "Heavy gas and oil extraction, gas flaring, district heating, and metallurgy." },
+        { rank: 5, name: "Japan", code: "JP", flag: "🇯🇵", region: "Asia", emissions: 1.00, share: 2.67, perCapita: 8.0, note: "Fossil-heavy grid post-Fukushima; major industrial and automotive manufacturing." },
+        { rank: 6, name: "Indonesia", code: "ID", flag: "🇮🇩", region: "Asia", emissions: 0.75, share: 2.01, perCapita: 2.7, note: "Rapidly expanding coal fleet, captive coal for nickel smelters; excludes peat/deforestation fires." },
+        { rank: 7, name: "Iran", code: "IR", flag: "🇮🇷", region: "Middle East", emissions: 0.72, share: 1.93, perCapita: 8.2, note: "Heavily subsidized domestic fossil gas and oil consumption; extensive petroleum extraction." },
+        { rank: 8, name: "Saudi Arabia", code: "SA", flag: "🇸🇦", region: "Middle East", emissions: 0.64, share: 1.71, perCapita: 18.2, note: "High domestic cooling demand, water desalination, petrochemicals, and oil refining." },
+        { rank: 9, name: "Germany", code: "DE", flag: "🇩🇪", region: "Europe", emissions: 0.61, share: 1.63, perCapita: 7.3, note: "Europe's largest annual emitter; phasing out coal and nuclear, scaling renewables." },
+        { rank: 10, name: "South Korea", code: "KR", flag: "🇰🇷", region: "Asia", emissions: 0.58, share: 1.55, perCapita: 11.2, note: "Heavy reliance on coal and LNG imports for semiconductors, steel, and electronics." },
+        { rank: 11, name: "Canada", code: "CA", flag: "🇨🇦", region: "North America", emissions: 0.54, share: 1.44, perCapita: 13.8, note: "Oil sands extraction (Alberta), vast transportation distances, and cold winters." },
+        { rank: 12, name: "Mexico", code: "MX", flag: "🇲🇽", region: "Latin America", emissions: 0.49, share: 1.31, perCapita: 3.8, note: "State oil refining (Pemex), gas power plants, and industrial manufacturing." },
+        { rank: 13, name: "Brazil", code: "BR", flag: "🇧🇷", region: "Latin America", emissions: 0.48, share: 1.28, perCapita: 2.2, note: "Territorial fossil CO₂; total greenhouse footprint is ~3× higher with Amazon deforestation and livestock." },
+        { rank: 14, name: "South Africa", code: "ZA", flag: "🇿🇦", region: "Africa", emissions: 0.44, share: 1.18, perCapita: 7.3, note: "Africa's highest annual emitter; Eskom's ageing coal fleet and Sasol coal-to-liquids plants." },
+        { rank: 15, name: "Turkey", code: "TR", flag: "🇹🇷", region: "Middle East", emissions: 0.43, share: 1.15, perCapita: 5.0, note: "Rapid economic expansion, domestic lignite generation, and heavy cement / steel production." },
+        { rank: 16, name: "Australia", code: "AU", flag: "🇦🇺", region: "Oceania", emissions: 0.39, share: 1.04, perCapita: 14.6, note: "High per-capita footprint; coal/gas grid transition and mining energy consumption." },
+        { rank: 17, name: "United Kingdom", code: "GB", flag: "🇬🇧", region: "Europe", emissions: 0.33, share: 0.88, perCapita: 4.8, note: "Rank #17 globally; emissions have fallen >53% since 1990 following complete coal power phase-out in 2024." },
+        { rank: 18, name: "Vietnam", code: "VN", flag: "🇻🇳", region: "Asia", emissions: 0.33, share: 0.88, perCapita: 3.3, note: "Fast industrializing export manufacturing hub; major recent buildout of coal power stations." },
+        { rank: 19, name: "Italy", code: "IT", flag: "🇮🇹", region: "Europe", emissions: 0.32, share: 0.86, perCapita: 5.4, note: "Gas-dominated power generation, industrial northern corridor, and automotive transport." },
+        { rank: 20, name: "Poland", code: "PL", flag: "🇵🇱", region: "Europe", emissions: 0.29, share: 0.78, perCapita: 7.7, note: "Highest coal share in the EU (~60% of power); expanding nuclear and offshore wind to replace lignite." },
+        { rank: 21, name: "Taiwan", code: "TW", flag: "🇹🇼", region: "Asia", emissions: 0.28, share: 0.75, perCapita: 11.8, note: "Global semiconductor fabs (TSMC) running 24/7 on imported coal and LNG." },
+        { rank: 22, name: "Malaysia", code: "MY", flag: "🇲🇾", region: "Asia", emissions: 0.27, share: 0.72, perCapita: 7.9, note: "Petronas offshore gas extraction, petrochemicals, and coal power fleet." },
+        { rank: 23, name: "France", code: "FR", flag: "🇫🇷", region: "Europe", emissions: 0.27, share: 0.72, perCapita: 4.0, note: "Low electricity emissions thanks to 70% nuclear baseload; majority of emissions from transport and heating." },
+        { rank: 24, name: "Thailand", code: "TH", flag: "🇹🇭", region: "Asia", emissions: 0.26, share: 0.70, perCapita: 3.7, note: "Natural gas power dependency, automotive assembly, and manufacturing." },
+        { rank: 25, name: "Spain", code: "ES", flag: "🇪🇸", region: "Europe", emissions: 0.23, share: 0.61, perCapita: 4.8, note: "Rapid solar and wind deployment has cut grid emissions by >60% over the last decade." },
+        { rank: 26, name: "United Arab Emirates", code: "AE", flag: "🇦🇪", region: "Middle East", emissions: 0.22, share: 0.59, perCapita: 23.5, note: "Very high per-capita emissions from year-round air conditioning, desalination, and oil infrastructure." },
+        { rank: 27, name: "Kazakhstan", code: "KZ", flag: "🇰🇿", region: "Eurasia", emissions: 0.22, share: 0.59, perCapita: 11.0, note: "Coal-dependent power and heating, metallurgical smelters, and Caspian oil development." },
+        { rank: 28, name: "Egypt", code: "EG", flag: "🇪🇬", region: "Africa", emissions: 0.22, share: 0.59, perCapita: 2.0, note: "Domestic natural gas power generation, expanding population of 105 million." },
+        { rank: 29, name: "Iraq", code: "IQ", flag: "🇮🇶", region: "Middle East", emissions: 0.19, share: 0.51, perCapita: 4.2, note: "Significant petroleum extraction and gas flaring in southern oil fields." },
+        { rank: 30, name: "Pakistan", code: "PK", flag: "🇵🇰", region: "Asia", emissions: 0.19, share: 0.51, perCapita: 0.8, note: "240M population; low per-capita emissions (<1t), highly vulnerable to climate extremes." },
+        { rank: 31, name: "Algeria", code: "DZ", flag: "🇩🇿", region: "Africa", emissions: 0.18, share: 0.48, perCapita: 3.9, note: "Major gas exporter to Southern Europe; domestic gas-fired grid." },
+        { rank: 32, name: "Argentina", code: "AR", flag: "🇦🇷", region: "Latin America", emissions: 0.17, share: 0.45, perCapita: 3.7, note: "Natural gas grid (Vaca Muerta shale basin) and urban transport." },
+        { rank: 33, name: "Netherlands", code: "NL", flag: "🇳🇱", region: "Europe", emissions: 0.14, share: 0.37, perCapita: 7.8, note: "Rotterdam industrial port, chemical clusters, and intensive greenhouse horticulture." },
+        { rank: 34, name: "Philippines", code: "PH", flag: "🇵🇭", region: "Asia", emissions: 0.14, share: 0.37, perCapita: 1.2, note: "115M people; growing coal fleet to satisfy urban electrification demand." },
+        { rank: 35, name: "Uzbekistan", code: "UZ", flag: "🇺🇿", region: "Eurasia", emissions: 0.12, share: 0.32, perCapita: 3.4, note: "Central Asian gas extraction, thermal power plants, and chemical processing." },
+        { rank: 36, name: "Qatar", code: "QA", flag: "🇶🇦", region: "Middle East", emissions: 0.12, share: 0.32, perCapita: 44.0, note: "Highest per-capita emissions on Earth (~44 t/person) due to giant LNG export liquefaction trains." },
+        { rank: 37, name: "Nigeria", code: "NG", flag: "🇳🇬", region: "Africa", emissions: 0.10, share: 0.27, perCapita: 0.45, note: "Africa's most populous nation (220M); very low per-capita emissions; flaring in Niger Delta." },
+        { rank: 38, name: "Colombia", code: "CO", flag: "🇨🇴", region: "Latin America", emissions: 0.10, share: 0.27, perCapita: 1.9, note: "Predominantly hydro-powered grid; thermal coal mining for export." },
+        { rank: 39, name: "Bangladesh", code: "BD", flag: "🇧🇩", region: "Asia", emissions: 0.098, share: 0.26, perCapita: 0.58, note: "170M population; expanding garment manufacturing; extreme low-lying flood risk." },
+        { rank: 40, name: "Kuwait", code: "KW", flag: "🇰🇼", region: "Middle East", emissions: 0.095, share: 0.25, perCapita: 21.6, note: "Intense domestic oil/gas use for electricity and water desalination." },
+        { rank: 41, name: "Czech Republic", code: "CZ", flag: "🇨🇿", region: "Europe", emissions: 0.090, share: 0.24, perCapita: 8.4, note: "Historical heavy industrial base and domestic brown coal power plants." },
+        { rank: 42, name: "Chile", code: "CL", flag: "🇨🇱", region: "Latin America", emissions: 0.088, share: 0.24, perCapita: 4.4, note: "World's copper mining capital; phasing out coal in favor of Atacama solar." },
+        { rank: 43, name: "Belgium", code: "BE", flag: "🇧🇪", region: "Europe", emissions: 0.086, share: 0.23, perCapita: 7.4, note: "Antwerp chemical cluster, transit logistics, and natural gas heating." },
+        { rank: 44, name: "Oman", code: "OM", flag: "🇴🇲", region: "Middle East", emissions: 0.084, share: 0.22, perCapita: 16.5, note: "Enhanced oil recovery, gas processing, and industrial desalination." },
+        { rank: 45, name: "Turkmenistan", code: "TM", flag: "🇹🇲", region: "Eurasia", emissions: 0.078, share: 0.21, perCapita: 12.0, note: "Giant gas fields (Galkynysh) with substantial uncombusted methane and CO₂ venting." },
+        { rank: 46, name: "Romania", code: "RO", flag: "🇷🇴", region: "Europe", emissions: 0.068, share: 0.18, perCapita: 3.6, note: "Decarbonizing coal assets, gas generation, and nuclear power." },
+        { rank: 47, name: "Austria", code: "AT", flag: "🇦🇹", region: "Europe", emissions: 0.062, share: 0.17, perCapita: 6.9, note: "Heavy metallurgical industry (Voestalpine), transit freight through the Alps." },
+        { rank: 48, name: "Morocco", code: "MA", flag: "🇲🇦", region: "Africa", emissions: 0.061, share: 0.16, perCapita: 1.6, note: "Phosphate fertilizer manufacturing; building world's largest CSP solar complexes (Noor)." },
+        { rank: 49, name: "Israel", code: "IL", flag: "🇮🇱", region: "Middle East", emissions: 0.060, share: 0.16, perCapita: 6.3, note: "Offshore Leviathan/Tamar natural gas for domestic power and desalination." },
+        { rank: 50, name: "Greece", code: "GR", flag: "🇬🇷", region: "Europe", emissions: 0.054, share: 0.14, perCapita: 5.2, note: "Accelerating lignite phase-out, expanding Aegean wind and solar generation." }
       ];
 
-      const BLOCK_REST_OF_WORLD = {
+      const BLOCK_ANNUAL_REST_OF_WORLD = {
+        rank: 51,
+        name: "Rest of the World (170+ Nations)",
+        code: "ROW",
+        flag: "🌐",
+        region: "Rest of World",
+        emissions: 3.816,
+        share: 10.20,
+        perCapita: 1.15,
+        note: "Over 170 sovereign nations and territories collectively home to >3.2 billion citizens (each <0.14% individually). Click to explore the complete catalog!"
+      };
+
+      const ALL_ANNUAL_ITEMS = [...TOP_50_ANNUAL_EMITTERS, BLOCK_ANNUAL_REST_OF_WORLD];
+
+      // -------------------------------------------------------------------------
+      // 2. DATASET: CUMULATIVE HISTORICAL EMISSIONS (1750–2023 · 1,820 Gt CO₂)
+      // -------------------------------------------------------------------------
+      const TOP_50_HISTORICAL_EMITTERS = [
+        { rank: 1, name: "United States", code: "US", flag: "🇺🇸", region: "North America", emissions: 435.0, share: 23.90, perCapita: 13.9, note: "World leader in cumulative historical emissions; rapid 20th-century electrification, coal grid, and automobile expansion." },
+        { rank: 2, name: "China", code: "CN", flag: "🇨🇳", region: "Asia", emissions: 285.0, share: 15.66, perCapita: 8.1, note: "Rapid post-1980 industrial acceleration; now the world’s largest annual emitter driven by coal-fueled manufacturing." },
+        { rank: 3, name: "Russia", code: "RU", flag: "🇷🇺", region: "Eurasia", emissions: 123.0, share: 6.76, perCapita: 12.5, note: "Heavy Soviet heavy-industry legacy, vast gas pipelines, steelworks, and oil extraction." },
+        { rank: 4, name: "Germany", code: "DE", flag: "🇩🇪", region: "Europe", emissions: 95.0, share: 5.22, perCapita: 7.3, note: "Europe’s largest historical industrial powerhouse; coal-rich Ruhr valley and extensive automotive/chemical industry." },
+        { rank: 5, name: "United Kingdom", code: "GB", flag: "🇬🇧", region: "Europe", emissions: 80.0, share: 4.40, perCapita: 4.8, note: "Cradle of the Industrial Revolution in 1750; led world emissions for over a century with coal mines, steam engines, and railways." },
+        { rank: 6, name: "Japan", code: "JP", flag: "🇯🇵", region: "Asia", emissions: 70.0, share: 3.85, perCapita: 8.0, note: "Post-WWII rapid industrialization; heavy manufacturing, automotive, and steel production." },
+        { rank: 7, name: "India", code: "IN", flag: "🇮🇳", region: "Asia", emissions: 61.0, share: 3.35, perCapita: 2.1, note: "Home to 1.4B people; rapid recent electrification though historical cumulative per-capita emissions remain ~1/10th of the West." },
+        { rank: 8, name: "Canada", code: "CA", flag: "🇨🇦", region: "North America", emissions: 36.5, share: 2.01, perCapita: 13.8, note: "Extensive oil sands extraction, mining, and vast cold-climate transportation network." },
+        { rank: 9, name: "France", code: "FR", flag: "🇫🇷", region: "Europe", emissions: 35.8, share: 1.97, perCapita: 4.0, note: "Early coal adopter; drastically reduced power emissions via massive 1970s nuclear rollout." },
+        { rank: 10, name: "Ukraine", code: "UA", flag: "🇺🇦", region: "Eurasia", emissions: 31.0, share: 1.70, perCapita: 4.5, note: "Donbas coal basin, metallurgy, and heavy Soviet industrial infrastructure." },
+        { rank: 11, name: "Poland", code: "PL", flag: "🇵🇱", region: "Europe", emissions: 29.0, share: 1.59, perCapita: 7.7, note: "Historically dominated by Silesian hard coal and lignite power generation." },
+        { rank: 12, name: "South Africa", code: "ZA", flag: "🇿🇦", region: "Africa", emissions: 23.5, share: 1.29, perCapita: 7.3, note: "Africa’s highest historical emitter; Eskom coal-fired grid and Sasol coal-to-liquids synfuel refineries." },
+        { rank: 13, name: "Italy", code: "IT", flag: "🇮🇹", region: "Europe", emissions: 23.0, share: 1.26, perCapita: 5.4, note: "Po Valley industrial triangle (Milan, Turin, Genoa), automotive, and thermal power." },
+        { rank: 14, name: "Iran", code: "IR", flag: "🇮🇷", region: "Middle East", emissions: 20.5, share: 1.13, perCapita: 8.2, note: "Vast oil and gas production; domestic subsidized fossil consumption." },
+        { rank: 15, name: "Australia", code: "AU", flag: "🇦🇺", region: "Oceania", emissions: 20.0, share: 1.10, perCapita: 14.6, note: "Major global coal and LNG exporter; historically carbon-intensive domestic electricity grid." },
+        { rank: 16, name: "Mexico", code: "MX", flag: "🇲🇽", region: "Latin America", emissions: 19.5, share: 1.07, perCapita: 3.8, note: "Latin America’s largest cumulative emitter; oil refining (Pemex) and manufacturing belt." },
+        { rank: 17, name: "South Korea", code: "KR", flag: "🇰🇷", region: "Asia", emissions: 19.0, share: 1.04, perCapita: 11.2, note: "Miracle on the Han River; world-leading semiconductor, shipbuilding, and automotive exports." },
+        { rank: 18, name: "Brazil", code: "BR", flag: "🇧🇷", region: "Latin America", emissions: 17.5, share: 0.96, perCapita: 2.2, note: "Fossil CO₂; total historical warming impact is substantially higher when Amazon land-use/deforestation is included." },
+        { rank: 19, name: "Saudi Arabia", code: "SA", flag: "🇸🇦", region: "Middle East", emissions: 17.0, share: 0.93, perCapita: 18.2, note: "World’s leading petroleum producer; domestic desalination, petrochemicals, and refining." },
+        { rank: 20, name: "Indonesia", code: "ID", flag: "🇮🇩", region: "Asia", emissions: 16.5, share: 0.91, perCapita: 2.7, note: "Expanding coal power fleet; rapid industrial and nickel mineral processing." },
+        { rank: 21, name: "Spain", code: "ES", flag: "🇪🇸", region: "Europe", emissions: 15.0, share: 0.82, perCapita: 4.8, note: "Post-1960s rapid economic modernization, cement boom, and thermal power." },
+        { rank: 22, name: "Kazakhstan", code: "KZ", flag: "🇰🇿", region: "Eurasia", emissions: 14.0, share: 0.77, perCapita: 11.0, note: "Vast coal reserves (Ekibastuz) and major Caspian oil/gas extraction." },
+        { rank: 23, name: "Belgium", code: "BE", flag: "🇧🇪", region: "Europe", emissions: 12.5, share: 0.69, perCapita: 7.4, note: "First continental European nation to undergo the Industrial Revolution (Wallonia coal and steel)." },
+        { rank: 24, name: "Netherlands", code: "NL", flag: "🇳🇱", region: "Europe", emissions: 12.0, share: 0.66, perCapita: 7.8, note: "Groningen giant gas field extraction and Rotterdam petrochemical refining hub." },
+        { rank: 25, name: "Turkey", code: "TR", flag: "🇹🇷", region: "Middle East", emissions: 12.0, share: 0.66, perCapita: 5.0, note: "Lignite power generation and expanding manufacturing and steel base." },
+        { rank: 26, name: "Czech Republic", code: "CZ", flag: "🇨🇿", region: "Europe", emissions: 11.5, share: 0.63, perCapita: 8.4, note: "Historic Bohemian industrial center; heavy brown coal reliance." },
+        { rank: 27, name: "Taiwan", code: "TW", flag: "🇹🇼", region: "Asia", emissions: 10.0, share: 0.55, perCapita: 11.8, note: "Global semiconductor fabrication (TSMC) and high-tech electronics manufacturing." },
+        { rank: 28, name: "Argentina", code: "AR", flag: "🇦🇷", region: "Latin America", emissions: 9.0, share: 0.49, perCapita: 3.7, note: "Early 20th-century economic modernization; gas-dominated domestic power grid." },
+        { rank: 29, name: "Romania", code: "RO", flag: "🇷🇴", region: "Europe", emissions: 8.5, share: 0.47, perCapita: 3.6, note: "Historical Ploiești oil production and Communist-era heavy chemical industry." },
+        { rank: 30, name: "Egypt", code: "EG", flag: "🇪🇬", region: "Africa", emissions: 7.5, share: 0.41, perCapita: 2.0, note: "North Africa’s most populous economy; domestic natural gas and oil use." },
+        { rank: 31, name: "Thailand", code: "TH", flag: "🇹🇭", region: "Asia", emissions: 7.2, share: 0.40, perCapita: 3.7, note: "Southeast Asian automotive and electronics export manufacturing." },
+        { rank: 32, name: "Malaysia", code: "MY", flag: "🇲🇾", region: "Asia", emissions: 7.0, share: 0.38, perCapita: 7.9, note: "Petronas offshore gas fields, LNG exports, and rapid industrialization." },
+        { rank: 33, name: "Venezuela", code: "VE", flag: "🇻🇪", region: "Latin America", emissions: 6.8, share: 0.37, perCapita: 3.2, note: "World’s largest proven crude oil reserves; heavy Orinoco belt production." },
+        { rank: 34, name: "Uzbekistan", code: "UZ", flag: "🇺🇿", region: "Eurasia", emissions: 6.5, share: 0.36, perCapita: 3.4, note: "Central Asian gas extraction and Soviet-era agro-industrial processing." },
+        { rank: 35, name: "Austria", code: "AT", flag: "🇦🇹", region: "Europe", emissions: 6.0, share: 0.33, perCapita: 6.9, note: "Danubian heavy industry, Voestalpine steel, and Alpine transit transport." },
+        { rank: 36, name: "Sweden", code: "SE", flag: "🇸🇪", region: "Europe", emissions: 5.6, share: 0.31, perCapita: 3.4, note: "Early iron mining; largely decarbonized grid via hydro and nuclear." },
+        { rank: 37, name: "Hungary", code: "HU", flag: "🇭🇺", region: "Europe", emissions: 5.4, share: 0.30, perCapita: 4.8, note: "Post-war heavy machinery and chemical industrialization." },
+        { rank: 38, name: "United Arab Emirates", code: "AE", flag: "🇦🇪", region: "Middle East", emissions: 5.2, share: 0.29, perCapita: 23.5, note: "Rapid late-20th-century petroleum expansion and global aviation/shipping hub." },
+        { rank: 39, name: "Algeria", code: "DZ", flag: "🇩🇿", region: "Africa", emissions: 5.0, share: 0.27, perCapita: 3.9, note: "Hassi Messaoud oil and Hassi R’Mel giant gas fields." },
+        { rank: 40, name: "Pakistan", code: "PK", flag: "🇵🇰", region: "Asia", emissions: 4.9, share: 0.27, perCapita: 0.8, note: "240M population; highly climate-vulnerable despite low historical cumulative emissions." },
+        { rank: 41, name: "Vietnam", code: "VN", flag: "🇻🇳", region: "Asia", emissions: 4.8, share: 0.26, perCapita: 3.3, note: "Rapid 21st-century manufacturing boom and coal-fired industrial growth." },
+        { rank: 42, name: "Greece", code: "GR", flag: "🇬🇷", region: "Europe", emissions: 4.6, share: 0.25, perCapita: 5.2, note: "Ptolemaida lignite power stations and maritime transport." },
+        { rank: 43, name: "Belarus", code: "BY", flag: "🇧🇾", region: "Eurasia", emissions: 4.5, share: 0.25, perCapita: 5.8, note: "Mozyr oil refining, potash mining, and heavy machinery." },
+        { rank: 44, name: "Colombia", code: "CO", flag: "🇨🇴", region: "Latin America", emissions: 4.4, share: 0.24, perCapita: 1.9, note: "Cerrejón open-cast thermal coal mining and oil extraction." },
+        { rank: 45, name: "Philippines", code: "PH", flag: "🇵🇭", region: "Asia", emissions: 4.2, share: 0.23, perCapita: 1.2, note: "115M people; archipelagic nation facing severe typhoons despite <0.25% share." },
+        { rank: 46, name: "Iraq", code: "IQ", flag: "🇮🇶", region: "Middle East", emissions: 4.0, share: 0.22, perCapita: 4.2, note: "Basra oil fields and significant associated petroleum gas flaring." },
+        { rank: 47, name: "Chile", code: "CL", flag: "🇨🇱", region: "Latin America", emissions: 3.9, share: 0.21, perCapita: 4.4, note: "Global copper mining, thermoelectric power, and mineral refining." },
+        { rank: 48, name: "Kuwait", code: "KW", flag: "🇰🇼", region: "Middle East", emissions: 3.8, share: 0.21, perCapita: 21.6, note: "Burgan oil field and high per-capita energy consumption." },
+        { rank: 49, name: "Nigeria", code: "NG", flag: "🇳🇬", region: "Africa", emissions: 3.6, share: 0.20, perCapita: 0.45, note: "Africa’s largest population (220M); Niger Delta petroleum extraction and flaring." },
+        { rank: 50, name: "Bulgaria", code: "BG", flag: "🇧🇬", region: "Europe", emissions: 3.5, share: 0.19, perCapita: 5.6, note: "Maritsa East lignite power complex and historic heavy chemical industry." }
+      ];
+
+      const BLOCK_HISTORICAL_REST_OF_WORLD = {
         rank: 51,
         name: "Rest of the World (170+ Nations)",
         code: "ROW",
@@ -11684,169 +11787,173 @@
         region: "Rest of World",
         emissions: 149.3,
         share: 8.20,
+        perCapita: 1.15,
         note: "Over 170 sovereign states & territories collectively representing >3.2 billion citizens (each <0.2% individually). Click to explore the complete catalog!"
       };
 
-      const ALL_HISTORICAL_ITEMS = [...TOP_50_EMITTERS, BLOCK_REST_OF_WORLD];
+      const ALL_HISTORICAL_ITEMS = [...TOP_50_HISTORICAL_EMITTERS, BLOCK_HISTORICAL_REST_OF_WORLD];
 
-      // Catalog of 150+ remaining sovereign states & territories for modal
+      // Helper to return the active dataset
+      function getActiveDataset() {
+        return activeEmissionsScope === 'annual' ? ALL_ANNUAL_ITEMS : ALL_HISTORICAL_ITEMS;
+      }
+
+      // Catalog of 150+ remaining sovereign states & territories for modal & popover
       const REST_OF_WORLD_NATIONS = [
         // Europe & Transcontinental
-        { name: "Albania", code: "AL", flag: "🇦🇱", region: "Europe", emissions: 0.30, share: 0.016 },
-        { name: "Andorra", code: "AD", flag: "🇦🇩", region: "Europe", emissions: 0.02, share: 0.001 },
-        { name: "Armenia", code: "AM", flag: "🇦🇲", region: "Europe", emissions: 0.35, share: 0.019 },
-        { name: "Azerbaijan", code: "AZ", flag: "🇦🇿", region: "Eurasia", emissions: 3.10, share: 0.170 },
-        { name: "Bosnia & Herzegovina", code: "BA", flag: "🇧🇦", region: "Europe", emissions: 1.15, share: 0.063 },
-        { name: "Croatia", code: "HR", flag: "🇭🇷", region: "Europe", emissions: 1.30, share: 0.071 },
-        { name: "Cyprus", code: "CY", flag: "🇨🇾", region: "Europe", emissions: 0.32, share: 0.018 },
-        { name: "Denmark", code: "DK", flag: "🇩🇰", region: "Europe", emissions: 3.40, share: 0.187 },
-        { name: "Estonia", code: "EE", flag: "🇪🇪", region: "Europe", emissions: 1.45, share: 0.080 },
-        { name: "Finland", code: "FI", flag: "🇫🇮", region: "Europe", emissions: 2.85, share: 0.157 },
-        { name: "Georgia", code: "GE", flag: "🇬🇪", region: "Europe", emissions: 0.55, share: 0.030 },
-        { name: "Iceland", code: "IS", flag: "🇮🇸", region: "Europe", emissions: 0.12, share: 0.007 },
-        { name: "Ireland", code: "IE", flag: "🇮🇪", region: "Europe", emissions: 2.40, share: 0.132 },
-        { name: "Kosovo", code: "XK", flag: "🇽🇰", region: "Europe", emissions: 0.28, share: 0.015 },
-        { name: "Latvia", code: "LV", flag: "🇱🇻", region: "Europe", emissions: 0.60, share: 0.033 },
-        { name: "Liechtenstein", code: "LI", flag: "🇱🇮", region: "Europe", emissions: 0.01, share: 0.001 },
-        { name: "Lithuania", code: "LT", flag: "🇱🇹", region: "Europe", emissions: 0.85, share: 0.047 },
-        { name: "Luxembourg", code: "LU", flag: "🇱🇺", region: "Europe", emissions: 0.95, share: 0.052 },
-        { name: "Malta", code: "MT", flag: "🇲🇹", region: "Europe", emissions: 0.08, share: 0.004 },
-        { name: "Moldova", code: "MD", flag: "🇲🇩", region: "Europe", emissions: 0.70, share: 0.038 },
-        { name: "Monaco", code: "MC", flag: "🇲🇨", region: "Europe", emissions: 0.01, share: 0.001 },
-        { name: "Montenegro", code: "ME", flag: "🇲🇪", region: "Europe", emissions: 0.12, share: 0.007 },
-        { name: "North Macedonia", code: "MK", flag: "🇲🇰", region: "Europe", emissions: 0.52, share: 0.029 },
-        { name: "Norway", code: "NO", flag: "🇳🇴", region: "Europe", emissions: 2.95, share: 0.162 },
-        { name: "Portugal", code: "PT", flag: "🇵🇹", region: "Europe", emissions: 3.15, share: 0.173 },
-        { name: "San Marino", code: "SM", flag: "🇸🇲", region: "Europe", emissions: 0.01, share: 0.001 },
-        { name: "Serbia", code: "RS", flag: "🇷🇸", region: "Europe", emissions: 2.80, share: 0.154 },
-        { name: "Slovakia", code: "SK", flag: "🇸🇰", region: "Europe", emissions: 2.80, share: 0.154 },
-        { name: "Slovenia", code: "SI", flag: "🇸🇮", region: "Europe", emissions: 0.82, share: 0.045 },
-        { name: "Switzerland", code: "CH", flag: "🇨🇭", region: "Europe", emissions: 3.20, share: 0.176 },
-        { name: "Vatican City", code: "VA", flag: "🇻🇦", region: "Europe", emissions: 0.001, share: 0.0001 },
+        { name: "Albania", code: "AL", flag: "🇦🇱", region: "Europe", emissions: 0.30, share: 0.016, annualEmissions: 4.8, perCapita: 1.7 },
+        { name: "Andorra", code: "AD", flag: "🇦🇩", region: "Europe", emissions: 0.02, share: 0.001, annualEmissions: 0.5, perCapita: 6.2 },
+        { name: "Armenia", code: "AM", flag: "🇦🇲", region: "Europe", emissions: 0.35, share: 0.019, annualEmissions: 7.1, perCapita: 2.4 },
+        { name: "Azerbaijan", code: "AZ", flag: "🇦🇿", region: "Eurasia", emissions: 3.10, share: 0.170, annualEmissions: 38.5, perCapita: 3.7 },
+        { name: "Bosnia & Herzegovina", code: "BA", flag: "🇧🇦", region: "Europe", emissions: 1.15, share: 0.063, annualEmissions: 21.0, perCapita: 6.5 },
+        { name: "Croatia", code: "HR", flag: "🇭🇷", region: "Europe", emissions: 1.30, share: 0.071, annualEmissions: 17.8, perCapita: 4.4 },
+        { name: "Cyprus", code: "CY", flag: "🇨🇾", region: "Europe", emissions: 0.32, share: 0.018, annualEmissions: 7.2, perCapita: 5.8 },
+        { name: "Denmark", code: "DK", flag: "🇩🇰", region: "Europe", emissions: 3.40, share: 0.187, annualEmissions: 28.5, perCapita: 4.8 },
+        { name: "Estonia", code: "EE", flag: "🇪🇪", region: "Europe", emissions: 1.45, share: 0.080, annualEmissions: 10.8, perCapita: 8.1 },
+        { name: "Finland", code: "FI", flag: "🇫🇮", region: "Europe", emissions: 2.85, share: 0.157, annualEmissions: 35.2, perCapita: 6.3 },
+        { name: "Georgia", code: "GE", flag: "🇬🇪", region: "Europe", emissions: 0.55, share: 0.030, annualEmissions: 11.4, perCapita: 3.1 },
+        { name: "Iceland", code: "IS", flag: "🇮🇸", region: "Europe", emissions: 0.12, share: 0.007, annualEmissions: 3.2, perCapita: 8.4 },
+        { name: "Ireland", code: "IE", flag: "🇮🇪", region: "Europe", emissions: 2.40, share: 0.132, annualEmissions: 33.4, perCapita: 6.5 },
+        { name: "Kosovo", code: "XK", flag: "🇽🇰", region: "Europe", emissions: 0.28, share: 0.015, annualEmissions: 8.6, perCapita: 4.8 },
+        { name: "Latvia", code: "LV", flag: "🇱🇻", region: "Europe", emissions: 0.60, share: 0.033, annualEmissions: 7.4, perCapita: 3.9 },
+        { name: "Liechtenstein", code: "LI", flag: "🇱🇮", region: "Europe", emissions: 0.01, share: 0.001, annualEmissions: 0.16, perCapita: 4.1 },
+        { name: "Lithuania", code: "LT", flag: "🇱🇹", region: "Europe", emissions: 0.85, share: 0.047, annualEmissions: 12.8, perCapita: 4.6 },
+        { name: "Luxembourg", code: "LU", flag: "🇱🇺", region: "Europe", emissions: 0.95, share: 0.052, annualEmissions: 8.4, perCapita: 12.8 },
+        { name: "Malta", code: "MT", flag: "🇲🇹", region: "Europe", emissions: 0.08, share: 0.004, annualEmissions: 1.8, perCapita: 3.4 },
+        { name: "Moldova", code: "MD", flag: "🇲🇩", region: "Europe", emissions: 0.70, share: 0.038, annualEmissions: 8.5, perCapita: 3.3 },
+        { name: "Monaco", code: "MC", flag: "🇲🇨", region: "Europe", emissions: 0.01, share: 0.001, annualEmissions: 0.15, perCapita: 3.9 },
+        { name: "Montenegro", code: "ME", flag: "🇲🇪", region: "Europe", emissions: 0.12, share: 0.007, annualEmissions: 2.5, perCapita: 4.0 },
+        { name: "North Macedonia", code: "MK", flag: "🇲🇰", region: "Europe", emissions: 0.52, share: 0.029, annualEmissions: 7.8, perCapita: 3.8 },
+        { name: "Norway", code: "NO", flag: "🇳🇴", region: "Europe", emissions: 2.95, share: 0.162, annualEmissions: 39.8, perCapita: 7.2 },
+        { name: "Portugal", code: "PT", flag: "🇵🇹", region: "Europe", emissions: 3.15, share: 0.173, annualEmissions: 38.6, perCapita: 3.8 },
+        { name: "San Marino", code: "SM", flag: "🇸🇲", region: "Europe", emissions: 0.01, share: 0.001, annualEmissions: 0.22, perCapita: 6.5 },
+        { name: "Serbia", code: "RS", flag: "🇷🇸", region: "Europe", emissions: 2.70, share: 0.148, annualEmissions: 44.5, perCapita: 6.6 },
+        { name: "Slovakia", code: "SK", flag: "🇸🇰", region: "Europe", emissions: 2.65, share: 0.146, annualEmissions: 32.8, perCapita: 6.0 },
+        { name: "Slovenia", code: "SI", flag: "🇸🇮", region: "Europe", emissions: 0.95, share: 0.052, annualEmissions: 12.4, perCapita: 5.9 },
+        { name: "Sweden", code: "SE", flag: "🇸🇪", region: "Europe", emissions: 5.60, share: 0.308, annualEmissions: 35.8, perCapita: 3.4 },
+        { name: "Switzerland", code: "CH", flag: "🇨🇭", region: "Europe", emissions: 3.20, share: 0.176, annualEmissions: 33.2, perCapita: 3.7 },
+        { name: "Vatican City", code: "VA", flag: "🇻🇦", region: "Europe", emissions: 0.001, share: 0.0001, annualEmissions: 0.003, perCapita: 3.5 },
 
-        // Asia & Middle East (excluding Top 50)
-        { name: "Afghanistan", code: "AF", flag: "🇦🇫", region: "Asia", emissions: 0.22, share: 0.012 },
-        { name: "Bahrain", code: "BH", flag: "🇧🇭", region: "Middle East", emissions: 1.55, share: 0.085 },
-        { name: "Bangladesh", code: "BD", flag: "🇧🇩", region: "Asia", emissions: 2.20, share: 0.121 },
-        { name: "Bhutan", code: "BT", flag: "🇧🇹", region: "Asia", emissions: 0.03, share: 0.002 },
-        { name: "Brunei", code: "BN", flag: "🇧🇳", region: "Asia", emissions: 0.38, share: 0.021 },
-        { name: "Cambodia", code: "KH", flag: "🇰🇭", region: "Asia", emissions: 0.26, share: 0.014 },
-        { name: "Israel", code: "IL", flag: "🇮🇱", region: "Middle East", emissions: 3.10, share: 0.170 },
-        { name: "Jordan", code: "JO", flag: "🇯🇴", region: "Middle East", emissions: 0.95, share: 0.052 },
-        { name: "Kyrgyzstan", code: "KG", flag: "🇰🇬", region: "Eurasia", emissions: 0.65, share: 0.036 },
-        { name: "Laos", code: "LA", flag: "🇱🇦", region: "Asia", emissions: 0.32, share: 0.018 },
-        { name: "Lebanon", code: "LB", flag: "🇱🇧", region: "Middle East", emissions: 0.88, share: 0.048 },
-        { name: "Maldives", code: "MV", flag: "🇲🇻", region: "Oceania & SIDS", emissions: 0.04, share: 0.002 },
-        { name: "Mongolia", code: "MN", flag: "🇲🇳", region: "Asia", emissions: 0.85, share: 0.047 },
-        { name: "Myanmar (Burma)", code: "MM", flag: "🇲🇲", region: "Asia", emissions: 0.95, share: 0.052 },
-        { name: "Nepal", code: "NP", flag: "🇳🇵", region: "Asia", emissions: 0.24, share: 0.013 },
-        { name: "North Korea", code: "KP", flag: "🇰🇵", region: "Asia", emissions: 3.40, share: 0.187 },
-        { name: "Oman", code: "OM", flag: "🇴🇲", region: "Middle East", emissions: 2.10, share: 0.115 },
-        { name: "Palestine", code: "PS", flag: "🇵🇸", region: "Middle East", emissions: 0.09, share: 0.005 },
-        { name: "Qatar", code: "QA", flag: "🇶🇦", region: "Middle East", emissions: 3.35, share: 0.184 },
-        { name: "Singapore", code: "SG", flag: "🇸🇬", region: "Asia", emissions: 2.45, share: 0.135 },
-        { name: "Sri Lanka", code: "LK", flag: "🇱🇰", region: "Asia", emissions: 0.52, share: 0.029 },
-        { name: "Syria", code: "SY", flag: "🇸🇾", region: "Middle East", emissions: 1.85, share: 0.102 },
-        { name: "Tajikistan", code: "TJ", flag: "🇹🇯", region: "Eurasia", emissions: 0.55, share: 0.030 },
-        { name: "Timor-Leste", code: "TL", flag: "🇹🇱", region: "Asia", emissions: 0.02, share: 0.001 },
-        { name: "Turkmenistan", code: "TM", flag: "🇹🇲", region: "Eurasia", emissions: 3.30, share: 0.181 },
-        { name: "Yemen", code: "YE", flag: "🇾🇪", region: "Middle East", emissions: 0.65, share: 0.036 },
+        // Middle East & North Africa
+        { name: "Bahrain", code: "BH", flag: "🇧🇭", region: "Middle East", emissions: 1.25, share: 0.069, annualEmissions: 36.4, perCapita: 24.2 },
+        { name: "Jordan", code: "JO", flag: "🇯🇴", region: "Middle East", emissions: 0.85, share: 0.047, annualEmissions: 26.5, perCapita: 2.4 },
+        { name: "Lebanon", code: "LB", flag: "🇱🇧", region: "Middle East", emissions: 0.92, share: 0.051, annualEmissions: 21.0, perCapita: 3.8 },
+        { name: "Libya", code: "LY", flag: "🇱🇾", region: "Africa", emissions: 2.45, share: 0.135, annualEmissions: 52.0, perCapita: 7.6 },
+        { name: "Palestine", code: "PS", flag: "🇵🇸", region: "Middle East", emissions: 0.12, share: 0.007, annualEmissions: 4.8, perCapita: 0.9 },
+        { name: "Syria", code: "SY", flag: "🇸🇾", region: "Middle East", emissions: 2.10, share: 0.115, annualEmissions: 24.2, perCapita: 1.1 },
+        { name: "Tunisia", code: "TN", flag: "🇹🇳", region: "Africa", emissions: 1.10, share: 0.060, annualEmissions: 31.5, perCapita: 2.6 },
+        { name: "Yemen", code: "YE", flag: "🇾🇪", region: "Middle East", emissions: 0.65, share: 0.036, annualEmissions: 10.8, perCapita: 0.32 },
 
-        // Africa (50+ nations)
-        { name: "Angola", code: "AO", flag: "🇦🇴", region: "Africa", emissions: 1.25, share: 0.069 },
-        { name: "Benin", code: "BJ", flag: "🇧🇯", region: "Africa", emissions: 0.14, share: 0.008 },
-        { name: "Botswana", code: "BW", flag: "🇧🇼", region: "Africa", emissions: 0.32, share: 0.018 },
-        { name: "Burkina Faso", code: "BF", flag: "🇧🇫", region: "Africa", emissions: 0.12, share: 0.007 },
-        { name: "Burundi", code: "BI", flag: "🇧🇮", region: "Africa", emissions: 0.02, share: 0.001 },
-        { name: "Cameroon", code: "CM", flag: "🇨🇲", region: "Africa", emissions: 0.42, share: 0.023 },
-        { name: "Cape Verde", code: "CV", flag: "🇨🇻", region: "Oceania & SIDS", emissions: 0.03, share: 0.002 },
-        { name: "Central African Rep.", code: "CF", flag: "🇨🇫", region: "Africa", emissions: 0.02, share: 0.001 },
-        { name: "Chad", code: "TD", flag: "🇹🇩", region: "Africa", emissions: 0.06, share: 0.003 },
-        { name: "Comoros", code: "KM", flag: "🇰🇲", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
-        { name: "Congo (Brazzaville)", code: "CG", flag: "🇨🇬", region: "Africa", emissions: 0.25, share: 0.014 },
-        { name: "DR Congo", code: "CD", flag: "🇨🇩", region: "Africa", emissions: 0.45, share: 0.025 },
-        { name: "Djibouti", code: "DJ", flag: "🇩🇯", region: "Africa", emissions: 0.03, share: 0.002 },
-        { name: "Equatorial Guinea", code: "GQ", flag: "🇬🇶", region: "Africa", emissions: 0.32, share: 0.018 },
-        { name: "Eritrea", code: "ER", flag: "🇪🇷", region: "Africa", emissions: 0.03, share: 0.002 },
-        { name: "Eswatini", code: "SZ", flag: "🇸🇿", region: "Africa", emissions: 0.06, share: 0.003 },
-        { name: "Ethiopia", code: "ET", flag: "🇪🇹", region: "Africa", emissions: 0.65, share: 0.036 },
-        { name: "Gabon", code: "GA", flag: "🇬🇦", region: "Africa", emissions: 0.35, share: 0.019 },
-        { name: "Gambia", code: "GM", flag: "🇬🇲", region: "Africa", emissions: 0.02, share: 0.001 },
-        { name: "Ghana", code: "GH", flag: "🇬🇭", region: "Africa", emissions: 0.55, share: 0.030 },
-        { name: "Guinea", code: "GN", flag: "🇬🇳", region: "Africa", emissions: 0.12, share: 0.007 },
-        { name: "Guinea-Bissau", code: "GW", flag: "🇬🇼", region: "Africa", emissions: 0.01, share: 0.001 },
-        { name: "Ivory Coast", code: "CI", flag: "🇨🇮", region: "Africa", emissions: 0.45, share: 0.025 },
-        { name: "Kenya", code: "KE", flag: "🇰🇪", region: "Africa", emissions: 0.68, share: 0.037 },
-        { name: "Lesotho", code: "LS", flag: "🇱🇸", region: "Africa", emissions: 0.04, share: 0.002 },
-        { name: "Liberia", code: "LR", flag: "🇱🇷", region: "Africa", emissions: 0.03, share: 0.002 },
-        { name: "Libya", code: "LY", flag: "🇱🇾", region: "Africa", emissions: 2.65, share: 0.146 },
-        { name: "Madagascar", code: "MG", flag: "🇲🇬", region: "Africa", emissions: 0.15, share: 0.008 },
-        { name: "Malawi", code: "MW", flag: "🇲🇼", region: "Africa", emissions: 0.06, share: 0.003 },
-        { name: "Mali", code: "ML", flag: "🇲🇱", region: "Africa", emissions: 0.12, share: 0.007 },
-        { name: "Mauritania", code: "MR", flag: "🇲🇷", region: "Africa", emissions: 0.14, share: 0.008 },
-        { name: "Mauritius", code: "MU", flag: "🇲🇺", region: "Oceania & SIDS", emissions: 0.16, share: 0.009 },
-        { name: "Morocco", code: "MA", flag: "🇲🇦", region: "Africa", emissions: 2.30, share: 0.126 },
-        { name: "Mozambique", code: "MZ", flag: "🇲🇿", region: "Africa", emissions: 0.22, share: 0.012 },
-        { name: "Namibia", code: "NA", flag: "🇳🇦", region: "Africa", emissions: 0.16, share: 0.009 },
-        { name: "Niger", code: "NE", flag: "🇳🇪", region: "Africa", emissions: 0.09, share: 0.005 },
-        { name: "Rwanda", code: "RW", flag: "🇷🇼", region: "Africa", emissions: 0.04, share: 0.002 },
-        { name: "São Tomé & Príncipe", code: "ST", flag: "🇸🇹", region: "Oceania & SIDS", emissions: 0.005, share: 0.0003 },
-        { name: "Senegal", code: "SN", flag: "🇸🇳", region: "Africa", emissions: 0.35, share: 0.019 },
-        { name: "Seychelles", code: "SC", flag: "🇸🇨", region: "Oceania & SIDS", emissions: 0.02, share: 0.001 },
-        { name: "Sierra Leone", code: "SL", flag: "🇸🇱", region: "Africa", emissions: 0.03, share: 0.002 },
-        { name: "Somalia", code: "SO", flag: "🇸🇴", region: "Africa", emissions: 0.03, share: 0.002 },
-        { name: "South Sudan", code: "SS", flag: "🇸🇸", region: "Africa", emissions: 0.05, share: 0.003 },
-        { name: "Sudan", code: "SD", flag: "🇸🇩", region: "Africa", emissions: 0.65, share: 0.036 },
-        { name: "Tanzania", code: "TZ", flag: "🇹🇿", region: "Africa", emissions: 0.42, share: 0.023 },
-        { name: "Togo", code: "TG", flag: "🇹🇬", region: "Africa", emissions: 0.08, share: 0.004 },
-        { name: "Tunisia", code: "TN", flag: "🇹🇳", region: "Africa", emissions: 1.25, share: 0.069 },
-        { name: "Uganda", code: "UG", flag: "🇺🇬", region: "Africa", emissions: 0.22, share: 0.012 },
-        { name: "Zambia", code: "ZM", flag: "🇿🇲", region: "Africa", emissions: 0.35, share: 0.019 },
-        { name: "Zimbabwe", code: "ZW", flag: "🇿🇼", region: "Africa", emissions: 0.82, share: 0.045 },
+        // Asia & Central/East/South Asia
+        { name: "Afghanistan", code: "AF", flag: "🇦🇫", region: "Asia", emissions: 0.22, share: 0.012, annualEmissions: 11.2, perCapita: 0.27 },
+        { name: "Bhutan", code: "BT", flag: "🇧🇹", region: "Asia", emissions: 0.04, share: 0.002, annualEmissions: 1.8, perCapita: 2.3 },
+        { name: "Brunei", code: "BN", flag: "🇧🇳", region: "Asia", emissions: 0.38, share: 0.021, annualEmissions: 11.4, perCapita: 25.3 },
+        { name: "Cambodia", code: "KH", flag: "🇰🇭", region: "Asia", emissions: 0.24, share: 0.013, annualEmissions: 16.5, perCapita: 1.0 },
+        { name: "Kyrgyzstan", code: "KG", flag: "🇰🇬", region: "Eurasia", emissions: 0.48, share: 0.026, annualEmissions: 11.0, perCapita: 1.6 },
+        { name: "Laos", code: "LA", flag: "🇱🇦", region: "Asia", emissions: 0.25, share: 0.014, annualEmissions: 18.2, perCapita: 2.4 },
+        { name: "Maldives", code: "MV", flag: "🇲🇻", region: "Oceania & SIDS", emissions: 0.04, share: 0.002, annualEmissions: 2.4, perCapita: 4.4 },
+        { name: "Mongolia", code: "MN", flag: "🇲🇳", region: "Asia", emissions: 0.95, share: 0.052, annualEmissions: 34.5, perCapita: 10.2 },
+        { name: "Myanmar", code: "MM", flag: "🇲🇲", region: "Asia", emissions: 0.82, share: 0.045, annualEmissions: 38.0, perCapita: 0.70 },
+        { name: "Nepal", code: "NP", flag: "🇳🇵", region: "Asia", emissions: 0.28, share: 0.015, annualEmissions: 16.0, perCapita: 0.52 },
+        { name: "North Korea", code: "KP", flag: "🇰🇵", region: "Asia", emissions: 3.20, share: 0.176, annualEmissions: 48.0, perCapita: 1.8 },
+        { name: "Singapore", code: "SG", flag: "🇸🇬", region: "Asia", emissions: 2.30, share: 0.126, annualEmissions: 52.4, perCapita: 8.8 },
+        { name: "Sri Lanka", code: "LK", flag: "🇱🇰", region: "Asia", emissions: 0.55, share: 0.030, annualEmissions: 23.5, perCapita: 1.05 },
+        { name: "Tajikistan", code: "TJ", flag: "🇹🇯", region: "Eurasia", emissions: 0.34, share: 0.019, annualEmissions: 9.8, perCapita: 0.98 },
+        { name: "Timor-Leste", code: "TL", flag: "🇹🇱", region: "Asia", emissions: 0.02, share: 0.001, annualEmissions: 0.7, perCapita: 0.52 },
 
-        // Latin America & Caribbean (excluding Top 50)
-        { name: "Bahamas", code: "BS", flag: "🇧🇸", region: "Oceania & SIDS", emissions: 0.08, share: 0.004 },
-        { name: "Barbados", code: "BB", flag: "🇧🇧", region: "Oceania & SIDS", emissions: 0.05, share: 0.003 },
-        { name: "Belize", code: "BZ", flag: "🇧🇿", region: "Oceania & SIDS", emissions: 0.03, share: 0.002 },
-        { name: "Bolivia", code: "BO", flag: "🇧🇴", region: "Latin America", emissions: 0.95, share: 0.052 },
-        { name: "Costa Rica", code: "CR", flag: "🇨🇷", region: "Latin America", emissions: 0.35, share: 0.019 },
-        { name: "Cuba", code: "CU", flag: "🇨🇺", region: "Latin America", emissions: 1.65, share: 0.091 },
-        { name: "Dominican Republic", code: "DO", flag: "🇩🇴", region: "Latin America", emissions: 0.95, share: 0.052 },
-        { name: "Ecuador", code: "EC", flag: "🇪🇨", region: "Latin America", emissions: 1.85, share: 0.102 },
-        { name: "El Salvador", code: "SV", flag: "🇸🇻", region: "Latin America", emissions: 0.32, share: 0.018 },
-        { name: "Guatemala", code: "GT", flag: "🇬🇹", region: "Latin America", emissions: 0.65, share: 0.036 },
-        { name: "Guyana", code: "GY", flag: "🇬🇾", region: "Latin America", emissions: 0.15, share: 0.008 },
-        { name: "Haiti", code: "HT", flag: "🇭🇹", region: "Latin America", emissions: 0.12, share: 0.007 },
-        { name: "Honduras", code: "HN", flag: "🇭🇳", region: "Latin America", emissions: 0.38, share: 0.021 },
-        { name: "Jamaica", code: "JM", flag: "🇯🇲", region: "Oceania & SIDS", emissions: 0.38, share: 0.021 },
-        { name: "Nicaragua", code: "NI", flag: "🇳🇮", region: "Latin America", emissions: 0.22, share: 0.012 },
-        { name: "Panama", code: "PA", flag: "🇵🇦", region: "Latin America", emissions: 0.45, share: 0.025 },
-        { name: "Paraguay", code: "PY", flag: "🇵🇾", region: "Latin America", emissions: 0.30, share: 0.016 },
-        { name: "Peru", code: "PE", flag: "🇵🇪", region: "Latin America", emissions: 2.35, share: 0.129 },
-        { name: "Suriname", code: "SR", flag: "🇸🇷", region: "Latin America", emissions: 0.10, share: 0.005 },
-        { name: "Trinidad & Tobago", code: "TT", flag: "🇹🇹", region: "Oceania & SIDS", emissions: 1.75, share: 0.096 },
-        { name: "Uruguay", code: "UY", flag: "🇺🇾", region: "Latin America", emissions: 0.40, share: 0.022 },
+        // Sub-Saharan Africa
+        { name: "Angola", code: "AO", flag: "🇦🇴", region: "Africa", emissions: 0.95, share: 0.052, annualEmissions: 28.5, perCapita: 0.8 },
+        { name: "Benin", code: "BJ", flag: "🇧🇯", region: "Africa", emissions: 0.12, share: 0.007, annualEmissions: 8.2, perCapita: 0.6 },
+        { name: "Botswana", code: "BW", flag: "🇧🇼", region: "Africa", emissions: 0.25, share: 0.014, annualEmissions: 7.8, perCapita: 3.1 },
+        { name: "Burkina Faso", code: "BF", flag: "🇧🇫", region: "Africa", emissions: 0.09, share: 0.005, annualEmissions: 5.4, perCapita: 0.24 },
+        { name: "Burundi", code: "BI", flag: "🇧🇮", region: "Africa", emissions: 0.02, share: 0.001, annualEmissions: 0.9, perCapita: 0.07 },
+        { name: "Cabo Verde", code: "CV", flag: "🇨🇻", region: "Oceania & SIDS", emissions: 0.02, share: 0.001, annualEmissions: 0.6, perCapita: 1.0 },
+        { name: "Cameroon", code: "CM", flag: "🇨🇲", region: "Africa", emissions: 0.35, share: 0.019, annualEmissions: 10.5, perCapita: 0.38 },
+        { name: "Central African Rep.", code: "CF", flag: "🇨🇫", region: "Africa", emissions: 0.02, share: 0.001, annualEmissions: 0.4, perCapita: 0.08 },
+        { name: "Chad", code: "TD", flag: "🇹🇩", region: "Africa", emissions: 0.05, share: 0.003, annualEmissions: 2.1, perCapita: 0.12 },
+        { name: "Comoros", code: "KM", flag: "🇰🇲", region: "Oceania & SIDS", emissions: 0.01, share: 0.001, annualEmissions: 0.3, perCapita: 0.35 },
+        { name: "Congo (Brazzaville)", code: "CG", flag: "🇨🇬", region: "Africa", emissions: 0.18, share: 0.010, annualEmissions: 7.2, perCapita: 1.2 },
+        { name: "Congo (DRC)", code: "CD", flag: "🇨🇩", region: "Africa", emissions: 0.55, share: 0.030, annualEmissions: 4.8, perCapita: 0.05 },
+        { name: "Côte d'Ivoire", code: "CI", flag: "🇨🇮", region: "Africa", emissions: 0.45, share: 0.025, annualEmissions: 15.2, perCapita: 0.53 },
+        { name: "Djibouti", code: "DJ", flag: "🇩🇯", region: "Africa", emissions: 0.04, share: 0.002, annualEmissions: 0.6, perCapita: 0.58 },
+        { name: "Equatorial Guinea", code: "GQ", flag: "🇬🇶", region: "Africa", emissions: 0.22, share: 0.012, annualEmissions: 6.8, perCapita: 4.1 },
+        { name: "Eritrea", code: "ER", flag: "🇪🇷", region: "Africa", emissions: 0.03, share: 0.002, annualEmissions: 0.8, perCapita: 0.22 },
+        { name: "Eswatini", code: "SZ", flag: "🇸🇿", region: "Africa", emissions: 0.06, share: 0.003, annualEmissions: 1.2, perCapita: 1.0 },
+        { name: "Ethiopia", code: "ET", flag: "🇪🇹", region: "Africa", emissions: 0.42, share: 0.023, annualEmissions: 19.5, perCapita: 0.16 },
+        { name: "Gabon", code: "GA", flag: "🇬🇦", region: "Africa", emissions: 0.24, share: 0.013, annualEmissions: 6.2, perCapita: 2.6 },
+        { name: "Gambia", code: "GM", flag: "🇬🇲", region: "Africa", emissions: 0.02, share: 0.001, annualEmissions: 0.7, perCapita: 0.26 },
+        { name: "Ghana", code: "GH", flag: "🇬🇭", region: "Africa", emissions: 0.58, share: 0.032, annualEmissions: 23.0, perCapita: 0.68 },
+        { name: "Guinea", code: "GN", flag: "🇬🇳", region: "Africa", emissions: 0.12, share: 0.007, annualEmissions: 4.2, perCapita: 0.30 },
+        { name: "Guinea-Bissau", code: "GW", flag: "🇬🇼", region: "Africa", emissions: 0.01, share: 0.001, annualEmissions: 0.4, perCapita: 0.18 },
+        { name: "Kenya", code: "KE", flag: "🇰🇪", region: "Africa", emissions: 0.62, share: 0.034, annualEmissions: 22.8, perCapita: 0.42 },
+        { name: "Lesotho", code: "LS", flag: "🇱🇸", region: "Africa", emissions: 0.03, share: 0.002, annualEmissions: 0.8, perCapita: 0.35 },
+        { name: "Liberia", code: "LR", flag: "🇱🇷", region: "Africa", emissions: 0.06, share: 0.003, annualEmissions: 1.4, perCapita: 0.26 },
+        { name: "Madagascar", code: "MG", flag: "🇲🇬", region: "Africa", emissions: 0.14, share: 0.008, annualEmissions: 4.8, perCapita: 0.16 },
+        { name: "Malawi", code: "MW", flag: "🇲🇼", region: "Africa", emissions: 0.06, share: 0.003, annualEmissions: 1.9, perCapita: 0.09 },
+        { name: "Mali", code: "ML", flag: "🇲🇱", region: "Africa", emissions: 0.08, share: 0.004, annualEmissions: 4.2, perCapita: 0.18 },
+        { name: "Mauritania", code: "MR", flag: "🇲🇷", region: "Africa", emissions: 0.11, share: 0.006, annualEmissions: 4.6, perCapita: 0.98 },
+        { name: "Mauritius", code: "MU", flag: "🇲🇺", region: "Oceania & SIDS", emissions: 0.14, share: 0.008, annualEmissions: 4.4, perCapita: 3.5 },
+        { name: "Mozambique", code: "MZ", flag: "🇲🇿", region: "Africa", emissions: 0.28, share: 0.015, annualEmissions: 9.8, perCapita: 0.29 },
+        { name: "Namibia", code: "NA", flag: "🇳🇦", region: "Africa", emissions: 0.12, share: 0.007, annualEmissions: 4.5, perCapita: 1.7 },
+        { name: "Niger", code: "NE", flag: "🇳🇪", region: "Africa", emissions: 0.08, share: 0.004, annualEmissions: 3.2, perCapita: 0.12 },
+        { name: "Rwanda", code: "RW", flag: "🇷🇼", region: "Africa", emissions: 0.05, share: 0.003, annualEmissions: 1.6, perCapita: 0.11 },
+        { name: "São Tomé & Príncipe", code: "ST", flag: "🇸🇹", region: "Oceania & SIDS", emissions: 0.005, share: 0.0003, annualEmissions: 0.18, perCapita: 0.8 },
+        { name: "Senegal", code: "SN", flag: "🇸🇳", region: "Africa", emissions: 0.35, share: 0.019, annualEmissions: 12.8, perCapita: 0.74 },
+        { name: "Seychelles", code: "SC", flag: "🇸🇨", region: "Oceania & SIDS", emissions: 0.02, share: 0.001, annualEmissions: 0.7, perCapita: 6.8 },
+        { name: "Sierra Leone", code: "SL", flag: "🇸🇱", region: "Africa", emissions: 0.04, share: 0.002, annualEmissions: 1.5, perCapita: 0.17 },
+        { name: "Somalia", code: "SO", flag: "🇸🇴", region: "Africa", emissions: 0.05, share: 0.003, annualEmissions: 1.1, perCapita: 0.06 },
+        { name: "South Sudan", code: "SS", flag: "🇸🇸", region: "Africa", emissions: 0.06, share: 0.003, annualEmissions: 1.8, perCapita: 0.15 },
+        { name: "Sudan", code: "SD", flag: "🇸🇩", region: "Africa", emissions: 0.52, share: 0.029, annualEmissions: 19.5, perCapita: 0.41 },
+        { name: "Tanzania", code: "TZ", flag: "🇹🇿", region: "Africa", emissions: 0.32, share: 0.018, annualEmissions: 14.8, perCapita: 0.22 },
+        { name: "Togo", code: "TG", flag: "🇹🇬", region: "Africa", emissions: 0.08, share: 0.004, annualEmissions: 3.5, perCapita: 0.39 },
+        { name: "Uganda", code: "UG", flag: "🇺🇬", region: "Africa", emissions: 0.18, share: 0.010, annualEmissions: 7.2, perCapita: 0.15 },
+        { name: "Zambia", code: "ZM", flag: "🇿🇲", region: "Africa", emissions: 0.35, share: 0.019, annualEmissions: 9.4, perCapita: 0.47 },
+        { name: "Zimbabwe", code: "ZW", flag: "🇿🇼", region: "Africa", emissions: 0.92, share: 0.051, annualEmissions: 12.5, perCapita: 0.78 },
+
+        // Americas & Caribbean
+        { name: "Antigua & Barbuda", code: "AG", flag: "🇦🇬", region: "Oceania & SIDS", emissions: 0.02, share: 0.001, annualEmissions: 0.6, perCapita: 6.2 },
+        { name: "Bahamas", code: "BS", flag: "🇧🇸", region: "Oceania & SIDS", emissions: 0.09, share: 0.005, annualEmissions: 2.8, perCapita: 7.0 },
+        { name: "Barbados", code: "BB", flag: "🇧🇧", region: "Oceania & SIDS", emissions: 0.06, share: 0.003, annualEmissions: 1.4, perCapita: 4.8 },
+        { name: "Belize", code: "BZ", flag: "🇧🇿", region: "Latin America", emissions: 0.03, share: 0.002, annualEmissions: 0.8, perCapita: 2.0 },
+        { name: "Bolivia", code: "BO", flag: "🇧🇴", region: "Latin America", emissions: 0.72, share: 0.040, annualEmissions: 24.5, perCapita: 2.0 },
+        { name: "Costa Rica", code: "CR", flag: "🇨🇷", region: "Latin America", emissions: 0.32, share: 0.018, annualEmissions: 8.9, perCapita: 1.7 },
+        { name: "Cuba", code: "CU", flag: "🇨🇺", region: "Latin America", emissions: 1.65, share: 0.091, annualEmissions: 24.8, perCapita: 2.2 },
+        { name: "Dominica", code: "DM", flag: "🇩🇲", region: "Oceania & SIDS", emissions: 0.008, share: 0.0004, annualEmissions: 0.2, perCapita: 2.7 },
+        { name: "Dominican Republic", code: "DO", flag: "🇩🇴", region: "Latin America", emissions: 0.95, share: 0.052, annualEmissions: 28.5, perCapita: 2.5 },
+        { name: "Ecuador", code: "EC", flag: "🇪🇨", region: "Latin America", emissions: 1.45, share: 0.080, annualEmissions: 42.0, perCapita: 2.3 },
+        { name: "El Salvador", code: "SV", flag: "🇸🇻", region: "Latin America", emissions: 0.26, share: 0.014, annualEmissions: 7.2, perCapita: 1.1 },
+        { name: "Grenada", code: "GD", flag: "🇬🇩", region: "Oceania & SIDS", emissions: 0.01, share: 0.001, annualEmissions: 0.35, perCapita: 2.8 },
+        { name: "Guatemala", code: "GT", flag: "🇬🇹", region: "Latin America", emissions: 0.58, share: 0.032, annualEmissions: 21.0, perCapita: 1.15 },
+        { name: "Guyana", code: "GY", flag: "🇬🇾", region: "Latin America", emissions: 0.12, share: 0.007, annualEmissions: 4.8, perCapita: 6.0 },
+        { name: "Haiti", code: "HT", flag: "🇭🇹", region: "Latin America", emissions: 0.12, share: 0.007, annualEmissions: 3.4, perCapita: 0.29 },
+        { name: "Honduras", code: "HN", flag: "🇭🇳", region: "Latin America", emissions: 0.32, share: 0.018, annualEmissions: 11.2, perCapita: 1.08 },
+        { name: "Jamaica", code: "JM", flag: "🇯🇲", region: "Latin America", emissions: 0.42, share: 0.023, annualEmissions: 8.5, perCapita: 3.0 },
+        { name: "Nicaragua", code: "NI", flag: "🇳🇮", region: "Latin America", emissions: 0.22, share: 0.012, annualEmissions: 6.2, perCapita: 0.88 },
+        { name: "Panama", code: "PA", flag: "🇵🇦", region: "Latin America", emissions: 0.45, share: 0.025, annualEmissions: 13.8, perCapita: 3.1 },
+        { name: "Paraguay", code: "PY", flag: "🇵🇾", region: "Latin America", emissions: 0.35, share: 0.019, annualEmissions: 9.8, perCapita: 1.4 },
+        { name: "Peru", code: "PE", flag: "🇵🇪", region: "Latin America", emissions: 2.10, share: 0.115, annualEmissions: 56.0, perCapita: 1.65 },
+        { name: "Suriname", code: "SR", flag: "🇸🇷", region: "Latin America", emissions: 0.11, share: 0.006, annualEmissions: 2.5, perCapita: 4.1 },
+        { name: "Trinidad & Tobago", code: "TT", flag: "🇹🇹", region: "Latin America", emissions: 1.55, share: 0.085, annualEmissions: 33.5, perCapita: 22.0 },
+        { name: "Uruguay", code: "UY", flag: "🇺🇾", region: "Latin America", emissions: 0.45, share: 0.025, annualEmissions: 7.2, perCapita: 2.1 },
+        { name: "Venezuela", code: "VE", flag: "🇻🇪", region: "Latin America", emissions: 6.80, share: 0.374, annualEmissions: 84.0, perCapita: 2.9 },
 
         // Oceania & Small Island Developing States (SIDS)
-        { name: "Antigua & Barbuda", code: "AG", flag: "🇦🇬", region: "Oceania & SIDS", emissions: 0.02, share: 0.001 },
-        { name: "Dominica", code: "DM", flag: "🇩🇲", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
-        { name: "Fiji", code: "FJ", flag: "🇫🇯", region: "Oceania & SIDS", emissions: 0.06, share: 0.003 },
-        { name: "Grenada", code: "GD", flag: "🇬🇩", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
-        { name: "Kiribati", code: "KI", flag: "🇰🇮", region: "Oceania & SIDS", emissions: 0.003, share: 0.0002 },
-        { name: "Marshall Islands", code: "MH", flag: "🇲🇭", region: "Oceania & SIDS", emissions: 0.005, share: 0.0003 },
-        { name: "Micronesia", code: "FM", flag: "🇫🇲", region: "Oceania & SIDS", emissions: 0.006, share: 0.0003 },
-        { name: "Nauru", code: "NR", flag: "🇳🇷", region: "Oceania & SIDS", emissions: 0.002, share: 0.0001 },
-        { name: "New Zealand", code: "NZ", flag: "🇳🇿", region: "Oceania", emissions: 2.15, share: 0.118 },
-        { name: "Palau", code: "PW", flag: "🇵🇼", region: "Oceania & SIDS", emissions: 0.006, share: 0.0003 },
-        { name: "Papua New Guinea", code: "PG", flag: "🇵🇬", region: "Oceania", emissions: 0.35, share: 0.019 },
-        { name: "Saint Kitts & Nevis", code: "KN", flag: "🇰🇳", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
-        { name: "Saint Lucia", code: "LC", flag: "🇱🇨", region: "Oceania & SIDS", emissions: 0.02, share: 0.001 },
-        { name: "St Vincent & Grenadines", code: "VC", flag: "🇻🇨", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
-        { name: "Samoa", code: "WS", flag: "🇼🇸", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
-        { name: "Solomon Islands", code: "SB", flag: "🇸🇧", region: "Oceania & SIDS", emissions: 0.01, share: 0.001 },
-        { name: "Tonga", code: "TO", flag: "🇹🇴", region: "Oceania & SIDS", emissions: 0.006, share: 0.0003 },
-        { name: "Tuvalu", code: "TV", flag: "🇹🇻", region: "Oceania & SIDS", emissions: 0.001, share: 0.0001 },
-        { name: "Vanuatu", code: "VU", flag: "🇻🇺", region: "Oceania & SIDS", emissions: 0.005, share: 0.0003 }
+        { name: "Fiji", code: "FJ", flag: "🇫🇯", region: "Oceania & SIDS", emissions: 0.06, share: 0.003, annualEmissions: 2.1, perCapita: 2.2 },
+        { name: "Kiribati", code: "KI", flag: "🇰🇮", region: "Oceania & SIDS", emissions: 0.003, share: 0.0002, annualEmissions: 0.09, perCapita: 0.7 },
+        { name: "Marshall Islands", code: "MH", flag: "🇲🇭", region: "Oceania & SIDS", emissions: 0.005, share: 0.0003, annualEmissions: 0.18, perCapita: 4.2 },
+        { name: "Micronesia", code: "FM", flag: "🇫🇲", region: "Oceania & SIDS", emissions: 0.006, share: 0.0003, annualEmissions: 0.22, perCapita: 1.9 },
+        { name: "Nauru", code: "NR", flag: "🇳🇷", region: "Oceania & SIDS", emissions: 0.003, share: 0.0002, annualEmissions: 0.07, perCapita: 5.5 },
+        { name: "New Zealand", code: "NZ", flag: "🇳🇿", region: "Oceania", emissions: 2.60, share: 0.143, annualEmissions: 33.8, perCapita: 6.4 },
+        { name: "Palau", code: "PW", flag: "🇵🇼", region: "Oceania & SIDS", emissions: 0.006, share: 0.0003, annualEmissions: 0.24, perCapita: 13.0 },
+        { name: "Papua New Guinea", code: "PG", flag: "🇵🇬", region: "Oceania", emissions: 0.35, share: 0.019, annualEmissions: 7.6, perCapita: 0.74 },
+        { name: "Saint Kitts & Nevis", code: "KN", flag: "🇰🇳", region: "Oceania & SIDS", emissions: 0.01, share: 0.001, annualEmissions: 0.3, perCapita: 6.1 },
+        { name: "Saint Lucia", code: "LC", flag: "🇱🇨", region: "Oceania & SIDS", emissions: 0.02, share: 0.001, annualEmissions: 0.6, perCapita: 3.3 },
+        { name: "St Vincent & Grenadines", code: "VC", flag: "🇻🇨", region: "Oceania & SIDS", emissions: 0.01, share: 0.001, annualEmissions: 0.3, perCapita: 2.8 },
+        { name: "Samoa", code: "WS", flag: "🇼🇸", region: "Oceania & SIDS", emissions: 0.01, share: 0.001, annualEmissions: 0.4, perCapita: 1.8 },
+        { name: "Solomon Islands", code: "SB", flag: "🇸🇧", region: "Oceania & SIDS", emissions: 0.01, share: 0.001, annualEmissions: 0.4, perCapita: 0.54 },
+        { name: "Tonga", code: "TO", flag: "🇹🇴", region: "Oceania & SIDS", emissions: 0.006, share: 0.0003, annualEmissions: 0.2, perCapita: 1.9 },
+        { name: "Tuvalu", code: "TV", flag: "🇹🇻", region: "Oceania & SIDS", emissions: 0.001, share: 0.0001, annualEmissions: 0.015, perCapita: 1.3 },
+        { name: "Vanuatu", code: "VU", flag: "🇻🇺", region: "Oceania & SIDS", emissions: 0.005, share: 0.0003, annualEmissions: 0.2, perCapita: 0.62 }
       ];
 
       // Regional Palette Configuration
@@ -11867,6 +11974,171 @@
       let activeHoveredNode = null;
       let treemapCalculatedLayout = [];
       let treemapInitialized = false;
+      let treemapViewFormat = "treemap"; // 'treemap' | 'table'
+
+      // Switch scope between 'annual' and 'historical'
+      function setEmissionsScope(scope) {
+        if (scope !== 'annual' && scope !== 'historical') return;
+        activeEmissionsScope = scope;
+
+        const btnAnnual = document.getElementById("btnScopeAnnual");
+        const btnHist = document.getElementById("btnScopeHistorical");
+        if (btnAnnual) btnAnnual.classList.toggle("active", scope === "annual");
+        if (btnHist) btnHist.classList.toggle("active", scope === "historical");
+
+        updateTreemapMetadataAndStats();
+        buildTreemapTable();
+        buildRestOfWorldModalGrid(activeModalRegion, activeModalSearch);
+        buildRestOfWorldPopoverList(activePopoverRegion, activePopoverSearch);
+
+        // Force recalculated layout
+        renderHistoricalTreemap(true);
+      }
+
+      // Update card headers, subtitles, quick stat metrics, and banner
+      function updateTreemapMetadataAndStats() {
+        const isAnnual = activeEmissionsScope === "annual";
+
+        // Card Title
+        const cardTitle = document.getElementById("lblTreemapCardTitle");
+        if (cardTitle) {
+          cardTitle.innerHTML = isAnnual
+            ? `<span>🌍</span> Current Annual Emissions by Country (Latest Data · 2023)`
+            : `<span>🌍</span> Cumulative Historical Contribution to Atmospheric Carbon (1750–Present)`;
+        }
+
+        // Badges
+        const bSource = document.getElementById("badgeTreemapSource");
+        if (bSource) {
+          bSource.textContent = isAnnual ? "Global Carbon Project & EDGAR/OWID (2023)" : "Global Carbon Project & OWID";
+        }
+        const bTotal = document.getElementById("badgeTreemapTotal");
+        if (bTotal) {
+          bTotal.textContent = isAnnual ? "Total: 37.4 Gt CO₂/yr" : "Total: ~1,820 Gt CO₂";
+        }
+        const bUK = document.getElementById("badgeTreemapUK");
+        if (bUK) {
+          bUK.textContent = isAnnual ? "🇬🇧 UK #17 Annually (0.33 Gt · 0.88%)" : "🇬🇧 UK #5 All-Time (80 Gt · 4.4%)";
+        }
+
+        // Description
+        const desc = document.getElementById("lblTreemapDescription");
+        if (desc) {
+          desc.innerHTML = isAnnual
+            ? `Annual fossil fuel combustion and industrial cement $\text{CO}_2$ emissions by sovereign state for 2023. The area of each proportional block directly corresponds to that nation's current annual carbon emissions (37.40 Gt/yr). The <strong>Top 50 nations</strong> account for <strong>89.8%</strong> of all current global carbon, while the remaining <strong>170+ nations &amp; territories</strong> share just <strong>10.2%</strong>.`
+            : `Relative fossil fuel combustion and industrial cement $\text{CO}_2$ emissions by sovereign state since 1750. The area of each proportional block directly corresponds to that nation's cumulative share of total atmospheric carbon. The <strong>Top 50 nations</strong> account for <strong>91.8%</strong> of all historical industrial carbon, while the remaining <strong>170+ nations &amp; territories</strong> share just <strong>8.2%</strong>.`;
+        }
+
+        // Banner
+        const bTitle = document.getElementById("bannerTreemapNarrativeTitle");
+        const bBody = document.getElementById("bannerTreemapNarrativeBody");
+        if (bTitle && bBody) {
+          if (isAnnual) {
+            bTitle.innerHTML = `<span>⚖️</span> The Annual Flow vs Historical "Carbon Bathtub" Dilemma &amp; Per-Capita Equity`;
+            bBody.innerHTML = `While China leads current annual emissions at <strong>30.5% (11.4 Gt/yr)</strong> and the USA is #2 at <strong>12.6% (4.7 Gt/yr)</strong>, global warming is governed by the total cumulative carbon stock in the atmosphere—where the USA (23.9%) and Europe (~22%) are overwhelmingly responsible. Furthermore, per-capita intensity reveals dramatic contrasts: oil-rich Gulf states (Qatar <strong>44.0 t/person</strong>, UAE <strong>23.5 t</strong>, Saudi Arabia <strong>18.2 t</strong>) and western nations (Australia <strong>14.6 t</strong>, USA <strong>13.9 t</strong>) emit multiple times more per person than China (<strong>8.1 t</strong>), the UK (<strong>4.8 t</strong>), India (<strong>2.1 t</strong>), or African nations (<strong>&lt;1.0 t</strong>).`;
+          } else {
+            bTitle.innerHTML = `<span>🇬🇧</span> Why is this on the Dünkelflaute &amp; Storage Page? Britain's Carbon Heritage &amp; Technological Duty`;
+            bBody.innerHTML = `Because Great Britain ignited the Industrial Revolution in 1750 with coal-fired steam engines, blast furnaces, and railways, the UK has emitted <strong>~80 Billion tonnes of CO₂</strong>—ranking <strong>#5 all-time globally</strong> (greater than all 54 nations of Africa combined), despite comprising less than 1% of the world's population today. This historical carbon footprint underpins Britain's moral, economic, and scientific responsibility to master seasonal energy storage and solve the winter <strong>Dünkelflaute</strong> with zero-carbon innovation, pioneering an exportable blueprint for every industrial power grid on Earth.`;
+          }
+        }
+
+        // Quick Stats Strip
+        const s1Title = document.getElementById("lblStat1Title");
+        const s1Val = document.getElementById("lblStat1Val");
+        const s1Sub = document.getElementById("lblStat1Sub");
+        if (s1Title && s1Val && s1Sub) {
+          s1Title.textContent = isAnnual ? "Top 50 Nations (Annual)" : "Top 50 Nations (Cumulative)";
+          s1Val.innerHTML = isAnnual ? `33.58 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span>` : `1,670.7 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span>`;
+          s1Sub.textContent = isAnnual ? "89.8% of 2023 global emissions" : "91.8% of all-time global emissions";
+        }
+
+        const s2Title = document.getElementById("lblStat2Title");
+        const s2Val = document.getElementById("lblStat2Val");
+        const s2Sub = document.getElementById("lblStat2Sub");
+        if (s2Title && s2Val && s2Sub) {
+          s2Title.textContent = "Rest of the World (170+ Nations)";
+          s2Val.innerHTML = isAnnual ? `3.82 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span>` : `149.3 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span>`;
+          s2Sub.textContent = isAnnual ? "10.2% total · >3.2 Billion people" : "8.2% total · >3.2 Billion people";
+        }
+
+        const s3Title = document.getElementById("lblStat3Title");
+        const s3Val = document.getElementById("lblStat3Val");
+        const s3Sub = document.getElementById("lblStat3Sub");
+        if (s3Title && s3Val && s3Sub) {
+          s3Title.textContent = isAnnual ? "United Kingdom (Current)" : "United Kingdom (Cradle of 1750)";
+          s3Val.innerHTML = isAnnual ? `0.33 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span>` : `80.0 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span>`;
+          s3Sub.textContent = isAnnual ? "Rank #17 · 0.88% of world (down >53% since 1990)" : "Rank #5 · 4.40% of all atmospheric CO₂";
+        }
+
+        const s4Title = document.getElementById("lblStat4Title");
+        const s4Val = document.getElementById("lblStat4Val");
+        const s4Sub = document.getElementById("lblStat4Sub");
+        if (s4Title && s4Val && s4Sub) {
+          s4Title.textContent = isAnnual ? "Top 2 Emitters (China & USA)" : "Top 2 Emitters (USA & China)";
+          s4Val.innerHTML = isAnnual ? `16.10 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂/yr</span>` : `720.0 <span style="font-size: 0.8rem; color: #94a3b8;">Gt CO₂</span>`;
+          s4Sub.textContent = isAnnual ? "43.05% of total (CN 30.5% · US 12.6%)" : "39.56% of total (US 23.9% · CN 15.7%)";
+        }
+
+        // Table Header Columns
+        const thEm = document.getElementById("thEmissionsCol");
+        if (thEm) {
+          thEm.textContent = isAnnual ? "Annual Emissions (Gt CO₂/yr)" : "Cumulative Emissions (Gt CO₂)";
+        }
+      }
+
+      // Build Table rows for Ranked Table View
+      function buildTreemapTable() {
+        const tableBody = document.getElementById("historicalTableBody");
+        if (!tableBody) return;
+
+        const isAnnual = activeEmissionsScope === "annual";
+        const items = getActiveDataset();
+        let rowsHtml = "";
+
+        items.forEach(item => {
+          const isUk = item.code === "GB";
+          const isRow = item.rank === 51;
+          const rowClass = isUk ? "highlight-uk" : (isRow ? "highlight-row" : "");
+          const emUnit = isAnnual ? "Gt/yr" : "Gt";
+          const perCapDisplay = item.perCapita ? `${item.perCapita.toFixed(1)} t` : "N/A";
+
+          rowsHtml += `
+            <tr class="${rowClass}" id="treemapRow_${item.rank}">
+              <td><strong>#${item.rank}</strong></td>
+              <td><span style="margin-right: 6px;">${item.flag}</span> <strong>${item.name}</strong> <span style="font-size: 0.7rem; color: #94a3b8;">(${item.code})</span></td>
+              <td><span class="badge" style="font-size: 0.68rem;">${item.region}</span></td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; font-weight: 700;">${item.emissions >= 1 ? item.emissions.toFixed(2) : (item.emissions * 1000).toFixed(0) + ' Mt'} ${item.emissions >= 1 ? emUnit : '/yr'}</td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; font-weight: 700;">${item.share.toFixed(2)}%</td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; font-weight: 700; color: ${item.perCapita >= 10 ? '#f43f5e' : (item.perCapita >= 5 ? '#fbbf24' : '#34d399')};">${perCapDisplay}</td>
+              <td style="font-size: 0.74rem; color: #cbd5e1;">${item.note}</td>
+            </tr>
+          `;
+        });
+
+        // Total summary row
+        if (isAnnual) {
+          rowsHtml += `
+            <tr style="background: rgba(255, 255, 255, 0.05); font-weight: 800; border-top: 2px solid rgba(255, 255, 255, 0.2);">
+              <td colspan="3"><strong>TOTAL GLOBAL ANNUAL EMISSIONS (2023)</strong></td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">37.40 Gt/yr</td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">100.00%</td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">4.7 t</td>
+              <td style="font-size: 0.74rem; color: #94a3b8;">Fossil fuel combustion &amp; industrial cement processes in 2023 (Global Carbon Project)</td>
+            </tr>
+          `;
+        } else {
+          rowsHtml += `
+            <tr style="background: rgba(255, 255, 255, 0.05); font-weight: 800; border-top: 2px solid rgba(255, 255, 255, 0.2);">
+              <td colspan="3"><strong>TOTAL GLOBAL HISTORICAL EMISSIONS (1750–2023)</strong></td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">1,820.0 Gt</td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">100.00%</td>
+              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">-</td>
+              <td style="font-size: 0.74rem; color: #94a3b8;">Fossil fuel combustion &amp; industrial cement processes since 1750 (GCP &amp; OWID)</td>
+            </tr>
+          `;
+        }
+        tableBody.innerHTML = rowsHtml;
+      }
 
       // Squarified Treemap Layout Engine (Bruls, Huizing, van Wijk)
       function calculateSquarifiedTreemap(items, x, y, width, height) {
@@ -11967,8 +12239,10 @@
         const displayH = Math.max(300, Math.floor(rect.height || 560));
 
         const dpr = window.devicePixelRatio || 1;
+        const isAnnual = activeEmissionsScope === "annual";
+        const currentDataset = getActiveDataset();
 
-        // Only recreate layout and re-assign canvas buffer dimensions on resize or explicit layout updates
+        // Only recreate layout and re-assign canvas buffer dimensions on resize, explicit layout updates, or scope switch
         if (forceLayout || displayW !== treemapCachedWidth || displayH !== treemapCachedHeight || canvas.width !== displayW * dpr) {
           treemapCachedWidth = displayW;
           treemapCachedHeight = displayH;
@@ -11977,7 +12251,7 @@
 
           const padding = 2;
           treemapCalculatedLayout = calculateSquarifiedTreemap(
-            ALL_HISTORICAL_ITEMS,
+            currentDataset,
             padding,
             padding,
             displayW - padding * 2,
@@ -12074,7 +12348,8 @@
               if (bh > 45) {
                 ctx.font = "11px system-ui, sans-serif";
                 ctx.fillStyle = "#38bdf8";
-                ctx.fillText("149.3 Gt CO₂ (8.2%) · >3.2B People", bx + 8, by + 34);
+                const rowSub = isAnnual ? "3.82 Gt CO₂/yr (10.2%) · >3.2B People" : "149.3 Gt CO₂ (8.2%) · >3.2B People";
+                ctx.fillText(rowSub, bx + 8, by + 34);
               }
               if (bh > 65) {
                 ctx.font = "italic 10px system-ui, sans-serif";
@@ -12088,18 +12363,25 @@
               
               ctx.font = "bold 12px ui-monospace, monospace";
               ctx.fillStyle = "#ffffff";
-              ctx.fillText(`${node.emissions.toFixed(1)} Gt`, bx + 8, by + 36);
+              const emFormatted = isAnnual 
+                ? (node.emissions >= 1 ? `${node.emissions.toFixed(2)} Gt/yr` : `${Math.round(node.emissions * 1000)} Mt/yr`)
+                : `${node.emissions.toFixed(1)} Gt`;
+              ctx.fillText(emFormatted, bx + 8, by + 36);
 
               ctx.font = "11px system-ui, sans-serif";
               ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-              ctx.fillText(`${node.share.toFixed(1)}% · #${node.rank}`, bx + 8, by + 52);
+              const capTag = (isAnnual && node.perCapita) ? `${node.perCapita.toFixed(1)}t/cap · ` : "";
+              ctx.fillText(`${capTag}${node.share.toFixed(1)}% · #${node.rank}`, bx + 8, by + 52);
             } else if (bw >= 65 && bh >= 42) {
               // Medium block: Flag + Code + Gt
               ctx.font = "bold 11px system-ui, sans-serif";
               ctx.fillText(`${node.flag} ${node.code}`, bx + 6, by + 16);
               ctx.font = "10px ui-monospace, monospace";
               ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-              ctx.fillText(`${node.emissions.toFixed(1)} Gt`, bx + 6, by + 30);
+              const emMed = isAnnual 
+                ? (node.emissions >= 1 ? `${node.emissions.toFixed(1)} Gt` : `${Math.round(node.emissions * 1000)} Mt`)
+                : `${node.emissions.toFixed(1)} Gt`;
+              ctx.fillText(emMed, bx + 6, by + 30);
             } else if (bw >= 32 && bh >= 22) {
               // Small block: Flag or Code
               ctx.font = "10px system-ui, sans-serif";
@@ -12121,36 +12403,11 @@
         const container = document.getElementById("treemapCanvasContainer");
         const tooltip = document.getElementById("historicalTreemapTooltip");
 
+        // Sync initial UI metadata & stats
+        updateTreemapMetadataAndStats();
+
         // Build Table rows
-        const tableBody = document.getElementById("historicalTableBody");
-        if (tableBody) {
-          let rowsHtml = "";
-          ALL_HISTORICAL_ITEMS.forEach(item => {
-            const isUk = item.rank === 5;
-            const isRow = item.rank === 51;
-            const rowClass = isUk ? "highlight-uk" : (isRow ? "highlight-row" : "");
-            rowsHtml += `
-              <tr class="${rowClass}" id="treemapRow_${item.rank}">
-                <td><strong>#${item.rank}</strong></td>
-                <td><span style="margin-right: 6px;">${item.flag}</span> <strong>${item.name}</strong> <span style="font-size: 0.7rem; color: #94a3b8;">(${item.code})</span></td>
-                <td><span class="badge" style="font-size: 0.68rem;">${item.region}</span></td>
-                <td style="text-align: right; font-family: ui-monospace, monospace; font-weight: 700;">${item.emissions.toFixed(1)} Gt</td>
-                <td style="text-align: right; font-family: ui-monospace, monospace; font-weight: 700;">${item.share.toFixed(2)}%</td>
-                <td style="font-size: 0.74rem; color: #cbd5e1;">${item.note}</td>
-              </tr>
-            `;
-          });
-          // Total summary row
-          rowsHtml += `
-            <tr style="background: rgba(255, 255, 255, 0.05); font-weight: 800; border-top: 2px solid rgba(255, 255, 255, 0.2);">
-              <td colspan="3"><strong>TOTAL GLOBAL HISTORICAL EMISSIONS (1750–2023)</strong></td>
-              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">1,820.0 Gt</td>
-              <td style="text-align: right; font-family: ui-monospace, monospace; color: var(--cyan);">100.00%</td>
-              <td style="font-size: 0.74rem; color: #94a3b8;">Fossil fuel combustion &amp; industrial cement processes since 1750 (GCP &amp; OWID)</td>
-            </tr>
-          `;
-          tableBody.innerHTML = rowsHtml;
-        }
+        buildTreemapTable();
 
         // Build Rest of World modal grid
         buildRestOfWorldModalGrid();
@@ -12182,8 +12439,16 @@
             }
 
             if (hit) {
+              const isAnnual = activeEmissionsScope === "annual";
               canvas.style.cursor = hit.rank === 51 ? "pointer" : "crosshair";
-              canvas.title = `${hit.flag} ${hit.name} (${hit.code}) · ${hit.emissions.toFixed(1)} Gt CO₂ (${hit.share.toFixed(2)}%) · Rank #${hit.rank}`;
+
+              if (isAnnual) {
+                const emStr = hit.emissions >= 1 ? `${hit.emissions.toFixed(2)} Gt/yr` : `${Math.round(hit.emissions * 1000)} Mt/yr`;
+                const capStr = hit.perCapita ? ` · ${hit.perCapita.toFixed(1)} t/cap` : "";
+                canvas.title = `${hit.flag} ${hit.name} (${hit.code}) · ${emStr} (${hit.share.toFixed(2)}%)${capStr} · Rank #${hit.rank}`;
+              } else {
+                canvas.title = `${hit.flag} ${hit.name} (${hit.code}) · ${hit.emissions.toFixed(1)} Gt CO₂ (${hit.share.toFixed(2)}%) · Rank #${hit.rank}`;
+              }
 
               if (hit.rank === 51) {
                 // Rest of the World: Hide standard tooltip and show dedicated interactive popover
@@ -12195,6 +12460,16 @@
                 }
                 if (tooltip) {
                   tooltip.style.display = "block";
+                  const stat1Label = isAnnual ? "Annual CO₂ (2023)" : "Cumulative CO₂";
+                  const stat1Val = isAnnual 
+                    ? (hit.emissions >= 1 ? `${hit.emissions.toFixed(2)} <span style="font-size: 0.74rem; color: #94a3b8; font-weight: 500;">Gt/yr</span>` : `${Math.round(hit.emissions * 1000)} <span style="font-size: 0.74rem; color: #94a3b8; font-weight: 500;">Mt/yr</span>`)
+                    : `${hit.emissions.toFixed(1)} <span style="font-size: 0.74rem; color: #94a3b8; font-weight: 500;">Gt</span>`;
+
+                  const stat3Label = isAnnual ? "Per Capita Intensity" : "All-Time Rank";
+                  const stat3Val = isAnnual 
+                    ? (hit.perCapita ? `${hit.perCapita.toFixed(1)} <span style="font-size: 0.74rem; color: #94a3b8; font-weight: 500;">t/yr</span>` : "N/A")
+                    : `#${hit.rank} All-Time`;
+
                   tooltip.innerHTML = `
                     <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding-bottom: 6px;">
                       <div style="display: flex; align-items: center; gap: 8px;">
@@ -12207,14 +12482,18 @@
                       <span class="badge" style="font-size: 0.72rem; font-family: ui-monospace, monospace; font-weight: 800; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; padding: 2px 7px;">#${hit.rank}</span>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px;">
                       <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 6px 8px;">
-                        <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Cumulative CO₂</div>
-                        <div style="font-size: 1.15rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">${hit.emissions.toFixed(1)} <span style="font-size: 0.74rem; color: #94a3b8; font-weight: 500;">Gt</span></div>
+                        <div style="font-size: 0.64rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">${stat1Label}</div>
+                        <div style="font-size: 1.05rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">${stat1Val}</div>
                       </div>
                       <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 6px 8px;">
-                        <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Global Share</div>
-                        <div style="font-size: 1.15rem; font-weight: 800; color: #fbbf24; font-family: ui-monospace, monospace;">${hit.share.toFixed(2)}%</div>
+                        <div style="font-size: 0.64rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Global Share</div>
+                        <div style="font-size: 1.05rem; font-weight: 800; color: #fbbf24; font-family: ui-monospace, monospace;">${hit.share.toFixed(2)}%</div>
+                      </div>
+                      <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 6px 8px;">
+                        <div style="font-size: 0.64rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">${stat3Label}</div>
+                        <div style="font-size: 1.05rem; font-weight: 800; color: #34d399; font-family: ui-monospace, monospace;">${stat3Val}</div>
                       </div>
                     </div>
 
@@ -12224,8 +12503,8 @@
                   `;
 
                   // Responsive clamping
-                  const ttWidth = 310;
-                  const ttHeight = 180;
+                  const ttWidth = 330;
+                  const ttHeight = 190;
                   let posX = mouseX + 16;
                   let posY = mouseY - 40;
 
@@ -12348,7 +12627,49 @@
         renderHistoricalTreemap();
       }
 
-      
+      // Filter Treemap by Region
+      function filterTreemapRegion(region) {
+        activeTreemapRegion = region;
+        const chips = document.querySelectorAll(".treemap-chips-group .treemap-filter-chip");
+        chips.forEach(c => {
+          c.classList.toggle("active", c.getAttribute("data-region") === region);
+        });
+        renderHistoricalTreemap();
+      }
+
+      // Filter Treemap by Search
+      function handleTreemapSearch(term) {
+        treemapSearchTerm = term;
+        const btnClear = document.getElementById("btnClearTreemapSearch");
+        if (btnClear) btnClear.style.display = term ? "inline-block" : "none";
+        renderHistoricalTreemap();
+      }
+
+      function clearTreemapSearch() {
+        const input = document.getElementById("inputTreemapSearch");
+        if (input) input.value = "";
+        handleTreemapSearch("");
+      }
+
+      // Switch view format between 'treemap' and 'table'
+      function setHistoricalViewFormat(format) {
+        treemapViewFormat = format;
+        const btnBlocks = document.getElementById("btnTreemapViewBlocks");
+        const btnTable = document.getElementById("btnTreemapViewTable");
+        const canvasContainer = document.getElementById("treemapCanvasContainer");
+        const tableContainer = document.getElementById("treemapTableContainer");
+
+        if (btnBlocks) btnBlocks.classList.toggle("active", format === "treemap");
+        if (btnTable) btnTable.classList.toggle("active", format === "table");
+
+        if (canvasContainer) canvasContainer.style.display = format === "treemap" ? "block" : "none";
+        if (tableContainer) tableContainer.style.display = format === "table" ? "block" : "none";
+
+        if (format === "treemap") {
+          setTimeout(() => renderHistoricalTreemap(true), 20);
+        }
+      }
+
       // Popover State & Helpers for Rest of the World
       let isPinnedRestOfWorld = false;
       let isMouseInsidePopover = false;
@@ -12361,6 +12682,7 @@
         const countLbl = document.getElementById("lblPopoverCount");
         if (!listEl) return;
 
+        const isAnnual = activeEmissionsScope === "annual";
         const sLower = (searchFilter || "").toLowerCase().trim();
 
         let filtered = REST_OF_WORLD_NATIONS.filter(item => {
@@ -12374,7 +12696,11 @@
           return true;
         });
 
-        filtered.sort((a, b) => b.emissions - a.emissions);
+        if (isAnnual) {
+          filtered.sort((a, b) => (b.annualEmissions || 0) - (a.annualEmissions || 0));
+        } else {
+          filtered.sort((a, b) => b.emissions - a.emissions);
+        }
 
         if (countLbl) {
           countLbl.textContent = `${filtered.length} of ${REST_OF_WORLD_NATIONS.length}`;
@@ -12388,7 +12714,18 @@
         let itemsHtml = "";
         filtered.forEach(c => {
           const isSids = c.region === "Oceania & SIDS";
-          const emDisplay = c.emissions >= 1.0 ? `${c.emissions.toFixed(2)} Gt` : `${Math.round(c.emissions * 1000)} Mt`;
+          let emDisplay = "";
+          let subTag = "";
+
+          if (isAnnual) {
+            const anVal = c.annualEmissions || 0;
+            emDisplay = anVal >= 1000 ? `${(anVal / 1000).toFixed(2)} Gt/yr` : `${anVal.toFixed(1)} Mt/yr`;
+            subTag = c.perCapita ? `${c.perCapita.toFixed(1)} t/cap` : "";
+          } else {
+            emDisplay = c.emissions >= 1.0 ? `${c.emissions.toFixed(2)} Gt` : `${Math.round(c.emissions * 1000)} Mt`;
+            subTag = `${c.share.toFixed(3)}%`;
+          }
+
           itemsHtml += `
             <div class="rw-popover-item">
               <div style="display: flex; align-items: center; gap: 6px;">
@@ -12399,7 +12736,7 @@
                 </div>
               </div>
               <div style="text-align: right; font-family: ui-monospace, monospace; font-size: 0.72rem; font-weight: 700; color: ${isSids ? '#38bdf8' : '#a78bfa'};">
-                ${emDisplay} <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 400;">(${c.share.toFixed(3)}%)</span>
+                ${emDisplay} <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 400;">(${subTag})</span>
               </div>
             </div>
           `;
@@ -12495,12 +12832,15 @@
         buildRestOfWorldPopoverList(activePopoverRegion, activePopoverSearch);
       }
 
+      let activeModalRegion = "All";
+      let activeModalSearch = "";
 
       function buildRestOfWorldModalGrid(regionFilter = "All", searchFilter = "") {
         const grid = document.getElementById("modalCountryGrid");
-        const countLbl = document.getElementById("lblModalCount");
+        const countBadge = document.getElementById("lblModalCountryCount");
         if (!grid) return;
 
+        const isAnnual = activeEmissionsScope === "annual";
         const sLower = (searchFilter || "").toLowerCase().trim();
 
         let filtered = REST_OF_WORLD_NATIONS.filter(item => {
@@ -12514,94 +12854,61 @@
           return true;
         });
 
-        // Sort descending by emissions
-        filtered.sort((a, b) => b.emissions - a.emissions);
+        if (isAnnual) {
+          filtered.sort((a, b) => (b.annualEmissions || 0) - (a.annualEmissions || 0));
+        } else {
+          filtered.sort((a, b) => b.emissions - a.emissions);
+        }
 
-        if (countLbl) {
-          countLbl.textContent = `${filtered.length} of ${REST_OF_WORLD_NATIONS.length}`;
+        if (countBadge) {
+          countBadge.textContent = `${filtered.length} of ${REST_OF_WORLD_NATIONS.length}`;
         }
 
         if (filtered.length === 0) {
-          grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #94a3b8; font-size: 0.85rem;">No countries matched "${searchFilter}" in region "${regionFilter}".</div>`;
+          grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #94a3b8;">No nations match "${searchFilter}".</div>`;
           return;
         }
 
         let cardsHtml = "";
         filtered.forEach(c => {
           const isSids = c.region === "Oceania & SIDS";
-          const emDisplay = c.emissions >= 1.0 ? `${c.emissions.toFixed(2)} Gt` : `${Math.round(c.emissions * 1000)} Mt`;
+          let emDisplay = "";
+          let shareDisplay = "";
+
+          if (isAnnual) {
+            const anVal = c.annualEmissions || 0;
+            emDisplay = anVal >= 1000 ? `${(anVal / 1000).toFixed(2)} Gt/yr` : `${anVal.toFixed(1)} Mt/yr`;
+            shareDisplay = c.perCapita ? `${c.perCapita.toFixed(1)} t CO₂/cap` : "";
+          } else {
+            emDisplay = c.emissions >= 1.0 ? `${c.emissions.toFixed(2)} Gt` : `${Math.round(c.emissions * 1000)} Mt`;
+            shareDisplay = `${c.share.toFixed(3)}% of global`;
+          }
+
           cardsHtml += `
             <div class="rest-world-country-card">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 1.1rem;">${c.flag}</span>
-                <div>
-                  <div style="font-weight: 700; font-size: 0.78rem; color: #fff;">${c.name}</div>
-                  <div style="font-size: 0.68rem; color: #94a3b8;">${c.code} · ${c.region}</div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.35rem; line-height: 1;">${c.flag}</span>
+                  <div>
+                    <div style="font-weight: 700; color: #fff; font-size: 0.85rem;">${c.name}</div>
+                    <div style="font-size: 0.68rem; color: #94a3b8;">${c.code} · ${c.region}</div>
+                  </div>
                 </div>
+                ${isSids ? '<span class="badge badge-cyan" style="font-size: 0.6rem; padding: 1px 5px;">SIDS</span>' : ''}
               </div>
-              <div style="text-align: right;">
-                <div style="font-family: ui-monospace, monospace; font-weight: 700; font-size: 0.78rem; color: ${isSids ? '#38bdf8' : '#a78bfa'};">${emDisplay}</div>
-                <div style="font-size: 0.66rem; color: #94a3b8;">${c.share.toFixed(3)}%</div>
+              <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.06); display: flex; justify-content: space-between; align-items: baseline;">
+                <span style="font-size: 0.7rem; color: #94a3b8;">${isAnnual ? '2023 Emissions' : 'Cumulative CO₂'}:</span>
+                <span style="font-family: ui-monospace, monospace; font-weight: 800; color: #38bdf8; font-size: 0.85rem;">${emDisplay}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: baseline; font-size: 0.68rem; color: #cbd5e1;">
+                <span style="color: #64748b;">${isAnnual ? 'Per Capita' : 'All-time share'}:</span>
+                <span style="font-family: ui-monospace, monospace; color: #a78bfa;">${shareDisplay}</span>
               </div>
             </div>
           `;
         });
         grid.innerHTML = cardsHtml;
       }
-
-      function filterTreemapRegion(region) {
-        activeTreemapRegion = region;
-        const chips = document.querySelectorAll(".treemap-filter-chip[data-region]");
-        chips.forEach(c => {
-          c.classList.toggle("active", c.getAttribute("data-region") === region);
-        });
-        renderHistoricalTreemap(false);
-      }
-
-      function handleTreemapSearch(term) {
-        treemapSearchTerm = term;
-        const btnClear = document.getElementById("btnClearTreemapSearch");
-        if (btnClear) btnClear.style.display = term ? "inline-block" : "none";
-        renderHistoricalTreemap(false);
-
-        // Also filter table rows if table is visible
-        const sLower = (term || "").toLowerCase().trim();
-        const rows = document.querySelectorAll("#historicalTableBody tr");
-        rows.forEach(r => {
-          if (!sLower) {
-            r.style.display = "";
-          } else {
-            const text = r.textContent.toLowerCase();
-            r.style.display = text.includes(sLower) ? "" : "none";
-          }
-        });
-      }
-
-      function clearTreemapSearch() {
-        const input = document.getElementById("inputTreemapSearch");
-        if (input) input.value = "";
-        handleTreemapSearch("");
-      }
-
-      function setHistoricalViewFormat(format) {
-        const btnBlocks = document.getElementById("btnTreemapViewBlocks");
-        const btnTable = document.getElementById("btnTreemapViewTable");
-        const canvasContainer = document.getElementById("treemapCanvasContainer");
-        const tableContainer = document.getElementById("treemapTableContainer");
-
-        if (btnBlocks) btnBlocks.classList.toggle("active", format === "treemap");
-        if (btnTable) btnTable.classList.toggle("active", format === "table");
-
-        if (canvasContainer) canvasContainer.style.display = format === "treemap" ? "block" : "none";
-        if (tableContainer) tableContainer.style.display = format === "table" ? "block" : "none";
-
-        if (format === "treemap") {
-          setTimeout(() => renderHistoricalTreemap(true), 20);
-        }
-      }
-
-      let activeModalRegion = "All";
-      let activeModalSearch = "";
 
       function openRestOfWorldModal() {
         const modal = document.getElementById("modalRestOfWorld");
@@ -12634,8 +12941,6 @@
         buildRestOfWorldModalGrid(activeModalRegion, activeModalSearch);
       }
 
-      // Close modal on Escape key
-      
       // Close modal on backdrop click
       const modalRowEl = document.getElementById("modalRestOfWorld");
       if (modalRowEl) {
@@ -12654,6 +12959,7 @@
       });
 
       // Export to window
+      window.setEmissionsScope = setEmissionsScope;
       window.initHistoricalEmissionsTreemap = initHistoricalEmissionsTreemap;
       window.renderHistoricalTreemap = renderHistoricalTreemap;
       window.filterTreemapRegion = filterTreemapRegion;
