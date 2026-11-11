@@ -3278,20 +3278,23 @@
           <!-- 1. Annual Demand Presets & Slider -->
           <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <label for="sliderDunkelDemand" style="font-size: 0.85rem; font-weight: 700; color: #fff;">1. UK Annual Electricity Demand:</label>
+              <label for="sliderDunkelDemand" style="font-size: 0.85rem; font-weight: 700; color: #fff;">1. UK Annual Electricity Demand (Consumption/yr):</label>
               <span id="lblDunkelDemand" style="font-family: ui-monospace, monospace; font-size: 0.85rem; font-weight: 700; color: var(--cyan);">360 TWh/yr</span>
             </div>
             <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
-              <button class="budget-preset-btn" id="presetDunkelDemand2025" type="button">Current 2025 (300 TWh)</button>
-              <button class="budget-preset-btn active" id="presetDunkelDemand2030" type="button">Clean Power 2030 (360 TWh)</button>
-              <button class="budget-preset-btn" id="presetDunkelDemand2035" type="button">Decarbonised 2035 (450 TWh)</button>
-              <button class="budget-preset-btn" id="presetDunkelDemand2050" type="button">Net Zero 2050 (570 TWh)</button>
+              <button class="budget-preset-btn" id="presetDunkelDemand2025" type="button">Current 2025 (300 TWh/yr)</button>
+              <button class="budget-preset-btn active" id="presetDunkelDemand2030" type="button">Clean Power 2030 (360 TWh/yr)</button>
+              <button class="budget-preset-btn" id="presetDunkelDemand2035" type="button">Decarbonised 2035 (450 TWh/yr)</button>
+              <button class="budget-preset-btn" id="presetDunkelDemand2050" type="button">Net Zero 2050 (570 TWh/yr)</button>
             </div>
             <input type="range" id="sliderDunkelDemand" min="250" max="700" step="10" value="360" style="width: 100%;">
             <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
-              <span>250 TWh (historic low)</span>
+              <span>250 TWh/yr (historic low)</span>
               <span>Average Winter Load: <strong id="lblDunkelDailyWinterLoad" style="color: #cbd5e1;">1.13 TWh/day</strong></span>
-              <span>700 TWh (deep electrification)</span>
+              <span>700 TWh/yr (deep electrification)</span>
+            </div>
+            <div style="margin-top: 6px; font-size: 0.71rem; color: #94a3b8;">
+              ℹ️ <em>Total electricity consumed across Great Britain over a whole year (~300 TWh/yr today)—not current storage capacity.</em>
             </div>
           </div>
 
@@ -3320,13 +3323,16 @@
             </div>
           </div>
 
-          <!-- 3. Dialable Storage Fleet Allocation -->
+          <!-- 3. Dialable Target Storage Fleet Allocation -->
           <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
               <strong style="color: var(--cyan); font-size: 0.86rem; display: flex; align-items: center; gap: 6px;">
-                <span>🔋</span> 3. Dialable Storage Fleet Allocation
+                <span>🔋</span> 3. Target Storage Fleet Builder
               </strong>
-              <button class="btn btn-secondary" id="btnDunkelAutoBalance" type="button" style="padding: 3px 8px; font-size: 0.7rem;" title="Automatically balance the fleet to meet 100% of the deficit using the most cost-effective technologies">⚡ Auto-Balance Fleet</button>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="btn btn-secondary" id="btnDunkelActualToday" type="button" style="padding: 3px 8px; font-size: 0.7rem; color: #f59e0b; border-color: rgba(245, 158, 11, 0.45);" title="Set sliders to the UK's real existing clean electricity storage today (~30 GWh pumped hydro + ~6 GWh batteries; 0 TWh hydrogen caverns)">📍 Actual Today (0.036 TWh)</button>
+                <button class="btn btn-secondary" id="btnDunkelAutoBalance" type="button" style="padding: 3px 8px; font-size: 0.7rem;" title="Automatically balance the target fleet to meet 100% of the deficit using the most cost-effective technologies">⚡ Auto-Balance Target Fleet</button>
+              </div>
             </div>
 
             <!-- Option 1: Pumped Hydro (Strictly Limited) -->
@@ -3355,7 +3361,7 @@
                 </div>
                 <span id="lblDunkelBESS" style="font-family: ui-monospace, monospace; font-size: 0.78rem; font-weight: 700; color: var(--cyan);">10 GWh (0.010 TWh)</span>
               </div>
-              <input type="range" id="sliderDunkelBESS" min="0" max="200" step="5" value="10" style="width: 100%;">
+              <input type="range" id="sliderDunkelBESS" min="0" max="200" step="1" value="10" style="width: 100%;">
               <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">
                 <span>0 GWh</span>
                 <span>Current: ~6 GWh · CP2030 Target: ~50–100 GWh (2–4 hour duration)</span>
@@ -11621,12 +11627,12 @@
       function updateDunkelCalculations() {
         if (!sliderDunkelDemand || !sliderDunkelDays) return;
 
-        const demand = parseFloat(sliderDunkelDemand.value) || 360;
-        const days = parseFloat(sliderDunkelDays.value) || 14;
-        const phs = parseFloat(sliderDunkelPHS.value) || 30; // GWh
-        const bess = parseFloat(sliderDunkelBESS.value) || 10; // GWh
-        const caes = parseFloat(sliderDunkelCAES.value) || 200; // GWh
-        const h2 = parseFloat(sliderDunkelH2.value) || 32; // TWh
+        const demand = Number.isFinite(parseFloat(sliderDunkelDemand.value)) ? parseFloat(sliderDunkelDemand.value) : 360;
+        const days = Number.isFinite(parseFloat(sliderDunkelDays.value)) ? parseFloat(sliderDunkelDays.value) : 14;
+        const phs = Number.isFinite(parseFloat(sliderDunkelPHS.value)) ? parseFloat(sliderDunkelPHS.value) : 30; // GWh
+        const bess = Number.isFinite(parseFloat(sliderDunkelBESS.value)) ? parseFloat(sliderDunkelBESS.value) : 10; // GWh
+        const caes = Number.isFinite(parseFloat(sliderDunkelCAES.value)) ? parseFloat(sliderDunkelCAES.value) : 200; // GWh
+        const h2 = Number.isFinite(parseFloat(sliderDunkelH2.value)) ? parseFloat(sliderDunkelH2.value) : 32; // TWh
 
         // Winter space-heating factor: winter daily load is ~15% higher than annual average
         const dailyWinterDemand = (demand / 365) * 1.15; // TWh/day
@@ -13618,6 +13624,18 @@
             });
           }
         });
+
+        // Actual Today (2025 Real UK Clean Storage Fleet) Button
+        const btnActualToday = document.getElementById("btnDunkelActualToday");
+        if (btnActualToday) {
+          btnActualToday.addEventListener("click", () => {
+            if (sliderDunkelPHS) sliderDunkelPHS.value = 30;  // 30 GWh pumped hydro (Dinorwig, Cruachan, etc.)
+            if (sliderDunkelBESS) sliderDunkelBESS.value = 6;  // ~6 GWh grid batteries
+            if (sliderDunkelCAES) sliderDunkelCAES.value = 0; // 0 GWh CAES
+            if (sliderDunkelH2) sliderDunkelH2.value = 0;     // 0 TWh H2 electricity caverns
+            updateDunkelCalculations();
+          });
+        }
 
         // Auto-Balance Fleet Button
         const btnAutoBalance = document.getElementById("btnDunkelAutoBalance");
