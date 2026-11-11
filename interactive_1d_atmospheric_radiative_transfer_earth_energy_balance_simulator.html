@@ -3595,10 +3595,10 @@
         <!-- Toolbar & Filter Controls -->
         <div class="treemap-toolbar">
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <div class="btn-group" role="group" aria-label="View Style">
-              <button class="btn btn-secondary active" id="btnTreemapViewBlocks" style="font-size: 0.75rem; padding: 4px 10px;" onclick="setHistoricalViewFormat('treemap')">▦ Treemap Blocks</button>
-              <button class="btn btn-secondary" id="btnTreemapViewTable" style="font-size: 0.75rem; padding: 4px 10px;" onclick="setHistoricalViewFormat('table')">☰ Ranked Table</button>
-            </div>
+            <select id="selectTreemapViewFormat" onchange="setHistoricalViewFormat(this.value)" class="treemap-scope-select" style="background: rgba(15, 23, 42, 0.95); color: #ffffff; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 5px 12px; font-size: 0.76rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);">
+              <option value="treemap">▦ Treemap Blocks</option>
+              <option value="table">☰ Ranked Table</option>
+            </select>
             <div class="treemap-search-box">
               <span style="font-size: 0.75rem; opacity: 0.6;">🔎</span>
               <input type="text" id="inputTreemapSearch" class="treemap-search-input" placeholder="Search country or code..." oninput="handleTreemapSearch(this.value)">
@@ -12875,13 +12875,11 @@
       // Switch view format between 'treemap' and 'table'
       function setHistoricalViewFormat(format) {
         treemapViewFormat = format;
-        const btnBlocks = document.getElementById("btnTreemapViewBlocks");
-        const btnTable = document.getElementById("btnTreemapViewTable");
+        const selectFormat = document.getElementById("selectTreemapViewFormat");
+        if (selectFormat && selectFormat.value !== format) selectFormat.value = format;
+
         const canvasContainer = document.getElementById("treemapCanvasContainer");
         const tableContainer = document.getElementById("treemapTableContainer");
-
-        if (btnBlocks) btnBlocks.classList.toggle("active", format === "treemap");
-        if (btnTable) btnTable.classList.toggle("active", format === "table");
 
         if (canvasContainer) canvasContainer.style.display = format === "treemap" ? "block" : "none";
         if (tableContainer) tableContainer.style.display = format === "table" ? "block" : "none";
