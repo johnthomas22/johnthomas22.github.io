@@ -2897,8 +2897,7 @@
           <!-- Bottom Navigation Bar -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn btn-secondary" id="<button class="btn btn-secondary" onclick="setViewMode('dunkel'); setTimeout(() => { const el = document.getElementById('cardHistoricalEmissionsTreemap'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 120);" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">🌍 Historical Carbon Treemap &rarr;</button>
-              btnBackToSimFromSources" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
+              <button class="btn btn-secondary" id="btnBackToSimFromSources" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
               <button class="btn btn-secondary" id="btnJumpToBudgetsFromSources" style="font-size: 0.78rem; padding: 6px 14px;">🛢️ View Carbon Budgets</button>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -3160,9 +3159,6 @@
           <!-- Bottom Navigation Bar -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
             
-          <button class="btn btn-secondary" onclick="setViewMode('dunkel'); setTimeout(() => { const el = document.getElementById('cardHistoricalEmissionsTreemap'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 120);" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">
-            🌍 Cumulative Historical Carbon Treemap (1750–Present) &rarr;
-          </button>
 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button class="btn btn-secondary" id="btnBackToSimFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
               <button class="btn btn-secondary" id="btnJumpToSourcesFromSolutions" style="font-size: 0.78rem; padding: 6px 14px;">🏭 Review Greenhouse Gas Sources</button>
@@ -3500,14 +3496,7 @@
             </div>
           </div>
 
-          <!-- Bottom Navigation Bar -->
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px;">
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn btn-secondary" id="btnBackToSimFromDunkel" style="font-size: 0.78rem; padding: 6px 14px;">◀ Back to Simulator</button>
-              <button class="btn btn-secondary" id="btnBackToSolutionsFromDunkel" style="font-size: 0.78rem; padding: 6px 14px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">💡 Clean Energy Solutions</button>
-            </div>
-            <button class="btn btn-modal" id="btnOpenGuideFromDunkel" style="font-size: 0.78rem; padding: 6px 14px;">📖 Royal Society Report &amp; Storage Guide →</button>
-          </div>
+
 
         </div>
 
@@ -12774,17 +12763,7 @@
           });
         }
 
-        const btnBackSimDunkel = document.getElementById("btnBackToSimFromDunkel");
-        if (btnBackSimDunkel) btnBackSimDunkel.addEventListener("click", () => setViewMode("advanced"));
-        const btnBackSolDunkel = document.getElementById("btnBackToSolutionsFromDunkel");
-        if (btnBackSolDunkel) btnBackSolDunkel.addEventListener("click", () => setViewMode("solutions"));
-        const btnOpenGuideDunkel = document.getElementById("btnOpenGuideFromDunkel");
-        if (btnOpenGuideDunkel) {
-          btnOpenGuideDunkel.addEventListener("click", () => {
-            modalOverlay.style.display = "flex";
-            setDocPage("page-uk-grid");
-          });
-        }
+
 
         updateDunkelCalculations();
       }
