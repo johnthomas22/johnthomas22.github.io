@@ -2063,6 +2063,109 @@
         height: 440px;
       }
     }
+
+    /* Floating Interactive Popover for Rest of the World */
+    .rest-world-popover {
+      display: none;
+      position: fixed;
+      z-index: 3500;
+      width: 440px;
+      max-width: calc(100vw - 24px);
+      max-height: 540px;
+      background: #080f1e;
+      border: 1.5px solid #38bdf8;
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 25px rgba(56, 189, 248, 0.35);
+      backdrop-filter: blur(12px);
+      pointer-events: auto;
+      flex-direction: column;
+      overflow: hidden;
+      box-sizing: border-box;
+      animation: fadeInModal 0.15s ease-out;
+    }
+    .rw-popover-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .rw-popover-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .rw-popover-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      font-size: 1.1rem;
+      line-height: 1;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+    .rw-popover-close:hover {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+    .rw-popover-pin-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #94a3b8;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .rw-popover-pin-btn.pinned {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+    .rw-popover-list {
+      max-height: 260px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding-right: 4px;
+      margin: 8px 0;
+    }
+    .rw-popover-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      font-size: 0.74rem;
+      transition: background 0.12s ease;
+    }
+    .rw-popover-item:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
 </style>
 </head>
 <body>
@@ -3574,6 +3677,60 @@
 
   
   
+  
+  <!-- DEDICATED REST OF THE WORLD 170+ NATIONS POPOVER TOOLTIP -->
+  <div class="rest-world-popover" id="popoverRestOfWorld">
+    <div class="rw-popover-header">
+      <div>
+        <div class="rw-popover-title">
+          <span>🌐</span> Rest of the World (170+ Nations)
+        </div>
+        <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px;">
+          149.3 Gt CO₂ (8.20%) · &gt;3.2 Billion Population (each &lt;0.2%)
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <button type="button" class="rw-popover-pin-btn" id="btnPinRestOfWorld" title="Pin / Keep open" onclick="togglePinRestOfWorld()">
+          <span>📌</span> <span id="lblPinStatus">Pin</span>
+        </button>
+        <button type="button" class="rw-popover-close" title="Close" onclick="hideRestOfWorldPopover(true)">&times;</button>
+      </div>
+    </div>
+
+    <!-- Climate Asymmetry Callout -->
+    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 6px 10px; font-size: 0.73rem; color: #fde68a; line-height: 1.4; margin-bottom: 8px;">
+      <strong>⚠️ Extreme Asymmetry:</strong> Sovereign states below have contributed &lt;0.2% individually. Small island states (Tuvalu, Maldives, Kiribati) have emitted &lt;0.001% combined, yet face existential sea-level risks.
+    </div>
+
+    <!-- Search & Region Filter Bar -->
+    <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 6px;">
+      <div class="treemap-search-box" style="width: 100%; box-sizing: border-box;">
+        <span style="font-size: 0.72rem; opacity: 0.6;">🔎</span>
+        <input type="text" id="inputPopoverSearch" class="treemap-search-input" style="width: 100%;" placeholder="Filter by nation name or code..." oninput="filterPopoverSearch(this.value)">
+      </div>
+      <div class="treemap-chips-group" style="gap: 4px;">
+        <button class="treemap-filter-chip active" data-popover-region="All" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('All')">All (147+)</button>
+        <button class="treemap-filter-chip" data-popover-region="Africa" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Africa')">Africa</button>
+        <button class="treemap-filter-chip" data-popover-region="Asia" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Asia')">Asia</button>
+        <button class="treemap-filter-chip" data-popover-region="Latin America" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Latin America')">Americas</button>
+        <button class="treemap-filter-chip" data-popover-region="Europe" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Europe')">Europe</button>
+        <button class="treemap-filter-chip" data-popover-region="Oceania & SIDS" style="font-size: 0.68rem; padding: 2px 8px;" onclick="filterPopoverRegion('Oceania & SIDS')">🏝️ Island States</button>
+      </div>
+    </div>
+
+    <!-- Scrollable Country List -->
+    <div class="rw-popover-list" id="popoverCountryList">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Popover Footer -->
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.72rem; color: #94a3b8;">
+      <div>Showing <span id="lblPopoverCount" style="color: #fff; font-weight: 700;">147</span> nations</div>
+      <button type="button" class="btn btn-modal" onclick="openRestOfWorldModal()" style="font-size: 0.7rem; padding: 3px 8px; background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">⛶ Fullscreen Modal &rarr;</button>
+    </div>
+  </div>
+
+
   <!-- =====================================================================
        REST OF THE WORLD (170+ NATIONS) EXPLORER MODAL
        ===================================================================== -->
@@ -12019,74 +12176,146 @@
               renderHistoricalTreemap();
             }
 
-            if (hit && tooltip) {
+            if (hit) {
               canvas.style.cursor = hit.rank === 51 ? "pointer" : "crosshair";
-              tooltip.style.display = "block";
-              
-              let tooltipHtml = `
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding-bottom: 4px;">
-                  <div style="font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
-                    <span>${hit.flag}</span> ${hit.name}
-                  </div>
-                  <span class="badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace;">#${hit.rank}</span>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-                  <div>
-                    <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase;">Cumulative CO₂</div>
-                    <div style="font-size: 1.05rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">${hit.emissions.toFixed(1)} <span style="font-size: 0.72rem; color: #94a3b8;">Gt</span></div>
-                  </div>
-                  <div>
-                    <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase;">Global Share</div>
-                    <div style="font-size: 1.05rem; font-weight: 800; color: #fbbf24; font-family: ui-monospace, monospace;">${hit.share.toFixed(2)}%</div>
-                  </div>
-                </div>
-                <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px;">Region: <strong style="color: #fff;">${hit.region}</strong></div>
-                <div style="font-size: 0.74rem; color: #cbd5e1; line-height: 1.4;">${hit.note}</div>
-              `;
 
               if (hit.rank === 51) {
-                tooltipHtml += `
-                  <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(56, 189, 248, 0.3); font-size: 0.74rem; font-weight: 700; color: #38bdf8; text-align: center;">
-                    👉 Click this block to browse all 170+ nations
-                  </div>
-                `;
+                // Hide standard tooltip and show the rich interactive popover
+                if (tooltip) tooltip.style.display = "none";
+                showRestOfWorldPopover(e.clientX, e.clientY, false);
+              } else {
+                // If popover is not pinned, hide it and show standard tooltip
+                if (!isPinnedRestOfWorld) {
+                  hideRestOfWorldPopover(false);
+                }
+                if (tooltip) {
+                  tooltip.style.display = "block";
+                  tooltip.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); padding-bottom: 4px;">
+                      <div style="font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                        <span>${hit.flag}</span> ${hit.name}
+                      </div>
+                      <span class="badge" style="font-size: 0.68rem; font-family: ui-monospace, monospace;">#${hit.rank}</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                      <div>
+                        <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase;">Cumulative CO₂</div>
+                        <div style="font-size: 1.05rem; font-weight: 800; color: #38bdf8; font-family: ui-monospace, monospace;">${hit.emissions.toFixed(1)} <span style="font-size: 0.72rem; color: #94a3b8;">Gt</span></div>
+                      </div>
+                      <div>
+                        <div style="font-size: 0.68rem; color: #94a3b8; text-transform: uppercase;">Global Share</div>
+                        <div style="font-size: 1.05rem; font-weight: 800; color: #fbbf24; font-family: ui-monospace, monospace;">${hit.share.toFixed(2)}%</div>
+                      </div>
+                    </div>
+                    <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px;">Region: <strong style="color: #fff;">${hit.region}</strong></div>
+                    <div style="font-size: 0.74rem; color: #cbd5e1; line-height: 1.4;">${hit.note}</div>
+                  `;
+
+                  const ttWidth = 280;
+                  const ttHeight = 160;
+                  let posX = mouseX + 15;
+                  let posY = mouseY + 15;
+
+                  if (posX + ttWidth > rect.width) {
+                    posX = mouseX - ttWidth - 15;
+                  }
+                  if (posY + ttHeight > rect.height) {
+                    posY = mouseY - ttHeight - 15;
+                  }
+
+                  tooltip.style.left = `${Math.max(8, posX)}px`;
+                  tooltip.style.top = `${Math.max(8, posY)}px`;
+                }
               }
-
-              tooltip.innerHTML = tooltipHtml;
-
-              // Tooltip positioning clamped within container
-              const ttWidth = 280;
-              const ttHeight = 160;
-              let posX = mouseX + 15;
-              let posY = mouseY + 15;
-
-              if (posX + ttWidth > rect.width) {
-                posX = mouseX - ttWidth - 15;
-              }
-              if (posY + ttHeight > rect.height) {
-                posY = mouseY - ttHeight - 15;
-              }
-
-              tooltip.style.left = `${Math.max(8, posX)}px`;
-              tooltip.style.top = `${Math.max(8, posY)}px`;
-            } else if (tooltip) {
-              tooltip.style.display = "none";
+            } else {
+              if (tooltip) tooltip.style.display = "none";
               canvas.style.cursor = "default";
+              if (!isPinnedRestOfWorld) {
+                scheduleHideRestOfWorldPopover(200);
+              }
             }
           });
 
           canvas.addEventListener("mouseleave", () => {
             activeHoveredNode = null;
             if (tooltip) tooltip.style.display = "none";
+            if (!isPinnedRestOfWorld) {
+              scheduleHideRestOfWorldPopover(200);
+            }
             renderHistoricalTreemap();
           });
 
-          // Click handling
-          canvas.addEventListener("click", () => {
-            if (activeHoveredNode && activeHoveredNode.rank === 51) {
-              openRestOfWorldModal();
+          // Click handling on Canvas (Computes exact click coordinates for 100% reliable hit testing)
+          canvas.addEventListener("click", (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            let hit = null;
+            for (let i = treemapCalculatedLayout.length - 1; i >= 0; i--) {
+              const node = treemapCalculatedLayout[i];
+              if (
+                mouseX >= node.x &&
+                mouseX <= node.x + node.w &&
+                mouseY >= node.y &&
+                mouseY <= node.y + node.h
+              ) {
+                hit = node;
+                break;
+              }
+            }
+
+            if (hit && hit.rank === 51) {
+              showRestOfWorldPopover(e.clientX, e.clientY, true);
             }
           });
+
+          // Touch handling for mobile & tablet devices
+          canvas.addEventListener("touchstart", (e) => {
+            if (e.touches && e.touches.length > 0) {
+              const t = e.touches[0];
+              const rect = canvas.getBoundingClientRect();
+              const touchX = t.clientX - rect.left;
+              const touchY = t.clientY - rect.top;
+
+              let hit = null;
+              for (let i = treemapCalculatedLayout.length - 1; i >= 0; i--) {
+                const node = treemapCalculatedLayout[i];
+                if (
+                  touchX >= node.x &&
+                  touchX <= node.x + node.w &&
+                  touchY >= node.y &&
+                  touchY <= node.y + node.h
+                ) {
+                  hit = node;
+                  break;
+                }
+              }
+
+              if (hit && hit.rank === 51) {
+                e.preventDefault();
+                showRestOfWorldPopover(t.clientX, t.clientY, true);
+              }
+            }
+          }, { passive: false });
+
+          // Popover mouseenter / mouseleave handlers to prevent premature hiding
+          const popoverEl = document.getElementById("popoverRestOfWorld");
+          if (popoverEl) {
+            popoverEl.addEventListener("mouseenter", () => {
+              isMouseInsidePopover = true;
+              if (popoverHideTimer) {
+                clearTimeout(popoverHideTimer);
+                popoverHideTimer = null;
+              }
+            });
+            popoverEl.addEventListener("mouseleave", () => {
+              isMouseInsidePopover = false;
+              if (!isPinnedRestOfWorld) {
+                scheduleHideRestOfWorldPopover(200);
+              }
+            });
+          }
 
           // Resize Observer
           if (window.ResizeObserver) {
@@ -12101,6 +12330,154 @@
 
         renderHistoricalTreemap();
       }
+
+      
+      // Popover State & Helpers for Rest of the World
+      let isPinnedRestOfWorld = false;
+      let isMouseInsidePopover = false;
+      let popoverHideTimer = null;
+      let activePopoverRegion = "All";
+      let activePopoverSearch = "";
+
+      function buildRestOfWorldPopoverList(regionFilter = "All", searchFilter = "") {
+        const listEl = document.getElementById("popoverCountryList");
+        const countLbl = document.getElementById("lblPopoverCount");
+        if (!listEl) return;
+
+        const sLower = (searchFilter || "").toLowerCase().trim();
+
+        let filtered = REST_OF_WORLD_NATIONS.filter(item => {
+          if (regionFilter !== "All" && item.region !== regionFilter) return false;
+          if (sLower) {
+            const mName = item.name.toLowerCase().includes(sLower);
+            const mCode = item.code.toLowerCase().includes(sLower);
+            const mRegion = item.region.toLowerCase().includes(sLower);
+            if (!mName && !mCode && !mRegion) return false;
+          }
+          return true;
+        });
+
+        filtered.sort((a, b) => b.emissions - a.emissions);
+
+        if (countLbl) {
+          countLbl.textContent = `${filtered.length} of ${REST_OF_WORLD_NATIONS.length}`;
+        }
+
+        if (filtered.length === 0) {
+          listEl.innerHTML = `<div style="padding: 16px; text-align: center; color: #94a3b8; font-size: 0.75rem;">No nations matched "${searchFilter}".</div>`;
+          return;
+        }
+
+        let itemsHtml = "";
+        filtered.forEach(c => {
+          const isSids = c.region === "Oceania & SIDS";
+          const emDisplay = c.emissions >= 1.0 ? `${c.emissions.toFixed(2)} Gt` : `${Math.round(c.emissions * 1000)} Mt`;
+          itemsHtml += `
+            <div class="rw-popover-item">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 1rem;">${c.flag}</span>
+                <div>
+                  <span style="font-weight: 700; color: #fff;">${c.name}</span>
+                  <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 4px;">(${c.code} · ${c.region})</span>
+                </div>
+              </div>
+              <div style="text-align: right; font-family: ui-monospace, monospace; font-size: 0.72rem; font-weight: 700; color: ${isSids ? '#38bdf8' : '#a78bfa'};">
+                ${emDisplay} <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 400;">(${c.share.toFixed(3)}%)</span>
+              </div>
+            </div>
+          `;
+        });
+        listEl.innerHTML = itemsHtml;
+      }
+
+      function showRestOfWorldPopover(clientX, clientY, pin = false) {
+        const popover = document.getElementById("popoverRestOfWorld");
+        if (!popover) return;
+
+        if (popoverHideTimer) {
+          clearTimeout(popoverHideTimer);
+          popoverHideTimer = null;
+        }
+
+        buildRestOfWorldPopoverList(activePopoverRegion, activePopoverSearch);
+        popover.style.display = "flex";
+
+        if (pin) {
+          isPinnedRestOfWorld = true;
+          const pinBtn = document.getElementById("btnPinRestOfWorld");
+          const pinLbl = document.getElementById("lblPinStatus");
+          if (pinBtn) pinBtn.classList.add("pinned");
+          if (pinLbl) pinLbl.textContent = "Pinned";
+        }
+
+        // Positioning clamped inside window
+        const popW = 440;
+        const popH = 480;
+        let left = clientX + 18;
+        let top = clientY - 80;
+
+        if (left + popW > window.innerWidth - 16) {
+          left = clientX - popW - 18;
+        }
+        if (left < 10) left = 10;
+
+        if (top + popH > window.innerHeight - 16) {
+          top = window.innerHeight - popH - 16;
+        }
+        if (top < 10) top = 10;
+
+        popover.style.left = `${Math.round(left)}px`;
+        popover.style.top = `${Math.round(top)}px`;
+      }
+
+      function scheduleHideRestOfWorldPopover(delayMs = 200) {
+        if (isPinnedRestOfWorld || isMouseInsidePopover) return;
+        if (popoverHideTimer) clearTimeout(popoverHideTimer);
+        popoverHideTimer = setTimeout(() => {
+          hideRestOfWorldPopover(false);
+        }, delayMs);
+      }
+
+      function hideRestOfWorldPopover(force = false) {
+        if (force) {
+          isPinnedRestOfWorld = false;
+        }
+        if (!isPinnedRestOfWorld) {
+          const popover = document.getElementById("popoverRestOfWorld");
+          if (popover) popover.style.display = "none";
+          const pinBtn = document.getElementById("btnPinRestOfWorld");
+          const pinLbl = document.getElementById("lblPinStatus");
+          if (pinBtn) pinBtn.classList.remove("pinned");
+          if (pinLbl) pinLbl.textContent = "Pin";
+        }
+      }
+
+      function togglePinRestOfWorld() {
+        isPinnedRestOfWorld = !isPinnedRestOfWorld;
+        const pinBtn = document.getElementById("btnPinRestOfWorld");
+        const pinLbl = document.getElementById("lblPinStatus");
+        if (pinBtn) pinBtn.classList.toggle("pinned", isPinnedRestOfWorld);
+        if (pinLbl) pinLbl.textContent = isPinnedRestOfWorld ? "Pinned" : "Pin";
+
+        if (!isPinnedRestOfWorld && !isMouseInsidePopover) {
+          scheduleHideRestOfWorldPopover(150);
+        }
+      }
+
+      function filterPopoverRegion(region) {
+        activePopoverRegion = region;
+        const chips = document.querySelectorAll(".treemap-filter-chip[data-popover-region]");
+        chips.forEach(c => {
+          c.classList.toggle("active", c.getAttribute("data-popover-region") === region);
+        });
+        buildRestOfWorldPopoverList(activePopoverRegion, activePopoverSearch);
+      }
+
+      function filterPopoverSearch(term) {
+        activePopoverSearch = term;
+        buildRestOfWorldPopoverList(activePopoverRegion, activePopoverSearch);
+      }
+
 
       function buildRestOfWorldModalGrid(regionFilter = "All", searchFilter = "") {
         const grid = document.getElementById("modalCountryGrid");
@@ -12241,8 +12618,20 @@
       }
 
       // Close modal on Escape key
+      
+      // Close modal on backdrop click
+      const modalRowEl = document.getElementById("modalRestOfWorld");
+      if (modalRowEl) {
+        modalRowEl.addEventListener("click", (e) => {
+          if (e.target === modalRowEl) {
+            closeRestOfWorldModal();
+          }
+        });
+      }
+
       window.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
+          hideRestOfWorldPopover(true);
           closeRestOfWorldModal();
         }
       });
@@ -12258,6 +12647,11 @@
       window.closeRestOfWorldModal = closeRestOfWorldModal;
       window.filterModalRegion = filterModalRegion;
       window.filterModalSearch = filterModalSearch;
+      window.showRestOfWorldPopover = showRestOfWorldPopover;
+      window.hideRestOfWorldPopover = hideRestOfWorldPopover;
+      window.togglePinRestOfWorld = togglePinRestOfWorld;
+      window.filterPopoverRegion = filterPopoverRegion;
+      window.filterPopoverSearch = filterPopoverSearch;
 
 
       function initDunkelView() {
