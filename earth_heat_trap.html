@@ -1740,6 +1740,33 @@
   initParticles();
   updateUI();
   requestAnimationFrame(loop);
+
+  // Direct Hashtag Deep-Link Router for Root Index Page
+  function handleRootHashtagRoute() {
+    try {
+      const h = decodeURIComponent(window.location.hash || "").replace(/^#/, "").trim().toLowerCase();
+      if (!h) return;
+      const routeMap = {
+        "warmingsim": "advanced.html#WarmingSim",
+        "carbonbudgets": "advanced.html#CarbonBudgets",
+        "ghgsources": "advanced.html#GHGSources",
+        "energysolutions": "advanced.html#EnergySolutions",
+        "dunkelflaute": "advanced.html#Dunkelflaute",
+        "dunkel": "advanced.html#dunkel",
+        "nebriefing": "national_emergency_briefing.html",
+        "impacts": "uk_climate_impacts_500_years.html",
+        "whatcanido": "what_can_i_do.html",
+        "palebluedot": "we_only_have_one_pale_blue_dot.html",
+        "podcasts": "climate_podcasts.html",
+        "doughnuteconomics": "doughnut_economics.html"
+      };
+      if (routeMap[h]) {
+        window.location.replace(routeMap[h]);
+      }
+    } catch (_) {}
+  }
+  handleRootHashtagRoute();
+  window.addEventListener("hashchange", handleRootHashtagRoute);
 </script>
 
 <!-- PWA Service Worker Registration -->

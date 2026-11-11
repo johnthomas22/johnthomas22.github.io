@@ -2956,20 +2956,6 @@
            COUNTRY EMISSIONS BLOCK CHART: CURRENT ANNUAL (2023) & CUMULATIVE HISTORICAL (1750-PRESENT)
            ===================================================================== -->
       <div class="card historical-treemap-card" id="cardHistoricalEmissionsTreemap">
-        <!-- Drop-down Selector & Metric Control Panel -->
-        <div class="emissions-scope-switcher" style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px; background: rgba(15, 23, 42, 0.9); padding: 10px 14px; border-radius: 8px; border: 1.5px solid rgba(56, 189, 248, 0.35); flex-wrap: wrap; box-shadow: 0 4px 16px rgba(0,0,0,0.4);">
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%;">
-            <label for="selectEmissionsMetric" style="font-size: 0.86rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px; letter-spacing: -0.01em; white-space: nowrap;">
-              <span>📊</span> Plot &amp; Sort Chart By:
-            </label>
-            <select id="selectEmissionsMetric" class="treemap-scope-select" onchange="setEmissionsScope(this.value)" style="background: #090d16; color: #ffffff; border: 1.5px solid #38bdf8; border-radius: 6px; padding: 7px 14px; font-size: 0.84rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 14px rgba(56, 189, 248, 0.25); flex: 1; min-width: 280px;">
-              <option value="annual">📅 Current Annual Emissions (2023 · Gt CO₂/yr) — China #1 (30.5%), US #2 (12.6%), UK #17 (0.88%)</option>
-              <option value="historical">⏳ Cumulative Historical Contribution (1750–2023 · Total Gt CO₂) — US #1 (23.9%), UK #5 (4.40%)</option>
-              <option value="percapita">👤 Per-Capita Emissions (2023 · Tonnes CO₂/person/yr) — Gulf &amp; Western Heavyweights</option>
-            </select>
-          </div>
-        </div>
-
         <!-- Heading Row with Badges (Click Heading for Full Explanation Modal) -->
         <div class="card-title-row" style="flex-wrap: wrap; gap: 10px; margin-bottom: 12px; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -2981,6 +2967,20 @@
               <span class="badge badge-amber" id="badgeTreemapTotal" style="font-size: 0.72rem;">Total: 37.4 Gt CO₂/yr</span>
               <span class="badge badge-purple" id="badgeTreemapUK" style="font-size: 0.72rem; background: rgba(192, 132, 252, 0.15); border-color: #c084fc; color: #c084fc;">🇬🇧 UK #17 Annually (0.33 Gt · 0.88%)</span>
             </div>
+          </div>
+        </div>
+
+        <!-- Drop-down Selector & Metric Control Panel -->
+        <div class="emissions-scope-switcher" style="display: flex; gap: 12px; align-items: center; margin-bottom: 14px; background: rgba(15, 23, 42, 0.9); padding: 10px 14px; border-radius: 8px; border: 1.5px solid rgba(56, 189, 248, 0.35); flex-wrap: wrap; box-shadow: 0 4px 16px rgba(0,0,0,0.4);">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%;">
+            <label for="selectEmissionsMetric" style="font-size: 0.86rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px; letter-spacing: -0.01em; white-space: nowrap;">
+              <span>📊</span> Plot &amp; Sort Chart By:
+            </label>
+            <select id="selectEmissionsMetric" class="treemap-scope-select" onchange="setEmissionsScope(this.value)" style="background: #090d16; color: #ffffff; border: 1.5px solid #38bdf8; border-radius: 6px; padding: 7px 14px; font-size: 0.84rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 0 14px rgba(56, 189, 248, 0.25); flex: 1; min-width: 280px;">
+              <option value="annual">📅 Current Annual Emissions (2023 · Gt CO₂/yr) — China #1 (30.5%), US #2 (12.6%), UK #17 (0.88%)</option>
+              <option value="historical">⏳ Cumulative Historical Contribution (1750–2023 · Total Gt CO₂) — US #1 (23.9%), UK #5 (4.40%)</option>
+              <option value="percapita">👤 Per-Capita Emissions (2023 · Tonnes CO₂/person/yr) — Gulf &amp; Western Heavyweights</option>
+            </select>
           </div>
         </div>
 
@@ -10307,7 +10307,15 @@
 
         if (!skipHistoryUpdate) {
           try {
-            const desiredHash = isAdvanced ? "" : ("#" + mode);
+            const canonicalHashMap = {
+              "advanced": "#WarmingSim",
+              "simple": "#Intro",
+              "budgets": "#CarbonBudgets",
+              "sources": "#GHGSources",
+              "solutions": "#EnergySolutions",
+              "dunkel": "#Dunkelflaute"
+            };
+            const desiredHash = canonicalHashMap[mode] || ("#" + mode);
             const urlObj = new URL(window.location.href);
             urlObj.searchParams.delete("view");
             urlObj.searchParams.delete("page");
@@ -14649,9 +14657,25 @@
       function applyUrlViewRoute() {
         try {
           const params = new URLSearchParams(window.location.search);
-          const hashRaw = decodeURIComponent(window.location.hash || "").replace(/^#/, "").toLowerCase();
-          const paramRaw = (params.get("view") || params.get("page") || params.get("tab") || "").toLowerCase();
+          const hashRaw = decodeURIComponent(window.location.hash || "").replace(/^#/, "").trim().toLowerCase();
+          const paramRaw = (params.get("view") || params.get("page") || params.get("tab") || "").trim().toLowerCase();
           const raw = paramRaw || hashRaw;
+
+          // Redirect standalone page hashtags cleanly
+          const standalonePageMap = {
+            "nebriefing": "national_emergency_briefing.html",
+            "nationalemergencybriefing": "national_emergency_briefing.html",
+            "impacts": "uk_climate_impacts_500_years.html",
+            "whatcanido": "what_can_i_do.html",
+            "palebluedot": "we_only_have_one_pale_blue_dot.html",
+            "podcasts": "climate_podcasts.html",
+            "doughnuteconomics": "doughnut_economics.html",
+            "donuteconomics": "doughnut_economics.html"
+          };
+          if (standalonePageMap[raw]) {
+            window.location.replace(standalonePageMap[raw]);
+            return;
+          }
 
           const aliasMap = {
             "dunkel": "dunkel",
@@ -14661,11 +14685,15 @@
             "storage": "dunkel",
             "treemap": "sources",
             "emissions": "sources",
-            "budgets": "budgets",
+            "ghgsources": "sources",
             "sources": "sources",
+            "carbonbudgets": "budgets",
+            "budgets": "budgets",
+            "energysolutions": "solutions",
             "solutions": "solutions",
             "simple": "simple",
             "intro": "simple",
+            "warmingsim": "advanced",
             "advanced": "advanced",
             "simulator": "advanced"
           };
