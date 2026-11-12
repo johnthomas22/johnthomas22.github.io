@@ -182,18 +182,52 @@
       gap: 12px;
       margin-bottom: 14px;
     }
+    .stripes-title-box {
+      position: relative;
+      cursor: help;
+    }
     .stripes-title-box h2 {
       font-size: 1.35rem;
       font-weight: 800;
       color: #fff;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 8px;
     }
     .stripes-title-box p {
       font-size: 0.82rem;
       color: #94a3b8;
       margin-top: 2px;
+    }
+    .stripes-data-popover {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      z-index: 50;
+      width: max-content;
+      max-width: min(540px, 90vw);
+      background: rgba(7, 13, 25, 0.97);
+      border: 1px solid rgba(56, 189, 248, 0.42);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(8px);
+      transform: translateY(-4px);
+      transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+    }
+    .stripes-title-box:hover .stripes-data-popover,
+    .stripes-title-box:focus-within .stripes-data-popover {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
     }
 
     /* VIEW CONTROLS & FILTER BUTTONS */
@@ -768,14 +802,18 @@
     <!-- ED HAWKINS WARMING STRIPES HERO SECTION -->
     <section class="stripes-hero-card" aria-label="Ed Hawkins Warming Stripes Visualizer">
       <div class="stripes-header">
-        <div class="stripes-title-box">
+        <div class="stripes-title-box" tabindex="0" aria-describedby="stripesDataPopover">
           <h2>
             <span>📊</span> Ed Hawkins Warming Stripes: UK (1500–2025)
             <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" title="Warming Stripes visual design by Prof. Ed Hawkins (NCAS, University of Reading) — Creative Commons Attribution 4.0 International (CC BY 4.0)" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.68rem; font-weight: 700; font-family: var(--font-mono); color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 5px; padding: 2px 8px; text-decoration: none; vertical-align: middle; margin-left: 8px;">CC BY 4.0 ↗</a>
           </h2>
           <p>
-            Visualisation method created by <strong>Prof. Ed Hawkins MBE</strong> (NCAS, University of Reading / <a href="https://showyourstripes.info" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">#ShowYourStripes</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">CC BY 4.0</a>). Based on the Met Office Hadley Centre Central England Temperature (HadCET) record—the longest continuous instrumental thermometer series on Earth (1659–present), extended with European paleoclimate reconstructions (1500–1658).
+            Visualisation method created by <strong>Prof. Ed Hawkins MBE</strong> (NCAS, University of Reading / <a href="https://showyourstripes.info" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">#ShowYourStripes</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline;">CC BY 4.0</a>) <span style="color: #64748b; font-size: 0.74rem; border-bottom: 1px dotted #64748b;">· ℹ️ Data basis</span>
           </p>
+          <div class="stripes-data-popover" id="stripesDataPopover" role="tooltip">
+            <div style="font-weight: 700; color: #38bdf8; margin-bottom: 4px; font-size: 0.78rem;">🌡️ Temperature Dataset &amp; Reconstruction</div>
+            Based on the Met Office Hadley Centre Central England Temperature (HadCET) record—the longest continuous instrumental thermometer series on Earth (1659–present), extended with European paleoclimate reconstructions (1500–1658).
+          </div>
         </div>
 
         <!-- TIMEFRAME SELECTOR -->
