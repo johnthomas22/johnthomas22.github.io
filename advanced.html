@@ -1238,6 +1238,28 @@
       color: #fff;
       box-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
     }
+    #lblInstantEquilibrium.chart-bottom-btn {
+      border-color: rgba(245, 158, 11, 0.45);
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.08);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      user-select: none;
+    }
+    #lblInstantEquilibrium.chart-bottom-btn:hover {
+      background: rgba(245, 158, 11, 0.18);
+      border-color: #f59e0b;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+      color: #fff;
+    }
+    #lblInstantEquilibrium.chart-bottom-btn.active {
+      background: rgba(245, 158, 11, 0.24);
+      border-color: #f59e0b;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.45);
+    }
     .app-wrapper.simple-mode .chart-actions-bottom,
     .app-wrapper.simple-mode #btnZoomKeeling {
       display: none !important;
@@ -2528,6 +2550,10 @@
           <button type="button" class="chart-bottom-btn" id="btnMillionYear" title="Compare 500-year slices over the last 1,000,000 years">
             <span>🔍</span> 1-Million-Year Comparison
           </button>
+          <label class="chart-bottom-btn" id="lblInstantEquilibrium" title="Evaluate steady-state equilibrium (ΔTs = ΔTd = ΔF / λ, EEI = 0 W/m²) at current CO₂, or uncheck to return to transient warming">
+            <input type="checkbox" id="chkInstantEquilibrium" style="accent-color: #f59e0b; width: 15px; height: 15px; cursor: pointer; margin: 0;">
+            <span>⚡ <strong>Instant Ocean Equilibrium</strong></span>
+          </label>
           <a href="what_can_i_do.html?from=advanced" class="chart-bottom-btn" id="btnWhatCanIDoBottom" style="border-color: rgba(52, 211, 153, 0.45); color: #34d399; background: rgba(52, 211, 153, 0.08); text-decoration: none;" title="Explore individual &amp; civic climate pathways">
             <span>🌱</span> <strong>What Can I Do About It? →</strong>
           </a>
@@ -14114,6 +14140,32 @@
           state.showEnergy = e.target.checked;
           const lbl = document.getElementById("lblToggleEnergy");
           if (lbl) lbl.classList.toggle("active", state.showEnergy);
+          draw();
+        });
+      }
+
+      // Instant Ocean Equilibrium Checkbox Toggle (t -> infinity diagnostic)
+      const chkInstantEquilibrium = document.getElementById("chkInstantEquilibrium");
+      let savedTransientState = null;
+      if (chkInstantEquilibrium) {
+        chkInstantEquilibrium.addEventListener("change", e => {
+          const lbl = document.getElementById("lblInstantEquilibrium");
+          if (e.target.checked) {
+            savedTransientState = { deltaTs: state.deltaTs, deltaTd: state.deltaTd, running: state.running };
+            state.running = false;
+            const rf = ALPHA_RF * Math.log(Math.max(100, state.co2) / CO2_BASE);
+            const dTeq = rf / LAMBDA_FEEDBACK;
+            state.deltaTs = dTeq;
+            state.deltaTd = dTeq;
+          } else {
+            if (savedTransientState) {
+              state.deltaTs = savedTransientState.deltaTs;
+              state.deltaTd = savedTransientState.deltaTd;
+              savedTransientState = null;
+            }
+          }
+          if (lbl) lbl.classList.toggle("active", e.target.checked);
+          syncUI();
           draw();
         });
       }
